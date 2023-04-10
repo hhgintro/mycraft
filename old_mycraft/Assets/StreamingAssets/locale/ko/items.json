@@ -1,0 +1,228 @@
+﻿[
+  {
+    "id": 0,
+    "type": 3001,
+    "title": "시간",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "clock-icon"
+  },
+  
+  {
+    "id":3,
+    "type":3,
+    "title":"나무상자",
+    "slots":11,
+    "state":{
+      "power":21,
+      "defence":12,
+      "vitality":50
+    },
+    "desc":"물건을 보관하는 설비",
+    "stackable":100,
+    "slug":"chest"
+  },
+
+  {
+    "id": 1,
+    "type": 1,
+    "title": "컨베이어 밸트",
+    "speed": 1,
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "desc": "물건이 이동하는 설비",
+    "stackable": 100,
+    "slug": "basic-transport-belt"
+  },
+
+  {
+    "id": 11,
+    "type": 7,
+    "title": "지하 밸트",
+    "speed": 1,
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "desc": "물건이 이동하는 설비",
+    "stackable": 100,
+    "slug": "basic-transport-belt-to-ground"
+  },
+
+  {
+    "id": 2,
+    "type": 2,
+    "title": "로봇팔",
+    "speed": 1,
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "물건이 잡거나 넣는 설비",
+    "stackable": 100,
+    "slug":"robotic-arm"
+  },
+
+  {
+    "id": 4,
+    "type": 4,
+    "title": "채광 드릴",
+    "delay": 1,
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "자원을 채광하는 설비",
+    "stackable": 100,
+    "slug": "drill"
+  },
+
+  {
+    "id": 5,
+    "type": 5,
+    "title": "조립 생산 설비",
+    "assembling": {
+      "inputs": 4,
+      "chips": 4,
+      "outputskill": [2,9]
+    },
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "물건을 조립하는 설비",
+    "stackable": 100,
+    "slug": "machine"
+  },
+
+  {
+    "id": 6,
+    "type": 6,
+    "title": "석재 용광로",
+    "furnace": {
+      "inputs": 1,
+      "fuels": 1,
+      "outputs": 1,
+      "input": [
+        {
+          "id": 1002,
+          "limit": 5,
+          "build-time": 3.1,
+          "output": 2001
+        }
+      ],
+      "fuel": [
+        {
+          "id": 1001,
+          "limit": 5,
+          "burning-time": 10
+        }
+      ]
+    },
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "화력으로 재련하는 설비",
+    "stackable": 100,
+    "slug": "stone-furnace"
+  },
+
+  {
+    "id": 1001,
+    "type": 1001,
+    "title": "원목",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "raw-wood"
+  },
+
+  {
+    "id": 1002,
+    "type": 1002,
+    "title": "철광석",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "iron-ore"
+  },
+
+  {
+    "id": 1003,
+    "type": 1003,
+    "title": "돌",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "stone"
+  },
+
+  {
+    "id": 2003,
+    "type": 2003,
+    "title": "목재",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "wood"
+  },
+
+  {
+    "id": 2001,
+    "type": 2001,
+    "title": "철판",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "iron-plate"
+  },
+
+  {
+    "id": 2002,
+    "type": 2002,
+    "title": "철 기어 휠",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "desc": "",
+    "stackable": 100,
+    "slug": "iron-gear-wheel"
+  }
+
+]

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: TCF_Demo_Zombunny
+  m_Shader: {fileID: 4800000, guid: 81ae609a37b59f043ac4256abae11b2e, type: 3}
+  m_ShaderKeywords: TCP2_BUMP TCP2_RIM TCP2_SPEC
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 2800000, guid: e33cda09cacfe3e4599e37e98fb637da, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _Ramp
+      second:
+        m_Texture: {fileID: 2800000, guid: 4a056241e2722dc46a7262a8e7073fd9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: _RampSmooth
+      second: 0.05
+    - first:
+        name: _RampThreshold
+      second: 0.5
+    - first:
+        name: _RimMax
+      second: 1
+    - first:
+        name: _RimMin
+      second: 0.3392857
+    - first:
+        name: _RimPower
+      second: 2.3303568
+    - first:
+        name: _Shininess
+      second: 0.1829303
+    - first:
+        name: _SpecSmooth
+      second: 0.05
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    - first:
+        name: _HColor
+      second: {r: 1, g: 0.93951607, b: 0.80784315, a: 1}
+    - first:
+        name: _LColor
+      second: {r: 1, g: 1, b: 1, a: 1}
+    - first:
+        name: _RimColor
+      second: {r: 0.73022294, g: 0.7205882, b: 1, a: 0.28235295}
+    - first:
+        name: _RimDir
+      second: {r: 0, g: 0, b: 1, a: 0}
+    - first:
+        name: _SColor
+      second: {r: 0.37434375, g: 0.24150711, b: 0.5921569, a: 1}
+    - first:
+        name: _SpecColor
+      second: {r: 0.283737, g: 0.2845931, b: 0.30147058, a: 1}
