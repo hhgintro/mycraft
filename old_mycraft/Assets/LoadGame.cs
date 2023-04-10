@@ -56,7 +56,7 @@ namespace MyCraft
 
         public void OnLoadGame()
         {
-            LobbyManager.Instance().bNewGame = false;
+            Managers.Game.bNewGame = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
