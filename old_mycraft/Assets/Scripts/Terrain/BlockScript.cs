@@ -32,7 +32,7 @@ namespace MyCraft
         protected bool _bStart { get; set; }
 
 
-        protected virtual void Start()
+        void Start()
         {
             this.inven = null;
         }

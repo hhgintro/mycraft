@@ -10,7 +10,7 @@ namespace MyCraft
         public int amount;
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
             //_blocktype = BLOCKTYPE.RAW_WOOD;// TREE;
             //if (null == base._itembase)

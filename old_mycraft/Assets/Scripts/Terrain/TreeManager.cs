@@ -10,11 +10,9 @@ namespace MyCraft
         //private List<DrillScript> prefabs_drill;
 
         // Use this for initialization
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
-
-            base.LoadPrefab("blocks/tree", this.transform.GetChild(0));
+            base.LoadPrefab("mineral/tree", this.transform.GetChild(0));
         }
 
         //// Update is called once per frame

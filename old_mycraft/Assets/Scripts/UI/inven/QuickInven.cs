@@ -10,15 +10,14 @@ namespace MyCraft
 {
     public class QuickInven : ItemInvenBase
     {
-        protected GameObject keyPanel;
+        protected GameObject keyPanel;  //단축번호를 표기한다.
 
         public GameObject inventoryKey { get; private set; }
 
         public List<GameObject> keys = new List<GameObject>();
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
 
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Item_Canvas/QuickInven/Inventory Panel").gameObject;
@@ -26,17 +25,18 @@ namespace MyCraft
             //this.keyPanel = this.inventoryPanel.transform.FindChild("Key Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
             this.keyPanel = this.transform.Find("Key Panel").gameObject;
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             inventoryKey = Resources.Load<GameObject>("prefab/ui/SlotKey") as GameObject;
+
+        }
+
+        void Start()
+        {
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Slot Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             ////HG_TEST : 테스트 아이템 지급
             //AddItem((int)BLOCKTYPE.BELT, 54);

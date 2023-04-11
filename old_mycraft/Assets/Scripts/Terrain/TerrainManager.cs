@@ -27,56 +27,27 @@ namespace MyCraft
         //mineral 3차원 배열
         public TerrainLayer mineral_layer = new TerrainLayer();
 
-        //void Awake()
-        //{
-        //    this.block_layer = new TerrainLayer();
-        //    this.mineral_layer = new TerrainLayer();
-
-        //}
-
-        // Use this for initialization
-        void Start()
+        void Awake()
         {
-            LoadPrefab<BeltManager>("blocks/terrain-prefab", "belt");
-            LoadPrefab<InserterManager>("blocks/terrain-prefab", "inserter");
-            LoadPrefab<ChestManager>("blocks/terrain-prefab", "chest");
-            LoadPrefab<DrillManager>("blocks/terrain-prefab", "drill");
-            LoadPrefab<MachineManager>("blocks/terrain-prefab", "machine");
-            LoadPrefab<StoneFurnaceManager>("blocks/terrain-prefab", "stone-furnace");
+            LoadPrefab<BeltManager>("hierarchy/terrain", "belt");
+            LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
+            LoadPrefab<ChestManager>("hierarchy/terrain", "chest");
+            LoadPrefab<DrillManager>("hierarchy/terrain", "drill");
+            LoadPrefab<MachineManager>("hierarchy/terrain", "machine");
+            LoadPrefab<StoneFurnaceManager>("hierarchy/terrain", "stone-furnace");
+            LoadPrefab<StoneManager>("hierarchy/terrain", "stone");
+            LoadPrefab<TreeManager>("hierarchy/terrain", "tree");
+            LoadPrefab<IronManager>("hierarchy/terrain", "iron-ore");
 
-            LoadPrefab<StoneManager>("blocks/terrain-prefab", "stone");
-            LoadPrefab<TreeManager>("blocks/terrain-prefab", "tree");
-            LoadPrefab<IronManager>("blocks/terrain-prefab", "iron-ore");
 
+            int x = -2, z = 4;
+            //coal
 
-            //block_layer = new TerrainLayer();
-            //mineral_layer = new TerrainLayer();
+            //copper-ore
 
-            //this.belt_manager = this.GetComponentInChildren<BeltManager>();
-            //this.inserter_manager = this.GetComponentInChildren<InserterManager>();
-
-            //InitBlock();
-            //performance(100);
-
-            int x = -2, y = 0, z = -2;
-            BlockScript script;
-            //tree
-            script = CreateBlock(this.GetMineralLayer(), x-1, y, z + 2, GameManager.GetTreeManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1001);//BLOCKTYPE.RAW_WOOD
-            script = CreateBlock(this.GetMineralLayer(), x, y, z + 2, GameManager.GetTreeManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1001);//BLOCKTYPE.RAW_WOOD
-            script = CreateBlock(this.GetMineralLayer(), x+1, y, z+2, GameManager.GetTreeManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1001);//BLOCKTYPE.RAW_WOOD
-            //iron
-            script = CreateBlock(this.GetMineralLayer(), x-1, y, z, GameManager.GetIronManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1002);//BLOCKTYPE.IRON_ORE
-            script = CreateBlock(this.GetMineralLayer(), x, y, z, GameManager.GetIronManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1002);//BLOCKTYPE.IRON_ORE
-            script = CreateBlock(this.GetMineralLayer(), x+1, y, z, GameManager.GetIronManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1002);//BLOCKTYPE.IRON_ORE
-            //stone
-            script = CreateBlock(this.GetMineralLayer(), x, y, z-2, GameManager.GetStoneManager().GetChoicePrefab(TURN_WEIGHT.FRONT));
-            script._itembase = GameManager.GetItemBase().FetchItemByID(1003);//BLOCKTYPE.STONE
+            PutdownBlock(1001, 3, x, z -= 2, GameManager.GetTreeManager().GetChoicePrefab());       //tree
+            PutdownBlock(1002, 3, x, z -= 2, GameManager.GetIronManager().GetChoicePrefab());       //iron-ore
+            PutdownBlock(1003, 2, x, z -= 2, GameManager.GetStoneManager().GetChoicePrefab());      //stone
         }
 
         void LoadPrefab<T>(string path, string name) where T : BlockManager
@@ -84,6 +55,15 @@ namespace MyCraft
             GameObject go = Managers.Resource.Instantiate(path, this.transform);
             go.name = name;
             go.AddComponent<T>();
+        }
+
+        void PutdownBlock(int itemid, int count, int x, int z, BlockScript prefab)
+        {
+            for (int i = 0; i < count; ++i)
+            {
+                BlockScript block = CreateBlock(this.GetMineralLayer(), x-i, 0, z, prefab);
+                block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);//BLOCKTYPE.RAW_WOOD
+            }
         }
 
 

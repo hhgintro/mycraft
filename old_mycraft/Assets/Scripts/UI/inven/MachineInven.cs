@@ -15,9 +15,9 @@ namespace MyCraft
         public GameObject _panelInvenSub { get; private set; }
         public GameObject _panelInvenLeaf { get; private set; }
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
+            base.Init();
 
             //_panelInvenMain = this.transform.Find("Inven-Main Panel").gameObject;
             //_panelInvenSub = this.transform.Find("Inven-Main Panel/Inven-Sub Panel").gameObject;
@@ -32,15 +32,16 @@ namespace MyCraft
             //this.inventoryPanel = GameObject.Find("Canvas/ChestInven/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             //GameObject _slot = Resources.Load<GameObject>("prefab/ui/Slot") as GameObject;
 
             //GameObject clonePanel = this.CreateObject(this._panelInvenSub.transform, this._panelInvenLeaf);
             //GameObject cloneSlot = this.CreateSlot(clonePanel.transform, null, _slot);
+
+        }
+
+        void Start()
+        {
 
             //HG_TEST : 테스트를 위해서 active로 설정합니다.
             //this.SetActive(false);
@@ -52,17 +53,17 @@ namespace MyCraft
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , this.transform.Find("Progress/bar").GetComponent<Image>()
                 , this.transform.Find("Input-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Output-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Chip-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             //AddItem(1, 54);
             //AddItem(2, 54);

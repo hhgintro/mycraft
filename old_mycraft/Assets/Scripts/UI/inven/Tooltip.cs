@@ -28,13 +28,10 @@ namespace MyCraft
 
         //private Text textTooltip;
 
-        private void Awake()
+        void Awake()
         {
             //this.tooltip = GameObject.Find("Canvas/Tooltip");
 
-        }
-        private void Start()
-        {
             _title = Resources.Load<GameObject>("prefab/ui/Tooltip-Title") as GameObject;
             _cost = Resources.Load<GameObject>("prefab/ui/Tooltip-Cost") as GameObject;
             _comment = Resources.Load<GameObject>("prefab/ui/Tooltip-Comment") as GameObject;

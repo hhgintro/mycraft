@@ -165,7 +165,6 @@ namespace MyCraft
 
         void OnMouseRButtonDown()
         {
-            Debug.Log("r-down");
             RaycastHit hit;
             if (GetRayCast(Input.mousePosition, out hit, 1 << 9))//picking된 object 정보
             {

@@ -21,18 +21,6 @@ namespace MyCraft
 
         //public Text textAmount;
 
-        protected override void Awake()
-        {
-            //if(0 < this.transform.childCount)
-            //    textAmount = this.transform.GetChild(0).GetComponent<Text>();
-
-            //inven = GameManager.GetInventory();
-            //tooltip = GameManager.GetTooltip();
-        }
-        //private void Start()
-        //{
-
-        //}
         public override void OnPointerEnter(PointerEventData eventData)
         {
             //Debug.Log("point enter");
@@ -129,7 +117,7 @@ namespace MyCraft
                 this.AddStackCount(-pickCnt, true);
 
                 //일부만 가져옵니다(새로 만들어서)
-                InvenBase.choiced_item = (InvenItemData)this.owner.CreateItemData(null, this.transform.parent.parent.parent.parent.parent, this.panel, this.slot, this.database, this.owner.inventoryItem, ref pickCnt, false);
+                InvenBase.choiced_item = (InvenItemData)this.owner.CreateItemData(null, this.transform.parent.parent.parent.parent.parent, this.panel, this.slot, this.database, this.owner._invenItem, ref pickCnt, false);
                 InvenBase.choiced_item.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 return;
             }

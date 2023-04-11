@@ -19,7 +19,7 @@ namespace MyCraft
         ////}
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
             //_blocktype = BLOCKTYPE.RAW_WOOD;
 

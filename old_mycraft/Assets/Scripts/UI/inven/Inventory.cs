@@ -10,23 +10,17 @@ namespace MyCraft
 
         //public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
-
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Slot Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             ////HG_TEST : 테스트 아이템 지급
             //AddItem((int)BLOCKTYPE.BELT, 54);

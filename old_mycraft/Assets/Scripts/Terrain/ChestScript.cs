@@ -16,9 +16,8 @@ namespace MyCraft
         //public List<BlockSlot> slots = new List<BlockSlot>();
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
-            base.Start();
             //_blocktype = BLOCKTYPE.CHEST;
             //if (null == base._itembase)
             //    base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);

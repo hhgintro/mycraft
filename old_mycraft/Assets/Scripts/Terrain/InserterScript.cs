@@ -20,7 +20,7 @@ namespace MyCraft
         //public float speed = 10f;
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
             //_blocktype = BLOCKTYPE.INSERTER;
             if (null == base._itembase)

@@ -38,7 +38,7 @@ namespace MyCraft
         //public static Color Slot_Yellow = new Color((float)0xfd / 0xff, (float)0xe1 / 0xff, (float)0x00 / 0xff, (float)0xff / 0xff);
         //public static Color Slot_Red = new Color((float)0xff / 0xff, (float)0x42 / 0xff, (float)0x42 / 0xff, (float)0xff / 0xff);
 
-        protected override void Awake()
+        void Awake()
         {
             //this._panels.Add(new InvenSlotPanel(0, this.slotAmount, this
             //    , this.transform.FindChild("Slot Panel").gameObject
@@ -47,10 +47,6 @@ namespace MyCraft
 
             //GridLayoutGroup grid = this.slotPanel.GetComponent<GridLayoutGroup>();
             //grid.cellSize = new Vector2(16, 16);
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             //InitSlot();
             this.inventoryTech = Resources.Load<GameObject>("prefab/ui/Tech") as GameObject;
@@ -251,10 +247,8 @@ namespace MyCraft
                     base.CreateTechData(this, slots[i].transform, p, i, itemToAdd, this.inventoryTech);
 
                     //color
-                    if (itemToAdd.prev_techs.Count <= 0)
-                        slots[i].GetComponent<Image>().color = InvenBase.Slot_Yellow;
-                    else
-                        slots[i].GetComponent<Image>().color = InvenBase.Slot_Red;
+                    if (itemToAdd.prev_techs.Count <= 0)    slots[i].GetComponent<Image>().color = Color.yellow;
+                    else                                    slots[i].GetComponent<Image>().color = Color.red;
                     //TechSlot ts = slots[i].GetComponent<TechSlot>();
                     //Debug.Log("tech slot" + i + ts.ToString());
 

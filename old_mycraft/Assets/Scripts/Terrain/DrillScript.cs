@@ -21,7 +21,7 @@ namespace MyCraft
         //public bool running = false;
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
             //_blocktype = BLOCKTYPE.DRILL;
             //if (null == base._itembase)

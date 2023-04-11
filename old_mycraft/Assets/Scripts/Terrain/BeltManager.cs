@@ -15,10 +15,8 @@ namespace MyCraft
 
         //List<BeltGoods> goods;  //관리대상목록(belt에서 이동하고 있는 물품을 관리합니다.
 
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
-
             base.LoadPrefab("blocks/transport-belt-front", this.transform.GetChild(0));
             base.LoadPrefab("blocks/transport-belt-turn-left", this.transform.GetChild(0));
             base.LoadPrefab("blocks/transport-belt-turn-right", this.transform.GetChild(0));

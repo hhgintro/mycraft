@@ -136,7 +136,7 @@ namespace MyCraft
                     if(amount < this.cost.items[i].amount)  //부족할때
                     {
                         slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + amount.ToString() + "/" + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
-                        slot_cost.transform.GetChild(1).GetComponent<Text>().color = InvenBase.Slot_Gray;
+                        slot_cost.transform.GetChild(1).GetComponent<Text>().color = Color.gray;
                     }
                     else    //충분할때.
                     {

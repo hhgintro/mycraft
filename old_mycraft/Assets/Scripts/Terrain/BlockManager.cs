@@ -9,15 +9,11 @@ namespace MyCraft
         //protected TerrainManager terrain_manager;
 
         //HG_TEST : 테스트용으로 public으로 선언함.
-        protected List<BlockScript> prefabs;
+        protected List<BlockScript> prefabs = new List<BlockScript>();
         //List<BeltGoods> prefabs_goods;
 
         //List<BeltGoods> goods;  //관리대상목록(belt에서 이동하고 있는 물품을 관리합니다.
 
-        protected virtual void Start()
-        {
-            this.prefabs = new List<BlockScript>();
-        }
 
         protected void LoadPrefab(string path, Transform parent)
         {
@@ -27,7 +23,7 @@ namespace MyCraft
             this.prefabs.Add(block);
         }
 
-        public virtual BlockScript GetChoicePrefab(TURN_WEIGHT weight)
+        public virtual BlockScript GetChoicePrefab(TURN_WEIGHT weight=TURN_WEIGHT.FRONT)
         {
             if (this.prefabs.Count <= 0)
                 return null;

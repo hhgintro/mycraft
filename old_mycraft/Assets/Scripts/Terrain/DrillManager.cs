@@ -10,10 +10,8 @@ namespace MyCraft
         //private List<DrillScript> prefabs_drill;
 
         // Use this for initialization
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
-
             base.LoadPrefab("blocks/drill", this.transform.GetChild(0));
         }
 

@@ -8,11 +8,8 @@ namespace MyCraft
     {
         //private List<ChestScript> prefabs_chest;
 
-        // Use this for initialization
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
-
             base.LoadPrefab("blocks/chest", this.transform.GetChild(0));
         }
 

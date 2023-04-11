@@ -9,10 +9,8 @@ namespace MyCraft
         //private List<MachineScript> prefabs_machine;
 
         // Use this for initialization
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
-
             base.LoadPrefab("blocks/machine", this.transform.GetChild(0));
         }
 

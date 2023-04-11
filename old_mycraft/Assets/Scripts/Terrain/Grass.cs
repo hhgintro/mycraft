@@ -22,11 +22,11 @@ namespace MyCraft
         //}
 
         // Use this for initialization
-        protected override void Start()
-        {
-            //_blocktype = BLOCKTYPE.RAW_WOOD;
+        //void Start()
+        //{
+        //    //_blocktype = BLOCKTYPE.RAW_WOOD;
 
-        }
+        //}
 
         ////// Update is called once per frame
         ////void Update () {

@@ -21,7 +21,7 @@ namespace MyCraft
 
         //public Text textAmount;
 
-        protected override void Awake()
+        void Awake()
         {
             //if(0 < this.transform.childCount)
             //    textAmount = this.transform.GetChild(0).GetComponent<Text>();

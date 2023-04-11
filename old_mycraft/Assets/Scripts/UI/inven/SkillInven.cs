@@ -11,19 +11,20 @@ namespace MyCraft
         //public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
         //public GameObject inventoryPanel;
 
-        protected override void Awake()
+        void Awake()
         {
             //base.Awake();
+            base.Init();
 
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Canvas/ChestInven/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-        }
-        protected override void Start()
-        {
-            base.Start();
 
+        }
+        
+        void Start()
+        {
             this.SetActive(false);
 
             //this.slotAmount = 16;
@@ -32,14 +33,14 @@ namespace MyCraft
 
             for(int i=0; i<5; ++i)
             {
-                GameObject objPanel = UnityEngine.Object.Instantiate(this.inventoryPanel);
+                GameObject objPanel = UnityEngine.Object.Instantiate(this._invenPanel);
                 objPanel.transform.SetParent(parent, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
                 objPanel.name = "Slot-Panel-" + (i + 1);// i.ToString("D2");
 
                 base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                     , null
                     , objPanel
-                    , base._inventorySlot));
+                    , base._invenSlot));
 
                 ////HG_TEST : 임으로 넣는 로직임니다.
                 ////위 panel생성시 slot개수를 2개로 설정해습니다. 0으로 돌려주세요.

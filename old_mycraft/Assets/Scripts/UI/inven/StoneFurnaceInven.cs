@@ -12,9 +12,8 @@ namespace MyCraft
     {
         //public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
 
             base._progress.Add(this.transform.Find("Progress/bar").GetComponent<Image>());
             base._progress.Add(this.transform.Find("Fuel-Progress/bar").GetComponent<Image>());
@@ -23,9 +22,9 @@ namespace MyCraft
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
-        protected override void Start()
+
+        void Start()
         {
-            base.Start();
 
             //HG_TEST : 테스트를 위해서 active로 설정합니다.
             //this.SetActive(false);
@@ -37,17 +36,17 @@ namespace MyCraft
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , this.transform.Find("Progress/bar").GetComponent<Image>()
                 , this.transform.Find("Input-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , this.transform.Find("Fuel-Progress/bar").GetComponent<Image>()
                 , this.transform.Find("Fuel-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Output-Panel").gameObject
-                , base._inventorySlot));
+                , base._invenSlot));
             //AddItem(1, 54);
             //AddItem(2, 54);
 

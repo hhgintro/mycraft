@@ -16,9 +16,8 @@ namespace MyCraft
 
         //List<BeltGoods> goods;  //관리대상목록(belt에서 이동하고 있는 물품을 관리합니다.
 
-        protected override void Start()
+        void Awake()
         {
-            base.Start();
             //this.terrain_manager = this.transform.GetComponentInParent<TerrainManager>();
 
 

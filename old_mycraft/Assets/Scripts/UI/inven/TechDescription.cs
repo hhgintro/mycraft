@@ -19,24 +19,25 @@ namespace MyCraft
         //public GameObject inventoryItem;
         public GameObject _inventoryMultiple;
 
-        protected override void Awake()
+        void Awake()
         {
-            base.Awake();
+            base.Init();
 
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             LocaleManager.SetLocale("technology", this.transform.Find("Cost/Text").GetComponent<Text>());
             LocaleManager.SetLocale("technology", this.transform.Find("Pre-Tech/Text").GetComponent<Text>());
             LocaleManager.SetLocale("technology", this.transform.Find("Next-Tech/Text").GetComponent<Text>());
             LocaleManager.SetLocale("technology", this.transform.Find("Reward/Text").GetComponent<Text>());
             LocaleManager.SetLocale("technology", this.transform.Find("Research/Text").GetComponent<Text>());
+
+        }
+
+        void Start()
+        {
 
             foreach (var tech in GameManager.GetTechBase().database)
             {
@@ -71,7 +72,7 @@ namespace MyCraft
             this._panelTitle = new InvenSlotPanel(0, 0, this
                 , null
                 , this.transform.Find("Slot Panel").gameObject
-                , this._inventorySlot);
+                , this._invenSlot);
             //title-item
             this.AddTech(this._panelTitle, techbase.id);
             ////color
@@ -84,7 +85,7 @@ namespace MyCraft
             this._panelCost = new InvenSlotPanel(0, 0, this
                 , null
                 , this.transform.Find("Cost/Slot Panel").gameObject
-                , this._inventorySlot);
+                , this._invenSlot);
             //cost-item
             this.AddTime(this._panelCost, 0, techbase._cost.time);
             for (int i = 0; i < techbase._cost.items.Count; ++i)
@@ -103,7 +104,7 @@ namespace MyCraft
                 this._panelPreTech = new InvenSlotPanel(1, 0, this
                     , null
                     , this.transform.Find("Pre-Tech/Slot Panel").gameObject
-                    , this._inventorySlot);
+                    , this._invenSlot);
                 for (int i = 0; i < techbase.prev_techs.Count; ++i)
                     this.AddTech(this._panelPreTech, techbase.prev_techs[i]);
             }
@@ -113,7 +114,7 @@ namespace MyCraft
                 _panelNextTech = new InvenSlotPanel(2, 0, this
                     , null
                     , this.transform.Find("Next-Tech/Slot Panel").gameObject
-                    , this._inventorySlot);
+                    , this._invenSlot);
                 for (int i = 0; i < techbase.next_techs.Count; ++i)
                     this.AddTech(this._panelNextTech, techbase.next_techs[i]);
             }
@@ -123,7 +124,7 @@ namespace MyCraft
                 this._panelReward = new InvenSlotPanel(3, 0, this
                     , null
                     , this.transform.Find("Reward/Slot Panel").gameObject
-                    , this._inventorySlot);
+                    , this._invenSlot);
                 for (int i = 0; i < techbase.rewards.Count; ++i)
                     this.AddSkill(this._panelReward, techbase.rewards[i], 0);
             }
@@ -140,7 +141,7 @@ namespace MyCraft
             }
 
             Slot slot = panel.CreateSlot();
-            this.CreateTimeData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this.inventoryItem, time);
+            this.CreateTimeData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this._invenItem, time);
         }
 
         //InvenItemData가 없이,
@@ -195,10 +196,8 @@ namespace MyCraft
             this.CreateTechData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this.inventoryTech);
 
             //color
-            if (itemToAdd.prev_techs.Count <= 0)
-                slot.GetComponent<Image>().color = InvenBase.Slot_Yellow;
-            else
-                slot.GetComponent<Image>().color = InvenBase.Slot_Red;
+            if (itemToAdd.prev_techs.Count <= 0)    slot.GetComponent<Image>().color = Color.yellow;
+            else                                    slot.GetComponent<Image>().color = Color.red;
 
             //List<Slot> slots = panel._slots;
             //for (int i = 0; i < slots.Count; ++i)
@@ -262,7 +261,7 @@ namespace MyCraft
                     continue;
 
                 //this.items[i] = itemToAdd;
-                this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, this.inventoryItem, ref itemcount, true);
+                this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, this._invenItem, ref itemcount, true);
 
                 //더이상 추가할 것이 없다.
                 if (itemcount <= 0)

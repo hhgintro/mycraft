@@ -48,6 +48,12 @@ namespace MyCraft
         private static TechDescription _techdesc;
         private static Tooltip _tooltip;
 
+        private static GameObject _invenPanel;
+        private static GameObject _invenSlot;
+        private static GameObject _invenItem;
+        private static GameObject _invenSkill;
+        private static GameObject _invenReset;
+
 
         public bool bNewGame { get; set; }
         public StringBuilder _locale;
@@ -95,13 +101,6 @@ namespace MyCraft
                 this.Load();
 
             }
-
-
-            //HG_TEST
-            //new JSonParser<Technology>(Application.streamingAssetsPath + "/technology.json");
-
-            //..
-
 
             Application.runInBackground = true;
         }
@@ -275,8 +274,36 @@ namespace MyCraft
             return _tooltip;
         }
 
-
-
+        public static GameObject GetInvenPanel()
+        {
+            if(null == _invenPanel)
+                _invenPanel = Managers.Resource.Load<GameObject>("prefab/ui/Slot Panel");
+            return _invenPanel;
+        }
+        public static GameObject GetInvenSlot()
+        {
+            if(null == _invenSlot)
+               _invenSlot = Managers.Resource.Load<GameObject>("prefab/ui/Slot");
+            return _invenSlot;
+        }
+        public static GameObject GetInvenItem()
+        {
+            if(null == _invenItem)
+                _invenItem = Managers.Resource.Load<GameObject>("prefab/ui/Item");
+            return _invenItem;
+        }
+        public static GameObject GetInvenSkill()
+        {
+            if(null == _invenSkill)
+                _invenSkill = Managers.Resource.Load<GameObject>("prefab/ui/Skill");
+            return _invenSkill;
+        }
+        public static GameObject GetInvenReset()
+        {
+            if(null == _invenReset)
+                _invenReset = Managers.Resource.Load<GameObject>("prefab/ui/Reset");
+            return _invenReset;
+        }
 
         public static BeltGoods CreateMineral(int itemid, Transform parent)//, Vector3 pos)
         {

@@ -14,12 +14,12 @@ namespace MyCraft
         public BeltSector sector;//자신이 올라가 있는 belt의 sector
 
         // Use this for initialization
-        protected override void Start()
-        {
-            //_blocktype = BLOCKTYPE.RAW_WOOD;
+        //protected override void Start()
+        //{
+        //    //_blocktype = BLOCKTYPE.RAW_WOOD;
 
-            //base._bStart = true;
-        }
+        //    //base._bStart = true;
+        //}
 
         //// Update is called once per frame
         //void Update()

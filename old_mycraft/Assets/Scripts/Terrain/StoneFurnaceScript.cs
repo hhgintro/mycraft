@@ -30,9 +30,8 @@ namespace MyCraft
         private int _output { get; set; }
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
-            base.Start();
             //_blocktype = BLOCKTYPE.STONE_FURNACE;
             //if (null == base._itembase)
             //    base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);

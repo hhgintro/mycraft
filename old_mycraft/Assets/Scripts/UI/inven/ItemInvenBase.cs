@@ -34,7 +34,7 @@ namespace MyCraft
         //public static bool bPointerEnter { get; set; }      //인벤위에 마우스가 위치했는지???
 
 
-        protected override void Awake()
+        void Awake()
         {
             //this._panels.Add(new InvenSlotPanel(0, this.slotAmount, this
             //    , this.transform.FindChild("Slot Panel").gameObject
@@ -43,10 +43,6 @@ namespace MyCraft
 
             //GridLayoutGroup grid = this.slotPanel.GetComponent<GridLayoutGroup>();
             //grid.cellSize = new Vector2(16, 16);
-        }
-        protected override void Start()
-        {
-            base.Start();
 
             //InitSlot();
 
@@ -155,7 +151,7 @@ namespace MyCraft
                 return;
             }
 
-            this.CreateItemData(this, s.transform, panel, slot, itemToAdd, this.inventoryItem, ref amount, false);
+            this.CreateItemData(this, s.transform, panel, slot, itemToAdd, this._invenItem, ref amount, false);
 
         }
 
@@ -295,7 +291,7 @@ namespace MyCraft
                         continue;
 
                     //this.items[i] = itemToAdd;
-                    this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, this.inventoryItem, ref itemcount, true);
+                    this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, this._invenItem, ref itemcount, true);
 
                     //더이상 추가할 것이 없다.
                     if (itemcount <= 0)

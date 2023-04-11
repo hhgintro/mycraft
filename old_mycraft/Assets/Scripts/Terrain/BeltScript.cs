@@ -49,7 +49,7 @@ namespace MyCraft
         //}
 
         // Use this for initialization
-        protected override void Start()
+        void Start()
         {
             //_blocktype = BLOCKTYPE.BELT;
             //if(null == base._itembase)
