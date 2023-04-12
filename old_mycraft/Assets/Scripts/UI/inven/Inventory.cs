@@ -12,28 +12,18 @@ namespace MyCraft
 
         void Awake()
         {
-            //this.database = GetComponent<ItemDatabase>();
-            //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
-            //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            base.Init();
 
             base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                 , null
                 , this.transform.Find("Slot Panel").gameObject
-                , base._invenSlot));
+                , InvenBase._invenSlot));
 
-            ////HG_TEST : 테스트 아이템 지급
-            //AddItem((int)BLOCKTYPE.BELT, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.MINERAL, 54);
+            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+        }
+        
+        void Start()
+        {
 
             //locale
             //title text

@@ -15,11 +15,11 @@ namespace MyCraft
         ////protected GameObject slotPanel;
 
         //protected ItemDatabase database;
-        public GameObject _invenPanel { get; private set; }
-        public GameObject _invenSlot { get; private set; }
-        public GameObject _invenItem { get; private set; }
-        public GameObject _invenSkill { get; private set; }
-        public GameObject _invenReset { get; private set; }
+        public static GameObject _invenPanel { get; private set; }
+        public static GameObject _invenSlot { get; private set; }
+        public static GameObject _invenItem { get; private set; }
+        public static GameObject _invenSkill { get; private set; }
+        public static GameObject _invenReset { get; private set; }
 
         protected CanvasGroup canvas_ui;
 
@@ -40,14 +40,11 @@ namespace MyCraft
 
         protected virtual void Init()
         {
-            _invenPanel = Managers.Resource.Load<GameObject>("prefab/ui/Slot Panel");
-            _invenSlot = Managers.Resource.Load<GameObject>("prefab/ui/Slot");
-            _invenItem = Managers.Resource.Load<GameObject>("prefab/ui/Item");
-            _invenSkill = Managers.Resource.Load<GameObject>("prefab/ui/Skill");
-            _invenReset = Managers.Resource.Load < GameObject > ("prefab/ui/Reset");
-
-            //인벤 가이드 동영상
-            //https://www.youtube.com/watch?v=dIq_7BeEjKE
+            if(null == _invenPanel) _invenPanel = Managers.Resource.Load<GameObject>("prefabs/ui/Slot Panel");
+            if(null == _invenSlot)  _invenSlot = Managers.Resource.Load<GameObject>("prefabs/ui/Slot");
+            if(null == _invenItem)  _invenItem = Managers.Resource.Load<GameObject>("prefabs/ui/Item");
+            if(null == _invenSkill) _invenSkill = Managers.Resource.Load<GameObject>("prefabs/ui/Skill");
+            if(null == _invenReset) _invenReset = Managers.Resource.Load<GameObject>("prefabs/ui/Reset");
         }
 
         public virtual void Clear()
@@ -272,7 +269,7 @@ namespace MyCraft
             }
 
             Slot slot = panel.CreateSlot();
-            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this._invenReset, 0);
+            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, InvenBase._invenReset, 0);
         }
 
         //InvenItemData가 없이,
@@ -288,14 +285,16 @@ namespace MyCraft
 
             //database
             SkillBase itemToAdd = GameManager.GetSkillBase().FetchItemByID(id);
+            //ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
             if (null == itemToAdd)
             {
                 Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
                 return;
             }
 
+
             Slot slot = panel.CreateSlot();
-            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this._invenSkill, amount);
+            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, InvenBase._invenSkill, amount);
         }
 
         ////InvenItemData가 없이,
@@ -411,11 +410,10 @@ namespace MyCraft
         }
         public virtual void DeactiveIcon()
         {
-            if (null == InvenBase.choiced_item)
-                return;
+            if (null == InvenBase.choiced_item) return;
             //자원(광물)은 예외...
-            if (BLOCKTYPE.RAW_WOOD <= InvenBase.choiced_item.database.type)
-                return;
+            if (InvenBase.choiced_item.database.type < BLOCKTYPE.CHEST) return;
+
             GameManager.GetTerrainManager().SetChoicePrefab((ItemBase)InvenBase.choiced_item.database);
             GameManager.GetMouseController().mouse_refresh = true;//prefab을 찍을 수 있도록 설정
             InvenBase.choiced_item.GetComponent<Image>().enabled = false;

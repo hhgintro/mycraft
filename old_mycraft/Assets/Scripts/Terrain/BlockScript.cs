@@ -8,15 +8,10 @@ namespace MyCraft
     public class BlockScript : MonoBehaviour
     {
         //block을 save할때 동일여부를 판단하기 위해 식별자로 활용합니다.
-        public static int _static_idx = 0;
+        private static int _static_idx = 0;
         public int _index { get; private set; }
         //..
 
-        //public BLOCKTYPE _blocktype;// { get; protected set; }
-        public byte _blocksize = 1;
-
-        ////public DIRECTION forward = DIRECTION.FRONT;//바라보고 있는 방향
-        ////public int x, y, z;
 
         public List<BlockSlotPanel> _panels = new List<BlockSlotPanel>();
         public List<Progress> _progresses = new List<Progress>();
@@ -36,26 +31,32 @@ namespace MyCraft
         {
             this.inven = null;
         }
-        public virtual void Reset()
-        { }
-        public virtual void SetOutput(SkillBase skillbase)
-        { }
-        //public virtual void SetPos(int x, int y, int z)
-        //{
-        //    this.transform.position = new Vector3(x, y, z);
-        //}
-
-        //public virtual BlockScript ChainBlock()
-        //{ return null; }
+        public virtual void Reset() { }
+        public virtual void SetOutput(SkillBase skillbase) { }
 
         public bool IsBelt()
         {
-            if (null == this._itembase)
-                return false;
+            if (null == this._itembase) return false;
             if (BLOCKTYPE.BELT == this._itembase.type)
                 return true;
-            if (BLOCKTYPE.GROUND_BELT == this._itembase.type)
+            return false;
+        }
+        public bool IsSpliter()
+        {
+            if (null == this._itembase) return false;
+            if (BLOCKTYPE.SPLITER == this._itembase.type)
                 return true;
+            return false;
+        }
+        public bool IsTransport()
+        {
+            if (null == this._itembase) return false;
+            switch(this._itembase.type)
+            {
+                case BLOCKTYPE.BELT:
+                case BLOCKTYPE.SPLITER:
+                    return true;
+            }
             return false;
         }
 
@@ -68,11 +69,6 @@ namespace MyCraft
         {
             this.transform.position = new Vector3(x, y, z);
         }
-
-        //public virtual GameObject GetBodyObject()
-        //{
-        //    return this.gameObject;
-        //}
 
         public virtual void SetMeshRender()
         {
@@ -96,14 +92,6 @@ namespace MyCraft
 
         public virtual BlockScript Clone()
         {
-            /*bcheck
-             * false : check항목이 더 이상 없으므로 그냥 만든다.
-             * true : check항목이 있는지 판단해서 만들어라.(belt_manager에서 처리사항이 있어요)
-             * */
-
-            //HG_TODO : 우선은 그냥 만들어준다.
-            // belt_manager에서 주변 상황에 따른 prefab을 달리하여 생성하도록 해야 합니다.
-
             //create object
             GameObject obj = UnityEngine.Object.Instantiate(this.gameObject);
             obj.SetActive(true);
@@ -116,6 +104,7 @@ namespace MyCraft
             script.manager = this.manager;
             //script._itembase = this._itembase;
             script._index = ++_static_idx;
+            if (int.MaxValue <= _static_idx) _static_idx = 0;
             return script;
         }
 
@@ -146,6 +135,14 @@ namespace MyCraft
         public virtual void OnClicked() { }
         public virtual void OnProgressCompleted(int id)
         { Debug.LogError("Error: You must re-define Function"); }
+
+        //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
+        public virtual void LinkedBelt() { }
+        // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
+        public virtual int CheckWeightChainBelt() { return 0; }
+        public virtual void LinkBeltSector(BELT_ROW row1, BELT_ROW row2, BlockScript next, BELT_ROW lrow, BELT_COL lcol, BELT_ROW rrow, BELT_COL rcol) { }
+        //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
+        public virtual BlockScript ChainBelt(BlockScript script) { return this; }
 
         public virtual BeltSector GetBeltSector(BeltScript script_front)
         { Debug.LogError("Error: You must re-define Function"); return null; }
@@ -322,7 +319,7 @@ namespace MyCraft
             switch (script_front._itembase.type)
             {
                 case BLOCKTYPE.BELT:
-                case BLOCKTYPE.GROUND_BELT:
+                //case BLOCKTYPE.GROUND_BELT:
                     {
                         //goods가 먼저 생성된 후에, belt를 설치하는 경우에는 null==sector이므로 설정해 줘야합니다ㅏ.
                         if(null == goods.sector)

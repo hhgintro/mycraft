@@ -11,26 +11,20 @@ namespace MyCraft
 
         void Awake()
         {
-            //this.database = GetComponent<ItemDatabase>();
-            //this.inventoryPanel = GameObject.Find("Canvas/ChestInven/Inventory Panel").gameObject;
-            //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            base.Init();
 
+            int slotAmount = 16;
+            base._panels.Add(new InvenSlotPanel(base._panels.Count, slotAmount, this
+                , null
+                , this.transform.Find("Slot Panel").gameObject
+                , InvenBase._invenSlot));
+
+            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
 
         void Start()
         {
-
             this.SetActive(false);
-            int slotAmount = 16;
-            //base.Start();
-
-            //AddItem(1, 54);
-            //AddItem(2, 54);
-            base._panels.Add(new InvenSlotPanel(base._panels.Count, slotAmount, this
-                , null
-                , this.transform.Find("Slot Panel").gameObject
-                , base._invenSlot));
 
             //locale
             //title text

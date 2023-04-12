@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameScene : BaseScene
+namespace MyCraft
 {
-    protected override void Init()
+    public class GameScene : BaseScene
     {
-        base.Init();
+        protected override void Init()
+        {
+            base.Init();
 
-        SceneType = Define.Scene.Game;
+            SceneType = Define.Scene.Game;
 
-        //Managers.UI.ShowSceneUI<UI_Inven>();
+            //Managers.UI.ShowSceneUI<UI_Inven>();
 
-        //Dictionary<int, Stat> dict = Managers.Data.StatDict;
-    }
+            //Dictionary<int, Stat> dict = Managers.Data.StatDict;
+        }
 
-    public override void Clear()
-    {
-        
+        public override void Clear()
+        {
+
+        }
     }
 }

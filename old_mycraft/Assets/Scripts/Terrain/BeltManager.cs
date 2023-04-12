@@ -22,6 +22,35 @@ namespace MyCraft
             base.LoadPrefab("blocks/transport-belt-turn-right", this.transform.GetChild(0));
         }
 
+
+        public override void CreateBlock(BlockScript script)
+        {
+            if (null == script) return;
+            base.CreateBlock(script);
+
+            //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
+            script.LinkedBelt();
+
+            //생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
+            BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
+            if(script_front) script_front.manager.ChainBelt(script_front);
+        }
+
+        public override void DeleteBlock(BlockScript script)
+        {
+            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
+            //    return;
+            if (null == script || false == script.IsBelt())
+                return;
+
+            //삭제된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
+            BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
+            if (script_front) script_front.manager.ChainBelt(script_front);
+
+            //script.DeleteBlock();
+            base.DeleteBlock(script);
+        }
+
         public override BlockScript GetChoicePrefab(TURN_WEIGHT weight)
         {
             if (this.prefabs.Count <= 0)
@@ -41,7 +70,7 @@ namespace MyCraft
 
 
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public BlockScript ChainBelt(BlockScript script)
+        public override BlockScript ChainBelt(BlockScript script)
         {
             //if (null == script || null == script._itembase) return null;
             //if (BLOCKTYPE.BELT != script._itembase.type) return null;
@@ -81,16 +110,16 @@ namespace MyCraft
                 //삭제 : 교체바로 전에서 뺴고 처리하기 때문에 삭제시에는 block을 제거하지 않습니다.
                 GameManager.GetTerrainManager().DeleteBlock(script, false);
 
-                //외형이 변경된 경우 script_front와 next_front와의 link를 잡아준다.
+                //외형이 변경된 경우 script_front의 back/left/right에서 link를 걸어줍니다.
                 BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(newscript.transform.position + newscript.transform.forward);
-                //this.LinkedBelt(script_front);
+                if(script_front) script_front.LinkedBelt();
 
                 return script_front;
             }
 
             //외형이 변경되지 않은 경우
             //script_front와 link는 잡아준다.
-            //this.LinkedBelt(script);
+            script.LinkedBelt();
             return script;
         }
 
@@ -98,7 +127,7 @@ namespace MyCraft
         //변경될 prefab을 가져옵니다.
         public BeltScript ChainBeltPrefab(BeltScript script)
         {
-            int weight = this.CheckWeightChainBelt(script);
+            int weight = script.CheckWeightChainBelt();
 
             BeltScript prefab = null;
             /*
@@ -108,12 +137,12 @@ namespace MyCraft
              * right만 존재하는 경우는 TURN_RIGHT
              * */
             //weight
-            if (0 == weight)
-            {
-                prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-                prefab.transform.forward = script.transform.forward;
-                return prefab;
-            }
+            //if (0 == weight)
+            //{
+            //    prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
+            //    prefab.transform.forward = script.transform.forward;
+            //    return prefab;
+            //}
 
 
             if (Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT))
@@ -125,13 +154,7 @@ namespace MyCraft
 
             bool turn_left = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.LEFT);
             bool turn_right = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.RIGHT);
-            //front
-            if (true == turn_left && true == turn_right)
-            {
-                prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-                prefab.transform.forward = script.transform.forward;
-                return prefab;
-            }
+
             //left
             if (true == turn_left)
             {
@@ -141,7 +164,7 @@ namespace MyCraft
                 return prefab;
             }
             //right
-            else if (true == turn_right)
+            if (true == turn_right)
             {
                 prefab = (BeltScript)this.prefabs[2];   //TURN_RIGHT
                 prefab._itembase = script._itembase;
@@ -154,194 +177,6 @@ namespace MyCraft
                 Debug.LogError("critical not found prefab");
 
             return prefab;
-        }
-
-        // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
-        private int CheckWeightChainBelt(BlockScript script)
-        {
-            //BlockScript script_front = terrain_manager.GetBlock(script.transform.position + script.transform.forward);
-            BlockScript script_back = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.forward);
-            BlockScript script_left = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.right);
-            BlockScript script_right = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.right);
-
-            //주변 block에 의한 가중치
-            int weight = 0;
-
-            //back
-            if (true == this.WeightTurn(script_back, script.transform.forward))
-                weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.FRONT);
-            //left
-            if (true == this.WeightTurn(script_left, script.transform.right))
-                weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.LEFT);
-            //right
-            if (true == this.WeightTurn(script_right, -script.transform.right))
-                weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.RIGHT);
-
-            return weight;
-        }
-
-        //script의 forward와 일치히면 true를 리턴합니다.
-        private bool WeightTurn(BlockScript script, Vector3 forward)
-        {
-            //blocktype
-            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
-            //    return false;
-            if (null == script || false == script.IsBelt())
-                return false;
-
-            //forward(오차발생...허용범위로 체크)
-            float err_bound = 0.01f;
-            float angle = Vector3.Angle(script.transform.forward, forward);
-            if (angle < -err_bound || err_bound < angle)
-                return false;
-
-            return true;//가중치 적용
-        }
-
-
-        public override void CreateBlock(BlockScript script)
-        {
-            if (null == script) return;
-            base.CreateBlock(script);
-
-
-            //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
-            this.LinkedBelt(script);
-
-
-            //생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
-            BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            this.LinkedBelt(this.ChainBelt(script_front));
-            //this.ChainBelt(script_front);
-
-            //if (null == script_front) return;
-            //if (BLOCKTYPE.BELT != script_front.blocktype) return;
-        }
-
-
-        private void LinkedBelt(BlockScript script)
-        {
-            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
-            //    return;
-            if (null == script || false == script.IsBelt())
-                return;
-
-            //Debug.Log("LinkBetlt " + script._index);
-            // [자신]을 기준으로 back / left / right 의 belt 위치에 따라
-            // [자신의] 가중치를 결정합니다.
-            int weight = CheckWeightChainBelt(script);
-
-            bool turn_front = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT);
-            bool turn_left = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.LEFT);
-            bool turn_right = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.RIGHT);
-
-            //back으로 부터( [자신]의 가중치가 front - back이 belt가 있다)
-            if (true == turn_front)
-            {
-                //**************************************************************//
-                //영향력이 확인되었으므로 상태체크를 하지 않는다.( null / blocktype )
-
-                //back(back에 belt가 있다면) - [자신]은 front 상태임(back에 belt가 있으므로)
-                BeltScript script_back = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.forward);
-                //script_back.GetBeltSector(BELT_ROW.LEFT, BELT_COL.FIRST).next = ((BeltScript)script).GetBeltSector(BELT_ROW.LEFT, BELT_COL.FORTH);
-                //script_back.GetBeltSector(BELT_ROW.RIGHT, BELT_COL.FIRST).next = ((BeltScript)script).GetBeltSector(BELT_ROW.LEFT, BELT_COL.FORTH);
-                LinkBeltSector(script_back, (BeltScript)script, BELT_ROW.LEFT, BELT_COL.FORTH, BELT_ROW.RIGHT, BELT_COL.FORTH);
-
-                if (true == turn_left)
-                {
-                    //left에 belt가 있다면 - [자신]은 front 상태임(back에 belt가 있으므로)
-                    BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.right);
-                    LinkBeltSector(script_left, (BeltScript)script, BELT_ROW.LEFT, BELT_COL.FIRST, BELT_ROW.LEFT, BELT_COL.THIRD);
-                }
-
-                if (true == turn_right)
-                {
-                    //right에 belt가 있다면 - [자신]은 front 상태임(back에 belt가 있으므로)
-                    BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.right);
-                    LinkBeltSector(script_right, (BeltScript)script, BELT_ROW.RIGHT, BELT_COL.THIRD, BELT_ROW.RIGHT, BELT_COL.FIRST);
-                }
-
-                return;//****중요(더 아래로 진행못하게)
-            }
-
-            //HG_TODO : left,right의 모두인 경우나, 각각의 경우에 next 위치는 현재는 동일하다.
-            //          추후  모두인경우와 분리를 검토하기 위해 각각의 경우로 나눠 놓았을 뿐이다.
-            if (true == turn_left && true == turn_right)
-            {
-                //left 와 right 양쪽에 belt가 있다면...
-                //[자신]은 front 상태임(left 와 right에 모두 belt가 있으므로)
-
-                //left
-                BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.right);
-                LinkBeltSector(script_left, (BeltScript)script, BELT_ROW.LEFT, BELT_COL.FIRST, BELT_ROW.LEFT, BELT_COL.THIRD);
-                //right
-                BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.right);
-                LinkBeltSector(script_right, (BeltScript)script, BELT_ROW.RIGHT, BELT_COL.THIRD, BELT_ROW.RIGHT, BELT_COL.FIRST);
-
-                return;//****중요(더 아래로 진행못하게)
-            }
-
-            if (true == turn_left)
-            {
-                //left에 belt가 있다면
-                //[자신]은 left 상태임(left 에 belt가 있으므로)
-                BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.right);
-                LinkBeltSector(script_left, (BeltScript)script, BELT_ROW.LEFT, BELT_COL.SECOND, BELT_ROW.RIGHT, BELT_COL.FORTH);
-            }
-
-            if (true == turn_right)
-            {
-                //right에 belt가 있다면
-                //[자신]은 right 상태임(right 에 belt가 있으므로)
-                BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.right);
-                LinkBeltSector(script_right, (BeltScript)script, BELT_ROW.LEFT, BELT_COL.FORTH, BELT_ROW.RIGHT, BELT_COL.SECOND);
-            }
-        }
-
-        //prev의 앞쪽이 연결될 next의 ROW/COL을 설정해 줍니다.
-        private void LinkBeltSector(BeltScript prev, BeltScript next, BELT_ROW lrow, BELT_COL lcol, BELT_ROW rrow, BELT_COL rcol)
-        {
-            //if (null == prev || null == prev._itembase || BLOCKTYPE.BELT != prev._itembase.type)
-            //    return;
-            //if (null == next || null == next._itembase || BLOCKTYPE.BELT != next._itembase.type)
-            //    return;
-            if (null == prev || false == prev.IsBelt())
-                return;
-            if (null == next || false == next.IsBelt())
-                return;
-
-            //Debug.Log("LinkBetlt " + prev._index + " --> " + next._index);
-            prev.GetBeltSector(BELT_ROW.LEFT, BELT_COL.FIRST).next = next.GetBeltSector(lrow, lcol);
-            prev.GetBeltSector(BELT_ROW.RIGHT, BELT_COL.FIRST).next = next.GetBeltSector(rrow, rcol);
-        }
-
-        public void PutdownGoods(BlockScript script, BELT_ROW row)
-        {
-            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
-            //    return;
-            if (null == script || false == script.IsBelt())
-                return;
-
-            ////생성및 sector에 등록
-            //GameObject obj = UnityEngine.Object.Instantiate(this.prefabs_goods[0].gameObject);
-            //obj.SetActive(true);
-
-            //script.PutdownGoods(row, obj);
-        }
-
-        public override void DeleteBlock(BlockScript script)
-        {
-            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
-            //    return;
-            if (null == script || false == script.IsBelt())
-                return;
-
-            BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            this.LinkedBelt(this.ChainBelt(script_front));
-            //this.ChainBelt(script_front);
-
-            //script.DeleteBlock();
-            base.DeleteBlock(script);
         }
 
 

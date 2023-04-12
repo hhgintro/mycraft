@@ -1,188 +1,337 @@
 ﻿[
   {
-    "type":5000,
-    "id":0,
-    "category":1,
-    "panel":0,
-    "title":"reset",
-    "desc":"desc",
-    "DIY":1,
-    "slug":"reset"
+    "type": 5000,
+    "id": 0,
+    "category": 1,
+    "panel": 0,
+    "title": "reset",
+    "desc": "desc",
+    "DIY": 1,
+    "slug": "reset"
   },
   {
-    "type":5000,
-    "id":1,
-    "category":0,
-    "panel":0,
-    "title":"나무상자",
-    "desc":"스킬 1입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid": 1001,"amount": 3}
+    "type": 5000,
+    "id": 1,
+    "category": 0,
+    "panel": 0,
+    "title": "나무상자",
+    "desc": "스킬 1입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2000,
+          "amount": 3
+        }
       ]
     },
-    "outputs":[
-      {"itemid":3,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1000,
+        "amount": 1
+      }
     ],
-    "slug":"chest"
+    "slug": "chest"
   },
   {
-    "type":5000,
-    "id":2,
-    "category":0,
-    "panel":1,
-    "title":"컨베이어 밸트",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":2001,"amount":2},
-        {"itemid":2002,"amount":2}
+    "type": 5000,
+    "id": 2,
+    "category": 0,
+    "panel": 1,
+    "title": "컨베이어 밸트",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 1010,
+          "amount": 2
+        }
       ]
     },
-    "outputs":[
-      {"itemid":1,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1010,
+        "amount": 1
+      }
     ],
-    "slug":"basic-transport-belt"
+    "slug": "basic-transport-belt"
   },
   {
-    "type":5000,
-    "id":3,
-    "category":0,
-    "panel":2,
-    "title":"로봇팔",
-    "desc":"스킬 3입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":2001,"amount":2},
-        {"itemid":2002,"amount":2}
+    "type": 5000,
+    "id": 3,
+    "category": 0,
+    "panel": 1,
+    "title": "분배기",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 1010,
+          "amount": 2
+        }
       ]
     },
-    "outputs":[
-      {"itemid":2,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1020,
+        "amount": 1
+      }
     ],
-    "slug":"robotic-arm"
+    "slug": "basic-splitter"
   },
   {
-    "type":5000,
-    "id":4,
-    "category":1,
-    "panel":2,
-    "title":"채광 드릴",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":2001,"amount":2},
-        {"itemid":2002,"amount":2}
+    "type": 5000,
+    "id": 4,
+    "category": 0,
+    "panel": 2,
+    "title": "로봇팔",
+    "desc": "스킬 3입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ]
     },
-    "outputs":[
-      {"itemid":4,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1030,
+        "amount": 1
+      }
     ],
-    "slug":"drill"
+    "slug": "robotic-arm"
   },
   {
-    "type":5000,
-    "id":5,
-    "category":1,
-    "panel":3,
-    "title":"석재 용광로",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":1003,"amount":5}
+    "type": 5000,
+    "id": 5,
+    "category": 1,
+    "panel": 2,
+    "title": "채광 드릴",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ]
     },
-    "outputs":[
-      {"itemid":6,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1040,
+        "amount": 1
+      }
+    ],
+    "slug": "drill"
+  },
+  {
+    "type": 5000,
+    "id": 6,
+    "category": 1,
+    "panel": 3,
+    "title": "석재 용광로",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2,
+          "amount": 5
+        }
+      ]
+    },
+    "outputs": [
+      {
+        "itemid": 1050,
+        "amount": 1
+      }
     ],
     "slug": "stone-furnace"
   },
   {
-    "type":5000,
-    "id":6,
-    "category":1,
-    "panel":4,
-    "title":"조립 생산 설비",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":2001,"amount":2},
-        {"itemid":2002,"amount":2}
+    "type": 5000,
+    "id": 7,
+    "category": 1,
+    "panel": 4,
+    "title": "조립 생산 설비",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ]
     },
-    "outputs":[
-      {"itemid":5,"amount":1}
+    "outputs": [
+      {
+        "itemid": 1060,
+        "amount": 1
+      }
     ],
     "slug": "machine"
   },
   {
-    "type":5000,
-    "id":7,
-    "category":2,
-    "panel":1,
-    "title":"목재",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":1001,"amount":1}
+    "type": 5000,
+    "id": 8,
+    "category": 2,
+    "panel": 1,
+    "title": "목재",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 1,
+          "amount": 1
+        }
       ]
     },
-    "outputs":[
-      {"itemid":2003,"amount":1}
+    "outputs": [
+      {
+        "itemid": 2000,
+        "amount": 1
+      }
     ],
     "slug": "wood"
   },
   {
-    "type":5000,
-    "id":8,
-    "category":2,
-    "panel":1,
-    "title":"철판",
-    "desc":"스킬 2입니다.",
-    "DIY":0,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":1002,"amount":1}
+    "type": 5000,
+    "id": 9,
+    "category": 2,
+    "panel": 1,
+    "title": "철판",
+    "desc": "스킬 2입니다.",
+    "DIY": 0,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 3,
+          "amount": 1
+        }
       ]
     },
-    "outputs":[
-      {"itemid":2001,"amount":1}
+    "outputs": [
+      {
+        "itemid": 2010,
+        "amount": 1
+      }
     ],
     "slug": "iron-plate"
   },
   {
-    "type":5000,
-    "id":9,
-    "category":2,
-    "panel":3,
-    "title":"철 기어 휠",
-    "desc":"스킬 2입니다.",
-    "DIY":1,
-    "cost":{
-      "time":2.1,
-      "items":[
-        {"itemid":2001,"amount":1}
+    "type": 5000,
+    "id": 10,
+    "category": 2,
+    "panel": 3,
+    "title": "철 기어 휠",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 1
+        }
       ]
     },
-    "outputs":[
-      {"itemid":2002,"amount":1}
+    "outputs": [
+      {
+        "itemid": 2011,
+        "amount": 2
+      }
     ],
     "slug": "iron-gear-wheel"
+  },
+  {
+    "type": 5000,
+    "id": 11,
+    "category": 2,
+    "panel": 3,
+    "title": "구리판",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 1
+        }
+      ]
+    },
+    "outputs": [
+      {
+        "itemid": 3000,
+        "amount": 2
+      }
+    ],
+    "slug": "copper-plate"
+  },
+  {
+    "type": 5000,
+    "id": 12,
+    "category": 2,
+    "panel": 3,
+    "title": "구리선",
+    "desc": "스킬 2입니다.",
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 1
+        }
+      ]
+    },
+    "outputs": [
+      {
+        "itemid": 3010,
+        "amount": 2
+      }
+    ],
+    "slug": "copper-plate"
   }
+
+
+
+
 
 ]

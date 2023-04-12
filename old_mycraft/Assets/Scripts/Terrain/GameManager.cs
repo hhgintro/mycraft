@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace MyCraft
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager
     {
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
@@ -23,7 +23,7 @@ namespace MyCraft
 
         private static TerrainManager _terrain_manager;
         private static BeltManager _belt_manager;
-        private static BeltGroundManager _belt_ground_manager;
+        private static SpliterManager _spliter_manager;
         private static InserterManager _inserter_manager;
         private static ChestManager _chest_manager;
         private static DrillManager _drill_manager;
@@ -58,12 +58,8 @@ namespace MyCraft
         public bool bNewGame { get; set; }
         public StringBuilder _locale;
 
-        void Awake()
-        {
-            Init();
-        }
 
-        void Start()
+        public void OnGame()
         {
             if(true == this.bNewGame)
             {
@@ -72,27 +68,28 @@ namespace MyCraft
                     GameManager.GetInventory()._panels[0].SetAmount(20);
 
                 //HG_TEST : 테스트 아이템 지급
-                GameManager.GetInventory().AddItem(2001, 100); //iron-plate
-                GameManager.GetInventory().AddItem(2002, 100); //iron-gear
-                GameManager.GetInventory().AddItem(2003, 100); //wood
+                GameManager.GetInventory().AddItem(2010, 100);  //iron-plate
+                GameManager.GetInventory().AddItem(2011, 100);  //iron-gear
+                GameManager.GetInventory().AddItem(2000, 100);  //wood
 
-                GameManager.GetInventory().AddItem(1001, 54);    //BLOCKTYPE.RAW_WOOD
-                GameManager.GetInventory().AddItem(1002, 54);    //BLOCKTYPE.IRON_ORE
-                GameManager.GetInventory().AddItem(1003, 54);       //BLOCKTYPE.STONE
+                GameManager.GetInventory().AddItem(10, 54);     //raw-wood
+                GameManager.GetInventory().AddItem(40, 54);     //iron-ore
+                GameManager.GetInventory().AddItem(20, 54);     //stone
 
+                GameManager.GetInventory().AddItem(1010, 54);   //belt
 
 
                 //quick slot
                 if (0 < GameManager.GetQuickInven()._panels.Count)
                     GameManager.GetQuickInven()._panels[0].SetAmount(10);
 
-                GameManager.GetQuickInven().AddItem(1, 54);     //BLOCKTYPE.BELT
-                GameManager.GetQuickInven().AddItem(11, 54);    //BLOCKTYPE.GROUND_BELT
-                GameManager.GetQuickInven().AddItem(2, 54);     //BLOCKTYPE.INSERTER
-                GameManager.GetQuickInven().AddItem(3, 54);     //BLOCKTYPE.CHEST
-                GameManager.GetQuickInven().AddItem(4, 54);     //BLOCKTYPE.DRILL
-                GameManager.GetQuickInven().AddItem(5, 54);     //BLOCKTYPE.MACHINE
-                GameManager.GetQuickInven().AddItem(6, 54);     //BLOCKTYPE.FURNACE
+                GameManager.GetQuickInven().AddItem(1000, 54);  //chest
+                GameManager.GetQuickInven().AddItem(1010, 54);  //belt
+                GameManager.GetQuickInven().AddItem(1020, 54);  //spliter
+                GameManager.GetQuickInven().AddItem(1030, 54);  //inserter
+                GameManager.GetQuickInven().AddItem(1040, 54);  //drill
+                GameManager.GetQuickInven().AddItem(1050, 54);  //stone-furnace
+                GameManager.GetQuickInven().AddItem(1060, 54);  //machine
 
             }
             else
@@ -101,14 +98,13 @@ namespace MyCraft
                 this.Load();
 
             }
-
             Application.runInBackground = true;
         }
 
-        void Init()
+        public void Init()
         {
             //load ini
-            Load("/../config/config.ini");
+            Load(Application.dataPath + "/../config/config.ini");
             LocaleManager.Open(Application.streamingAssetsPath + "/locale/" + _locale.ToString() + "/ui.cfg");
         }
 
@@ -123,7 +119,7 @@ namespace MyCraft
 
             //locale
             _locale = new StringBuilder(255);
-            GetPrivateProfileString("common", "locale", "(empty)", _locale, 255, Application.dataPath + filepath);
+            GetPrivateProfileString("common", "locale", "(empty)", _locale, 255, filepath);
             if (0 == string.Compare(_locale.ToString(), "(empty)"))
                 Debug.LogError("Fail : Not Read Locale");
         }
@@ -139,19 +135,19 @@ namespace MyCraft
             //if (null == item_database)
             //    item_database = GameObject.Find("Canvas/Inventory").GetComponent<ItemDatabase>();
             if(null == _itembase)
-                _itembase = new JSonParser<ItemBase>(Application.streamingAssetsPath + "/locale/" + LobbyManager.Instance()._locale + "/items.json");
+                _itembase = new JSonParser<ItemBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/items.json");
             return _itembase;
         }
 
         public static JSonParser<TechBase> GetTechBase() {
             if (null == _techbase)
-                _techbase = new JSonParser<TechBase>(Application.streamingAssetsPath + "/locale/" + LobbyManager.Instance()._locale + "/technology.json");
+                _techbase = new JSonParser<TechBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/technology.json");
             return _techbase;
         }
 
         public static JSonParser<SkillBase> GetSkillBase() {
             if (null == _skillbase)
-                _skillbase = new JSonParser<SkillBase>(Application.streamingAssetsPath + "/locale/" + LobbyManager.Instance()._locale + "/skills.json");
+                _skillbase = new JSonParser<SkillBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/skills.json");
             return _skillbase;
         }
 
@@ -165,10 +161,10 @@ namespace MyCraft
                 _belt_manager = GetTerrainManager().GetComponentInChildren<BeltManager>();
             return _belt_manager;
         }
-        public static BeltGroundManager GetBeltGroundManager() {
-            if (null == _belt_ground_manager)
-                _belt_ground_manager = GetTerrainManager().GetComponentInChildren<BeltGroundManager>();
-            return _belt_ground_manager;
+        public static SpliterManager GetSpliterManager() {
+            if (null == _spliter_manager)
+                _spliter_manager = GetTerrainManager().GetComponentInChildren<SpliterManager>();
+            return _spliter_manager;
         }
         public static InserterManager GetInserterManager() {
             if(null == _inserter_manager)
@@ -219,7 +215,7 @@ namespace MyCraft
 
         public static BeltGoods GetBeltGoods() {
             if(null == _belt_package)
-                _belt_package = GetDrillManager().transform.Find("prefab/belt-goods").GetComponent<BeltGoods>();
+                _belt_package = Managers.Resource.Load<BeltGoods>("prefabs/blocks/belt-goods");
             return _belt_package;
         }
 
@@ -330,12 +326,17 @@ namespace MyCraft
         public static int AddItem(int itemid, int amount)
         {
             //quick inven
-            amount = GetQuickInven().AddItem(itemid, amount);
+            amount = GetQuickInven().AddItem(itemid, amount, false);
             if (amount <= 0)
                 return 0;
 
             //inventory
             amount = GetInventory().AddItem(itemid, amount);
+            if (amount <= 0)
+                return 0;
+
+            //그래도 남아있으면...생성해준다.
+            amount = GetQuickInven().AddItem(itemid, amount);
             if (amount <= 0)
                 return 0;
 

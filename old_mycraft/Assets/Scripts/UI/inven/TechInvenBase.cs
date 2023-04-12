@@ -38,7 +38,7 @@ namespace MyCraft
         //public static Color Slot_Yellow = new Color((float)0xfd / 0xff, (float)0xe1 / 0xff, (float)0x00 / 0xff, (float)0xff / 0xff);
         //public static Color Slot_Red = new Color((float)0xff / 0xff, (float)0x42 / 0xff, (float)0x42 / 0xff, (float)0xff / 0xff);
 
-        void Awake()
+        protected override void Init()
         {
             //this._panels.Add(new InvenSlotPanel(0, this.slotAmount, this
             //    , this.transform.FindChild("Slot Panel").gameObject
@@ -49,7 +49,8 @@ namespace MyCraft
             //grid.cellSize = new Vector2(16, 16);
 
             //InitSlot();
-            this.inventoryTech = Resources.Load<GameObject>("prefab/ui/Tech") as GameObject;
+            base.Init();
+            this.inventoryTech = Managers.Resource.Instantiate("ui/Tech", this.transform);
 
             //인벤 가이드 동영상
             //https://www.youtube.com/watch?v=dIq_7BeEjKE

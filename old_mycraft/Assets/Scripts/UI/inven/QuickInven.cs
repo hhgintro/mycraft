@@ -18,6 +18,14 @@ namespace MyCraft
 
         void Awake()
         {
+            base.Init();
+
+            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
+                , null
+                , this.transform.Find("Slot Panel").gameObject
+                , InvenBase._invenSlot));
+
+            inventoryKey = Managers.Resource.Load<GameObject>("prefabs/ui/SlotKey");
 
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Item_Canvas/QuickInven/Inventory Panel").gameObject;
@@ -25,32 +33,11 @@ namespace MyCraft
             //this.keyPanel = this.inventoryPanel.transform.FindChild("Key Panel").gameObject;
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
             this.keyPanel = this.transform.Find("Key Panel").gameObject;
-
-            inventoryKey = Resources.Load<GameObject>("prefab/ui/SlotKey") as GameObject;
-
+            this.keyPanel.GetComponent<Image>().raycastTarget = false;  //퀵슬롯 아이템을 줍거나 넣을수 없었다.
         }
 
         void Start()
         {
-
-            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
-                , null
-                , this.transform.Find("Slot Panel").gameObject
-                , base._invenSlot));
-
-            ////HG_TEST : 테스트 아이템 지급
-            //AddItem((int)BLOCKTYPE.BELT, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.MINERAL, 54);
-
             //frame이 끝나야 slot의 위치를 알수 있어서 coroutine을 사용합니다.
             StartCoroutine(CheckSlotPosition());
         }
@@ -66,7 +53,7 @@ namespace MyCraft
                 {
                     RectTransform rt = (RectTransform)slots[i].transform;
                     //items.Add(new Item());
-                    keys.Add(UnityEngine.Object.Instantiate(inventoryKey));
+                    keys.Add(UnityEngine.Object.Instantiate(this.inventoryKey));
                     //keys[i].GetComponent<Slot>().id = i;
                     //keys[i].GetComponent<Slot>().owner = this;
                     keys[i].transform.SetParent(keyPanel.transform, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution

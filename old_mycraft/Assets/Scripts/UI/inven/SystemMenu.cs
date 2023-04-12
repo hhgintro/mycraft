@@ -52,7 +52,7 @@ namespace MyCraft
             //HG_TODO : 새게임하기로 다시 시작하도록 해야 합니다.
             //      현재는 OnContinue()와 동일한 기능으로 구현합니다.
             //this.SetActive(false);
-            LobbyManager.Instance().bNewGame = true;
+            Managers.Game.bNewGame = true;
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 

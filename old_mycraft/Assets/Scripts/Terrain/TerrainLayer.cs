@@ -35,90 +35,27 @@ namespace MyCraft
 
         public BlockScript GetBlock(int x, int y, int z, BlockScript prefab)
         {
-            if (null == prefab) return null;
-
-            switch (prefab._blocksize)
+            if (null == prefab)
             {
-                case 1://1칸
-                    //현위치
-                    return this.GetBlock(x, y, z);
-
-                case 2://4칸
-                    {
-                        //현위치
-                        BlockScript script = this.GetBlock(x, y, z);
-                        if (null != script) return script;
-                        //front
-                        script = this.GetBlock(x, y, z + 1);// prefab.transform.position + prefab.transform.forward);
-                        if (null != script) return script;
-                        //right
-                        script = this.GetBlock(x + 1, y, z);// prefab.transform.position + prefab.transform.right);
-                        if (null != script) return script;
-                        //front-right
-                        script = this.GetBlock(x + 1, y, z + 1);// prefab.transform.position + prefab.transform.forward + prefab.transform.right);
-                        if (null != script) return script;
-                    } return null;
-
-                case 3://9칸
-                    {
-                        for (int col = 0; col < prefab._blocksize; ++col)
-                        {
-                            for (int row = 0; row < prefab._blocksize; ++row)
-                            {
-                                BlockScript script = this.GetBlock(x - 1 + col, y, z - 1 + row);
-                                if (null != script) return script;
-                            }
-                        }
-
-                        ////front-left
-                        //BlockScript script = this.GetBlock(prefab.transform.position + prefab.transform.forward - prefab.transform.right);
-                        //if (null != script) return script;
-                        ////front
-                        //script = this.GetBlock(prefab.transform.position + prefab.transform.forward);
-                        //if (null != script) return script;
-                        ////front-right
-                        //script = this.GetBlock(prefab.transform.position + prefab.transform.forward + prefab.transform.right);
-                        //if (null != script) return script;
-                        ////left
-                        //script = this.GetBlock(prefab.transform.position - prefab.transform.right);
-                        //if (null != script) return script;
-                        ////현위치
-                        //script = this.GetBlock(x, y, z);
-                        //if (null != script) return script;
-                        ////right
-                        //script = this.GetBlock(prefab.transform.position + prefab.transform.right);
-                        //if (null != script) return script;
-                        ////back-left
-                        //script = this.GetBlock(prefab.transform.position - prefab.transform.forward - prefab.transform.right);
-                        //if (null != script) return script;
-                        ////back
-                        //script = this.GetBlock(prefab.transform.position - prefab.transform.forward);
-                        //if (null != script) return script;
-                        ////back-right
-                        //script = this.GetBlock(prefab.transform.position - prefab.transform.forward + prefab.transform.right);
-                        //if (null != script) return script;
-
-                    } return null;
-
-                //4칸은 구지 만들지 마세요...(차라리 5칸으로....)
-                case 4://16칸
-                    return null;
-
-                case 5://25칸
-                    {
-                        for (int col = 0; col < prefab._blocksize; ++col)
-                        {
-                            for (int row = 0; row < prefab._blocksize; ++row)
-                            {
-                                BlockScript script = this.GetBlock(x - 2 + col, y, z - 2 + row);
-                                if (null != script) return script;
-                            }
-                        }
-                    } return null;
-
-                //그 이상은 지원하지 않습니다.
-                default: return prefab;
+                Debug.LogError("Fail: prefab is null");
+                return null;
             }
+
+
+            Vector3 scale = Quaternion.Euler(prefab.transform.eulerAngles) * prefab.transform.localScale;
+            for (int X = Common.PosRounding(Mathf.Min(0, scale.x+1)); X < Common.PosRounding(Mathf.Max(1, scale.x)); ++X)
+            {
+                for (int Y = Common.PosRounding(Mathf.Min(0, scale.y+1)); Y < Common.PosRounding(Mathf.Max(1, scale.y)); ++Y)
+                {
+                    for (int Z = Common.PosRounding(Mathf.Min(0, scale.z+1)); Z < Common.PosRounding(Mathf.Max(1, scale.z)); ++Z)
+                    {
+                        BlockScript block = this.GetBlock(x + X, y + Y, z + Z);
+                        if (null != block) return block;
+
+                    }
+                }
+            }
+            return null;    //빈공간이다.
         }
         public BlockScript GetBlock(Vector3 pos)
         {
@@ -163,75 +100,23 @@ namespace MyCraft
 
         //script : 체크용
         //obj : 등록할 개체(null일 수도 있다)
-        public void SetBlock(BlockScript script, BlockScript obj)
+        public void SetBlock(BlockScript block, BlockScript obj)
         {
-            if (null == script) return;
+            if (null == block) return;
 
-            int x = Common.PosRounding(script.transform.position.x);
-            int y = Common.PosRounding(script.transform.position.y);
-            int z = Common.PosRounding(script.transform.position.z);
+            int x = Common.PosRounding(block.transform.position.x);
+            int y = Common.PosRounding(block.transform.position.y);
+            int z = Common.PosRounding(block.transform.position.z);
 
-            switch (script._blocksize)
+            Vector3 scale = Quaternion.Euler(block.transform.eulerAngles) * block.transform.localScale;
+            for (int X = Common.PosRounding(Mathf.Min(0, scale.x+1)); X < Common.PosRounding(Mathf.Max(1, scale.x)); ++X)
             {
-                case 1://1칸
-                    //현위치
-                    SetSizeBlock(x, y, z, obj);
-                    break;
-
-                case 2://4칸
-                    {
-                        //현위치
-                        SetSizeBlock(x, y, z, obj);
-                        //front
-                        SetSizeBlock(x, y, z + 1, obj);// script.transform.position + script.transform.forward, obj);
-                        //right
-                        SetSizeBlock(x + 1, y, z, obj);// script.transform.position + script.transform.right, obj);
-                        //front-right
-                        SetSizeBlock(x + 1, y, z + 1, obj);// script.transform.position + script.transform.forward + script.transform.right, obj);
-                    } break;
-
-                case 3://9칸
-                    {
-                        for(int col=0; col<script._blocksize; ++col)
-                            for(int row=0; row<script._blocksize; ++row)
-                                SetSizeBlock(x-1+col, y, z-1+row, obj);
-
-
-                        ////front-left
-                        //SetSizeBlock(x - 1, y, z + 1, obj);
-                        ////front
-                        //SetSizeBlock(x, y, z + 1, obj);
-                        ////front-right
-                        //SetSizeBlock(x + 1, y, z + 1, obj);
-                        ////left
-                        //SetSizeBlock(x - 1, y, z, obj);
-                        ////현위치
-                        //SetSizeBlock(x, y, z, obj);
-                        ////right
-                        //SetSizeBlock(x + 1, y, z, obj);
-                        ////back-left
-                        //SetSizeBlock(x - 1, y, z - 1, obj);
-                        ////back
-                        //SetSizeBlock(x, y, z, obj);
-                        ////back-right
-                        //SetSizeBlock(x + 1, y, z - 1, obj);
-
-                    } break;
-
-                //4칸은 구지 만들지 마세요...(차라리 5칸으로....)
-                case 4://16칸
-                    break;
-
-                case 5://25칸
-                    for (int col = 0; col < script._blocksize; ++col)
-                        for (int row = 0; row < script._blocksize; ++row)
-                            SetSizeBlock(x - 2 + col, y, z - 2 + row, obj);
-                    break;
-
-                //그 이상은 지원하지 않습니다.
-                default: break;
+                for (int Y = Common.PosRounding(Mathf.Min(0, scale.y+1)); Y < Common.PosRounding(Mathf.Max(1, scale.y)); ++Y)
+                {
+                    for (int Z = Common.PosRounding(Mathf.Min(0, scale.z+1)); Z < Common.PosRounding(Mathf.Max(1, scale.z)); ++Z)
+                        SetSizeBlock(x+X, y+Y, z+Z, obj);
+                }
             }
-
         }
         public void SetSizeBlock(Vector3 pos, BlockScript obj)
         {
@@ -273,7 +158,7 @@ namespace MyCraft
                     return;
                 }
                 tmp_y.Remove(y);
-                //Debug.Log("--- sub block : [" + x + "," + y + "," + z + "]");
+                //Debug.Log($"--- sub block : [{x},{y},{z}]");
             }
             else
             {//등록
@@ -283,17 +168,13 @@ namespace MyCraft
                     return;
                 }
                 tmp_y.Add(y, obj);
-
-                //if(BLOCKTYPE.NONE != obj._blocktype
-                //    && obj._blocktype < BLOCKTYPE.RAW_WOOD)
-                //Debug.Log("+++ add block : [" + x + "," + y + "," + z + "]");
+                //Debug.Log($"+++ add block : [{x},{y},{z}]");
             }
         }
 
 
         public Dictionary<int, BlockData> GetBlockList()
         {
-            //List<BlockData> blocks = new List<BlockData>();
             Dictionary<int, BlockData> blocks = new Dictionary<int, BlockData>();
 
             //x 검색
@@ -315,13 +196,9 @@ namespace MyCraft
                         int x = Common.PosRounding(script.transform.position.x);
                         int y = Common.PosRounding(script.transform.position.y);
                         int z = Common.PosRounding(script.transform.position.z);
-
                         //Debug.Log("id:" + script._id + " " + x + "/" + y + "/" + z + ":"
                         //    + "blocktype/" + script._blocktype.ToString());
 
-                        //이미포함된 블럭은 제외
-                        //if (false == blocks.ContainsKey(script._id))
-                        //blocks.Add(script._id, new BlockData(tmp_zy.Key, tmp.Key, tmp_y.Key, script));
                         blocks.Add(script._index, new BlockData(x, y, z, script));
                     }
                 }

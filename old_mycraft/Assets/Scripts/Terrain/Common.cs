@@ -4,47 +4,34 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+
 namespace MyCraft
 {
-    //6면체 방향
-    public enum DIRECTION
+    public enum BLOCKTYPE : ushort
     {
-        FRONT, BACK, LEFT, RIGHT, UP, DOWN,
-        /*front_left
-         * <--
-         *   |
-         * */
-        FRONT_LEFT, FRONT_RIGHT,
-        BACK_LEFT, BACK_RIGHT,
-        LEFT_FRONT, LEFT_BACK,
-        RIGHT_FRONT, RIGHT_BACK,
-        MAX
-    };
+        NONE,
 
-    public enum BLOCKTYPE
-    {
-        NONE, BELT, INSERTER, CHEST, DRILL, MACHINE, STONE_FURNACE,
-        GROUND_BELT,
+        NATURAL_RESOURCE,       //천연자원
+        INTERMEDIATE_PRODUCTS,  //중간생산품
+        
+        CHEST           = 1000,
+        BELT            = 1010,
+        SPLITER         = 1020,
+        INSERTER        = 1030,
+        DRILL           = 1040,
+        STONE_FURNACE   = 1050,
+        MACHINE         = 1060,
 
-        //이 이후의 type은 인벤을 벗어날 때
-        // modeling으로 설정하지 않는 type들로 분류되어집니다.
-        RAW_WOOD = 1001, //자원(광물,등등...)
-        IRON_ORE,
-        STONE,
 
-        IRON_PLATE = 2001,
-        //TREE,
-        //RAW_WOOD,
-
-        SKILL = 5000,
-        TECH = 6000,
+        SKILL           = 5000,
+        TECH            = 6000,
     }
 
 
-    public enum BELT_ROW { LEFT, RIGHT, MAX }//left, right
-    public enum BELT_COL { FIRST, SECOND, THIRD, FORTH, MAX }//head, middle, tail
+    public enum BELT_ROW : byte { ROW1, ROW2, ROW3, ROW4, MAX }        //left -> right
+    public enum BELT_COL : byte { FIRST, SECOND, THIRD, FORTH, MAX }   //front -> tail
 
-    public enum COLLIDER
+    public enum COLLIDER : byte
     {//unity에서 설정하는 값입니다.
         TERRAIN = 8,
         BLOCK,
@@ -57,7 +44,7 @@ namespace MyCraft
     //    TURN_FRONT = 1 << 3, //직진
     //}
 
-    public enum TURN_WEIGHT
+    public enum TURN_WEIGHT : byte
     {//방향에 영향을 주는 방향
         FRONT = 1 << 0,  //back 으로 부터의 가중치
         LEFT = 1 << 1, //left
@@ -75,13 +62,13 @@ namespace MyCraft
             switch (type)
             {
                 case BLOCKTYPE.BELT:            return typeof(BeltItemBase);
-                case BLOCKTYPE.GROUND_BELT:     return typeof(BeltItemBase);
+                case BLOCKTYPE.SPLITER:         return typeof(BeltItemBase);
 
                 case BLOCKTYPE.INSERTER:        return typeof(InserterItemBase);
                 case BLOCKTYPE.CHEST:           return typeof(ChestItemBase);
                 case BLOCKTYPE.DRILL:           return typeof(DrillItemBase);
-                case BLOCKTYPE.MACHINE:         return typeof(MachineItemBase);
                 case BLOCKTYPE.STONE_FURNACE:   return typeof(FurnaceItemBase);
+                case BLOCKTYPE.MACHINE:         return typeof(MachineItemBase);
 
                 case BLOCKTYPE.SKILL:           return typeof(SkillBase);
                 case BLOCKTYPE.TECH:            return typeof(TechBase);

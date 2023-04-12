@@ -16,46 +16,26 @@ namespace MyCraft
             //base.Awake();
             base.Init();
 
-            //this.database = GetComponent<ItemDatabase>();
-            //this.inventoryPanel = GameObject.Find("Canvas/ChestInven/Inventory Panel").gameObject;
-            //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-
-        }
-        
-        void Start()
-        {
-            this.SetActive(false);
-
-            //this.slotAmount = 16;
-            //base.Start();
             Transform parent = this.transform.Find("Skills");
 
             for(int i=0; i<5; ++i)
             {
-                GameObject objPanel = UnityEngine.Object.Instantiate(this._invenPanel);
+                GameObject objPanel = UnityEngine.Object.Instantiate(InvenBase._invenPanel);
                 objPanel.transform.SetParent(parent, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
                 objPanel.name = "Slot-Panel-" + (i + 1);// i.ToString("D2");
 
                 base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
                     , null
                     , objPanel
-                    , base._invenSlot));
-
-                ////HG_TEST : 임으로 넣는 로직임니다.
-                ////위 panel생성시 slot개수를 2개로 설정해습니다. 0으로 돌려주세요.
-                ////slot을 생성하고, 적정한 slot위치를 설정할 수 있도록 수정해야 합니다.
-                ////database
-                //int id = 1;
-                //SkillBase itemToAdd = GameManager.GetSkillBase().FetchItemByID(id);
-                //if (null == itemToAdd)
-                //{
-                //    Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
-                //    continue;
-                //}
-
-                //base.CreateSkillData(this, base._panels[i]._slots[0].transform, i, 0, itemToAdd);
+                    , InvenBase._invenSlot));
             }
+
+            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+        }
+        
+        void Start()
+        {
+            this.SetActive(false);
 
             //database
             this.LinkSkillGroup(0);

@@ -29,9 +29,10 @@ namespace MyCraft
 
         void Awake()
         {
-            LoadPrefab<BeltManager>("hierarchy/terrain", "belt");
-            LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
             LoadPrefab<ChestManager>("hierarchy/terrain", "chest");
+            LoadPrefab<BeltManager>("hierarchy/terrain", "belt");
+            LoadPrefab<SpliterManager>("hierarchy/terrain", "spliter");
+            LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
             LoadPrefab<DrillManager>("hierarchy/terrain", "drill");
             LoadPrefab<MachineManager>("hierarchy/terrain", "machine");
             LoadPrefab<StoneFurnaceManager>("hierarchy/terrain", "stone-furnace");
@@ -39,15 +40,20 @@ namespace MyCraft
             LoadPrefab<TreeManager>("hierarchy/terrain", "tree");
             LoadPrefab<IronManager>("hierarchy/terrain", "iron-ore");
 
+        }
+
+        void Start()
+        {
+            Managers.Game.OnGame();
 
             int x = -2, z = 4;
             //coal
 
             //copper-ore
 
-            PutdownBlock(1001, 3, x, z -= 2, GameManager.GetTreeManager().GetChoicePrefab());       //tree
-            PutdownBlock(1002, 3, x, z -= 2, GameManager.GetIronManager().GetChoicePrefab());       //iron-ore
-            PutdownBlock(1003, 2, x, z -= 2, GameManager.GetStoneManager().GetChoicePrefab());      //stone
+            PutdownBlock(10, 3, x, z -= 2, GameManager.GetTreeManager().GetChoicePrefab());       //tree
+            PutdownBlock(40, 3, x, z -= 2, GameManager.GetIronManager().GetChoicePrefab());       //iron-ore
+            PutdownBlock(20, 2, x, z -= 2, GameManager.GetStoneManager().GetChoicePrefab());      //stone
         }
 
         void LoadPrefab<T>(string path, string name) where T : BlockManager
@@ -63,6 +69,8 @@ namespace MyCraft
             {
                 BlockScript block = CreateBlock(this.GetMineralLayer(), x-i, 0, z, prefab);
                 block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);//BLOCKTYPE.RAW_WOOD
+                if (null == block._itembase)
+                    Debug.LogError($"Fail: not found itemid {itemid}");
             }
         }
 
@@ -113,13 +121,13 @@ namespace MyCraft
             BlockScript script = null;
             switch (blocktype)
             {
-                case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);          break;
-                case BLOCKTYPE.INSERTER:        script = GameManager.GetInserterManager().GetChoicePrefab(weight);      break;
                 case BLOCKTYPE.CHEST:           script = GameManager.GetChestManager().GetChoicePrefab(weight);         break;
+                case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);          break;
+                case BLOCKTYPE.SPLITER:         script = GameManager.GetSpliterManager().GetChoicePrefab(weight);       break;
+                case BLOCKTYPE.INSERTER:        script = GameManager.GetInserterManager().GetChoicePrefab(weight);      break;
                 case BLOCKTYPE.DRILL:           script = GameManager.GetDrillManager().GetChoicePrefab(weight);         break;
                 case BLOCKTYPE.MACHINE:         script = GameManager.GetMachineManager().GetChoicePrefab(weight);       break;
                 case BLOCKTYPE.STONE_FURNACE:   script = GameManager.GetStoneFurnaceManager().GetChoicePrefab(weight);  break;
-                case BLOCKTYPE.GROUND_BELT:     script = GameManager.GetBeltGroundManager().GetChoicePrefab(weight);    break;
              }
             return script;
         }
@@ -138,9 +146,9 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:
                     newscript = GameManager.GetBeltManager().ChainBeltPrefab((BeltScript)prefab);
                     break;
-                case BLOCKTYPE.GROUND_BELT:
-                    newscript = GameManager.GetBeltGroundManager().ChainBeltPrefab((BeltScript)prefab);
-                    break;
+                //case BLOCKTYPE.GROUND_BELT:
+                //    newscript = GameManager.GetSpliterManager().ChainBeltPrefab((BeltScript)prefab);
+                //    break;
             }
             if (null != newscript)
             {
@@ -198,8 +206,12 @@ namespace MyCraft
             switch(script._itembase.type)
             {
                 case BLOCKTYPE.BELT:
-                case BLOCKTYPE.GROUND_BELT:
+                //case BLOCKTYPE.GROUND_BELT:
                     GameManager.GetBeltManager().DeleteBlock(script);
+                    break;
+
+                case BLOCKTYPE.SPLITER:
+                    GameManager.GetSpliterManager().DeleteBlock(script);
                     break;
 
                 default:
@@ -208,7 +220,7 @@ namespace MyCraft
             }
 
             //인벤에 다시 넣어줍니다.
-            GameManager.GetInventory().AddItem(script._itembase.id, 1);
+            GameManager.AddItem(script._itembase.id, 1);
 
             //HG_TODO : 삭제하지 않고 pool에서 관리하도록 바꿔야 합니다.(crash발생)
             GameObject.Destroy(script.gameObject);
@@ -219,48 +231,32 @@ namespace MyCraft
             this.DeleteBlock(this.block_layer.GetBlock(obj), removeblock);
         }
 
-        public BlockScript CreateMineral(int x, int y, int z, BlockScript prefab)
-        {
-            if (null == prefab)// || BLOCKTYPE.MINERAL != prefab.blocktype)
-                return null;
+        //public BlockScript CreateMineral(int x, int y, int z, BlockScript prefab)
+        //{
+        //    if (null == prefab)// || BLOCKTYPE.MINERAL != prefab.blocktype)
+        //        return null;
 
-            //이미 점유중
-            //if (null != GetBlock(x, y, z)) return null;
-            BlockScript front_script = this.mineral_layer.GetBlock(x, y, z, prefab);
-            if (null != front_script)
-                return null;
+        //    //이미 점유중
+        //    //if (null != GetBlock(x, y, z)) return null;
+        //    BlockScript front_script = this.mineral_layer.GetBlock(x, y, z, prefab);
+        //    if (null != front_script)
+        //        return null;
 
-            //clone
-            BlockScript script = prefab.Clone();
-            if (null == script) return null;
+        //    //clone
+        //    BlockScript script = prefab.Clone();
+        //    if (null == script) return null;
 
-            //terrain에 위치시키다.
-            script.SetPos(x, y, z);
-            this.mineral_layer.AddBlock(script);
+        //    //terrain에 위치시키다.
+        //    script.SetPos(x, y, z);
+        //    this.mineral_layer.AddBlock(script);
 
-            if (null != script.manager)
-                script.manager.CreateBlock(script);
-            return script;
-        }
+        //    if (null != script.manager)
+        //        script.manager.CreateBlock(script);
+        //    return script;
+        //}
         public virtual void Save(BinaryWriter writer)
         {
             Dictionary<int, BlockData> blocks = this.block_layer.GetBlockList();
-
-            ////x 검색
-            //foreach (var tmp_zy in this.block_xyz)
-            //{
-            //    //z 검색
-            //    foreach (var tmp_y in tmp_zy.Value)
-            //    {
-            //        //y 검색
-            //        foreach (var tmp in tmp_y.Value)
-            //        {
-            //            //Debug.Log(tmp_zy.Key + "/" + tmp_y.Key + "/" + tmp.Key + ":"
-            //            //    + "blocktype/" + tmp.Value.blocktype.ToString());
-            //            blocks.Add(new BlockData(tmp_zy.Key, tmp.Key, tmp_y.Key, tmp.Value));
-            //        }
-            //    }
-            //}
 
             //block count
             writer.Write(blocks.Count);
@@ -268,23 +264,21 @@ namespace MyCraft
             //for(int i=0; i<blocks.Count; ++i)
             foreach(var tmp_block in blocks)
             {
-                //sep
-                //writer.Write((int)999);
+                tmp_block.Value.Save(writer);
 
-                // blocks[i].Save(writer);
-                //position
-                writer.Write(tmp_block.Value.posx);
-                writer.Write(tmp_block.Value.posy);
-                writer.Write(tmp_block.Value.posz);
-                //Debug.Log("***write pos:" + tmp_block.posx + "/" + blocks[i].posy + "/" + blocks[i].posz);
-                //itemid
-                writer.Write((int)tmp_block.Value.script._itembase.id);
-                //Debug.Log("write blocktype:" + blocks[i].script.blocktype);
-                //angle
-                writer.Write(tmp_block.Value.script.transform.eulerAngles.y);
-                //Debug.Log("write angle:" + blocks[i].script.transform.eulerAngles.y);
-                //data
-                tmp_block.Value.script.Save(writer);
+                ////position
+                //writer.Write(tmp_block.Value.posx);
+                //writer.Write(tmp_block.Value.posy);
+                //writer.Write(tmp_block.Value.posz);
+                ////Debug.Log("***write pos:" + tmp_block.posx + "/" + blocks[i].posy + "/" + blocks[i].posz);
+                ////itemid
+                //writer.Write((int)tmp_block.Value.script._itembase.id);
+                ////Debug.Log("write blocktype:" + blocks[i].script.blocktype);
+                ////angle
+                //writer.Write(tmp_block.Value.script.transform.eulerAngles.y);
+                ////Debug.Log("write angle:" + blocks[i].script.transform.eulerAngles.y);
+                ////data
+                //tmp_block.Value.script.Save(writer);
             }
 
 
@@ -292,71 +286,59 @@ namespace MyCraft
 
         public virtual void Load(BinaryReader reader)
         {
+
             //block count
             int blockcount = reader.ReadInt32();
             for(int i=0; i<blockcount; ++i)
             {
-                //sep
-                //int sep = reader.ReadInt32();
-                //Debug.Log("sep:" + sep); //999
+                BlockData data = new BlockData();
+                data.Load(reader);
 
-            //position
-            int posx = reader.ReadInt32();
-                int posy = reader.ReadInt32();
-                int posz = reader.ReadInt32();
-                //Debug.Log("***read pos:" + posx + "/" + posy + "/" + posz);
+                ////position
+                //int posx = reader.ReadInt32();
+                //int posy = reader.ReadInt32();
+                //int posz = reader.ReadInt32();
+                ////Debug.Log("***read pos:" + posx + "/" + posy + "/" + posz);
 
-                //itemid
-                int itemid = reader.ReadInt32();
-                ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
-                if (null == itembase)
-                {
-                    Debug.LogError("not found loaded itemid " + itemid.ToString());
-                    continue;
-                }
-                //Debug.Log("load: blocktype[" + blocktype + "], pos:[" + posx + "},{" + posy + "},{" + posz + "}]");
-                //angle
-                float angley = reader.ReadSingle();
-                //Debug.Log("read angle:" + angley);
-                int turn_weight = (int)TURN_WEIGHT.FRONT;
-                if(BLOCKTYPE.BELT == (BLOCKTYPE)itembase.type
-                    || BLOCKTYPE.GROUND_BELT == (BLOCKTYPE)itembase.type)
-                {
-                    turn_weight = reader.ReadInt32();
-                    //Debug.Log("read turn_weight:" + turn_weight);
-                }
+                ////itemid
+                //int itemid = reader.ReadInt32();
+                //ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
+                //if (null == itembase)
+                //{
+                //    Debug.LogError("not found loaded itemid " + itemid.ToString());
+                //    continue;
+                //}
+                ////Debug.Log("load: blocktype[" + blocktype + "], pos:[" + posx + "},{" + posy + "},{" + posz + "}]");
+                ////angle
+                //float angley = reader.ReadSingle();
+                ////Debug.Log("read angle:" + angley);
+                //int turn_weight = (int)TURN_WEIGHT.FRONT;
+                //if(BLOCKTYPE.BELT == (BLOCKTYPE)itembase.type
+                //    || BLOCKTYPE.GROUND_BELT == (BLOCKTYPE)itembase.type)
+                //{
+                //    turn_weight = reader.ReadInt32();
+                //    //Debug.Log("read turn_weight:" + turn_weight);
+                //}
 
-                BlockScript prefab = this.GetBlockPrefab(itembase.type, (TURN_WEIGHT)turn_weight);
-                if (null == prefab) continue;
-                prefab._itembase = itembase;
+                //BlockScript prefab = this.GetBlockPrefab(itembase.type, (TURN_WEIGHT)turn_weight);
+                //if (null == prefab) continue;
+                //prefab._itembase = itembase;
 
-                //angle
-                prefab.transform.eulerAngles = new Vector3(0f, angley, 0f);
+                ////angle
+                //prefab.transform.eulerAngles = new Vector3(0f, angley, 0f);
 
-                BlockScript script = this.CreateBlock(this.GetBlockLayer(), posx, posy, posz, prefab);
-                if (null == script)
-                {
-                    Debug.LogError("fail load: itemid[" + itemid
-                        + "], pos:[" + posx + "},{" + posy + "},{" + posz + "}]");
-                    continue;
-                }
+                //BlockScript script = this.CreateBlock(this.GetBlockLayer(), posx, posy, posz, prefab);
+                //if (null == script)
+                //{
+                //    Debug.LogError($"fail load: itemid[{itemid}], pos:[{posx},{posy},{posz}]");
+                //    continue;
+                //}
 
-                script._itembase = itembase;
-                script.Load(reader);
-                //float angle = reader.ReadSingle();
+                //script._itembase = itembase;
+                //script.Load(reader);
+                ////float angle = reader.ReadSingle();
 
             }
-
-        }
-
-        public virtual void Save(FileStream fs)
-        {
-            //BinaryFormatter bf = new BinaryFormatter();
-
-        }
-        public virtual void Load(FileStream fs)
-        {
-            //BinaryFormatter bf = new BinaryFormatter();
 
         }
 
@@ -366,12 +348,71 @@ namespace MyCraft
     public class BlockData
     {
         public int posx, posy, posz;
-        public BlockScript script;
+        public BlockScript block;
 
+        public BlockData() { }
         public BlockData(int x, int y, int z, BlockScript script)
         {
             this.posx = x; this.posy = y; this.posz = z;
-            this.script = script;
+            this.block = script;
+        }
+
+        public void Save(BinaryWriter writer)
+        {
+            //position
+            writer.Write(this.posx);
+            writer.Write(this.posy);
+            writer.Write(this.posz);
+            //itemid
+            writer.Write(this.block._itembase.id);
+            //angle
+            writer.Write(this.block.transform.eulerAngles.y);
+            //data
+            block.Save(writer);
+        }
+        public void Load(BinaryReader reader)
+        {
+            //position
+            this.posx = reader.ReadInt32();
+            this.posy = reader.ReadInt32();
+            this.posz = reader.ReadInt32();
+            //Debug.Log("***read pos:" + posx + "/" + posy + "/" + posz);
+
+            //itemid
+            int itemid = reader.ReadInt32();
+            //angle
+            float angley = reader.ReadSingle();
+
+            ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
+            if (null == itembase)
+            {
+                Debug.LogError($"not found loaded itemid: {itemid}");
+                return;
+            }
+
+            byte turn_weight = (byte)TURN_WEIGHT.FRONT;
+            if (BLOCKTYPE.BELT == (BLOCKTYPE)itembase.type)
+            {
+                turn_weight = reader.ReadByte();
+                //Debug.Log("read turn_weight:" + turn_weight);
+            }
+
+            BlockScript prefab = GameManager.GetTerrainManager().GetBlockPrefab(itembase.type, (TURN_WEIGHT)turn_weight);
+            if (null == prefab) return;
+            prefab._itembase = itembase;
+
+            //angle
+            prefab.transform.eulerAngles = new Vector3(0f, angley, 0f);
+
+            this.block = GameManager.GetTerrainManager().CreateBlock(GameManager.GetTerrainManager().GetBlockLayer(), posx, posy, posz, prefab);
+            if (null == this.block)
+            {
+                Debug.LogError($"fail load: itemid[{itemid}], pos:[{posx},{posy},{posz}]");
+                return;
+            }
+
+            this.block._itembase = itembase;
+            this.block.Load(reader);
         }
     }
 }//..namespace MyCraft

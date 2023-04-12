@@ -11,16 +11,7 @@ namespace MyCraft
 
         void Awake()
         {
-
-            //this.database = GetComponent<ItemDatabase>();
-            //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
-            //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-
-        }
-
-        void Start()
-        {
+            base.Init();
 
             int slotAmount = 64;// GameManager.GetTechBase().database.Count;
             //base.Start();
@@ -28,21 +19,14 @@ namespace MyCraft
             base._panels.Add(new InvenSlotPanel(base._panels.Count, slotAmount, this
                 , null
                 , this.transform.Find("Viewport/Slot Panel").gameObject
-                , base._invenSlot));
+                , InvenBase._invenSlot));
 
-            ////HG_TEST : 테스트 아이템 지급
-            //AddItem((int)BLOCKTYPE.BELT, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.INSERTER, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.CHEST, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.DRILL, 54);
-            //AddItem((int)BLOCKTYPE.MINERAL, 54);
+            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
 
+        }
+
+        void Start()
+        {
             foreach(var tech in GameManager.GetTechBase().database)
                 this.AddItem(tech.Key, 1);
 

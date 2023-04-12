@@ -104,7 +104,7 @@ namespace MyCraft
                 {
                     if (0 == slots[i]._itemid) continue;
 
-                    GameManager.GetInventory().AddItem(slots[i]._itemid, slots[i]._amount);
+                    GameManager.AddItem(slots[i]._itemid, slots[i]._amount);
                     slots[i]._itemid = 0;
                 }
             }
@@ -266,9 +266,9 @@ namespace MyCraft
 
         public override void OnClicked()
         {
-            //인벤이 활성화 되어있으면 열수 없다.
-            if (true == GameManager.GetInventory().GetActive())
-                return;
+            ////인벤이 활성화 되어있으면 열수 없다.
+            //if (true == GameManager.GetInventory().GetActive())
+            //    return;
 
             if (null == this._output)
             {

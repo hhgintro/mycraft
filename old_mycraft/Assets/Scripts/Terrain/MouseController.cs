@@ -58,9 +58,9 @@ namespace MyCraft
         {
             OnMouseMove();
 
-            //인벤이 활성상태이면 L/R button을 막는다.
-            if (true == GameManager.GetInventory().GetActive())
-                return;
+            ////인벤이 활성상태이면 L/R button을 막는다.
+            //if (true == GameManager.GetInventory().GetActive())
+            //    return;
 
             if (Input.GetMouseButtonDown(0))//mouse left
                 OnMouseLButtonDown();
@@ -76,7 +76,7 @@ namespace MyCraft
             if (null != GameManager.GetTerrainManager().GetChoicePrefab())
             {
                 RaycastHit hit;
-                if (GetRayCast(Input.mousePosition, out hit, 1 << 8))//picking된 object 정보
+                if (GetRayCast(Input.mousePosition, out hit, 1 << (int)COLLIDER.TERRAIN))//picking된 object 정보
                 {
                     int posx = Common.PosRounding(hit.point.x);
                     int posz = Common.PosRounding(hit.point.z);
@@ -91,7 +91,7 @@ namespace MyCraft
                         BlockScript block = GameManager.GetTerrainManager().GetChoicePrefab();
 
                         //인벤이 활성상태이면 block생성을 막는다.
-                        if (false == GameManager.GetInventory().GetActive())
+                        //if (false == GameManager.GetInventory().GetActive())
                         {
                             //belt는 마우스를 누른상태에서 이동하면 연속적으로 자동생성합니다.
                             if (null != block && null != block._itembase
@@ -117,14 +117,14 @@ namespace MyCraft
             RaycastHit hit;
 
             //HG[2017.05.16] object생성되면서 바로 처리되기 때문에. 생성되는 로직 앞쪽에서 처리하도록 합니다.
-            if (GetRayCast(Input.mousePosition, out hit, 1 << 9))//picking된 object 정보
+            if (GetRayCast(Input.mousePosition, out hit, 1 << (int)COLLIDER.BLOCK))//picking된 object 정보
             {
                 BlockScript script = hit.collider.GetComponent<BlockScript>();
                 if (null != script) script.OnClicked();
 
             }//..if(GetRayCast())
 
-            if (GetRayCast(Input.mousePosition, out hit, 1 << 8))//picking된 object 정보
+            if (GetRayCast(Input.mousePosition, out hit, 1 << (int)COLLIDER.TERRAIN))//picking된 object 정보
             {
                 //HG_TODO : LButton을 눌렸을때 block 뒤에 새로운 block을 놓이기도 하고,
                 //          앞의 block이 "chest"인 경우에는 chest의 인벤정보를 보여줘야 합니다.
@@ -166,7 +166,7 @@ namespace MyCraft
         void OnMouseRButtonDown()
         {
             RaycastHit hit;
-            if (GetRayCast(Input.mousePosition, out hit, 1 << 9))//picking된 object 정보
+            if (GetRayCast(Input.mousePosition, out hit, 1 << (int)COLLIDER.BLOCK))//picking된 object 정보
             {
                 //Debug.Log("layer: " + hit.collider.gameObject.layer);
                 //Debug.Log("hit tag : " + hit.collider.tag.ToString());

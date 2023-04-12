@@ -10,7 +10,6 @@ namespace MyCraft
     {
         [SerializeField] float load_delay;
 
-
         void Start()
         {
             StartCoroutine(LoadNextScene1());

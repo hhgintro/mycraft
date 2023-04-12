@@ -237,8 +237,8 @@ namespace MyCraft
         public override void OnClicked()
         {
             //인벤이 활성화 되어있으면 열수 없다.
-            if (true == GameManager.GetInventory().GetActive())
-                return;
+            //if (true == GameManager.GetInventory().GetActive())
+            //    return;
 
             GameManager.GetStoneFurnaceInven().LinkInven(this, base._panels, base._progresses);
 

@@ -141,12 +141,12 @@ namespace MyCraft
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.O))
+            if (Input.GetKeyDown(KeyCode.LeftBracket))  //"["
             {
-                LobbyManager.Instance().bNewGame = false;
+                Managers.Game.bNewGame = false;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
-            if (Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKeyDown(KeyCode.RightBracket)) //"]"
             {
                 GameManager.Save();
             }

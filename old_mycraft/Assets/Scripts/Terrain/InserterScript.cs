@@ -81,11 +81,7 @@ namespace MyCraft
             switch(script_back._itembase.type)
             {
                 case BLOCKTYPE.BELT:
-                case BLOCKTYPE.GROUND_BELT:
-                    this.obj = script_back.PickupGoods(script_front);
-                    //this.obj = this.PickupGoodsFromBelt(script_back);
-                    break;
-
+                case BLOCKTYPE.SPLITER:
                 case BLOCKTYPE.CHEST:
                 case BLOCKTYPE.STONE_FURNACE:
                 case BLOCKTYPE.MACHINE:
@@ -239,14 +235,14 @@ namespace MyCraft
             {
                 //Debug.Log("forward: front");
                 //return target.PutdownGoods(BELT_ROW.LEFT, BELT_COL.FORTH, goods);
-                return script_front.GetBeltSector(BELT_ROW.LEFT, BELT_COL.FORTH);
+                return script_front.GetBeltSector(BELT_ROW.ROW1, BELT_COL.FORTH);
             }
             //back
             else if (dot < -0.9f)
             {
                 //Debug.Log("forward: back");
                 //return target.PutdownGoods(BELT_ROW.RIGHT, BELT_COL.FIRST, goods);
-                return script_front.GetBeltSector(BELT_ROW.RIGHT, BELT_COL.FIRST);
+                return script_front.GetBeltSector(BELT_ROW.ROW2, BELT_COL.FIRST);
             }
 
             dot = Vector3.Dot(this.transform.right, script_front.transform.forward);
@@ -256,7 +252,7 @@ namespace MyCraft
                 //Debug.Log("forward: right");
                 //먼쪽에 놓는다.
                 //return target.PutdownGoods(BELT_ROW.LEFT, BELT_COL.SECOND, goods);
-                return script_front.GetBeltSector(BELT_ROW.LEFT, BELT_COL.SECOND);
+                return script_front.GetBeltSector(BELT_ROW.ROW1, BELT_COL.SECOND);
             }
             //left
             else if (dot < -0.9f)
@@ -264,7 +260,7 @@ namespace MyCraft
                 //Debug.Log("forward: left");
                 //먼쪽에 놓는다.
                 //return target.PutdownGoods(BELT_ROW.RIGHT, BELT_COL.SECOND, goods);
-                return script_front.GetBeltSector(BELT_ROW.RIGHT, BELT_COL.SECOND);
+                return script_front.GetBeltSector(BELT_ROW.ROW2, BELT_COL.SECOND);
             }
             return null;
         }

@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 526f1392bb5b97849b16efec496bf821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocksize: 1
 --- !u!1 &1121438708988516
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,8 +708,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebbac6b6dc0b9864fa2587ef6b2d4d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _blocksize: 1
-  turn_weight: 4
   sectors:
   - {fileID: 114410003880375228}
   - {fileID: 114696052907043512}
@@ -720,6 +717,7 @@ MonoBehaviour:
   - {fileID: 114701685822404394}
   - {fileID: 114208145837441858}
   - {fileID: 114438586878590446}
+  turn_weight: 4
 --- !u!1 &1537085433578228
 GameObject:
   m_ObjectHideFlags: 0

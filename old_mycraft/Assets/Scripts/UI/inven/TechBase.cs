@@ -27,7 +27,7 @@ namespace MyCraft
         public TechBase() { }
         public TechBase(JsonData json)
         {
-            this.id = (int)json["id"];
+            this.id = (ushort)json["id"];
             this.Title = json["title"].ToString();
             this.Description = json["desc"].ToString();
 
@@ -37,7 +37,7 @@ namespace MyCraft
             LoadReward(json);
 
             this.Slug = json["slug"].ToString();
-            this.Sprite = Resources.Load<Sprite>("graphic/technology/" + this.Slug);
+            this.Sprite = Managers.Resource.Load<Sprite>("Textures/technology/" + this.Slug);
             //Debug.Log("tech slug: " + this.Slug);
 
         }

@@ -8,7 +8,7 @@ namespace MyCraft
 {
     public class BeltSector : MonoBehaviour
     {
-        public BeltScript owner;    //this개체가 소속된 곳
+        public BeltBaseScript owner;    //this개체가 소속된 곳
 
         public BeltGoods obj = null; //등록된 object
         public BeltSector next;

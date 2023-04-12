@@ -19,11 +19,20 @@ namespace MyCraft
         {
             base.Init();
 
-            //_panelInvenMain = this.transform.Find("Inven-Main Panel").gameObject;
-            //_panelInvenSub = this.transform.Find("Inven-Main Panel/Inven-Sub Panel").gameObject;
-            ////_panelInvenMain = Resources.Load<GameObject>("prefab/ui/Inven-Main Panel") as GameObject;
-            ////_paneInvenSub = Resources.Load<GameObject>("prefab/ui/Inven-Sub Panel") as GameObject;
-            //_panelInvenLeaf = Resources.Load<GameObject>("prefab/ui/Inven-Leaf Panel") as GameObject;
+            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
+                , this.transform.Find("Progress/bar").GetComponent<Image>()
+                , this.transform.Find("Input-Panel").gameObject
+                , InvenBase._invenSlot));
+
+            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
+                , null
+                , this.transform.Find("Output-Panel").gameObject
+                , InvenBase._invenSlot));
+
+            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
+                , null
+                , this.transform.Find("Chip-Panel").gameObject
+                , InvenBase._invenSlot));
 
 
 
@@ -48,22 +57,6 @@ namespace MyCraft
             this.SetActive(true);
 
 
-            //this.slotAmount = 16;
-            //base.Start();
-            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
-                , this.transform.Find("Progress/bar").GetComponent<Image>()
-                , this.transform.Find("Input-Panel").gameObject
-                , base._invenSlot));
-
-            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
-                , null
-                , this.transform.Find("Output-Panel").gameObject
-                , base._invenSlot));
-
-            base._panels.Add(new InvenSlotPanel(base._panels.Count, 0, this
-                , null
-                , this.transform.Find("Chip-Panel").gameObject
-                , base._invenSlot));
 
             //AddItem(1, 54);
             //AddItem(2, 54);

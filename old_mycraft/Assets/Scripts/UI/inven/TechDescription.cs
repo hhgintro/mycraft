@@ -7,13 +7,13 @@ namespace MyCraft
 {
     public class TechDescription : TechInvenBase
     {
-        private TechBase _techbase = null;
+        private TechBase _techbase;
 
-        public InvenSlotPanel _panelTitle = null;   //title image
-        public InvenSlotPanel _panelCost = null;
-        public InvenSlotPanel _panelPreTech = null;
-        public InvenSlotPanel _panelNextTech = null;
-        public InvenSlotPanel _panelReward = null;
+        public InvenSlotPanel _panelTitle;   //title image
+        public InvenSlotPanel _panelCost;
+        public InvenSlotPanel _panelPreTech;
+        public InvenSlotPanel _panelNextTech;
+        public InvenSlotPanel _panelReward;
 
         //public GameObject inventorySlot;
         //public GameObject inventoryItem;
@@ -26,14 +26,8 @@ namespace MyCraft
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
+
             base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-
-            LocaleManager.SetLocale("technology", this.transform.Find("Cost/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("technology", this.transform.Find("Pre-Tech/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("technology", this.transform.Find("Next-Tech/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("technology", this.transform.Find("Reward/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("technology", this.transform.Find("Research/Text").GetComponent<Text>());
-
         }
 
         void Start()
@@ -44,6 +38,12 @@ namespace MyCraft
                 this.LinkTech(tech.Value);
                 break;//맨처음꺼를 설정해주고 멈춘다.
             }
+
+            LocaleManager.SetLocale("technology", this.transform.Find("Cost/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("technology", this.transform.Find("Pre-Tech/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("technology", this.transform.Find("Next-Tech/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("technology", this.transform.Find("Reward/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("technology", this.transform.Find("Research/Text").GetComponent<Text>());
         }
 
         public override void Clear()
@@ -57,8 +57,9 @@ namespace MyCraft
 
         public void LinkTech(TechBase techbase)
         {
+            //HG_TEST : 디버깅을 위해 주석처리함( 상용화시 주석해제할 것 )
             //동일하면...무시
-            if (this._techbase == techbase) return;
+            //if (this._techbase == techbase) return;
 
             this._techbase = techbase;
             Clear();
@@ -72,7 +73,7 @@ namespace MyCraft
             this._panelTitle = new InvenSlotPanel(0, 0, this
                 , null
                 , this.transform.Find("Slot Panel").gameObject
-                , this._invenSlot);
+                , InvenBase._invenSlot);
             //title-item
             this.AddTech(this._panelTitle, techbase.id);
             ////color
@@ -85,11 +86,11 @@ namespace MyCraft
             this._panelCost = new InvenSlotPanel(0, 0, this
                 , null
                 , this.transform.Find("Cost/Slot Panel").gameObject
-                , this._invenSlot);
+                , InvenBase._invenSlot);
             //cost-item
             this.AddTime(this._panelCost, 0, techbase._cost.time);
             for (int i = 0; i < techbase._cost.items.Count; ++i)
-                this.AddSkill(this._panelCost, techbase._cost.items[i].itemid, techbase._cost.items[i].amount);
+                this.AddItem(this._panelCost, techbase._cost.items[i].itemid, techbase._cost.items[i].amount);
             //multiple
             Slot multiple = UnityEngine.Object.Instantiate(this._inventoryMultiple).GetComponent<Slot>();
             this._panelCost._slots.Add(multiple);
@@ -104,7 +105,7 @@ namespace MyCraft
                 this._panelPreTech = new InvenSlotPanel(1, 0, this
                     , null
                     , this.transform.Find("Pre-Tech/Slot Panel").gameObject
-                    , this._invenSlot);
+                    , InvenBase._invenSlot);
                 for (int i = 0; i < techbase.prev_techs.Count; ++i)
                     this.AddTech(this._panelPreTech, techbase.prev_techs[i]);
             }
@@ -114,7 +115,7 @@ namespace MyCraft
                 _panelNextTech = new InvenSlotPanel(2, 0, this
                     , null
                     , this.transform.Find("Next-Tech/Slot Panel").gameObject
-                    , this._invenSlot);
+                    , InvenBase._invenSlot);
                 for (int i = 0; i < techbase.next_techs.Count; ++i)
                     this.AddTech(this._panelNextTech, techbase.next_techs[i]);
             }
@@ -124,7 +125,7 @@ namespace MyCraft
                 this._panelReward = new InvenSlotPanel(3, 0, this
                     , null
                     , this.transform.Find("Reward/Slot Panel").gameObject
-                    , this._invenSlot);
+                    , InvenBase._invenSlot);
                 for (int i = 0; i < techbase.rewards.Count; ++i)
                     this.AddSkill(this._panelReward, techbase.rewards[i], 0);
             }
@@ -141,7 +142,7 @@ namespace MyCraft
             }
 
             Slot slot = panel.CreateSlot();
-            this.CreateTimeData(this, slot.transform, panel._panel, slot.slot, itemToAdd, this._invenItem, time);
+            this.CreateTimeData(this, slot.transform, panel._panel, slot.slot, itemToAdd, InvenBase._invenItem, time);
         }
 
         //InvenItemData가 없이,
@@ -261,7 +262,7 @@ namespace MyCraft
                     continue;
 
                 //this.items[i] = itemToAdd;
-                this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, this._invenItem, ref itemcount, true);
+                this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, InvenBase._invenItem, ref itemcount, true);
 
                 //더이상 추가할 것이 없다.
                 if (itemcount <= 0)

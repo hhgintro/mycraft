@@ -32,12 +32,12 @@ namespace MyCraft
         {
             //this.tooltip = GameObject.Find("Canvas/Tooltip");
 
-            _title = Resources.Load<GameObject>("prefab/ui/Tooltip-Title") as GameObject;
-            _cost = Resources.Load<GameObject>("prefab/ui/Tooltip-Cost") as GameObject;
-            _comment = Resources.Load<GameObject>("prefab/ui/Tooltip-Comment") as GameObject;
-            _totalcost = Resources.Load<GameObject>("prefab/ui/Tooltip-TotalCost") as GameObject;
-            _slot = Resources.Load<GameObject>("prefab/ui/Slot") as GameObject;
-            _skill = Resources.Load<GameObject>("prefab/ui/Skill") as GameObject;
+            _title = Managers.Resource.Instantiate("ui/Tooltip-Title", this.transform);
+            _cost = Managers.Resource.Instantiate("ui/Tooltip-Cost", this.transform);
+            _comment = Managers.Resource.Instantiate("ui/Tooltip-Comment", this.transform);
+            _totalcost = Managers.Resource.Instantiate("ui/Tooltip-TotalCost", this.transform);
+            _slot = Managers.Resource.Instantiate("ui/Slot", this.transform);
+            _skill = Managers.Resource.Instantiate("ui/Skill", this.transform);
 
             this.GetComponent<CanvasGroup>().alpha = 0f;
             //this.gameObject.SetActive(false);

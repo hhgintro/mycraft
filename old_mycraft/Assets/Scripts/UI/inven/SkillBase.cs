@@ -68,7 +68,7 @@ namespace MyCraft
         public SkillBase() { }
         public SkillBase(JsonData json)
         {
-            this.id = (int)json["id"];
+            this.id = (ushort)json["id"];
             this.category = (int)json["category"];
             this.panel = (int)json["panel"];
             this.Title = json["title"].ToString();
@@ -82,7 +82,7 @@ namespace MyCraft
             this.Slug = json["slug"].ToString();
             //Debug.Log("skill slug: " + this.Slug);
 
-            this.Sprite = Resources.Load<Sprite>("graphic/ui/" + this.Slug);
+            this.Sprite = Managers.Resource.Load<Sprite>("Textures/ui/" + this.Slug);
         }
 
         void LoadSkillCost(JsonData json)

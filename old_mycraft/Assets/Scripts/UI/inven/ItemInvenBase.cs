@@ -151,14 +151,15 @@ namespace MyCraft
                 return;
             }
 
-            this.CreateItemData(this, s.transform, panel, slot, itemToAdd, this._invenItem, ref amount, false);
+            this.CreateItemData(this, s.transform, panel, slot, itemToAdd, InvenBase._invenItem, ref amount, false);
 
         }
 
         //InvenItemData가 없이,
         //id로 아이템을 추가하고가 할때 사용합니다.
         //InvenItemData를 이동하거나, 인벤에 넣어줄때는 Additem(InvenItemData itemData)를 사용하세요.
-        public virtual int AddItem(int id, int itemcount)
+        //bCreate: false이면 자리가 있어도 생성하지 않는다.(true이면 빈자리에 생성해 준다.)
+        public virtual int AddItem(int id, int itemcount, bool bCreate=true)
         {
             //들고 있는 아이템이면...
             if (null != InvenBase.choiced_item)
@@ -176,6 +177,9 @@ namespace MyCraft
             //더이상 추가할 것이 없다.
             if (itemcount <= 0)
                 return 0;
+
+            //빈자리가 있더라도, 생성하지는 않는다.
+            if (false == bCreate)   return itemcount;
 
             //database
             ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
@@ -291,7 +295,7 @@ namespace MyCraft
                         continue;
 
                     //this.items[i] = itemToAdd;
-                    this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, this._invenItem, ref itemcount, true);
+                    this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, InvenBase._invenItem, ref itemcount, true);
 
                     //더이상 추가할 것이 없다.
                     if (itemcount <= 0)

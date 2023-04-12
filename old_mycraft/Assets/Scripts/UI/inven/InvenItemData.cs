@@ -117,7 +117,7 @@ namespace MyCraft
                 this.AddStackCount(-pickCnt, true);
 
                 //일부만 가져옵니다(새로 만들어서)
-                InvenBase.choiced_item = (InvenItemData)this.owner.CreateItemData(null, this.transform.parent.parent.parent.parent.parent, this.panel, this.slot, this.database, this.owner._invenItem, ref pickCnt, false);
+                InvenBase.choiced_item = (InvenItemData)this.owner.CreateItemData(null, this.transform.parent.parent.parent.parent.parent, this.panel, this.slot, this.database, InvenBase._invenItem, ref pickCnt, false);
                 InvenBase.choiced_item.GetComponent<CanvasGroup>().blocksRaycasts = false;
                 return;
             }

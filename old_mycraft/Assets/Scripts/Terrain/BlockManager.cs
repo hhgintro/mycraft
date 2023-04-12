@@ -19,6 +19,7 @@ namespace MyCraft
         {
             BlockScript block = Managers.Resource.Instantiate(path, parent).GetComponent<BlockScript>();
             block.manager = this;
+            block.GetComponent<Collider>().enabled = false;
             block.SetActive(false);
             this.prefabs.Add(block);
         }
@@ -33,6 +34,10 @@ namespace MyCraft
             prefab.GetComponent<Collider>().enabled = false;
             return prefab;
         }
+
+        //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
+        public virtual BlockScript ChainBelt(BlockScript script) { return null; }
+
 
         public virtual void CreateBlock(BlockScript script)
         {
