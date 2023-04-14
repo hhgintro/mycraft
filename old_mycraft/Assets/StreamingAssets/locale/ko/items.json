@@ -90,13 +90,25 @@
     "id": 900,
     "type": 900,
     "title": "권총",
+    "desc": "",
     "speed": 1,
+    "learn": 1,
+    "DIY": 1,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 1010,"amount": 2}
+      ]
+    },
+    "outputs": [
+      {"itemid": 1010,"amount": 1}
+    ],
     "state": {
       "power": 1,
       "defence": 2,
       "vitality": 10
     },
-    "desc": "",
     "stackable": 100,
     "slug": "pistol"
   },
@@ -108,29 +120,24 @@
     "id": 1000,
     "type": 1000,
     "title": "나무상자",
+    "desc": "",
     "slots": 21,
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2000,
-          "amount": 3
-        }
+        {"itemid": 2000,"amount": 3}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1000,
-        "amount": 1
-      }
+      {"itemid": 1000,"amount": 1}
     ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
     "slug": "chest"
   },
@@ -141,25 +148,17 @@
     "title": "컨베이어 밸트",
     "desc": "물건이 이동하는 설비",
     "speed": 1,
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1010,
-        "amount": 1
-      }
+      {"itemid": 1010,"amount": 1}
     ],
     "state": {
       "power": 1,
@@ -176,25 +175,17 @@
     "title": "분배기",
     "desc": "물건이 이동하는 설비",
     "speed": 1,
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1000,
-        "amount": 1
-      }
+      {"itemid": 1000,"amount": 1}
     ],
     "state": {
       "power": 1,
@@ -210,25 +201,17 @@
     "type": 1030,
     "title": "로봇팔",
     "speed": 1,
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1020,
-        "amount": 1
-      }
+      {"itemid": 1020,"amount": 1}
     ],
     "state": {
       "power": 21,
@@ -246,25 +229,17 @@
     "title": "채광 드릴",
     "desc": "자원을 채광하는 설비",
     "delay": 1,
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1040,
-        "amount": 1
-      }
+      {"itemid": 1040,"amount": 1}
     ],
     "state": {
       "power": 21,
@@ -280,40 +255,26 @@
     "type": 1050,
     "title": "석재 용광로",
     "desc": "화력으로 재련하는 설비",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2,
-          "amount": 5
-        }
+        {"itemid": 2,"amount": 5}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1050,
-        "amount": 1
-      }
+      {"itemid": 1050,"amount": 1}
     ],
     "furnace": {
       "inputs": 1,
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {
-          "id": 40,
-          "limit": 5,
-          "build-time": 3.1,
-          "output": 2010
-        }
+        {"id": 40,"limit": 5,"build-time": 3.1,"output": 2010}
       ],
       "fuel": [
-        {
-          "id": 10,
-          "limit": 5,
-          "burning-time": 10
-        }
+        {"id": 10,"limit": 5,"burning-time": 10}
       ]
     },
     "state": {
@@ -330,25 +291,17 @@
     "type": 1060,
     "title": "조립 생산 설비",
     "desc": "물건을 조립하는 설비",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1060,
-        "amount": 1
-      }
+      {"itemid": 1060,"amount": 1}
     ],
     "assembling": {
       "inputs": 4,
@@ -372,21 +325,16 @@
     "type": 2,
     "title": "목재",
     "desc": "",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 1,
-          "amount": 1
-        }
+        {"itemid": 1,"amount": 1}
       ]
     },
     "outputs": [
-      {
-        "itemid": 2000,
-        "amount": 1
-      }
+      {"itemid": 2000,"amount": 1}
     ],
     "state": {
       "power": 21,
@@ -402,21 +350,16 @@
     "type": 2,
     "title": "철판",
     "desc": "",
+    "learn": 1,
     "DIY": 0,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 3,
-          "amount": 1
-        }
+        {"itemid": 3,"amount": 1}
       ]
     },
     "outputs": [
-      {
-        "itemid": 2010,
-        "amount": 1
-      }
+      {"itemid": 2010,"amount": 1}
     ],
     "state": {
       "power": 21,
@@ -432,21 +375,16 @@
     "type": 2,
     "title": "철 기어 휠",
     "desc": "",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 1
-        }
+        {"itemid": 2010,"amount": 1}
       ]
     },
     "outputs": [
-      {
-        "itemid": 2011,
-        "amount": 2
-      }
+      {"itemid": 2011,"amount": 2}
     ],
     "state": {
       "power": 21,
@@ -462,21 +400,16 @@
     "type": 2,
     "title": "구리판",
     "desc": "",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 1
-        }
+        {"itemid": 2010,"amount": 1}
       ]
     },
     "outputs": [
-      {
-        "itemid": 2011,
-        "amount": 2
-      }
+      {"itemid": 2011,"amount": 2}
     ],
     "state": {
       "power": 21,
@@ -492,21 +425,16 @@
     "type": 2,
     "title": "구리선",
     "desc": "",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 1
-        }
+        {"itemid": 2010,"amount": 1}
       ]
     },
     "outputs": [
-      {
-        "itemid": 2011,
-        "amount": 2
-      }
+      {"itemid": 2011,"amount": 2}
     ],
     "state": {
       "power": 21,

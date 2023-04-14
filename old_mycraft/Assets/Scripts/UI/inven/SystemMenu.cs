@@ -5,7 +5,6 @@ namespace MyCraft
 {
     public class SystemMenu : MonoBehaviour
     {
-
         private CanvasGroup canvas_ui;
 
         // Use this for initialization

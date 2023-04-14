@@ -91,7 +91,7 @@ namespace MyCraft
             if (null == mineral)
             {
                 //주변에 채취가 가능한 자원이 없습니다.
-                Debug.Log("not found mineral");
+                //Debug.Log("not found mineral");
                 return true;// false;
             }
 

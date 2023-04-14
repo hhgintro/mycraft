@@ -41,25 +41,17 @@
     "panel": 1,
     "title": "컨베이어 밸트",
     "desc": "스킬 2입니다.",
+    "learn": 1,
     "DIY": 1,
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 1010,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 1010,"amount": 2}
       ]
     },
     "outputs": [
-      {
-        "itemid": 1010,
-        "amount": 1
-      }
+      {"itemid": 1010,"amount": 1}
     ],
     "slug": "basic-transport-belt"
   },
