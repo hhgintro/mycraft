@@ -59,8 +59,8 @@ namespace MyCraft
             base.OnMouseLButtonDown();
 
             //Debug.Log("Skill item clicked");
-            SkillBase skillbase = (SkillBase)base.database;
-            if(false == this.owner.SetOutput(skillbase))
+            ItemBase itembase = (ItemBase)base.database;
+            if(false == this.owner.SetOutput(itembase))
             {
                 //HG_TODO : block에서 생산함 outpu설정하지 않을 경우에는
                 //          자체스킬로 인벤에 넣어주는 기능
@@ -107,12 +107,13 @@ namespace MyCraft
         //cost아이템이 부족하면 false를 리턴합니다.
         private bool CreateItem()
         {
-            SkillBase skillbase = (SkillBase)base.database;
+            ItemBase itembase = (ItemBase)base.database;
             //생산시설이 필요한 경우에는 직접 생산할 수 없습니다.
-            if (0 == skillbase.DIY) return false;
-            for (int i = 0; i < skillbase.cost.items.Count; ++i)
+            if (false == itembase.DIY) return false;
+
+            for (int i = 0; i < itembase.cost.items.Count; ++i)
             {
-                SkillCostItem costitem = skillbase.cost.items[i];
+                BuildCostItem costitem = itembase.cost.items[i];
                 //인벤 & quick에서 필요한 아이템 존재여부 체크
                 int amount = GameManager.GetInventory().GetAmount(costitem.itemid);
                 amount += GameManager.GetQuickInven().GetAmount(costitem.itemid);
@@ -124,9 +125,9 @@ namespace MyCraft
                 //..
             }
 
-            for (int i = 0; i < skillbase.cost.items.Count; ++i)
+            for (int i = 0; i < itembase.cost.items.Count; ++i)
             {
-                SkillCostItem costitem = skillbase.cost.items[i];
+                BuildCostItem costitem = itembase.cost.items[i];
                 //필요한 아이템 삭제
                 int amount = costitem.amount;
                 amount = GameManager.GetInventory().SubItem(costitem.itemid, amount);
@@ -136,8 +137,9 @@ namespace MyCraft
             }
 
             //아이템 생성(quick 또는 인벤에 넣어준다.)
-            for (int i = 0; i < skillbase.outputs.Count; ++i)
-                GameManager.AddItem(skillbase.outputs[i].itemid, skillbase.outputs[i].amount);
+            //for (int i = 0; i < itembase.outputs.Count; ++i)
+            //    GameManager.AddItem(itembase.outputs[i].itemid, itembase.outputs[i].amount);
+            GameManager.AddItem(itembase.id, itembase.cost.outputs);
 
             return true;
         }

@@ -17,10 +17,10 @@
       {"techid":2}
     ],
     "reward":[
-      {"skill":1},
-      {"skill":2}
+      {"skill":1010},
+      {"skill":1020}
     ],
-    "slug":"automation"
+    "icon":"automation"
   },
   {
     "type":6000,
@@ -44,10 +44,10 @@
       {"techid":3}
     ],
     "reward":[
-      {"skill":2},
-      {"skill":3}
+      {"skill":1010},
+      {"skill":1020}
     ],
-    "slug":"electronics"
+    "icon":"electronics"
   },
   {
     "type":6000,
@@ -67,10 +67,10 @@
       {"techid":2}
     ],
     "reward":[
-      {"skill":3},
-      {"skill":4}
+      {"skill":1010},
+      {"skill":1020}
     ],
-    "slug":"logistics"
+    "icon":"logistics"
   }
 
 

@@ -13,13 +13,16 @@ namespace MyCraft
       
         //true이면 진행중, false이면 잠시멈출
         public bool _bRunning { get; set; }
+  
         //progress에 의해 만들어 지는 아이템 ID
         //private AssemblingOutput _output = null;
-        private SkillBase _output = null;
+        private ItemBase _output = null;
 
-        //public MachineScript()
-        private void Init()
+        protected override void Init()
         {
+            if (0 != base._panels.Count)
+                return;
+
             //_itembase가 null이 아니면
             //이미 초기화 되었으니. 또 실행할 필요없다.
             //if (null != _itembase)
@@ -28,6 +31,7 @@ namespace MyCraft
             //_blocktype = BLOCKTYPE.MACHINE;
             //if (null == base._itembase)
             //    base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);
+
 
             //for(int i=0; i<base._itembase._assembling.inputs; ++i)
             //    base._panels.Add(new BlockSlotPanel(this._panels.Count, 1));//input
@@ -125,9 +129,9 @@ namespace MyCraft
         //    }
         //    Debug.Log("not found output: " + itemid);
         //}
-        public override void SetOutput(SkillBase skillbase)
+        public override void SetOutput(ItemBase itembase)
         {
-            if (null == skillbase)
+            if (null == itembase)
                 return;
 
             //load할때 아이템 설정이 안되어 있어서.
@@ -147,8 +151,8 @@ namespace MyCraft
             //    return;
             //}
 
-            this._output = skillbase;
-            this._panels[0].SetAmount(skillbase.cost.items.Count);
+            this._output = itembase;
+            this._panels[0].SetAmount(itembase.cost.items.Count);
         }
 
 
@@ -187,7 +191,7 @@ namespace MyCraft
 
             //check...자원
             List<BlockSlot> slots = this._panels[0]._slots;
-            List<SkillCostItem> inputs = this._output.cost.items;
+            List<BuildCostItem> inputs = this._output.cost.items;
             for(int i=0; i< inputs.Count; ++i)
             {
                 if (slots[i].GetItemAmount() < inputs[i].amount)
@@ -196,7 +200,7 @@ namespace MyCraft
 
 
             //output이 가득 찼으면...중단.
-            if (true == this._panels[1].GetIsFull(this._output.outputs[0].itemid))
+            if (true == this._panels[1].GetIsFull(this._output.id))
                 return false;
 
 
@@ -278,10 +282,10 @@ namespace MyCraft
                 return;
             }
 
-            GameManager.GetMachineInven().LinkInven(this, base._panels, base._progresses);
 
-            GameManager.GetInventory().SetActive(true);
+            GameManager.GetMachineInven().LinkInven(this, base._panels, base._progresses);
             GameManager.GetMachineInven().SetActive(true);
+            GameManager.GetInventory().SetActive(true);
         }
 
         //id: progress id
@@ -309,20 +313,26 @@ namespace MyCraft
                     return;//reset되어 만들 output이 없는 경우.
 
                 //아이템을 생성해 준다.
-                for(int i=0; i<this._output.outputs.Count; ++i)
+                //for(int i=0; i<this._output.outputs.Count; ++i)
+                //{
+                //    if (false == base.PutdownGoods(this.GetOutputSlot(), this._output.outputs[i].itemid))
+                //    {
+                //        this._bRunning = false;//들어갈 자리가 없으면 실패...
+                //                               //Debug.Log(no + ": machine running(" + this._bRunning + ")");
+                //        return;
+                //    }
+                //}
+                if (false == base.PutdownGoods(this.GetOutputSlot(), this._output.id, this._output.cost.outputs))
                 {
-                    if (false == base.PutdownGoods(this.GetOutputSlot(), this._output.outputs[i].itemid))
-                    {
-                        this._bRunning = false;//들어갈 자리가 없으면 실패...
-                                               //Debug.Log(no + ": machine running(" + this._bRunning + ")");
-                        return;
-                    }
+                    this._bRunning = false;//들어갈 자리가 없으면 실패...
+                                            //Debug.Log(no + ": machine running(" + this._bRunning + ")");
+                    return;
                 }
             }
 
             //check...자원
             List<BlockSlot> slots = this._panels[0]._slots;
-            List<SkillCostItem> inputs = this._output.cost.items;
+            List<BuildCostItem> inputs = this._output.cost.items;
             for (int i = 0; i < inputs.Count; ++i)
             {
                 if (slots[i].GetItemAmount() < inputs[i].amount)
@@ -348,7 +358,7 @@ namespace MyCraft
         public override bool PutdownGoods(BeltGoods goods)
         {
             //Debug.Log("PutdownGoods : goods");
-            if(true == PutdownGoods(goods.itemid))
+            if(true == PutdownGoods(goods.itemid, 1))
             {
                 Destroy(goods.gameObject);
                 return true;
@@ -356,7 +366,7 @@ namespace MyCraft
             return false;
         }
 
-        public override bool PutdownGoods(int itemid)
+        public override bool PutdownGoods(int itemid, int amount)
         {
             if (false == this._bStart)
                 return false;
@@ -370,7 +380,7 @@ namespace MyCraft
 
 
             if (null == this._output) return false;
-            List<SkillCostItem> inputs = this._output.cost.items;
+            List<BuildCostItem> inputs = this._output.cost.items;
             for (int i = 0; i < inputs.Count; ++i)
             {
                 if (inputs[i].itemid != itemid)
@@ -379,7 +389,7 @@ namespace MyCraft
                 List<BlockSlot> slots = base.GetPutdownSlot(itemid);
 
                 //겹치기
-                if (true == slots[i].OnOverlapItem(itemid, itembase.Stackable))
+                if (true == slots[i].OnOverlapItem(itemid, amount, itembase.Stackable))
                 {
                     //UI
                     this.SetBlock2Inven(slots[i]._panel, i, slots[i]._itemid, slots[i]._amount);
@@ -511,7 +521,7 @@ namespace MyCraft
             {
                 case 0://input
                     {
-                        List<SkillCostItem> inputs = this._output.cost.items;
+                        List<BuildCostItem> inputs = this._output.cost.items;
                         if (inputs[slot].itemid != itemid)
                             return false;
                         //자동겹침 제한
@@ -542,29 +552,67 @@ namespace MyCraft
             return false;
         }
 
+        //_panels[0](input-panel) 에 넣은수 있는 아이템 정보를 가져옵니다.
+        public override bool CheckPutdownGoods(ref List<int> putdowns)
+        {
+            if (null == this._output || null == this._output.cost.items) return false;
+
+            //_panels[0] : only input panel.
+            for (int i=0; i<this._output.cost.items.Count; ++i)
+            {
+                //empty
+                if (0 == this._panels[0]._slots[i]._itemid)
+                {
+                    putdowns.Add(this._output.cost.items[i].itemid);
+                    break;
+                }
+                //overlap
+                if (this._panels[0]._slots[i]._amount < this._output.cost.items[i].amount)
+                {
+                    putdowns.Add(this._output.cost.items[i].itemid);
+                    break;
+                }
+            }
+            //one more time: 위에서는 필요한 개수만큼만 먼저 가져가고,
+            //  아래에서는 여유분만큼 더 가져갈 수 있도록 함.
+            for (int i = 0; i < this._output.cost.items.Count; ++i)
+            {
+                ////empty
+                //if (0 == this._panels[0]._slots[i]._itemid)
+                //{
+                //    putdowns.Add(this._output.cost.items[i].itemid);
+                //    break;
+                //}
+                //overlap *2
+                if (this._panels[0]._slots[i]._amount < this._output.cost.items[i].amount*2)
+                {
+                    putdowns.Add(this._output.cost.items[i].itemid);
+                    break;
+                }
+            }
+            return false;   //putdowns에 포함된 아이템만 가져올 수 있다.
+        }
 
         public override void Save(BinaryWriter writer)
         {
-            base.Save(writer);
-
-            //skill
-            int skillid = 0;
-            if (null != this._output) skillid = this._output.id;
-            writer.Write(skillid);
+            //output
+            int itemid = 0;
+            if (null != this._output) itemid = this._output.id;
+            writer.Write((short)itemid);
             //...
 
+            base.Save(writer);
         }
 
         public override void Load(BinaryReader reader)
         {
-            base.Load(reader);
-
-            //skill
-            int skillid = reader.ReadInt32();
-            if (0 != skillid)
-                this.SetOutput(GameManager.GetSkillBase().FetchItemByID(skillid));
+            //output
+            short itemid = reader.ReadInt16();
+            if (0 != itemid)
+                this.SetOutput(GameManager.GetItemBase().FetchItemByID(itemid));
             //....
 
+            base.Load(reader);
         }
 
     }//..class ChestScript

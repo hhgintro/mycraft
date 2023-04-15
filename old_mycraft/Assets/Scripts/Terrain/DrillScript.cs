@@ -20,7 +20,7 @@ namespace MyCraft
         //예외처리가 필요하여 변수를 추가합니다.
         //public bool running = false;
 
-        // Use this for initialization
+
         void Start()
         {
             //_blocktype = BLOCKTYPE.DRILL;
@@ -107,7 +107,7 @@ namespace MyCraft
                     case BLOCKTYPE.STONE_FURNACE:
                         {
                             //놓을자리가 이미 찼다면...false를 리턴
-                            if (true == script_front.PutdownGoods(mineral._itembase.id))
+                            if (true == script_front.PutdownGoods(mineral._itembase.id, 1))
                                 return true;//지급완료
                         } break;
                 }

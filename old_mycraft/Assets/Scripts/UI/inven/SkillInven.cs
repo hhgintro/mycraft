@@ -11,14 +11,22 @@ namespace MyCraft
         //public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
         //public GameObject inventoryPanel;
 
-        void Awake()
+        private InvenSlotPanel _group;
+
+        protected override void Init()
         {
             //base.Awake();
             base.Init();
 
+            Transform skill_group = this.transform.Find("Categories");
             Transform parent = this.transform.Find("Skills");
-
-            for(int i=0; i<5; ++i)
+            
+            //categories
+            _group = new InvenSlotPanel(0, 0, this, null, skill_group.gameObject, InvenBase._invenSlot);
+            for(int i=0; i<GameManager.GetCategories().database.Count; ++i)
+                base.AddCategory(_group, i);
+            //skills
+            for (int i=0; i<5; ++i)
             {
                 GameObject objPanel = UnityEngine.Object.Instantiate(InvenBase._invenPanel);
                 objPanel.transform.SetParent(parent, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
@@ -35,10 +43,12 @@ namespace MyCraft
         
         void Start()
         {
-            this.SetActive(false);
+            this.Init();
 
             //database
             this.LinkSkillGroup(0);
+
+            this.SetActive(false);
 
             //locale
             //title text
@@ -51,7 +61,7 @@ namespace MyCraft
         //    base.Clear();
         //}
 
-        public override bool SetOutput(SkillBase skillbase)
+        public override bool SetOutput(ItemBase itembase)
         {
             //machin에서 skill창을 열었을 경우에는 _block이 null이 아닙니다.
             //이때는 machine에서 생성할 아이템정보를 세팅합니다.
@@ -59,7 +69,7 @@ namespace MyCraft
             //인벤의 아이템을 재료로하여 아이템을 생성하도록 합니다.
             if (null != base._block)
             {
-                base._block.SetOutput(skillbase);
+                base._block.SetOutput(itembase);
                 this.SetActive(false);
                 return true;
             }
@@ -68,20 +78,22 @@ namespace MyCraft
 
         public virtual void LinkSkillGroup(int category)
         {
+            if (GameManager.GetCategories().database.Count <= category)
+                return;
+
             //동일한 경우는...무시
             //if (this.category == category) return;
             this.category = category;
 
             this.Clear();
-            for (int i = 0; i < GameManager.GetSkillBase().database.Count; ++i)
+            Categories categories = GameManager.GetCategories().database[category];
+            if (null == categories)
+                return;
+
+            for (int p = 0; p < categories.panels.Count; ++p)
             {
-                SkillBase database = GameManager.GetSkillBase().database[i];
-                if (database.id <= 0)
-                    continue;//reset skill은 제외시킨다.
-                if(database.category != category)
-                    continue;
-                int panel = database.panel;
-                this.AddSkill(base._panels[panel], database.id, 0);
+                for(int i=0; i<categories.panels[p].items.Count; ++i)
+                    this.AddSkill(base._panels[p], categories.panels[p].items[i].itemid, 0);
             }
 
         }

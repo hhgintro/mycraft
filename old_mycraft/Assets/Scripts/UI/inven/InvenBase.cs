@@ -20,6 +20,7 @@ namespace MyCraft
         public static GameObject _invenItem { get; private set; }
         public static GameObject _invenSkill { get; private set; }
         public static GameObject _invenReset { get; private set; }
+        public static GameObject _category { get; private set; }
 
         protected CanvasGroup canvas_ui;
 
@@ -40,11 +41,12 @@ namespace MyCraft
 
         protected virtual void Init()
         {
-            if(null == _invenPanel) _invenPanel = Managers.Resource.Load<GameObject>("prefabs/ui/Slot Panel");
-            if(null == _invenSlot)  _invenSlot = Managers.Resource.Load<GameObject>("prefabs/ui/Slot");
-            if(null == _invenItem)  _invenItem = Managers.Resource.Load<GameObject>("prefabs/ui/Item");
-            if(null == _invenSkill) _invenSkill = Managers.Resource.Load<GameObject>("prefabs/ui/Skill");
-            if(null == _invenReset) _invenReset = Managers.Resource.Load<GameObject>("prefabs/ui/Reset");
+            if(null == _invenPanel)     _invenPanel = Managers.Resource.Load<GameObject>("prefabs/ui/Slot Panel");
+            if(null == _invenSlot)      _invenSlot = Managers.Resource.Load<GameObject>("prefabs/ui/Slot");
+            if(null == _invenItem)      _invenItem = Managers.Resource.Load<GameObject>("prefabs/ui/Item");
+            if(null == _invenSkill)     _invenSkill = Managers.Resource.Load<GameObject>("prefabs/ui/Skill");
+            if(null == _invenReset)     _invenReset = Managers.Resource.Load<GameObject>("prefabs/ui/Reset");
+            if (null == _category)      _category = Managers.Resource.Load<GameObject>("prefabs/ui/Category");
         }
 
         public virtual void Clear()
@@ -56,8 +58,8 @@ namespace MyCraft
         public virtual void Reset()
         { }
 
-        public virtual bool SetOutput(SkillBase skillbase)
-        { return false; }
+        public virtual bool SetOutput(ItemBase itembase) { return false; }
+
         ////protected virtual void InitSlot()
         ////{
         ////    for (int i = 0; i < this.slotAmount; ++i)
@@ -261,15 +263,15 @@ namespace MyCraft
         public virtual void AddReset(InvenSlotPanel panel)
         {
             int id = 0;//reset
-            SkillBase itemToAdd = GameManager.GetSkillBase().FetchItemByID(id);
-            if (null == itemToAdd)
+            ItemBase itembase = GameManager.GetItemBase().FetchItemByID(id);
+            if (null == itembase)
             {
                 Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
                 return;
             }
 
             Slot slot = panel.CreateSlot();
-            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, InvenBase._invenReset, 0);
+            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itembase, InvenBase._invenReset, 0);
         }
 
         //InvenItemData가 없이,
@@ -284,9 +286,9 @@ namespace MyCraft
             }
 
             //database
-            SkillBase itemToAdd = GameManager.GetSkillBase().FetchItemByID(id);
+            ItemBase itembase = GameManager.GetItemBase().FetchItemByID(id);
             //ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
-            if (null == itemToAdd)
+            if (null == itembase)
             {
                 Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
                 return;
@@ -294,7 +296,23 @@ namespace MyCraft
 
 
             Slot slot = panel.CreateSlot();
-            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itemToAdd, InvenBase._invenSkill, amount);
+            this.CreateSkillData(this, slot.transform, panel._panel, slot.slot, itembase, InvenBase._invenSkill, amount);
+        }
+
+        public virtual void AddCategory(InvenSlotPanel panel, int category)
+        {
+            //database
+            Categories categories = GameManager.GetCategories().FetchItemByID(category);
+            //ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
+            if (null == categories)
+            {
+                Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + category + "]");
+                return;
+            }
+
+
+            Slot slot = panel.CreateSlot();
+            this.CreateCategory(this, slot.transform, panel._panel, slot.slot, categories, InvenBase._category);
         }
 
         ////InvenItemData가 없이,
@@ -324,11 +342,12 @@ namespace MyCraft
             clone.GetComponent<Image>().sprite = database.Sprite;
             clone.name = database.Title;
             //clone.GetComponent<CanvasGroup>().blocksRaycasts = false;//인벤에 생성할때는 true입니다.
+            
             ItemData itemData = clone.GetComponent<ItemData>();
-            itemData.owner = owner;
-            itemData.database = database;
-            itemData.panel = panel;
-            itemData.slot = slot;
+            itemData.owner      = owner;
+            itemData.database   = database;
+            itemData.panel      = panel;
+            itemData.slot       = slot;
             return itemData;
         }
 
@@ -358,6 +377,16 @@ namespace MyCraft
             , int panel, int slot, JSonDatabase database, GameObject itemObj)
         {
             ItemData itemData = this.CreateObject(owner, parent, panel, slot, database, itemObj);
+
+            RectTransform rt = (RectTransform)itemData.transform;
+            rt.sizeDelta = Vector2.one * 60f;
+        }
+
+        public virtual void CreateCategory(InvenBase owner, Transform parent
+            , int panel, int slot, JSonDatabase database, GameObject itemObj)
+        {
+            SkillGroupData itemData = (SkillGroupData)this.CreateObject(owner, parent, panel, slot, database, itemObj);
+            itemData.category = slot;
 
             RectTransform rt = (RectTransform)itemData.transform;
             rt.sizeDelta = Vector2.one * 60f;

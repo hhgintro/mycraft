@@ -17,7 +17,7 @@ namespace MyCraft
         public List<int> next_techs = new List<int>();
         public List<int> rewards = new List<int>();
 
-        public string Slug;
+        public string icon;
 
         ////2d 이미지용
         //public Sprite Sprite;
@@ -36,9 +36,9 @@ namespace MyCraft
             LoadNextTechnology(json);
             LoadReward(json);
 
-            this.Slug = json["slug"].ToString();
-            this.Sprite = Managers.Resource.Load<Sprite>("Textures/technology/" + this.Slug);
-            //Debug.Log("tech slug: " + this.Slug);
+            this.icon = json["icon"].ToString();
+            this.Sprite = Managers.Resource.Load<Sprite>("Textures/technology/" + this.icon);
+            //Debug.Log("tech icon: " + this.icon);
 
         }
 

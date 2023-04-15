@@ -14,6 +14,7 @@ namespace MyCraft
         //public GameObject up;
         //public GameObject down;
 
+
         //void Awake()
         //{
         //    //위쪽에 다른 block이 있는 경우 up을 그리지 않는다.(모든 방향의 block도 동일하게 처리)

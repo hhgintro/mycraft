@@ -147,7 +147,7 @@ namespace MyCraft
             ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(itemid);
             if (null == itemToAdd)
             {
-                Debug.LogError("Database is empty : Need Checking Script Execute Order");
+                Debug.LogError($"Database is empty({itemid}) : Need Checking Script Execute Order");
                 return;
             }
 

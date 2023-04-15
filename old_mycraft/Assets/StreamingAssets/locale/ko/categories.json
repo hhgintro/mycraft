@@ -1,0 +1,49 @@
+﻿[
+  {
+    "type": 5000,
+    "id": 0,
+    "title": "물류",
+    "desc": "스킬 0입니다.",
+    "panels": [
+      {"items": [{"itemid":1000}]},
+      {"items": [{"itemid":1010},{"itemid":1020}]}
+    ],
+    "icon": "logistics"
+  },
+
+  {
+    "type": 5000,
+    "id": 1,
+    "title": "생산품",
+    "desc": "스킬 1입니다.",
+    "panels": [
+      {"items": [{"itemid":1030}]},
+      {"items": [{"itemid":1040},{"itemid":1050},{"itemid":1060}]}
+    ],
+    "icon": "production"
+  },
+
+  {
+    "type": 5000,
+    "id": 2,
+    "title": "중간 생산품",
+    "desc": "스킬 2입니다.",
+    "panels": [
+      {"items": [{"itemid":2000},{"itemid":2010},{"itemid":2011}]},
+      {"items": [{"itemid":3000},{"itemid":3010}]}
+    ],
+    "icon": "intermediate-products"
+  },
+
+  {
+    "type": 5000,
+    "id": 3,
+    "title": "전투",
+    "desc": "스킬 3입니다.",
+    "panels": [
+      {"items": [{"itemid":900}]}
+    ],
+    "icon": "military"
+  }
+
+]

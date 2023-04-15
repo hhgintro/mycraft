@@ -50,7 +50,7 @@ namespace MyCraft
 
             //InitSlot();
             base.Init();
-            this.inventoryTech = Managers.Resource.Instantiate("ui/Tech", this.transform);
+            this.inventoryTech = Managers.Resource.Load<GameObject>("prefabs/ui/Tech");
 
             //인벤 가이드 동영상
             //https://www.youtube.com/watch?v=dIq_7BeEjKE
@@ -166,14 +166,14 @@ namespace MyCraft
             //    return 0;
 
             //database
-            TechBase itemToAdd = GameManager.GetTechBase().FetchItemByID(id);
-            if (null == itemToAdd)
+            TechBase techbase = GameManager.GetTechBase().FetchItemByID(id);
+            if (null == techbase)
             {
                 Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
                 return itemcount;
             }
 
-            this.OnCreateItemData(itemToAdd);
+            this.OnCreateItemData(techbase);
             return 0;
         }
 
@@ -233,7 +233,7 @@ namespace MyCraft
         //    return itemcount;
         //}
 
-        protected virtual void OnCreateItemData(TechBase itemToAdd)
+        protected virtual void OnCreateItemData(TechBase techbase)
         {
             for (int p = 0; p < this._panels.Count; ++p)
             {
@@ -245,10 +245,10 @@ namespace MyCraft
                         continue;
 
                     //this.items[i] = itemToAdd;
-                    base.CreateTechData(this, slots[i].transform, p, i, itemToAdd, this.inventoryTech);
+                    base.CreateTechData(this, slots[i].transform, p, i, techbase, this.inventoryTech);
 
                     //color
-                    if (itemToAdd.prev_techs.Count <= 0)    slots[i].GetComponent<Image>().color = Color.yellow;
+                    if (techbase.prev_techs.Count <= 0)     slots[i].GetComponent<Image>().color = Color.yellow;
                     else                                    slots[i].GetComponent<Image>().color = Color.red;
                     //TechSlot ts = slots[i].GetComponent<TechSlot>();
                     //Debug.Log("tech slot" + i + ts.ToString());

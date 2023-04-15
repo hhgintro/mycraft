@@ -19,11 +19,6 @@ namespace MyCraft
         ////}
 
         // Use this for initialization
-        void Start()
-        {
-            //_blocktype = BLOCKTYPE.RAW_WOOD;
-
-        }
 
         ////// Update is called once per frame
         ////void Update () {

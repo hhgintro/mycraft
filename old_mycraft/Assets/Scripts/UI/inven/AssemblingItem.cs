@@ -7,8 +7,9 @@ namespace MyCraft
     {
         public int inputs;  //input의 slot 최대개수
         public int chips;   //chip의 slot 최대개수
-        //public List<AssemblingOutput> outputs = new List<AssemblingOutput>();   //생성할 아이템 list
-        public Dictionary<int, SkillBase> outputs = new Dictionary<int, SkillBase>();
+        ////public List<AssemblingOutput> outputs = new List<AssemblingOutput>();   //생성할 아이템 list
+        //public Dictionary<int, ItemBase> outputs = new Dictionary<int, ItemBase>();
+        public List<int> outputs = new List<int>(); //아직 미구현
 
         public AssemblingItem(JsonData json)
         {
@@ -18,13 +19,13 @@ namespace MyCraft
             //for(int i=0; i<json["output"].Count; ++i)
             //    this.outputs.Add(new AssemblingOutput(json["output"][i]));
 
-            for(int i=0; i<json["outputskill"].Count; ++i)
+            for (int i = 0; i < json["outputskill"].Count; ++i)
             {
-                int skillid = (int)json["outputskill"][i];
-                SkillBase skill = GameManager.GetSkillBase().FetchItemByID(skillid);
-                if (null == skill) continue;
-
-                outputs.Add(skillid, skill);
+                int itemid = (int)json["outputskill"][i];
+                //ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
+                //if (null == itembase) continue;
+                //outputs.Add(itemid, itembase);
+                outputs.Add(itemid);
             }
         }
     }

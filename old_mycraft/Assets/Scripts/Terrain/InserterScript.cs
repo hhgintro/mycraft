@@ -19,7 +19,7 @@ namespace MyCraft
         //          현재는 dest를 적용하기위해 임시로 적용합니다.
         //public float speed = 10f;
 
-        // Use this for initialization
+
         void Start()
         {
             //_blocktype = BLOCKTYPE.INSERTER;

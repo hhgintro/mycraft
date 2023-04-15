@@ -3,84 +3,84 @@
     "id": 0,
     "type": 1,
     "title": "시간",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "clock-icon"
+    "icon": "clock-icon"
   },
 
   {
     "id": 10,
     "type": 1,
     "title": "원목",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "raw-wood"
+    "icon": "raw-wood"
   },
 
   {
     "id": 20,
     "type": 1,
     "title": "돌",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "stone"
+    "icon": "stone"
   },
 
   {
     "id": 30,
     "type": 1,
     "title": "석탄",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "stone"
+    "icon": "stone"
   },
 
   {
     "id": 40,
     "type": 1,
     "title": "철광석",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "iron-ore"
+    "icon": "iron-ore"
   },
 
   {
     "id": 50,
     "type": 1,
     "title": "구리광석",
+    "desc": "",
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "",
     "stackable": 100,
-    "slug": "copper-ore"
+    "icon": "copper-ore"
   },
 
 
@@ -92,25 +92,22 @@
     "title": "권총",
     "desc": "",
     "speed": 1,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 1010,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1010,"amount": 1}
-    ],
     "state": {
       "power": 1,
       "defence": 2,
       "vitality": 10
     },
     "stackable": 100,
-    "slug": "pistol"
+    "icon": "pistol"
   },
 
 
@@ -122,24 +119,21 @@
     "title": "나무상자",
     "desc": "",
     "slots": 21,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2000,"amount": 3}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1000,"amount": 1}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "chest"
+    "icon": "chest"
   },
 
   {
@@ -148,25 +142,22 @@
     "title": "컨베이어 밸트",
     "desc": "물건이 이동하는 설비",
     "speed": 1,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1010,"amount": 1}
-    ],
     "state": {
       "power": 1,
       "defence": 2,
       "vitality": 10
     },
     "stackable": 100,
-    "slug": "basic-transport-belt"
+    "icon": "basic-transport-belt"
   },
 
   {
@@ -175,52 +166,46 @@
     "title": "분배기",
     "desc": "물건이 이동하는 설비",
     "speed": 1,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1000,"amount": 1}
-    ],
     "state": {
       "power": 1,
       "defence": 2,
       "vitality": 10
     },
     "stackable": 100,
-    "slug": "basic-splitter"
+    "icon": "basic-splitter"
   },
 
   {
     "id": 1030,
     "type": 1030,
     "title": "로봇팔",
+    "desc": "물건이 잡거나 넣는 설비",
     "speed": 1,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1020,"amount": 1}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
-    "desc": "물건이 잡거나 넣는 설비",
     "stackable": 100,
-    "slug": "robotic-arm"
+    "icon": "robotic-arm"
   },
 
   {
@@ -229,25 +214,22 @@
     "title": "채광 드릴",
     "desc": "자원을 채광하는 설비",
     "delay": 1,
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1040,"amount": 1}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "drill"
+    "icon": "drill"
   },
 
   {
@@ -255,17 +237,14 @@
     "type": 1050,
     "title": "석재 용광로",
     "desc": "화력으로 재련하는 설비",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2,"amount": 5}
-      ]
+        {"itemid": 20,"amount": 5}
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1050,"amount": 1}
-    ],
     "furnace": {
       "inputs": 1,
       "fuels": 1,
@@ -283,7 +262,7 @@
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "stone-furnace"
+    "icon": "stone-furnace"
   },
 
   {
@@ -291,18 +270,15 @@
     "type": 1060,
     "title": "조립 생산 설비",
     "desc": "물건을 조립하는 설비",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
-      ]
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 1060,"amount": 1}
-    ],
     "assembling": {
       "inputs": 4,
       "chips": 4,
@@ -314,7 +290,7 @@
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "machine"
+    "icon": "machine"
   },
 
 
@@ -325,24 +301,21 @@
     "type": 2,
     "title": "목재",
     "desc": "",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 1,"amount": 1}
-      ]
+        {"itemid": 10,"amount": 1}
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 2000,"amount": 1}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "wood"
+    "icon": "wood"
   },
 
   {
@@ -350,24 +323,22 @@
     "type": 2,
     "title": "철판",
     "desc": "",
-    "learn": 1,
-    "DIY": 0,
+    "learn":true,
+    "DIY":false,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 3,"amount": 1}
-      ]
+        {"itemid": 40,"amount": 1}
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 2010,"amount": 1}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "iron-plate"
+    "icon": "iron-plate"
   },
 
   {
@@ -375,24 +346,21 @@
     "type": 2,
     "title": "철 기어 휠",
     "desc": "",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 1}
-      ]
+      ],
+      "outputs": 2
     },
-    "outputs": [
-      {"itemid": 2011,"amount": 2}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "iron-gear-wheel"
+    "icon": "iron-gear-wheel"
   },
 
   {
@@ -400,24 +368,22 @@
     "type": 2,
     "title": "구리판",
     "desc": "",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
+    "DIY":false,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 1}
-      ]
+        {"itemid": 50,"amount": 1}
+      ],
+      "outputs": 1
     },
-    "outputs": [
-      {"itemid": 2011,"amount": 2}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "copper-plate"
+    "icon": "copper-plate"
   },
 
   {
@@ -425,24 +391,21 @@
     "type": 2,
     "title": "구리선",
     "desc": "",
-    "learn": 1,
-    "DIY": 1,
+    "learn":true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 1}
-      ]
+        {"itemid": 3000,"amount": 1}
+      ],
+      "outputs": 2
     },
-    "outputs": [
-      {"itemid": 2011,"amount": 2}
-    ],
     "state": {
       "power": 21,
       "defence": 12,
       "vitality": 50
     },
     "stackable": 100,
-    "slug": "copper-cable"
+    "icon": "copper-cable"
   }
 
 ]

@@ -27,14 +27,14 @@ namespace MyCraft
             return this._amount;
         }
 
-        public bool OnOverlapItem(int itemid, int stackable)
+        public bool OnOverlapItem(int itemid, int amount, int stackable)
         {
             //itemID가 다르면...무시
             if (this._itemid != itemid) return false;
             //가득차면...무시
             if (stackable <= this._amount) return false;
 
-            ++_amount;
+            this._amount += amount;
             return true;
         }
 

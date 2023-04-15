@@ -31,8 +31,9 @@ namespace MyCraft
         {
             this.inven = null;
         }
+        protected virtual void Init() { }
         public virtual void Reset() { }
-        public virtual void SetOutput(SkillBase skillbase) { }
+        public virtual void SetOutput(ItemBase itembase) { }
 
         public bool IsBelt()
         {
@@ -170,7 +171,7 @@ namespace MyCraft
             ItemBase itembase = GameManager.GetItemBase().FetchItemByID(goods.itemid);
             if (null == itembase) return false;
 
-            if (true == PutdownGoods(goods.itemid))
+            if (true == PutdownGoods(goods.itemid, 1))
             {
                 Destroy(goods.gameObject);
                 return true;
@@ -178,7 +179,7 @@ namespace MyCraft
             return false;
         }
 
-        public virtual bool PutdownGoods(int itemid)
+        public virtual bool PutdownGoods(int itemid, int amount)
         {
             //준비중입니다.
             if (false == this._bStart) return false;
@@ -191,10 +192,10 @@ namespace MyCraft
                 return false;//ID는 slot에 넣을 수 없습니다..
             }
 
-            return PutdownGoods(slots, itemid);
+            return PutdownGoods(slots, itemid, amount);
         }
 
-        public virtual bool PutdownGoods(List<BlockSlot> slots, int itemid)
+        public virtual bool PutdownGoods(List<BlockSlot> slots, int itemid, int amount)
         {
             ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
             if (null == itembase)
@@ -206,7 +207,7 @@ namespace MyCraft
             //겹치기
             for (int i = 0; i < slots.Count; ++i)
             {
-                if (false == slots[i].OnOverlapItem(itemid, itembase.Stackable))
+                if (false == slots[i].OnOverlapItem(itemid, amount, itembase.Stackable))
                     continue;
 
                 //UI
@@ -239,6 +240,10 @@ namespace MyCraft
             //return false;//넣을 수 없다.
             return true;//넣을 수 있다.
         }
+        //_panels[0](input-panel) 에 넣은수 있는 아이템 정보를 가져옵니다.
+        //   return: true이면 무조건 가져올 수 있다.
+        public virtual bool CheckPutdownGoods(ref List<int> putdowns) { return true; }
+
         public virtual BeltGoods PickupGoods(BlockScript script_front)
         {
             //준비중입니다.
@@ -254,27 +259,53 @@ namespace MyCraft
                 return null;//ID는 slot에서 가져올 수 없습니다..
             }
 
-            //뒤에서 체크하는 이유는 중간에 뺄때...crash방지차원.
-            for (int i = slots.Count - 1; 0 <= i; --i)
+            //script_front에 넣을 수 있는 아이템
+            List<int> putdowns = new List<int>();
+            // return: true이면 앞쪽부터 하나씩 가져갈 수 있다.
+            if(true == script_front.CheckPutdownGoods(ref putdowns))
             {
-                if (0 == slots[i]._itemid)
-                    continue;
+                //구지 뒤에서 뺄 필요가 있을까...테스트후 이상없으면 주석 삭제할 것
+                ////뒤에서 체크하는 이유는 중간에 뺄때...crash방지차원.
+                //for (int s = slots.Count - 1; 0 <= s; --s)
+                for (int s = 0; s < slots.Count; ++s)
+                {
+                    if (0 == slots[s]._itemid) continue;
 
-                //front에 넣을 수 없다면...다음꺼를 찾는다.
-                if (false == script_front.CheckPutdownGoods(slots[i]._itemid))
-                    continue;
+                    BeltGoods goods = GameManager.CreateMineral(slots[s]._itemid, this.transform);
+                    //goods.transform.position = base.CheckDestPosFrontBlock(goods);
 
-                BeltGoods goods = GameManager.CreateMineral(slots[i]._itemid, this.transform);//, this.transform.position);
-                //goods.transform.position = base.CheckDestPosFrontBlock(goods);
+                    //자원하나를 빼준다.
+                    if (--slots[s]._amount <= 0) slots[s]._itemid = 0;
+                    //Debug.Log("block slot" + i + ": " + slots[i].amount);
 
-                //자원하나를 빼준다.
-                if (--slots[i]._amount <= 0)     slots[i]._itemid = 0;
-                //Debug.Log("block slot" + i + ": " + slots[i].amount);
+                    //UI
+                    this.SetBlock2Inven(slots[s]._panel, s, slots[s]._itemid, slots[s]._amount);
+                    return goods;// obj.GetComponent<BeltGoods>();
+                }
+                return null;
+            }
+            // return: false이면, putdowns에 등록된 아이템만 가져갈 수 있다.
+            for (int i = 0; i < putdowns.Count; ++i)
+            {
+                //구지 뒤에서 뺄 필요가 있을까...테스트후 이상없으면 주석 삭제할 것
+                ////뒤에서 체크하는 이유는 중간에 뺄때...crash방지차원.
+                //for (int s = slots.Count - 1; 0 <= s; --s)
+                for (int s=0; s<slots.Count; ++s)
+                {
+                    if (0 == slots[s]._itemid)              continue;
+                    if (putdowns[i] != slots[s]._itemid)    continue;
 
-                //UI
-                this.SetBlock2Inven(slots[i]._panel, i, slots[i]._itemid, slots[i]._amount);
+                    BeltGoods goods = GameManager.CreateMineral(slots[s]._itemid, this.transform);
+                    //goods.transform.position = base.CheckDestPosFrontBlock(goods);
 
-                return goods;// obj.GetComponent<BeltGoods>();
+                    //자원하나를 빼준다.
+                    if (--slots[s]._amount <= 0) slots[s]._itemid = 0;
+                    //Debug.Log("block slot" + i + ": " + slots[i].amount);
+
+                    //UI
+                    this.SetBlock2Inven(slots[s]._panel, s, slots[s]._itemid, slots[s]._amount);
+                    return goods;// obj.GetComponent<BeltGoods>();
+                }
             }
             return null;
         }
@@ -386,14 +417,50 @@ namespace MyCraft
             //writer.Write((int)this.blocktype);
             //writer.Write(this.transform.eulerAngles.y);
 
+            byte count = 0;  //아이템개수
+            for (int p = 0; p < this._panels.Count; p++)
+            {
+                for (int s = 0; s < this._panels[p]._slots.Count; ++s)
+                {
+                    if (0 != this._panels[p]._slots[s]._itemid)
+                        ++count;
+                }
+            }
+
+            writer.Write(count);    //아이템 개수
+            for (int p=0; p<this._panels.Count; p++)
+            {
+                for(int s=0; s<this._panels[p]._slots.Count; ++s)
+                {
+                    if (0 == this._panels[p]._slots[s]._itemid)
+                        continue;
+                    writer.Write((byte)p);    //panel
+                    writer.Write((byte)s);    //slot
+                    writer.Write((short)this._panels[p]._slots[s]._itemid);
+                    writer.Write((short)this._panels[p]._slots[s]._amount);
+                }
+            }
         }
 
         public virtual void Load(BinaryReader reader)
         {
+            this.Init();
+
             //생성을 위해 먼저 처리되므로, 여기에서는 처리하지 않습니다.
             //int blocktype = reader.ReadInt32();
             //float angley = reader.ReadSingle();
 
+            byte count = reader.ReadByte();     //아이템 개수
+            for(int i=0; i<count; ++i)
+            {
+                byte p          = reader.ReadByte();     //panel
+                byte s          = reader.ReadByte();     //slot
+                short itemid    = reader.ReadInt16();     //itemid
+                short amount    = reader.ReadInt16();     //amount
+
+                this._panels[p]._slots[s]._itemid = itemid;
+                this._panels[p]._slots[s]._amount = amount;
+            }
         }
 
 

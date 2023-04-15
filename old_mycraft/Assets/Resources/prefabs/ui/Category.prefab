@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 225411527183474338}
   - component: {fileID: 114420083758844428}
   m_Layer: 5
-  m_Name: SkillGroup
+  m_Name: Category
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

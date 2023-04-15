@@ -276,7 +276,6 @@ namespace MyCraft
             Debug.Log(_techbase.id + " 연구 완료");
         }
 
-        public override bool SetOutput(SkillBase skillbase)
-        { return true; }
+        public override bool SetOutput(ItemBase itembase) { return true; }
     }//..class TechDescription
 }//..namespace MyCraft

@@ -29,9 +29,10 @@ namespace MyCraft
         //progress에 의해 만들어 지는 아이템 ID
         private int _output { get; set; }
 
-        // Use this for initialization
-        void Start()
+        protected override void Init()
         {
+            if (0 != base._panels.Count)
+                return;
             //_blocktype = BLOCKTYPE.STONE_FURNACE;
             //if (null == base._itembase)
             //    base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);
@@ -43,6 +44,11 @@ namespace MyCraft
 
             this._progresses.Add(new Progress(this, 0, 1f, false));//progress
             this._progresses.Add(new Progress(this, 1, 10, true));//progress-fuel
+        }
+
+        void Start()
+        {
+            this.Init();
 
             //progress
             //this._build = false;
@@ -258,7 +264,7 @@ namespace MyCraft
             if(0 == id)
             {
                 //아이템을 생성해 준다.
-                if(false == base.PutdownGoods(this.GetOutputSlot(), this._output))
+                if(false == base.PutdownGoods(this.GetOutputSlot(), this._output, 1))
                 {
                     this._bRunning = false;//들어갈 자리가 없으면 실패...
                     //Debug.Log(no + ": furnace 1 running(" + this._bRunning + ")");
@@ -286,7 +292,7 @@ namespace MyCraft
         public override bool PutdownGoods(BeltGoods goods)
         {
             //Debug.Log("PutdownGoods : goods");
-            if(true == PutdownGoods(goods.itemid))
+            if(true == PutdownGoods(goods.itemid, 1))
             {
                 Destroy(goods.gameObject);
                 return true;
@@ -294,10 +300,10 @@ namespace MyCraft
             return false;
         }
 
-        public override bool PutdownGoods(int itemid)
+        public override bool PutdownGoods(int itemid, int amount)
         {
             //Debug.Log("PutdownGoods : ID");
-            bool ret = base.PutdownGoods(itemid);
+            bool ret = base.PutdownGoods(itemid, amount);
             if(false == ret)
                 return false;
 
@@ -440,6 +446,38 @@ namespace MyCraft
             return false;
         }
 
+        //_panels[0](input-panel) 에 넣은수 있는 아이템 정보를 가져옵니다.
+        public override bool CheckPutdownGoods(ref List<int> putdowns)
+        {
+            if (null == base._itembase || null == ((FurnaceItemBase)base._itembase)._furnace) return false;
+
+            List<FurnaceInputItem> inputs = ((FurnaceItemBase)base._itembase)._furnace.input;
+            for(int i=0; i<inputs.Count; ++i)
+            {
+                //0: input-panel
+                //1: fuel-panel
+                for (int p = 0; p < this._panels.Count; ++p)
+                {
+                    if (2 <= p) break;  //output-panel은 넣을 수 없습니다.
+
+                    for (int s = 0; s < this._panels[p]._slots.Count; ++s)
+                    {
+                        if (0 == this._panels[p]._slots[s]._itemid)
+                        {
+                            putdowns.Add(this._panels[p]._slots[s]._itemid);
+                            break;
+                        }
+
+                        if (this._panels[p]._slots[s]._amount < inputs[i].limit * 2)
+                        {
+                            putdowns.Add(this._panels[p]._slots[s]._itemid);
+                            break;
+                        }
+                    }
+                }
+            }
+            return false;   //putdowns에 포함된 아이템만 가져올 수 있다.
+        }
 
         public override void Save(BinaryWriter writer)
         {

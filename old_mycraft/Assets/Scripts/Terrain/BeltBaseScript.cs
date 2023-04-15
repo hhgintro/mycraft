@@ -11,7 +11,6 @@ namespace MyCraft
         //belt를 좌우 각각 4부분으로 나눈다.(운반체를 최대 8개까지 올릴수 있다.)
         public BeltSector[] sectors;
 
-
         void Start()
         {
             if (true == base._bOnTerrain)

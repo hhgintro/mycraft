@@ -19,7 +19,7 @@ namespace MyCraft
         //private static ItemDatabase item_database;
         private static JSonParser<ItemBase> _itembase;
         private static JSonParser<TechBase> _techbase;
-        private static JSonParser<SkillBase> _skillbase;
+        private static JSonParser<Categories> _categories;
 
         private static TerrainManager _terrain_manager;
         private static BeltManager _belt_manager;
@@ -73,8 +73,9 @@ namespace MyCraft
                 GameManager.GetInventory().AddItem(2000, 100);  //wood
 
                 GameManager.GetInventory().AddItem(10, 54);     //raw-wood
-                GameManager.GetInventory().AddItem(40, 54);     //iron-ore
                 GameManager.GetInventory().AddItem(20, 54);     //stone
+                GameManager.GetInventory().AddItem(40, 54);     //iron-ore
+                GameManager.GetInventory().AddItem(50, 54);     //copper-ore
 
                 GameManager.GetInventory().AddItem(1010, 54);   //belt
 
@@ -145,10 +146,11 @@ namespace MyCraft
             return _techbase;
         }
 
-        public static JSonParser<SkillBase> GetSkillBase() {
-            if (null == _skillbase)
-                _skillbase = new JSonParser<SkillBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/skills.json");
-            return _skillbase;
+        public static JSonParser<Categories> GetCategories()
+        {
+            if (null == _categories)
+                _categories = new JSonParser<Categories>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/categories.json");
+            return _categories;
         }
 
         public static TerrainManager GetTerrainManager() {
@@ -270,36 +272,36 @@ namespace MyCraft
             return _tooltip;
         }
 
-        public static GameObject GetInvenPanel()
-        {
-            if(null == _invenPanel)
-                _invenPanel = Managers.Resource.Load<GameObject>("prefab/ui/Slot Panel");
-            return _invenPanel;
-        }
-        public static GameObject GetInvenSlot()
-        {
-            if(null == _invenSlot)
-               _invenSlot = Managers.Resource.Load<GameObject>("prefab/ui/Slot");
-            return _invenSlot;
-        }
-        public static GameObject GetInvenItem()
-        {
-            if(null == _invenItem)
-                _invenItem = Managers.Resource.Load<GameObject>("prefab/ui/Item");
-            return _invenItem;
-        }
-        public static GameObject GetInvenSkill()
-        {
-            if(null == _invenSkill)
-                _invenSkill = Managers.Resource.Load<GameObject>("prefab/ui/Skill");
-            return _invenSkill;
-        }
-        public static GameObject GetInvenReset()
-        {
-            if(null == _invenReset)
-                _invenReset = Managers.Resource.Load<GameObject>("prefab/ui/Reset");
-            return _invenReset;
-        }
+        //public static GameObject GetInvenPanel()
+        //{
+        //    if(null == _invenPanel)
+        //        _invenPanel = Managers.Resource.Load<GameObject>("prefab/ui/Slot Panel");
+        //    return _invenPanel;
+        //}
+        //public static GameObject GetInvenSlot()
+        //{
+        //    if(null == _invenSlot)
+        //       _invenSlot = Managers.Resource.Load<GameObject>("prefab/ui/Slot");
+        //    return _invenSlot;
+        //}
+        //public static GameObject GetInvenItem()
+        //{
+        //    if(null == _invenItem)
+        //        _invenItem = Managers.Resource.Load<GameObject>("prefab/ui/Item");
+        //    return _invenItem;
+        //}
+        //public static GameObject GetInvenSkill()
+        //{
+        //    if(null == _invenSkill)
+        //        _invenSkill = Managers.Resource.Load<GameObject>("prefab/ui/Skill");
+        //    return _invenSkill;
+        //}
+        //public static GameObject GetInvenReset()
+        //{
+        //    if(null == _invenReset)
+        //        _invenReset = Managers.Resource.Load<GameObject>("prefab/ui/Reset");
+        //    return _invenReset;
+        //}
 
         public static BeltGoods CreateMineral(int itemid, Transform parent)//, Vector3 pos)
         {
@@ -313,13 +315,10 @@ namespace MyCraft
             //생성위치
             //obj.transform.position = pos;
 
-            //item ID
-            //obj.GetComponent<BeltGoods>().ID = id;    //HG_TODO : item.json에서 설정된 값을 넣어줘야 합니다.
-            //return obj;
-            BeltGoods goods = obj.GetComponent<BeltGoods>();
-            MeshRenderer render= goods.transform.GetChild(0).GetComponent<MeshRenderer>();
+            BeltGoods goods             = obj.GetComponent<BeltGoods>();
+            goods.itemid                = itemid;    //HG_TODO : item.json에서 설정된 값을 넣어줘야 합니다.
+            MeshRenderer render         = goods.transform.GetChild(0).GetComponent<MeshRenderer>();
             render.material.mainTexture = itembase.Sprite.texture;
-            goods.itemid = itemid;    //HG_TODO : item.json에서 설정된 값을 넣어줘야 합니다.
             return goods;
         }
 
@@ -335,10 +334,10 @@ namespace MyCraft
             if (amount <= 0)
                 return 0;
 
-            //그래도 남아있으면...생성해준다.
-            amount = GetQuickInven().AddItem(itemid, amount);
-            if (amount <= 0)
-                return 0;
+            ////그래도 남아있으면...생성해준다.
+            //amount = GetQuickInven().AddItem(itemid, amount);
+            //if (amount <= 0)
+            //    return 0;
 
             return amount;
         }

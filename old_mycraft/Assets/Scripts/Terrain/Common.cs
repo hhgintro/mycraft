@@ -70,7 +70,7 @@ namespace MyCraft
                 case BLOCKTYPE.STONE_FURNACE:   return typeof(FurnaceItemBase);
                 case BLOCKTYPE.MACHINE:         return typeof(MachineItemBase);
 
-                case BLOCKTYPE.SKILL:           return typeof(SkillBase);
+                case BLOCKTYPE.SKILL:           return typeof(Categories);
                 case BLOCKTYPE.TECH:            return typeof(TechBase);
             }
 
