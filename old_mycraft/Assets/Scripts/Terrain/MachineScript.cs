@@ -411,15 +411,26 @@ namespace MyCraft
             return true;
         }
 
-        public override BeltGoods PickupGoods(BlockScript script_front)
+        //inserter: 물건을 가져가는 로봇팔
+        //dutdonws: block_front 에 넣을 수 있는 itemid(null인 경우도 있다. 필요한 경우에 사용하세요.)
+        public override BeltGoods PickupGoods(BlockScript inserter, List<int> putdowns/*null*/)
         {
-            BeltGoods goods = base.PickupGoods(script_front);
-            if (null == goods) return null;
+            BeltGoods goods = base.PickupGoods(inserter, putdowns);
 
             //아이템이 등록되면 시작 여부를 판단합니다.
             this.CheckStartAssembling();
             return goods;
         }
+
+        //public override BeltGoods PickupGoods(BlockScript script_front)
+        //{
+        //    BeltGoods goods = base.PickupGoods(script_front);
+        //    if (null == goods) return null;
+
+        //    //아이템이 등록되면 시작 여부를 판단합니다.
+        //    this.CheckStartAssembling();
+        //    return goods;
+        //}
 
         public override void SetItem(int panel, int slot, int itemid, int amount)
         {

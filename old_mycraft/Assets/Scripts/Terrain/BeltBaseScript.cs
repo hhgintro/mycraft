@@ -16,6 +16,7 @@ namespace MyCraft
             if (true == base._bOnTerrain)
             {
                 base.SetMeshRender(1.0f);
+                base._bStart = true;
                 StartCoroutine(TranslateObject());
             }
             else
@@ -187,29 +188,118 @@ namespace MyCraft
             return true;
         }
 
-        public override BeltGoods PickupGoods(BlockScript script_front)
+        //[자신]을 기준으로 inserter가 물건을 가져올때 우선 순위.
+        private List<BeltSector> PickupInserter(BlockScript inserter)
         {
-            if (null == script_front)
-                return null;
+            List<BeltSector> s = new List<BeltSector>();
 
-            //HG_TODO : sector를 순회하면서 아이템을 가져오고 있습니다.
-            //          아이템을 가져올 우선 순위를 정함도 좋을 듯 싶습니다.
-            for (int i = 0; i < this.sectors.Length; ++i)
+            //insert type에 따른 거리를 판단해준다.
+            int LEN = 1; //long inserter의 경우는 2
+
+            //front: 앞쪽에 insert가 있다.
+            if (Vector3.Distance(inserter.transform.position, this.transform.position + this.transform.forward * LEN) < 0.5f)
             {
-                if (null == this.sectors[i].obj)
-                    continue;
-
-                //front에 넣을 수 없다면...다음꺼를 찾는다.
-                if (false == script_front.CheckPutdownGoods(this.sectors[i].obj.itemid))
-                    continue;
-
-
-                BeltGoods obj = this.sectors[i].obj;
-                this.sectors[i].obj = null;
-                return obj;
+                s.Add(this.sectors[0]);
+                s.Add(this.sectors[1]);
+                s.Add(this.sectors[2]);
+                s.Add(this.sectors[3]);
+                s.Add(this.sectors[4]);
+                s.Add(this.sectors[5]);
+                s.Add(this.sectors[6]);
+                s.Add(this.sectors[7]);
+                return s;
+            }
+            //back: 뒤쪽에 inserter가 있다.
+            if (Vector3.Distance(inserter.transform.position, this.transform.position - this.transform.forward * LEN) < 0.5f)
+            {
+                s.Add(this.sectors[0]);
+                s.Add(this.sectors[1]);
+                s.Add(this.sectors[2]);
+                s.Add(this.sectors[3]);
+                s.Add(this.sectors[4]);
+                s.Add(this.sectors[5]);
+                s.Add(this.sectors[6]);
+                s.Add(this.sectors[7]);
+                return s;
+            }
+            //right: 오른쪽에 inserter가 있다.
+            if (Vector3.Distance(inserter.transform.position, this.transform.position + this.transform.right * LEN) < 0.5f)
+            {
+                s.Add(this.sectors[4]);
+                s.Add(this.sectors[5]);
+                s.Add(this.sectors[6]);
+                s.Add(this.sectors[7]);
+                s.Add(this.sectors[0]);
+                s.Add(this.sectors[1]);
+                s.Add(this.sectors[2]);
+                s.Add(this.sectors[3]);
+                return s;
+            }
+            //left: 왼쪽에 inserter가 있다.
+            if (Vector3.Distance(inserter.transform.position, this.transform.position - this.transform.right * LEN) < 0.5f)
+            {
+                s.Add(this.sectors[0]);
+                s.Add(this.sectors[1]);
+                s.Add(this.sectors[2]);
+                s.Add(this.sectors[3]);
+                s.Add(this.sectors[4]);
+                s.Add(this.sectors[5]);
+                s.Add(this.sectors[6]);
+                s.Add(this.sectors[7]);
+                return s;
             }
             return null;
         }
+
+        //inserter: 물건을 가져가는 로봇팔
+        //dutdonws: block_front 에 넣을 수 있는 itemid(null인 경우도 있다. 필요한 경우에 사용하세요.)
+        public override BeltGoods PickupGoods(BlockScript inserter, List<int> putdowns/*null*/)
+        {
+            //방향.
+            List<BeltSector> SEC = this.PickupInserter(inserter);
+            if (SEC == null) return null;
+
+            for (int i = 0; i < putdowns.Count; ++i)
+            {
+                //sector를 순회하면서 아이템을 가져오고 있습니다.
+                for (int s = 0; s < SEC.Count; ++s)
+                {
+                    if (null == SEC[s].obj)
+                        continue;
+                    if (putdowns[i] != SEC[s].obj.itemid)
+                        continue;
+
+                    BeltGoods obj = SEC[s].obj;
+                    SEC[s].obj = null;
+                    return obj;
+                }
+            }
+
+            return null;
+        }
+        //public override BeltGoods PickupGoods(BlockScript script_front)
+        //{
+        //    if (null == script_front)
+        //        return null;
+
+        //    //HG_TODO : sector를 순회하면서 아이템을 가져오고 있습니다.
+        //    //          아이템을 가져올 우선 순위를 정함도 좋을 듯 싶습니다.
+        //    for (int i = 0; i < this.sectors.Length; ++i)
+        //    {
+        //        if (null == this.sectors[i].obj)
+        //            continue;
+
+        //        //front에 넣을 수 없다면...다음꺼를 찾는다.
+        //        if (false == script_front.CheckPutdownGoods(this.sectors[i].obj.itemid))
+        //            continue;
+
+
+        //        BeltGoods obj = this.sectors[i].obj;
+        //        this.sectors[i].obj = null;
+        //        return obj;
+        //    }
+        //    return null;
+        //}
 
 
         public override void Save(BinaryWriter writer)
@@ -225,8 +315,6 @@ namespace MyCraft
 
         public override void Load(BinaryReader reader)
         {
-            //생성을 위해 먼저 처리되므로, 여기에서는 처리하지 않습니다.
-            //int turn_weight = reader.ReadInt32
             base.Load(reader);
 
             //sector

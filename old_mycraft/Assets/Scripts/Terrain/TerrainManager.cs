@@ -263,25 +263,7 @@ namespace MyCraft
             //block info
             //for(int i=0; i<blocks.Count; ++i)
             foreach(var tmp_block in blocks)
-            {
                 tmp_block.Value.Save(writer);
-
-                ////position
-                //writer.Write(tmp_block.Value.posx);
-                //writer.Write(tmp_block.Value.posy);
-                //writer.Write(tmp_block.Value.posz);
-                ////Debug.Log("***write pos:" + tmp_block.posx + "/" + blocks[i].posy + "/" + blocks[i].posz);
-                ////itemid
-                //writer.Write((int)tmp_block.Value.script._itembase.id);
-                ////Debug.Log("write blocktype:" + blocks[i].script.blocktype);
-                ////angle
-                //writer.Write(tmp_block.Value.script.transform.eulerAngles.y);
-                ////Debug.Log("write angle:" + blocks[i].script.transform.eulerAngles.y);
-                ////data
-                //tmp_block.Value.script.Save(writer);
-            }
-
-
         }
 
         public virtual void Load(BinaryReader reader)
@@ -293,51 +275,6 @@ namespace MyCraft
             {
                 BlockData data = new BlockData();
                 data.Load(reader);
-
-                ////position
-                //int posx = reader.ReadInt32();
-                //int posy = reader.ReadInt32();
-                //int posz = reader.ReadInt32();
-                ////Debug.Log("***read pos:" + posx + "/" + posy + "/" + posz);
-
-                ////itemid
-                //int itemid = reader.ReadInt32();
-                //ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
-                //if (null == itembase)
-                //{
-                //    Debug.LogError("not found loaded itemid " + itemid.ToString());
-                //    continue;
-                //}
-                ////Debug.Log("load: blocktype[" + blocktype + "], pos:[" + posx + "},{" + posy + "},{" + posz + "}]");
-                ////angle
-                //float angley = reader.ReadSingle();
-                ////Debug.Log("read angle:" + angley);
-                //int turn_weight = (int)TURN_WEIGHT.FRONT;
-                //if(BLOCKTYPE.BELT == (BLOCKTYPE)itembase.type
-                //    || BLOCKTYPE.GROUND_BELT == (BLOCKTYPE)itembase.type)
-                //{
-                //    turn_weight = reader.ReadInt32();
-                //    //Debug.Log("read turn_weight:" + turn_weight);
-                //}
-
-                //BlockScript prefab = this.GetBlockPrefab(itembase.type, (TURN_WEIGHT)turn_weight);
-                //if (null == prefab) continue;
-                //prefab._itembase = itembase;
-
-                ////angle
-                //prefab.transform.eulerAngles = new Vector3(0f, angley, 0f);
-
-                //BlockScript script = this.CreateBlock(this.GetBlockLayer(), posx, posy, posz, prefab);
-                //if (null == script)
-                //{
-                //    Debug.LogError($"fail load: itemid[{itemid}], pos:[{posx},{posy},{posz}]");
-                //    continue;
-                //}
-
-                //script._itembase = itembase;
-                //script.Load(reader);
-                ////float angle = reader.ReadSingle();
-
             }
 
         }
@@ -364,9 +301,10 @@ namespace MyCraft
             writer.Write(this.posy);
             writer.Write(this.posz);
             //itemid
-            writer.Write(this.block._itembase.id);
+            writer.Write((short)this.block._itembase.id);
             //angle
             writer.Write(this.block.transform.eulerAngles.y);
+
             //data
             block.Save(writer);
         }
@@ -376,10 +314,8 @@ namespace MyCraft
             this.posx = reader.ReadInt32();
             this.posy = reader.ReadInt32();
             this.posz = reader.ReadInt32();
-            //Debug.Log("***read pos:" + posx + "/" + posy + "/" + posz);
-
             //itemid
-            int itemid = reader.ReadInt32();
+            short itemid = reader.ReadInt16();
             //angle
             float angley = reader.ReadSingle();
 
@@ -411,7 +347,7 @@ namespace MyCraft
                 return;
             }
 
-            this.block._itembase = itembase;
+            this.block._itembase = itembase;    //GetTerrainManager().CreateBlock()에서 처리되는거 같다.
             this.block.Load(reader);
         }
     }

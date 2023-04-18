@@ -312,15 +312,25 @@ namespace MyCraft
             return true;
         }
 
-        public override BeltGoods PickupGoods(BlockScript script_front)
+        //inserter: 물건을 가져가는 로봇팔
+        //dutdonws: block_front 에 넣을 수 있는 itemid(null인 경우도 있다. 필요한 경우에 사용하세요.)
+        public override BeltGoods PickupGoods(BlockScript inserter, List<int> putdowns/*null*/)
         {
-            BeltGoods goods = base.PickupGoods(script_front);
-            if (null == goods) return null;
+            BeltGoods goods = base.PickupGoods(inserter, putdowns);
 
             //아이템이 등록되면 시작 여부를 판단합니다.
             this.CheckStartAssembling();
             return goods;
         }
+        //public override BeltGoods PickupGoods(BlockScript script_front)
+        //{
+        //    BeltGoods goods = base.PickupGoods(script_front);
+        //    if (null == goods) return null;
+
+        //    //아이템이 등록되면 시작 여부를 판단합니다.
+        //    this.CheckStartAssembling();
+        //    return goods;
+        //}
 
         public override void SetItem(int panel, int slot, int itemid, int amount)
         {
@@ -446,36 +456,43 @@ namespace MyCraft
             return false;
         }
 
+        private void GetPutdownItems<T>(List<T> inputs, List<BlockSlot> slots, int Limit, ref List<int> putdowns) where T : FurnaceInputBase   
+        {
+            for (int i = 0; i < inputs.Count; ++i)
+            {
+                for (int s = 0; s < slots.Count; ++s)
+                {
+                    //비어있거나 limit 미달이면 putdown가능하다.
+                    if (0 == slots[s]._itemid
+                        || slots[s]._amount < inputs[i].limit * Limit)
+                    {
+                        putdowns.Add(inputs[s].itemid);
+                        break;
+                    }
+                }
+            }
+        }
+
         //_panels[0](input-panel) 에 넣은수 있는 아이템 정보를 가져옵니다.
         public override bool CheckPutdownGoods(ref List<int> putdowns)
         {
             if (null == base._itembase || null == ((FurnaceItemBase)base._itembase)._furnace) return false;
 
             List<FurnaceInputItem> inputs = ((FurnaceItemBase)base._itembase)._furnace.input;
-            for(int i=0; i<inputs.Count; ++i)
-            {
-                //0: input-panel
-                //1: fuel-panel
-                for (int p = 0; p < this._panels.Count; ++p)
-                {
-                    if (2 <= p) break;  //output-panel은 넣을 수 없습니다.
+            //0: input-panel
+            GetPutdownItems<FurnaceInputItem>(inputs, this._panels[0]._slots, 1, ref putdowns);
+            //1: fuel-panel
+            List<FurnaceFuelItem> fuels = ((FurnaceItemBase)base._itembase)._furnace.fuel;
+            GetPutdownItems<FurnaceFuelItem>(fuels, this._panels[1]._slots, 1, ref putdowns);
 
-                    for (int s = 0; s < this._panels[p]._slots.Count; ++s)
-                    {
-                        if (0 == this._panels[p]._slots[s]._itemid)
-                        {
-                            putdowns.Add(this._panels[p]._slots[s]._itemid);
-                            break;
-                        }
+            //여기서 이미 아이템이 담겼다면 *2 할 필요없으니...리턴
+            if (0 > putdowns.Count) return false;
 
-                        if (this._panels[p]._slots[s]._amount < inputs[i].limit * 2)
-                        {
-                            putdowns.Add(this._panels[p]._slots[s]._itemid);
-                            break;
-                        }
-                    }
-                }
-            }
+            //limit * 2 까지 저장합니다.
+            //0: input-panel
+            GetPutdownItems<FurnaceInputItem>(inputs, this._panels[0]._slots, 2, ref putdowns);
+            //1: fuel-panel
+            GetPutdownItems<FurnaceFuelItem>(fuels, this._panels[0]._slots, 2, ref putdowns);
             return false;   //putdowns에 포함된 아이템만 가져올 수 있다.
         }
 

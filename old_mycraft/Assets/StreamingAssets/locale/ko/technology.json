@@ -31,8 +31,8 @@
       "multiple":12,
       "time":2.1,
       "item":[
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {"itemid": 1010,"amount": 2},
+        {"itemid": 1020,"amount": 2}
       ]
     },
     "pre-tech":[
@@ -44,8 +44,8 @@
       {"techid":3}
     ],
     "reward":[
-      {"skill":1010},
-      {"skill":1020}
+      {"skill":1040},
+      {"skill":1050}
     ],
     "icon":"electronics"
   },
@@ -58,8 +58,8 @@
       "multiple":13,
       "time":3.1,
       "item":[
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {"itemid": 1040,"amount": 2},
+        {"itemid": 1050,"amount": 2}
       ]
     },
     "pre-tech":[
@@ -67,8 +67,8 @@
       {"techid":2}
     ],
     "reward":[
-      {"skill":1010},
-      {"skill":1020}
+      {"skill":2010},
+      {"skill":3000}
     ],
     "icon":"logistics"
   }

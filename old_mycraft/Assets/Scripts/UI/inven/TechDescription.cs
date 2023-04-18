@@ -150,23 +150,6 @@ namespace MyCraft
         //InvenItemData를 이동하거나, 인벤에 넣어줄때는 Additem(InvenItemData itemData)를 사용하세요.
         public virtual int AddItem(InvenSlotPanel panel, int id, int itemcount)
         {
-            ////들고 있는 아이템이면...
-            //if (null != InvenBase.choiced_item)
-            //{
-            //    if (InvenBase.choiced_item.itembase.id == id)
-            //    {
-            //        itemcount = InvenBase.choiced_item.AddStackCount(itemcount, true);
-            //        if (itemcount <= 0)
-            //            return 0;
-            //    }
-            //}
-
-            ////겹치기
-            //itemcount = this.OnOverlapItem(id, itemcount);
-            ////더이상 추가할 것이 없다.
-            //if (itemcount <= 0)
-            //    return 0;
-
             //database
             ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
             if (null == itemToAdd)
@@ -176,6 +159,7 @@ namespace MyCraft
             }
 
             //겹치지 못하고 남은 것이 있다면...생성해서 넣어줍니다.
+            Slot slot = panel.CreateSlot();
             itemcount = this.OnCreateItemData(panel, itemToAdd, itemcount);
             return itemcount;
         }

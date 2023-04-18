@@ -161,7 +161,6 @@ namespace MyCraft
         public override void Save(BinaryWriter writer)
         {
             writer.Write((byte)this.turn_weight);
-            //Debug.Log("write turn_weight:" + turn_weight);
 
             base.Save(writer);
         }
@@ -169,7 +168,8 @@ namespace MyCraft
         public override void Load(BinaryReader reader)
         {
             //생성을 위해 먼저 처리되므로, 여기에서는 처리하지 않습니다.
-            //int turn_weight = reader.ReadInt32
+            //byte turn_weight = reader.ReadByte()
+
             base.Load(reader);
         }
 

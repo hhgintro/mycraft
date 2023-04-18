@@ -43,20 +43,35 @@ namespace MyCraft
     //        //Debug.Log("amount:" + this.amount);
     //    }
     //}
-    public class FurnaceInputItem
+    public class FurnaceInputBase
     {
         public int itemid;  //재료아이템
         public int limit;   //자동겹침 제한
-        public float build_time;    //생산시간
-        public int output;  //만들어지는 아이템
 
-        public FurnaceInputItem(JsonData json)
+        public FurnaceInputBase(JsonData json)
         {
             if (json.Count <= 0)
                 return;
 
             this.itemid = (int)json["id"];
             this.limit = (int)json["limit"];
+        }
+    }
+    
+    public class FurnaceInputItem : FurnaceInputBase
+    {
+        //public int itemid;  //재료아이템
+        //public int limit;   //자동겹침 제한
+        public float build_time;    //생산시간
+        public int output;  //만들어지는 아이템
+
+        public FurnaceInputItem(JsonData json) : base(json)
+        {
+            if (json.Count <= 0)
+                return;
+
+            //this.itemid = (int)json["id"];
+            //this.limit = (int)json["limit"];
             this.build_time = float.Parse(json["build-time"].ToString());
             this.output = (int)json["output"];
             //Debug.Log("input -> id:" + this.id + " build-time:" + this.build_time + " output:" + this.output);
@@ -75,16 +90,16 @@ namespace MyCraft
     //        //Debug.Log("amount:" + this.amount);
     //    }
     //}
-    public class FurnaceFuelItem
+    public class FurnaceFuelItem : FurnaceInputBase
     {
-        public int itemid;  //연료 아이템
-        public int limit;   //자동겹침 제한
+        //public int itemid;  //연료 아이템
+        //public int limit;   //자동겹침 제한
         public float burning_time;  //연소시간
 
-        public FurnaceFuelItem(JsonData json)
+        public FurnaceFuelItem(JsonData json) : base(json)
         {
-            this.itemid = (int)json["id"];
-            this.limit = (int)json["limit"];
+            //this.itemid = (int)json["id"];
+            //this.limit = (int)json["limit"];
             this.burning_time = float.Parse(json["burning-time"].ToString());
             //Debug.Log("fuel -> id:" + this.id + " burning-time:" + this.burning_time);
         }

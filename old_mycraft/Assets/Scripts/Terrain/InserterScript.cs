@@ -85,7 +85,7 @@ namespace MyCraft
                 case BLOCKTYPE.CHEST:
                 case BLOCKTYPE.STONE_FURNACE:
                 case BLOCKTYPE.MACHINE:
-                    this.obj = script_back.PickupGoods(script_front);
+                    this.obj = script_back.PickupGoods(this, script_front);
                     break;
 
                 default:
@@ -195,7 +195,7 @@ namespace MyCraft
             //        return false;
             //}
             //놓을자리가 이미 찼다면...
-            if (false == base.CheckPushGoods(this.obj))
+            if (false == base.CheckPutdownGoods(this.obj))
                 return false;
 
 

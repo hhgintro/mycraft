@@ -17,7 +17,7 @@ namespace MyCraft
 
         public int Power;
         public int Defence;
-        public int Vitality;
+        public int Vitality;    //(광물의 경우 자원의 수량)block의 HP량.
         public int Stackable;   //겹치기 최대개수
         public string icon;     //icon image filename
 

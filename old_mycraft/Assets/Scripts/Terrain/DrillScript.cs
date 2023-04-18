@@ -129,7 +129,7 @@ namespace MyCraft
             //놓을자리가 이미 찼다면...
             //chest의 경우에는 BeltGoods개체를 만들지 않아도 되므로 위에서 먼저 처리합니다.
             //(함수내에서는 구문이 있어도 Drill에서는 처리하지 않음)
-            if (false == base.CheckPushGoods(this._mineral))
+            if (false == base.CheckPutdownGoods(this._mineral))
                 return false;
 
             //성공

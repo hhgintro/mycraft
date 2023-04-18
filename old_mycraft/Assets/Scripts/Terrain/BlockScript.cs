@@ -244,29 +244,21 @@ namespace MyCraft
         //   return: true이면 무조건 가져올 수 있다.
         public virtual bool CheckPutdownGoods(ref List<int> putdowns) { return true; }
 
-        public virtual BeltGoods PickupGoods(BlockScript script_front)
+        //inserter: 물건을 가져가는 로봇팔
+        //dutdonws: block_front 에 넣을 수 있는 itemid(null인 경우도 있다. 필요한 경우에 사용하세요.)
+        public virtual BeltGoods PickupGoods(BlockScript inserter, List<int> putdowns=null)
         {
-            //준비중입니다.
-            if (false == this._bStart) return null;
-
-            if (null == script_front)
-                return null;
-
             List<BlockSlot> slots = this.GetOutputSlot();
             if (null == slots)
             {
-                Debug.Log("Can't pickup on slot");
+                Debug.Log("Fail: not defined Output slot");
                 return null;//ID는 slot에서 가져올 수 없습니다..
             }
 
-            //script_front에 넣을 수 있는 아이템
-            List<int> putdowns = new List<int>();
-            // return: true이면 앞쪽부터 하나씩 가져갈 수 있다.
-            if(true == script_front.CheckPutdownGoods(ref putdowns))
+            //(chest와 같은경우)
+            //  return: true이면 앞쪽부터 하나씩 가져갈 수 있다.
+            if (null == putdowns)
             {
-                //구지 뒤에서 뺄 필요가 있을까...테스트후 이상없으면 주석 삭제할 것
-                ////뒤에서 체크하는 이유는 중간에 뺄때...crash방지차원.
-                //for (int s = slots.Count - 1; 0 <= s; --s)
                 for (int s = 0; s < slots.Count; ++s)
                 {
                     if (0 == slots[s]._itemid) continue;
@@ -284,16 +276,17 @@ namespace MyCraft
                 }
                 return null;
             }
+            //(machine와 같은 경우)
             // return: false이면, putdowns에 등록된 아이템만 가져갈 수 있다.
             for (int i = 0; i < putdowns.Count; ++i)
             {
                 //구지 뒤에서 뺄 필요가 있을까...테스트후 이상없으면 주석 삭제할 것
                 ////뒤에서 체크하는 이유는 중간에 뺄때...crash방지차원.
                 //for (int s = slots.Count - 1; 0 <= s; --s)
-                for (int s=0; s<slots.Count; ++s)
+                for (int s = 0; s < slots.Count; ++s)
                 {
-                    if (0 == slots[s]._itemid)              continue;
-                    if (putdowns[i] != slots[s]._itemid)    continue;
+                    if (0 == slots[s]._itemid) continue;
+                    if (putdowns[i] != slots[s]._itemid) continue;
 
                     BeltGoods goods = GameManager.CreateMineral(slots[s]._itemid, this.transform);
                     //goods.transform.position = base.CheckDestPosFrontBlock(goods);
@@ -308,6 +301,23 @@ namespace MyCraft
                 }
             }
             return null;
+        }
+        public virtual BeltGoods PickupGoods(BlockScript inserter, BlockScript script_front)
+        {
+            //준비중입니다.
+            if (false == this._bStart)  return null;
+            if (null == script_front)   return null;
+
+            //script_front에 넣을 수 있는 아이템
+            List<int> putdowns = new List<int>();
+            //(chest와 같은경우)
+            //  return: true이면 앞쪽부터 하나씩 가져갈 수 있다.
+            if (true == script_front.CheckPutdownGoods(ref putdowns))
+                return this.PickupGoods(inserter);
+
+            //(machine와 같은 경우)
+            // return: false이면, putdowns에 등록된 아이템만 가져갈 수 있다.
+            return this.PickupGoods(inserter, putdowns);
         }
 
         //goods를 내려놓을 위치를 가져옵니다.
@@ -336,14 +346,13 @@ namespace MyCraft
         }
 
         //front block에 넣는다.
-        protected virtual bool CheckPushGoods(BeltGoods goods)
+        protected virtual bool CheckPutdownGoods(BeltGoods goods)
         {
             BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.forward);
             if (null == script_front || null == script_front._itembase)
             {
-                //HG_TODO : terrain에 올린다.
+                //HG_TODO : 건물이 없으면 땅바닥에 떨어뜨릴지 고심중...
                 //..
-
                 return false;
             }
 
@@ -414,7 +423,7 @@ namespace MyCraft
         public virtual void Save(BinaryWriter writer)
         {
             //생성을 위해 먼저 처리되므로, 여기에서는 처리하지 않습니다.
-            //writer.Write((int)this.blocktype);
+            //writer.Write(this._itembase.id);
             //writer.Write(this.transform.eulerAngles.y);
 
             byte count = 0;  //아이템개수
@@ -447,7 +456,7 @@ namespace MyCraft
             this.Init();
 
             //생성을 위해 먼저 처리되므로, 여기에서는 처리하지 않습니다.
-            //int blocktype = reader.ReadInt32();
+            //int itemid = reader.ReadInt32();
             //float angley = reader.ReadSingle();
 
             byte count = reader.ReadByte();     //아이템 개수
