@@ -8,7 +8,7 @@ namespace MyCraft
     public class MainMenu : MonoBehaviour
     {
 
-        PlayMenu playmenu;
+        private PlayMenu playmenu;
         //MainMenu mapeditmenu;
         //OptionMenu optionmenu;
 

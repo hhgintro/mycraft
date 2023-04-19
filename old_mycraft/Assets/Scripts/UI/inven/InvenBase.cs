@@ -22,7 +22,6 @@ namespace MyCraft
         public static GameObject _invenReset { get; private set; }
         public static GameObject _category { get; private set; }
 
-        protected CanvasGroup canvas_ui;
 
         ////ChestInven은 ChestScript와 연결됩니다.
         protected BlockScript _block { get; set; }
@@ -101,6 +100,25 @@ namespace MyCraft
             return p._slots[slot];
         }
 
+        public virtual bool Resize()
+        {
+            Debug.Log($"Resizing panels:{this._panels.Count}");
+            for(int p=0; p < this._panels.Count; ++p)
+            {
+                //last slot
+                int s = this._panels[p]._slots.Count - 1;
+                RectTransform slot = this._panels[p]._slots[s].GetComponent<RectTransform>();
+                Debug.Log($"Resizing last slot rect:({slot.rect}");
+
+            }
+            //GridLayoutGroup grid = this.GetComponent<GridLayoutGroup>();
+            //grid.padding.left;
+
+            RectTransform inven = this.GetComponent<RectTransform>();
+            Debug.Log($"Resizing inven rect:({inven.rect} / {inven.sizeDelta}");
+            this.GetComponent<RectTransform>().sizeDelta = new Vector2(332,350);
+            return true;
+        }
         ////Block에서 변경된 내용을 Inven에 반영합니다.
         //public void SetItem(int panel, int slot, int itemid, int amount)
         //{

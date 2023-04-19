@@ -31,14 +31,14 @@ namespace MyCraft
 
             if (true == base._bOnTerrain)
             {
-                base.SetMeshRender(1.0f);
-                base._bStart = true;
+                //base.SetMeshRender(1.0f);
+                //base._bStart = true;
                 StartCoroutine(CheckBackBlock());
             }
             else
             {
                 //반투명하게...
-                base.SetMeshRender(0.5f);
+                //base.SetMeshRender(0.5f);
             }
         }
 
@@ -64,9 +64,7 @@ namespace MyCraft
         bool CheckBackBlock_Func()
         {
             //Debug.Log("Check Belt()");
-
-            //terrain에 위치하게 되면 true로 활성화해 주어야 합니다.
-            if (false == this._bStart)
+            if (false == base._bOnTerrain)
                 return false;
 
             //front가 없으면 구지 꺼내오지 않는다.

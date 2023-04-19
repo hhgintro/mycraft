@@ -287,9 +287,9 @@ namespace MyCraft
 
         public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            //Debug.Log("enter pointer");
-            if (false == this.GetActive())
-                return;
+            ////Debug.Log("enter pointer");
+            //if (false == this.GetActive_1())
+            //    return;
 
             this.ActiveIcon();
             bPointerEnter = true;
@@ -330,26 +330,26 @@ namespace MyCraft
         //    offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
         //}
 
-        public bool GetActive() {
-            if (null == canvas_ui || 1f != canvas_ui.alpha)
-                return false;
-            return true;
-        }
-        public void SetActive(bool active)
-        {
-            if (null == canvas_ui) return;
+        //public bool GetActive_1() {
+        //    if (null == canvas_ui || 1f != canvas_ui.alpha)
+        //        return false;
+        //    return true;
+        //}
+        //public void SetActive_1(bool active)
+        //{
+        //    if (null == canvas_ui) return;
 
-            if (true == active)
-            {
-                canvas_ui.alpha = 1f;
-                canvas_ui.blocksRaycasts = true;
-                return;
-            }
+        //    if (true == active)
+        //    {
+        //        canvas_ui.alpha = 1f;
+        //        canvas_ui.blocksRaycasts = true;
+        //        return;
+        //    }
 
-            canvas_ui.alpha = 0f;
-            canvas_ui.blocksRaycasts = false;
-            this._block = null;
-        }
+        //    canvas_ui.alpha = 0f;
+        //    canvas_ui.blocksRaycasts = false;
+        //    this._block = null;
+        //}
 
         //public virtual void LinkInven(BlockScript block, List<BlockSlotPanel> panels, List<Progress> progresses)
         //{

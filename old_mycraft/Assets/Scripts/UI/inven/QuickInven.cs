@@ -31,7 +31,7 @@ namespace MyCraft
             //this.inventoryPanel = GameObject.Find("Item_Canvas/QuickInven/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
             //this.keyPanel = this.inventoryPanel.transform.FindChild("Key Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
             this.keyPanel = this.transform.Find("Key Panel").gameObject;
             this.keyPanel.GetComponent<Image>().raycastTarget = false;  //퀵슬롯 아이템을 줍거나 넣을수 없었다.
         }

@@ -24,7 +24,7 @@ namespace MyCraft
         //생성이 완료되지 않은 상태에서, 상화작용이 발생하면서 exception발생
         // _bOnTerrain이 true인 경우에 _bStart를 true로 설정합니다.
         public bool _bOnTerrain { get; set; }
-        protected bool _bStart { get; set; }
+        //protected bool _bStart { get; set; }
 
 
         void Start()
@@ -71,12 +71,12 @@ namespace MyCraft
             this.transform.position = new Vector3(x, y, z);
         }
 
-        public virtual void SetMeshRender()
-        {
-            if (true == this._bOnTerrain)   this.SetMeshRender(1.0f);
-            //반투명하게...
-            else                            this.SetMeshRender(0.5f);
-        }
+        //public virtual void SetMeshRender()
+        //{
+        //    if (true == this._bOnTerrain)   this.SetMeshRender(1.0f);
+        //    //반투명하게...
+        //    else                            this.SetMeshRender(0.5f);
+        //}
 
         //반투명처리: alpha가 0이면 투명처리됨.
         public virtual void SetMeshRender(float alpha)
@@ -164,7 +164,7 @@ namespace MyCraft
         public virtual bool PutdownGoods(BeltGoods goods)
         {
             //준비중입니다.
-            if (false == this._bStart) return false;
+            if (false == this._bOnTerrain) return false;
 
             //HG_TODO : 꽉찬 경우 false를 리턴해야합니다.
             //..
@@ -182,7 +182,7 @@ namespace MyCraft
         public virtual bool PutdownGoods(int itemid, int amount)
         {
             //준비중입니다.
-            if (false == this._bStart) return false;
+            if (false == this._bOnTerrain) return false;
 
             List<BlockSlot> slots = this.GetPutdownSlot(itemid);
             if (null == slots)
@@ -235,11 +235,13 @@ namespace MyCraft
         {
             return true;//넣을 수 있다.
         }
-        public virtual bool CheckPutdownGoods(int itemid)
-        {
-            //return false;//넣을 수 없다.
-            return true;//넣을 수 있다.
-        }
+        
+        //public virtual bool CheckPutdownGoods(int itemid)
+        //{
+        //    //return false;//넣을 수 없다.
+        //    return true;//넣을 수 있다.
+        //}
+
         //_panels[0](input-panel) 에 넣은수 있는 아이템 정보를 가져옵니다.
         //   return: true이면 무조건 가져올 수 있다.
         public virtual bool CheckPutdownGoods(ref List<int> putdowns) { return true; }
@@ -305,8 +307,8 @@ namespace MyCraft
         public virtual BeltGoods PickupGoods(BlockScript inserter, BlockScript script_front)
         {
             //준비중입니다.
-            if (false == this._bStart)  return null;
-            if (null == script_front)   return null;
+            if (false == this._bOnTerrain)  return null;
+            if (null == script_front)       return null;
 
             //script_front에 넣을 수 있는 아이템
             List<int> putdowns = new List<int>();

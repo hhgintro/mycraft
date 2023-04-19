@@ -65,6 +65,7 @@ namespace MyCraft
             }
             if (null == prefab) return null;
             prefab.GetComponent<Collider>().enabled = false;
+            //prefab.SetMeshRender(0.3f);
             return prefab;
         }
 

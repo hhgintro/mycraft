@@ -27,7 +27,7 @@ namespace MyCraft
             //this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
 
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
 
         void Start()
