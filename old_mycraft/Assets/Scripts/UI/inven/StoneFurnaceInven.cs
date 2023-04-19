@@ -34,7 +34,7 @@ namespace MyCraft
             base._progress.Add(this.transform.Find("Progress/bar").GetComponent<Image>());
             base._progress.Add(this.transform.Find("Fuel-Progress/bar").GetComponent<Image>());
 
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
 
         void Start()
@@ -42,7 +42,7 @@ namespace MyCraft
 
             //HG_TEST : 테스트를 위해서 active로 설정합니다.
             //this.SetActive(false);
-            this.SetActive(true);
+            //this.SetActive_1(true);
             //AddItem(1, 54);
             //AddItem(2, 54);
 

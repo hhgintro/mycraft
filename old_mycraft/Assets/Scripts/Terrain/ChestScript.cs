@@ -33,16 +33,16 @@ namespace MyCraft
 
             //base._bStart = true;
 
-            if (true == base._bOnTerrain)
-            {
-                base.SetMeshRender(1.0f);
-                base._bStart = true;
-            }
-            else
-            {
-                //반투명하게...
-                base.SetMeshRender(0.5f);
-            }
+            //if (true == base._bOnTerrain)
+            //{
+            //    //base.SetMeshRender(1.0f);
+            //    base._bStart = true;
+            //}
+            //else
+            //{
+            //    //반투명하게...
+            //    //base.SetMeshRender(0.5f);
+            //}
 
         }
 
@@ -54,14 +54,14 @@ namespace MyCraft
 
         public override void OnClicked()
         {
-            ////인벤이 활성화 되어있으면 열수 없다.
-            //if (true == GameManager.GetInventory().GetActive())
-            //    return;
-
             GameManager.GetChestInven().LinkInven(this, base._panels, base._progresses);
-
-            GameManager.GetInventory().SetActive(true);
-            GameManager.GetChestInven().SetActive(true);
+            //active
+            GameManager.GetInventory().gameObject.SetActive(true);
+            GameManager.GetChestInven().gameObject.SetActive(true);
+            GameManager.GetSkillInven().gameObject.SetActive(true);
+            //de-active
+            GameManager.GetMachineInven().gameObject.SetActive(false);
+            GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
         }
 
     }//..class ChestScript

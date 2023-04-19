@@ -21,6 +21,7 @@ namespace MyCraft
             block.manager = this;
             block.GetComponent<Collider>().enabled = false;
             block.SetActive(false);
+            block.SetMeshRender(0.3f);
             this.prefabs.Add(block);
         }
 
@@ -44,6 +45,7 @@ namespace MyCraft
             if (null == script) return;
             script.manager = this;
             script._bOnTerrain = true;
+            script.SetMeshRender(1.0f);
         }
 
         public virtual void DeleteBlock(BlockScript script)

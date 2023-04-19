@@ -31,8 +31,11 @@ namespace MyCraft
         private static StoneFurnaceManager _stone_furnace_manager;
 
         private static IronManager _iron_manager;
+        private static CopperManager _copper_manager;
+        private static CoalManager _coal_manager;
         private static StoneManager _stone_manager;
         private static TreeManager _tree_manager;
+        private static CrudeOilManager _crudeoil_manager;
 
         private static MouseController _mouse_controller;
 
@@ -61,11 +64,16 @@ namespace MyCraft
 
         public void OnGame()
         {
-            if(true == this.bNewGame)
+            ShowInitUIs();
+
+            if (true == this.bNewGame)
             {
                 //inven slot
                 if(0 < GameManager.GetInventory()._panels.Count)
-                    GameManager.GetInventory()._panels[0].SetAmount(20);
+                    GameManager.GetInventory()._panels[0].SetAmount(51);
+
+                GameManager.GetInventory().Resize();
+
 
                 //HG_TEST : 테스트 아이템 지급
                 GameManager.GetInventory().AddItem(2010, 100);  //iron-plate
@@ -123,6 +131,20 @@ namespace MyCraft
             GetPrivateProfileString("common", "locale", "(empty)", _locale, 255, filepath);
             if (0 == string.Compare(_locale.ToString(), "(empty)"))
                 Debug.LogError("Fail : Not Read Locale");
+        }
+
+        private void ShowInitUIs()
+        {
+            GameManager.GetTechInven().gameObject.SetActive(true);
+            GameManager.GetTechDesc().gameObject.SetActive(true);
+
+            GameManager.GetInventory().gameObject.SetActive(false);
+            GameManager.GetChestInven().gameObject.SetActive(false);
+            GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
+            GameManager.GetMachineInven().gameObject.SetActive(false);
+            GameManager.GetSkillInven().gameObject.SetActive(false);
+
+            GameManager.GetSystemMenu().gameObject.SetActive(false);
         }
 
 
@@ -198,6 +220,18 @@ namespace MyCraft
                 _iron_manager = GetTerrainManager().GetComponentInChildren<IronManager>();
             return _iron_manager;
         }
+        public static CopperManager GetCopperManager()
+        {
+            if (null == _copper_manager)
+                _copper_manager = GetTerrainManager().GetComponentInChildren<CopperManager>();
+            return _copper_manager;
+        }
+        public static CoalManager GetCoalManager()
+        {
+            if (null == _coal_manager)
+                _coal_manager = GetTerrainManager().GetComponentInChildren<CoalManager>();
+            return _coal_manager;
+        }
         public static StoneManager GetStoneManager() {
             if (null == _stone_manager)
                 _stone_manager = GetTerrainManager().GetComponentInChildren<StoneManager>();
@@ -207,6 +241,12 @@ namespace MyCraft
             if (null == _tree_manager)
                 _tree_manager = GetTerrainManager().GetComponentInChildren<TreeManager>();
             return _tree_manager;
+        }
+        public static CrudeOilManager GetCrudeOilManager()
+        {
+            if (null == _crudeoil_manager)
+                _crudeoil_manager = GetTerrainManager().GetComponentInChildren<CrudeOilManager>();
+            return _crudeoil_manager;
         }
 
         public static MouseController GetMouseController() {

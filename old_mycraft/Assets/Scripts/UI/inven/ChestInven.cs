@@ -18,13 +18,11 @@ namespace MyCraft
                 , null
                 , this.transform.Find("Slot Panel").gameObject
                 , InvenBase._invenSlot));
-
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
 
         void Start()
         {
-            this.SetActive(false);
+            //this.gameObject.SetActive(false);
 
             //locale
             //title text

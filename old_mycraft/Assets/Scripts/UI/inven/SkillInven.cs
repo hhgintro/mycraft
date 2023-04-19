@@ -38,7 +38,7 @@ namespace MyCraft
                     , InvenBase._invenSlot));
             }
 
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
         
         void Start()
@@ -48,7 +48,7 @@ namespace MyCraft
             //database
             this.LinkSkillGroup(0);
 
-            this.SetActive(false);
+            //this.SetActive_1(false);
 
             //locale
             //title text
@@ -70,7 +70,7 @@ namespace MyCraft
             if (null != base._block)
             {
                 base._block.SetOutput(itembase);
-                this.SetActive(false);
+                this.gameObject.SetActive(false);
                 return true;
             }
             return false;

@@ -19,7 +19,6 @@ namespace MyCraft
                 , this.transform.Find("Slot Panel").gameObject
                 , InvenBase._invenSlot));
 
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
         
         void Start()

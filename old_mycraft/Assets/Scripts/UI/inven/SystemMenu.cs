@@ -5,45 +5,36 @@ namespace MyCraft
 {
     public class SystemMenu : MonoBehaviour
     {
-        private CanvasGroup canvas_ui;
-
-        // Use this for initialization
-        void Start()
-        {
-            this.canvas_ui = this.transform.GetComponent<CanvasGroup>();
-
-            this.SetActive(false);
-        }
 
         //// Update is called once per frame
         //void Update () {
 
         //}
 
-        public bool GetActive()
-        {
-            if (null == canvas_ui || 1f != canvas_ui.alpha)
-                return false;
-            return true;
-        }
-        public void SetActive(bool active)
-        {
-            if (null == canvas_ui) return;
+        //public bool GetActive_1()
+        //{
+        //    if (null == canvas_ui || 1f != canvas_ui.alpha)
+        //        return false;
+        //    return true;
+        //}
+        //public void SetActive_1(bool active)
+        //{
+        //    if (null == canvas_ui) return;
 
-            if (true == active)
-            {
-                canvas_ui.alpha = 1f;
-                canvas_ui.blocksRaycasts = true;
-                return;
-            }
+        //    if (true == active)
+        //    {
+        //        canvas_ui.alpha = 1f;
+        //        canvas_ui.blocksRaycasts = true;
+        //        return;
+        //    }
 
-            canvas_ui.alpha = 0f;
-            canvas_ui.blocksRaycasts = false;
-        }
+        //    canvas_ui.alpha = 0f;
+        //    canvas_ui.blocksRaycasts = false;
+        //}
 
         public void OnContinue()
         {
-            this.SetActive(false);
+            this.gameObject.SetActive(false);
         }
 
         public void OnRetry()

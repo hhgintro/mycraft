@@ -15,14 +15,14 @@ namespace MyCraft
         {
             if (true == base._bOnTerrain)
             {
-                base.SetMeshRender(1.0f);
-                base._bStart = true;
+                //base.SetMeshRender(1.0f);
+                //base._bStart = true;
                 StartCoroutine(TranslateObject());
             }
             else
             {
                 //반투명하게...
-                base.SetMeshRender(0.5f);
+                //base.SetMeshRender(0.5f);
             }
         }
 

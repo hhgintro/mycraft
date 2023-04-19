@@ -56,16 +56,16 @@ namespace MyCraft
             this._output = 0;
             //StartCoroutine(CheckAssembling());
 
-            if (true == base._bOnTerrain)
-            {
-                base.SetMeshRender(1.0f);
-                base._bStart = true;
-            }
-            else
-            {
-                //반투명하게...
-                base.SetMeshRender(0.5f);
-            }
+            //if (true == base._bOnTerrain)
+            //{
+            //    //base.SetMeshRender(1.0f);
+            //    base._bStart = true;
+            //}
+            //else
+            //{
+            //    //반투명하게...
+            //    //base.SetMeshRender(0.5f);
+            //}
 
         }
 
@@ -242,14 +242,14 @@ namespace MyCraft
 
         public override void OnClicked()
         {
-            //인벤이 활성화 되어있으면 열수 없다.
-            //if (true == GameManager.GetInventory().GetActive())
-            //    return;
-
             GameManager.GetStoneFurnaceInven().LinkInven(this, base._panels, base._progresses);
-
-            GameManager.GetInventory().SetActive(true);
-            GameManager.GetStoneFurnaceInven().SetActive(true);
+            //active
+            GameManager.GetInventory().gameObject.SetActive(true);
+            GameManager.GetStoneFurnaceInven().gameObject.SetActive(true);
+            //de-active
+            GameManager.GetSkillInven().gameObject.SetActive(false);
+            GameManager.GetChestInven().gameObject.SetActive(false);
+            GameManager.GetMachineInven().gameObject.SetActive(false);
         }
 
         //id: progress id
@@ -390,25 +390,25 @@ namespace MyCraft
             return base._panels[2]._slots;
         }
 
-        //block에 id인 아이템을 넣을 수 있는지 체크
-        public override bool CheckPutdownGoods(int itemid)
-        {
-            for (int p = 0; p < base._panels.Count; ++p)
-            {
-                for (int i = 0; i < base._panels[p]._slots.Count; ++i)
-                {
-                    if (true == CheckPutdownGoods(p, i, itemid))
-                        return true;
-                }
-            }
+        ////block에 id인 아이템을 넣을 수 있는지 체크
+        //public override bool CheckPutdownGoods(int itemid)
+        //{
+        //    for (int p = 0; p < base._panels.Count; ++p)
+        //    {
+        //        for (int i = 0; i < base._panels[p]._slots.Count; ++i)
+        //        {
+        //            if (true == CheckPutdownGoods(p, i, itemid))
+        //                return true;
+        //        }
+        //    }
 
-            ////input
-            //if (true == CheckPutdownGoods(0, itemid)) return true;
-            ////fuel
-            //if (true == CheckPutdownGoods(1, itemid)) return true;
+        //    ////input
+        //    //if (true == CheckPutdownGoods(0, itemid)) return true;
+        //    ////fuel
+        //    //if (true == CheckPutdownGoods(1, itemid)) return true;
 
-            return false;//넣을 수 없다.
-        }
+        //    return false;//넣을 수 없다.
+        //}
 
         public override bool CheckPutdownGoods(int panel, int slot, int itemid)
         {
@@ -466,7 +466,7 @@ namespace MyCraft
                     if (0 == slots[s]._itemid
                         || slots[s]._amount < inputs[i].limit * Limit)
                     {
-                        putdowns.Add(inputs[s].itemid);
+                        putdowns.Add(inputs[i].itemid);
                         break;
                     }
                 }

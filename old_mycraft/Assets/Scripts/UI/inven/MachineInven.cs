@@ -40,7 +40,7 @@ namespace MyCraft
             //this.database = GetComponent<ItemDatabase>();
             //this.inventoryPanel = GameObject.Find("Canvas/ChestInven/Inventory Panel").gameObject;
             //this.slotPanel = this.inventoryPanel.transform.FindChild("Slot Panel").gameObject;
-            base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
+            //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
 
             //GameObject _slot = Resources.Load<GameObject>("prefab/ui/Slot") as GameObject;
 
@@ -54,7 +54,7 @@ namespace MyCraft
 
             //HG_TEST : 테스트를 위해서 active로 설정합니다.
             //this.SetActive(false);
-            this.SetActive(true);
+            //this.SetActive_1(true);
 
 
 
@@ -102,8 +102,8 @@ namespace MyCraft
         {
             base._block.Reset();
             this.Clear();
-            base.SetActive(false);
-            GameManager.GetInventory().SetActive(false);
+            this.gameObject.SetActive(false);
+            GameManager.GetInventory().gameObject.SetActive(false);
         }
         public override void Save(BinaryWriter writer)
         {

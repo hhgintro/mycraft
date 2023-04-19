@@ -2,6 +2,15 @@
   {
     "id": 0,
     "type": 1,
+    "title": "reset",
+    "desc": "",
+    "stackable": 1,
+    "icon": "reset"
+  },
+
+  {
+    "id": 1,
+    "type": 1,
     "title": "시간",
     "desc": "",
     "stackable": 1,
@@ -78,6 +87,19 @@
     "icon": "copper-ore"
   },
 
+  {
+    "id": 60,
+    "type": 1,
+    "title": "원유",
+    "desc": "",
+    "state": {
+      "power": 21,
+      "defence": 12,
+      "vitality": 50
+    },
+    "stackable": 100,
+    "icon": "crude-ole"
+  },
 
 
 
@@ -245,10 +267,14 @@
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010}
+        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2010},
+        {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010},
+        {"id": 50,"limit": 2,"build-time": 3.1,"output": 3000}
       ],
       "fuel": [
-        {"id": 10,"limit": 2,"burning-time": 10}
+        {"id": 10,"limit": 2,"burning-time": 10},
+        {"id": 30,"limit": 2,"burning-time": 20},
+        {"id": 2000,"limit": 2,"burning-time": 15}
       ]
     },
     "state": {

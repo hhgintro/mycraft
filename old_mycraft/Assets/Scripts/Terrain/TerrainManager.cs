@@ -39,6 +39,9 @@ namespace MyCraft
             LoadPrefab<StoneManager>("hierarchy/terrain", "stone");
             LoadPrefab<TreeManager>("hierarchy/terrain", "tree");
             LoadPrefab<IronManager>("hierarchy/terrain", "iron-ore");
+            LoadPrefab<CopperManager>("hierarchy/terrain", "copper-ore");
+            LoadPrefab<CoalManager>("hierarchy/terrain", "coal");
+            LoadPrefab<CrudeOilManager>("hierarchy/terrain", "crude-oil");
 
         }
 
@@ -46,14 +49,18 @@ namespace MyCraft
         {
             Managers.Game.OnGame();
 
-            int x = -2, z = 4;
+            int x = -2, z = 8;
             //coal
 
             //copper-ore
 
-            PutdownBlock(10, 3, x, z -= 2, GameManager.GetTreeManager().GetChoicePrefab());       //tree
-            PutdownBlock(40, 3, x, z -= 2, GameManager.GetIronManager().GetChoicePrefab());       //iron-ore
-            PutdownBlock(20, 2, x, z -= 2, GameManager.GetStoneManager().GetChoicePrefab());      //stone
+            PutdownBlock(30, 2, x, z -= 2, GameManager.GetCoalManager().GetChoicePrefab());         //coal
+            PutdownBlock(50, 3, x, z -= 2, GameManager.GetCopperManager().GetChoicePrefab());       //copper-ore
+            PutdownBlock(10, 3, x, z -= 2, GameManager.GetTreeManager().GetChoicePrefab());         //tree
+            PutdownBlock(40, 3, x, z -= 2, GameManager.GetIronManager().GetChoicePrefab());         //iron-ore
+            PutdownBlock(20, 2, x, z -= 2, GameManager.GetStoneManager().GetChoicePrefab());        //stone
+            PutdownBlock(30, 2, x, z -= 2, GameManager.GetCoalManager().GetChoicePrefab());         //coal
+            PutdownBlock(60, 2, x, z -= 2, GameManager.GetCrudeOilManager().GetChoicePrefab());     //crude-old
         }
 
         void LoadPrefab<T>(string path, string name) where T : BlockManager
@@ -190,12 +197,14 @@ namespace MyCraft
                 script.manager.CreateBlock(script);
             return script;
         }
- 
+
 
         //removeblock:terrain에서 빼지 여부 판단.(block교체시에는 미리 빼기에 예외가 필요합니다)
         public void DeleteBlock(BlockScript script, bool removeblock)
         {
-            if (null == script) return;
+            if (null == script || null == script._itembase) return;
+            if (BLOCKTYPE.NATURAL_RESOURCE == script._itembase.type)
+                return;
 
             ////target : picking 된 obj가 target의 일부인 경우에 target을 찾기 위해 GetBodyObject()를 호출합니다.
             //GameObject target = GetBlock(obj).GetBodyObject();

@@ -52,34 +52,53 @@ namespace MyCraft
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                //HG[2017.07.19]인벤창에 막혀 들고있던 아이템을 terrain에 설치하기 어려워 주석처리함.
-                //(컨셉:직접 인벤에 넣어라)
-                //if(null != InvenBase.choiced_item)
-                //{
-                //    GameManager.GetTerrainManager().SetChoicePrefab(null);
-                //    CancelChoicedItem();
-                //}
-                //else
-                if(true == GameManager.GetInventory().GetActive())
-                {
-                    GameManager.GetInventory().SetActive(false);
-                    GameManager.GetChestInven().SetActive(false);
-                    GameManager.GetMachineInven().SetActive(false);
-                    GameManager.GetStoneFurnaceInven().SetActive(false);
-                    GameManager.GetSkillInven().SetActive(false);
-                    GameManager.GetTechInven().SetActive(false);
-                    GameManager.GetTechDesc().SetActive(false);
-                }
-                else if(true == GameManager.GetTechInven().GetActive())
-                {
-                    GameManager.GetTechInven().SetActive(false);
-                    GameManager.GetTechDesc().SetActive(false);
-                }
-                else
-                {
+                //최상위 UI순
+                //  GetSystemMenu
+                //  GetTechInven / GetTechDesc
+                //  GetInventory / GetSkillInven / GetChestInven / GetMachineInven / GetStoneFurnaceInven
 
-                    GameManager.GetSystemMenu().SetActive(!GameManager.GetSystemMenu().GetActive());
+                //tech
+                if (true == GameManager.GetTechInven().gameObject.activeSelf)
+                {
+                    GameManager.GetTechInven().gameObject.SetActive(false);
+                    GameManager.GetTechDesc().gameObject.SetActive(false);
+                    return;
                 }
+
+                bool bChecked = false;
+                //inven
+                if (true == GameManager.GetInventory().gameObject.activeSelf)
+                {
+                    GameManager.GetInventory().gameObject.SetActive(false);
+                    bChecked = true;
+                }
+                //chest
+                if (true == GameManager.GetChestInven().gameObject.activeSelf)
+                {
+                    GameManager.GetChestInven().gameObject.SetActive(false);
+                    bChecked = true;
+                }
+                //machine
+                if (true == GameManager.GetMachineInven().gameObject.activeSelf)
+                {
+                    GameManager.GetMachineInven().gameObject.SetActive(false);
+                    bChecked = true;
+                }
+                //stone-furnace
+                if (true == GameManager.GetStoneFurnaceInven().gameObject.activeSelf)
+                {
+                    GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
+                    bChecked = true;
+                }
+                //skill
+                if (true == GameManager.GetSkillInven().gameObject.activeSelf)
+                {
+                    GameManager.GetSkillInven().gameObject.SetActive(false);
+                    bChecked = true;
+                }
+
+                if (true == bChecked) return;
+                GameManager.GetSystemMenu().gameObject.SetActive(!GameManager.GetSystemMenu().gameObject.activeSelf);
             }
 
             //KeyCode.Alpha0 ~ KeyCode.Alpha9
@@ -127,18 +146,18 @@ namespace MyCraft
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                //인벤이 활성화 되어있으면 열수 없다.
-                if (false == GameManager.GetInventory().GetActive())
+                if (false == GameManager.GetInventory().gameObject.activeSelf)
                 {
-                    //GameObject obj = GameManager.GetInventory().gameObject;
-                    //Debug.Log("active : " + obj.active);
-                    //Debug.Log("active : " + obj.activeSelf);
-                    //Debug.Log("active : " + obj.activeInHierarchy);
-                    //GameManager.GetInventory().gameObject.SetActive(!GameManager.GetInventory().gameObject.activeSelf);
-
-                    GameManager.GetInventory().SetActive(true);
-                    GameManager.GetSkillInven().SetActive(true);
+                    GameManager.GetInventory().gameObject.SetActive(true);
+                    GameManager.GetSkillInven().gameObject.SetActive(true);
+                    return;
                 }
+
+                GameManager.GetInventory().gameObject.SetActive(false);
+                GameManager.GetChestInven().gameObject.SetActive(false);
+                GameManager.GetMachineInven().gameObject.SetActive(false);
+                GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
+                GameManager.GetSkillInven().gameObject.SetActive(false);
             }
 
             if (Input.GetKeyDown(KeyCode.LeftBracket))  //"["
@@ -176,11 +195,9 @@ namespace MyCraft
 
                 //GameManager.GetTechInven().SetActive(!GameManager.GetTechInven().GetActive());
                 //GameManager.GetTechDesc().SetActive(!GameManager.GetTechDesc().GetActive());
-                if(false == GameManager.GetTechInven().GetActive())
-                {
-                    GameManager.GetTechInven().SetActive(true);
-                    GameManager.GetTechDesc().SetActive(true);
-                }
+                GameManager.GetTechInven().gameObject.SetActive(!GameManager.GetTechInven().gameObject.activeSelf);
+                GameManager.GetTechDesc().gameObject.SetActive(GameManager.GetTechInven().gameObject.activeSelf);
+
                 ////inven 이외에는 모두 닫는다.
                 //GameManager.GetChestInven().SetActive(false);
                 //GameManager.GetStoneFurnaceInven().SetActive(false);

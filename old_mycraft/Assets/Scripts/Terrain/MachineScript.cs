@@ -71,16 +71,16 @@ namespace MyCraft
             //this._output = base._itembase._assembling.outputs[0];
             //StartCoroutine(CheckAssembling());
 
-            if (true == base._bOnTerrain)
-            {
-                base.SetMeshRender(1.0f);
-                base._bStart = true;
-            }
-            else
-            {
-                //반투명하게...
-                base.SetMeshRender(0.5f);
-            }
+            //if (true == base._bOnTerrain)
+            //{
+            //    //base.SetMeshRender(1.0f);
+            //    base._bStart = true;
+            //}
+            //else
+            //{
+            //    //반투명하게...
+            //    //base.SetMeshRender(0.5f);
+            //}
 
         }
 
@@ -270,22 +270,28 @@ namespace MyCraft
 
         public override void OnClicked()
         {
-            ////인벤이 활성화 되어있으면 열수 없다.
-            //if (true == GameManager.GetInventory().GetActive())
-            //    return;
-
             if (null == this._output)
             {
                 //setactive(true)이후에 LinkIven()을 호출합니다.(setactive에서 block정보를 초기화)
+                //active
                 GameManager.GetSkillInven().LinkInven(this, null ,null);
-                GameManager.GetSkillInven().SetActive(true);
+                GameManager.GetSkillInven().gameObject.SetActive(true);
+                //de-active
+                GameManager.GetInventory().gameObject.SetActive(false);
+                GameManager.GetChestInven().gameObject.SetActive(false);
+                GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
+                GameManager.GetMachineInven().gameObject.SetActive(false);
                 return;
             }
 
-
             GameManager.GetMachineInven().LinkInven(this, base._panels, base._progresses);
-            GameManager.GetMachineInven().SetActive(true);
-            GameManager.GetInventory().SetActive(true);
+            //active
+            GameManager.GetMachineInven().gameObject.SetActive(true);
+            GameManager.GetInventory().gameObject.SetActive(true);
+            //de-active
+            GameManager.GetSkillInven().gameObject.SetActive(false);
+            GameManager.GetChestInven().gameObject.SetActive(false);
+            GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
         }
 
         //id: progress id
@@ -368,7 +374,7 @@ namespace MyCraft
 
         public override bool PutdownGoods(int itemid, int amount)
         {
-            if (false == this._bStart)
+            if (false == base._bOnTerrain)
                 return false;
 
             ////Debug.Log("PutdownGoods : ID");
@@ -494,35 +500,35 @@ namespace MyCraft
             return base._panels[1]._slots;
         }
 
-        //block에 id인 아이템을 넣을 수 있는지 체크
-        public override bool CheckPutdownGoods(int itemid)
-        {
-            if (false == this._bStart)
-                return false;
+        ////block에 id인 아이템을 넣을 수 있는지 체크
+        //public override bool CheckPutdownGoods(int itemid)
+        //{
+        //    if (false == this._bStart)
+        //        return false;
 
-            //for(int p=0; p<base._panels.Count; ++p)
-            //{
-            //    for (int i = 0; i < base._itembase._assembling.inputs; ++i)
-            //    {
-            //        if (true == CheckPutdownGoods(p, i, itemid))
-            //            return true;
-            //    }
-            //}
-            int panel = 0;//input
-            for (int i = 0; i < base._panels[panel]._slots.Count; ++i)
-            {
-                if (true == CheckPutdownGoods(panel, i, itemid))
-                    return true;
-            }
-            ////input
-            //if (true == CheckPutdownGoods(0, itemid)) return true;
-            ////output
-            //if (true == CheckPutdownGoods(1, itemid)) return true;
-            ////chip
-            //if (true == CheckPutdownGoods(1, itemid)) return true;
+        //    //for(int p=0; p<base._panels.Count; ++p)
+        //    //{
+        //    //    for (int i = 0; i < base._itembase._assembling.inputs; ++i)
+        //    //    {
+        //    //        if (true == CheckPutdownGoods(p, i, itemid))
+        //    //            return true;
+        //    //    }
+        //    //}
+        //    int panel = 0;//input
+        //    for (int i = 0; i < base._panels[panel]._slots.Count; ++i)
+        //    {
+        //        if (true == CheckPutdownGoods(panel, i, itemid))
+        //            return true;
+        //    }
+        //    ////input
+        //    //if (true == CheckPutdownGoods(0, itemid)) return true;
+        //    ////output
+        //    //if (true == CheckPutdownGoods(1, itemid)) return true;
+        //    ////chip
+        //    //if (true == CheckPutdownGoods(1, itemid)) return true;
 
-            return false;//넣을 수 없다.
-        }
+        //    return false;//넣을 수 없다.
+        //}
 
         public override bool CheckPutdownGoods(int panel, int slot, int itemid)
         {
