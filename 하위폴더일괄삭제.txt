@@ -1,0 +1,4 @@
+#검색
+find . -type f -name "*.bak" -exec ls {} \;
+#삭제
+find . -type f -name "*.bak" -exec rm {} \;

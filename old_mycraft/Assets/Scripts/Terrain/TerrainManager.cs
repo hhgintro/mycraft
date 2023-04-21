@@ -19,8 +19,6 @@ namespace MyCraft
         private BlockScript choiced_prefab = null;  //생성을 위해 선택된 개체
 
 
-
-
         //block 3차원 배열
         //private BLOCK_XYZ block_xyz = new BLOCK_XYZ();
         public TerrainLayer block_layer = new TerrainLayer();
@@ -31,6 +29,8 @@ namespace MyCraft
         {
             LoadPrefab<ChestManager>("hierarchy/terrain", "chest");
             LoadPrefab<BeltManager>("hierarchy/terrain", "belt");
+            LoadPrefab<BeltUpManager>("hierarchy/terrain", "belt-up");
+            LoadPrefab<BeltDownManager>("hierarchy/terrain", "belt-down");
             LoadPrefab<SpliterManager>("hierarchy/terrain", "spliter");
             LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
             LoadPrefab<DrillManager>("hierarchy/terrain", "drill");
@@ -87,35 +87,54 @@ namespace MyCraft
 
 
         public BlockScript GetChoicePrefab() { return this.choiced_prefab; }
-        public void SetChoicePrefab(BlockScript script)
+        public void SetChoicePrefab(BlockScript block)
         {
             //null로 세팅하기 위해서 여기에서는 null체크를 하지마세요
             //의도하지 않은 null이 입력되는지 반드시 확인하세요
             //(반드시 의도한 null만 허용되어야 합니다.)
             //if (null == script) return;
 
-            if (script == this.choiced_prefab)
+            if (block == this.choiced_prefab)
                 return;
             //old
             if (null != this.choiced_prefab)
+            {
+                ////외형변화가 필요한 block은 위치를 강제로 옮겨서 sensor 체크 이후에 비활성화 되도록 처리한다.
+                //switch(this.choiced_prefab._itembase.type)
+                //{
+                //    case BLOCKTYPE.BELT:
+                //    case BLOCKTYPE.BELT_UP:
+                //    case BLOCKTYPE.BELT_DOWN:
+                //    case BLOCKTYPE.SPLITER:
+                //        this.choiced_prefab.ForceMove();        //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
+                //        this.choiced_prefab._deactive = true;   //OnTriggerExit()이후에 SetActive(false)하기 위해.
+                //        break;
+                //    default:
+                //        this.choiced_prefab.SetActive(false);
+                //        break;
+                //}
                 this.choiced_prefab.SetActive(false);
+            }
             //new
-            this.choiced_prefab = script;
+            this.choiced_prefab = block;
             if (null != this.choiced_prefab)
             {
+                //choiced_prefab.Clear(); //belt모형이 바뀔때, 이전기록을 그대로 가지고 있어, 잘못판단하는 경우가 있었다.(sensor체크부분)
                 this.choiced_prefab.SetActive(true);
+                this.choiced_prefab.Clear();
                 //if(null != this.choiced_prefab.transform)
                 //    this.choiced_prefab.transform.SetParent(this.transform);
             }
 
             //Debug.Log("layer:  " + this.choiced_prefab.gameObject.layer);
         }
-        public void SetChoicePrefab(ItemBase itembase)
+        public BlockScript SetChoicePrefab(ItemBase itembase)
         {
-            BlockScript script = this.GetBlockPrefab(itembase.type, TURN_WEIGHT.FRONT);
-            if (null == script) return;
-            script._itembase = itembase;
-            this.SetChoicePrefab(script);
+            BlockScript block = this.GetBlockPrefab(itembase.type, TURN_WEIGHT.FRONT);
+            if (null == block) return null;
+            block._itembase = itembase;
+            this.SetChoicePrefab(block);
+            return block;
         }
         //public void SetChoicePrefab(BLOCKTYPE blocktype)
         //{
@@ -130,6 +149,8 @@ namespace MyCraft
             {
                 case BLOCKTYPE.CHEST:           script = GameManager.GetChestManager().GetChoicePrefab(weight);         break;
                 case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);          break;
+                case BLOCKTYPE.BELT_UP:         script = GameManager.GetBeltUpManager().GetChoicePrefab(weight);        break;
+                case BLOCKTYPE.BELT_DOWN:       script = GameManager.GetBeltDownManager().GetChoicePrefab(weight);      break;
                 case BLOCKTYPE.SPLITER:         script = GameManager.GetSpliterManager().GetChoicePrefab(weight);       break;
                 case BLOCKTYPE.INSERTER:        script = GameManager.GetInserterManager().GetChoicePrefab(weight);      break;
                 case BLOCKTYPE.DRILL:           script = GameManager.GetDrillManager().GetChoicePrefab(weight);         break;
@@ -140,12 +161,17 @@ namespace MyCraft
         }
 
         //선택된 prefab을 x,z 위치할때 주변의 영향으로 [자신의] 외형이 변경되어질 수 있다.
-        public void ChainBlock(int posx, int posz, BlockScript prefab)
+        public void ChainBlock(int posx, int posy, int posz, BlockScript prefab)
         {
             if (null == prefab) return;
 
             //위치갱신:먼저 위치를 잡아줘야 ChainBeltPrefab()를 수행할 수 있습니다.
-            prefab.SetPos(posx, 0, posz);
+            prefab.SetPos(posx, posy, posz);
+            ChainBlock(prefab);
+        }
+        public void ChainBlock(BlockScript prefab)
+        {
+            if (null == prefab) return;
 
             BeltScript newscript = null;
             switch (prefab._itembase.type)
@@ -153,17 +179,15 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:
                     newscript = GameManager.GetBeltManager().ChainBeltPrefab((BeltScript)prefab);
                     break;
-                //case BLOCKTYPE.GROUND_BELT:
-                //    newscript = GameManager.GetSpliterManager().ChainBeltPrefab((BeltScript)prefab);
-                //    break;
+                    //case BLOCKTYPE.GROUND_BELT:
+                    //    newscript = GameManager.GetSpliterManager().ChainBeltPrefab((BeltScript)prefab);
+                    //    break;
             }
             if (null != newscript)
             {
+                newscript.SetPos(prefab.transform.position);    //위치갱신 : prefab이 변경된 경우 다시 위치 설정
                 this.SetChoicePrefab(newscript);
-                //위치갱신 : prefab이 변경된 경우 다시 위치 설정
-                newscript.SetPos(posx, 0, posz);
             }
-
         }
 
         public BlockScript CreateBlock(TerrainLayer layer, int x, int y, int z, BlockScript prefab)
@@ -218,6 +242,12 @@ namespace MyCraft
                 //case BLOCKTYPE.GROUND_BELT:
                     GameManager.GetBeltManager().DeleteBlock(script);
                     break;
+                case BLOCKTYPE.BELT_UP:
+                    GameManager.GetBeltUpManager().DeleteBlock(script);
+                    break;
+                case BLOCKTYPE.BELT_DOWN:
+                    GameManager.GetBeltDownManager().DeleteBlock(script);
+                    break;
 
                 case BLOCKTYPE.SPLITER:
                     GameManager.GetSpliterManager().DeleteBlock(script);
@@ -231,8 +261,26 @@ namespace MyCraft
             //인벤에 다시 넣어줍니다.
             GameManager.AddItem(script._itembase.id, 1);
 
-            //HG_TODO : 삭제하지 않고 pool에서 관리하도록 바꿔야 합니다.(crash발생)
-            GameObject.Destroy(script.gameObject);
+
+            //OnTriggerExit()이 호출되도록 이동시켜준다.(Exit()이 발생하기 전에 삭제되는듯 하다.)
+            //   그리하여, Exit()에서 삭제하도록 한다.
+            switch (script._itembase.type)
+            {
+                case BLOCKTYPE.BELT:      //HG_TODO: 지금은 작동하니깐. 추후에 변경을 고려
+                case BLOCKTYPE.BELT_UP:
+                case BLOCKTYPE.BELT_DOWN:
+                case BLOCKTYPE.SPLITER:  //HG_TODO: 지금은 작동하니깐. 추후에 변경을 고려
+                    {
+                        script.ForceMove(); //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
+                        script._destory = true; //OnTriggerExit()이후에 삭제할 개체들
+                    }
+                    break;
+
+                default:
+                    //HG_TODO : 삭제하지 않고 pool에서 관리하도록 바꿔야 합니다.(crash발생)
+                    GameObject.Destroy(script.gameObject);
+                    break;
+            }
         }
         //removeblock:terrain에서 뺄지 여부 판단.(block교체시에는 미리 빼기에 예외가 필요합니다)
         public void DeleteBlock(GameObject obj, bool removeblock)

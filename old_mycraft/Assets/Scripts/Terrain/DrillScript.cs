@@ -51,12 +51,6 @@ namespace MyCraft
 
         }
 
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
-
         IEnumerator CheckMining()
         {
             while (true)

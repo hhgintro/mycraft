@@ -23,6 +23,8 @@ namespace MyCraft
 
         private static TerrainManager _terrain_manager;
         private static BeltManager _belt_manager;
+        private static BeltUpManager _belt_up_manager;
+        private static BeltDownManager _belt_down_manager;
         private static SpliterManager _spliter_manager;
         private static InserterManager _inserter_manager;
         private static ChestManager _chest_manager;
@@ -94,6 +96,8 @@ namespace MyCraft
 
                 GameManager.GetQuickInven().AddItem(1000, 54);  //chest
                 GameManager.GetQuickInven().AddItem(1010, 54);  //belt
+                GameManager.GetQuickInven().AddItem(1011, 100);  //belt-up
+                GameManager.GetQuickInven().AddItem(1012, 100);  //belt-down
                 GameManager.GetQuickInven().AddItem(1020, 54);  //spliter
                 GameManager.GetQuickInven().AddItem(1030, 54);  //inserter
                 GameManager.GetQuickInven().AddItem(1040, 54);  //drill
@@ -135,8 +139,10 @@ namespace MyCraft
 
         private void ShowInitUIs()
         {
+            GameManager.GetQuickInven().gameObject.SetActive(true);
             GameManager.GetTechInven().gameObject.SetActive(true);
             GameManager.GetTechDesc().gameObject.SetActive(true);
+            GameManager.GetTooltip().gameObject.SetActive(true);
 
             GameManager.GetInventory().gameObject.SetActive(false);
             GameManager.GetChestInven().gameObject.SetActive(false);
@@ -184,6 +190,18 @@ namespace MyCraft
             if(null == _belt_manager)
                 _belt_manager = GetTerrainManager().GetComponentInChildren<BeltManager>();
             return _belt_manager;
+        }
+        public static BeltUpManager GetBeltUpManager()
+        {
+            if (null == _belt_up_manager)
+                _belt_up_manager = GetTerrainManager().GetComponentInChildren<BeltUpManager>();
+            return _belt_up_manager;
+        }
+        public static BeltDownManager GetBeltDownManager()
+        {
+            if (null == _belt_down_manager)
+                _belt_down_manager = GetTerrainManager().GetComponentInChildren<BeltDownManager>();
+            return _belt_down_manager;
         }
         public static SpliterManager GetSpliterManager() {
             if (null == _spliter_manager)

@@ -10,9 +10,6 @@ namespace MyCraft
 
         //HG_TEST : 테스트용으로 public으로 선언함.
         protected List<BlockScript> prefabs = new List<BlockScript>();
-        //List<BeltGoods> prefabs_goods;
-
-        //List<BeltGoods> goods;  //관리대상목록(belt에서 이동하고 있는 물품을 관리합니다.
 
 
         protected void LoadPrefab(string path, Transform parent)
@@ -36,8 +33,16 @@ namespace MyCraft
             return prefab;
         }
 
+        //센서:block간의 연결상태가 변경되면, 외형이 바뀔수 있다.
+        public virtual void LinkedSensor(BlockScript block) { }
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public virtual BlockScript ChainBelt(BlockScript script) { return null; }
+        public virtual BlockScript ChainBelt(BlockScript script) {
+            return null;
+        }
+        public virtual void ChainBelt(Sensor self)
+        {
+
+        }
 
 
         public virtual void CreateBlock(BlockScript script)

@@ -93,11 +93,6 @@ namespace MyCraft
             return clone;
         }
 
-        //void Update()
-        //{
-
-        //}
-
         IEnumerator CheckPosition()
         {
             while (true)

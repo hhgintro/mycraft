@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Unity.Android.Types;
 
 namespace MyCraft
 {
@@ -10,6 +10,8 @@ namespace MyCraft
         //block을 save할때 동일여부를 판단하기 위해 식별자로 활용합니다.
         private static int _static_idx = 0;
         public int _index { get; private set; }
+        public bool _destory;   //OnTriggerExit()이후에 삭제하기 위해.
+        public bool _deactive;  //OnTriggerExit()이후에 SetActive(false)하기 위해.
         //..
 
 
@@ -26,20 +28,69 @@ namespace MyCraft
         public bool _bOnTerrain { get; set; }
         //protected bool _bStart { get; set; }
 
+        //인접한 block(영향력이 있는경우만 유효)
+        public int _sensors;    //트리거 발생수.
+        public Sensor _lf, _rf, _L, _R, _lb, _rb;  //Front, Left, Right, Back
+
 
         void Start()
         {
             this.inven = null;
         }
+
+        void Update()
+        {
+            if (0 < this._sensors)
+            {
+                //Debug.Log($"Trigger수:{this._sensors}");
+                this._sensors = 0;
+
+                //센서:block간의 연결상태가 변경되면, 외형이 바뀔수 있다.
+                if (false == this._bOnTerrain)
+                {
+                    //if (null != InvenBase.choiced_item)
+                    //    GameManager.GetTerrainManager().SetChoicePrefab((ItemBase)InvenBase.choiced_item.database);
+                    GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
+                }
+                else
+                {
+                    this.manager.ChainBelt(this);
+                    //this.LinkedBelt();
+                }
+            }
+        }
+
         protected virtual void Init() { }
-        public virtual void Reset() { }
+        public virtual void Clear()
+        {
+            SetSensor(null, null, null, null, null, null);
+        }
+        public virtual void SetSensor(BlockScript block)
+        {
+            SetSensor(block._lf, block._rf, block._L, block._R, block._lb, block._rb);
+        }
+        public virtual void SetSensor(Sensor lf, Sensor rf, Sensor L, Sensor R, Sensor lb, Sensor rb)
+        {
+            this._lf    = lf;
+            this._rf    = rf;
+            this._L     = L;
+            this._R     = R;
+            this._lb    = lb;
+            this._rb    = rb;
+        }
+        public virtual void Reset() { }     //machine의 output=null설정
         public virtual void SetOutput(ItemBase itembase) { }
+
 
         public bool IsBelt()
         {
             if (null == this._itembase) return false;
-            if (BLOCKTYPE.BELT == this._itembase.type)
+            switch (this._itembase.type){
+                case BLOCKTYPE.BELT:
+                case BLOCKTYPE.BELT_UP:
+                case BLOCKTYPE.BELT_DOWN:
                 return true;
+            }
             return false;
         }
         public bool IsSpliter()
@@ -55,10 +106,21 @@ namespace MyCraft
             switch(this._itembase.type)
             {
                 case BLOCKTYPE.BELT:
+                case BLOCKTYPE.BELT_UP:
+                case BLOCKTYPE.BELT_DOWN:
                 case BLOCKTYPE.SPLITER:
                     return true;
             }
             return false;
+        }
+
+        //교체된 이전 prefab이나 삭제를 위한 block의 경우
+        //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
+        public virtual void ForceMove()
+        {
+            Vector3 pos = this.transform.localPosition;
+            pos.y = -251;
+            this.transform.localPosition = pos;
         }
 
         public virtual void SetInven(ItemInvenBase inven)
@@ -66,6 +128,10 @@ namespace MyCraft
             this.inven = inven;
         }
 
+        public virtual void SetPos(Vector3 pos)
+        {
+            this.transform.position = pos;
+        }
         public virtual void SetPos(int x, int y, int z)
         {
             this.transform.position = new Vector3(x, y, z);
@@ -97,12 +163,14 @@ namespace MyCraft
             GameObject obj = UnityEngine.Object.Instantiate(this.gameObject);
             obj.SetActive(true);
             obj.GetComponent<Collider>().enabled = true;
-            obj.layer = 9;
+            //obj.layer = (int)COLLIDER.BLOCK;
 
             //Hierarchy 위치설정
             obj.transform.SetParent(this.transform.parent.parent);
             BlockScript script = obj.GetComponent<BlockScript>();
             script.manager = this.manager;
+            script.SetSensor(this);
+
             //script._itembase = this._itembase;
             script._index = ++_static_idx;
             if (int.MaxValue <= _static_idx) _static_idx = 0;
@@ -139,6 +207,25 @@ namespace MyCraft
 
         //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
         public virtual void LinkedBelt() { }
+        public virtual void LinkedSensor(SENSOR self, Sensor other)
+        {
+            switch (self)
+            {
+                case SENSOR.LF:     this._lf = other;       break;
+                case SENSOR.RF:     this._rf = other;       break;
+                case SENSOR.L:      this._L = other;        break;
+                case SENSOR.R:      this._R = other;        break;
+                case SENSOR.LB:     this._lb = other;       break;
+                case SENSOR.RB:     this._rb = other;       break;
+            }
+            Debug.Log($"{this.name}({this._index}):lf({_lf})/rf({_rf})/L({_L})/R({_R})/lb({_lb})/rb({_rb})");
+
+            //this.LinkedBelt();
+
+            //if (this._lf) this._lf.manager.ChainBelt(this._lf);
+            //if (this._rf) this._rf.manager.ChainBelt(this._rf);
+        }
+
         // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
         public virtual int CheckWeightChainBelt() { return 0; }
         public virtual void LinkBeltSector(BELT_ROW row1, BELT_ROW row2, BlockScript next, BELT_ROW lrow, BELT_COL lcol, BELT_ROW rrow, BELT_COL rcol) { }
@@ -361,7 +448,9 @@ namespace MyCraft
             switch (script_front._itembase.type)
             {
                 case BLOCKTYPE.BELT:
-                //case BLOCKTYPE.GROUND_BELT:
+                case BLOCKTYPE.BELT_UP:
+                case BLOCKTYPE.BELT_DOWN:
+                    //case BLOCKTYPE.GROUND_BELT:
                     {
                         //goods가 먼저 생성된 후에, belt를 설치하는 경우에는 null==sector이므로 설정해 줘야합니다ㅏ.
                         if(null == goods.sector)

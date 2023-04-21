@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 4549189284858064}
   - component: {fileID: 114853394773463564}
   - component: {fileID: 65474599706563766}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: belt-goods
   m_TagString: Untagged
   m_Icon: {fileID: 0}

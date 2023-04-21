@@ -26,11 +26,6 @@ namespace MyCraft
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            //TranslateObject_Func();
-        }
 
         IEnumerator TranslateObject()
         {
@@ -188,7 +183,7 @@ namespace MyCraft
             return true;
         }
 
-        //[자신]을 기준으로 inserter가 물건을 가져올때 우선 순위.
+        //[자신]을 기준으로 inserter가 물건을 가져갈때 우선 순위.
         private List<BeltSector> PickupInserter(BlockScript inserter)
         {
             List<BeltSector> s = new List<BeltSector>();

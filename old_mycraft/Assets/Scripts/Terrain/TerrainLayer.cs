@@ -21,17 +21,6 @@ namespace MyCraft
         {
             this.block_xyz = new BLOCK_XYZ();
         }
-        //// Use this for initialization
-        //void Start()
-        //{
-        //    //block_xyz = new BLOCK_XYZ();
-        //}
-
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
 
         public BlockScript GetBlock(int x, int y, int z, BlockScript prefab)
         {
@@ -43,11 +32,11 @@ namespace MyCraft
 
 
             Vector3 scale = Quaternion.Euler(prefab.transform.eulerAngles) * prefab.transform.localScale;
-            for (int X = Common.PosRounding(Mathf.Min(0, scale.x+1)); X < Common.PosRounding(Mathf.Max(1, scale.x)); ++X)
+            for (int X = Common.PosRound(Mathf.Min(0, scale.x+1)); X < Common.PosRound(Mathf.Max(1, scale.x)); ++X)
             {
-                for (int Y = Common.PosRounding(Mathf.Min(0, scale.y+1)); Y < Common.PosRounding(Mathf.Max(1, scale.y)); ++Y)
+                for (int Y = Common.PosRound(Mathf.Min(0, scale.y+1)); Y < Common.PosRound(Mathf.Max(1, scale.y)); ++Y)
                 {
-                    for (int Z = Common.PosRounding(Mathf.Min(0, scale.z+1)); Z < Common.PosRounding(Mathf.Max(1, scale.z)); ++Z)
+                    for (int Z = Common.PosRound(Mathf.Min(0, scale.z+1)); Z < Common.PosRound(Mathf.Max(1, scale.z)); ++Z)
                     {
                         BlockScript block = this.GetBlock(x + X, y + Y, z + Z);
                         if (null != block) return block;
@@ -59,7 +48,7 @@ namespace MyCraft
         }
         public BlockScript GetBlock(Vector3 pos)
         {
-            return GetBlock(Common.PosRounding(pos.x), Common.PosRounding(pos.y), Common.PosRounding(pos.z));
+            return GetBlock(Common.PosRound(pos.x), Common.PosRound(pos.y), Common.PosRound(pos.z));
         }
         public BlockScript GetBlock(GameObject obj)
         {
@@ -104,23 +93,23 @@ namespace MyCraft
         {
             if (null == block) return;
 
-            int x = Common.PosRounding(block.transform.position.x);
-            int y = Common.PosRounding(block.transform.position.y);
-            int z = Common.PosRounding(block.transform.position.z);
+            int x = Common.PosRound(block.transform.position.x);
+            int y = Common.PosRound(block.transform.position.y);
+            int z = Common.PosRound(block.transform.position.z);
 
             Vector3 scale = Quaternion.Euler(block.transform.eulerAngles) * block.transform.localScale;
-            for (int X = Common.PosRounding(Mathf.Min(0, scale.x+1)); X < Common.PosRounding(Mathf.Max(1, scale.x)); ++X)
+            for (int X = Common.PosRound(Mathf.Min(0, scale.x+1)); X < Common.PosRound(Mathf.Max(1, scale.x)); ++X)
             {
-                for (int Y = Common.PosRounding(Mathf.Min(0, scale.y+1)); Y < Common.PosRounding(Mathf.Max(1, scale.y)); ++Y)
+                for (int Y = Common.PosRound(Mathf.Min(0, scale.y+1)); Y < Common.PosRound(Mathf.Max(1, scale.y)); ++Y)
                 {
-                    for (int Z = Common.PosRounding(Mathf.Min(0, scale.z+1)); Z < Common.PosRounding(Mathf.Max(1, scale.z)); ++Z)
+                    for (int Z = Common.PosRound(Mathf.Min(0, scale.z+1)); Z < Common.PosRound(Mathf.Max(1, scale.z)); ++Z)
                         SetSizeBlock(x+X, y+Y, z+Z, obj);
                 }
             }
         }
         public void SetSizeBlock(Vector3 pos, BlockScript obj)
         {
-            SetSizeBlock(Common.PosRounding(pos.x), Common.PosRounding(pos.y), Common.PosRounding(pos.z), obj);
+            SetSizeBlock(Common.PosRound(pos.x), Common.PosRound(pos.y), Common.PosRound(pos.z), obj);
         }
 
         public void SetSizeBlock(int x, int y, int z, BlockScript obj)
@@ -193,9 +182,9 @@ namespace MyCraft
                         if (true == blocks.ContainsKey(script._index))
                             continue;
 
-                        int x = Common.PosRounding(script.transform.position.x);
-                        int y = Common.PosRounding(script.transform.position.y);
-                        int z = Common.PosRounding(script.transform.position.z);
+                        int x = Common.PosRound(script.transform.position.x);
+                        int y = Common.PosRound(script.transform.position.y);
+                        int z = Common.PosRound(script.transform.position.z);
                         //Debug.Log("id:" + script._id + " " + x + "/" + y + "/" + z + ":"
                         //    + "blocktype/" + script._blocktype.ToString());
 

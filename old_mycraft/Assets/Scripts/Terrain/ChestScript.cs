@@ -46,12 +46,6 @@ namespace MyCraft
 
         }
 
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
-
         public override void OnClicked()
         {
             GameManager.GetChestInven().LinkInven(this, base._panels, base._progresses);

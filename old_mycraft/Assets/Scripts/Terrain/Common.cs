@@ -16,6 +16,8 @@ namespace MyCraft
         
         CHEST           = 1000,
         BELT            = 1010,
+        BELT_UP         = 1011,
+        BELT_DOWN       = 1012,
         SPLITER         = 1020,
         INSERTER        = 1030,
         DRILL           = 1040,
@@ -27,15 +29,23 @@ namespace MyCraft
         TECH            = 6000,
     }
 
+    //Front, Left, Right, Back(어느방향판별용)
+    public enum SENSOR : byte { LF, RF, L, R, LB, RB }
 
     public enum BELT_ROW : byte { ROW1, ROW2, ROW3, ROW4, MAX }        //left -> right
     public enum BELT_COL : byte { FIRST, SECOND, THIRD, FORTH, MAX }   //front -> tail
 
-    public enum COLLIDER : byte
+    public enum LAYER_TYPE : byte
     {//unity에서 설정하는 값입니다.
-        TERRAIN = 8,
-        BLOCK,
+        TERRAIN     = 8,
+        MINERAL,
+        BLOCK,      //10
+        PLAYER,
+        MONSTER,
+        SENSOR,
     }
+
+    public enum TRIGGER_DESTORY { DESTROY = -251 }
 
     //public enum BELT_TURN_WEIGHT
     //{//belt의 회전방향
@@ -62,6 +72,8 @@ namespace MyCraft
             switch (type)
             {
                 case BLOCKTYPE.BELT:            return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_UP:         return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_DOWN:       return typeof(BeltItemBase);
                 case BLOCKTYPE.SPLITER:         return typeof(BeltItemBase);
 
                 case BLOCKTYPE.INSERTER:        return typeof(InserterItemBase);
@@ -99,12 +111,22 @@ namespace MyCraft
             return (weight & val) == val;
         }
 
-        public static int PosRounding(float val)
+        //block이 원점을 중심으로 두고 있기때문에
+        //  block은 (-0.5 ~ 0.5)에 위치한다.
+        public static int PosRound(float val)
         {//반올림
             if (0 <= val)
                 return (int)(val + 0.5f);
             return (int)(val - 0.5f);
         }
+        public static int PosFloor(float val)
+        {//버림
+            return (int)(val);
+        }
+        //public static int PosCeil(float val)
+        //{//올림
+        //    return (int)(val+1);
+        //}
 
     }//..class Common
 

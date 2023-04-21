@@ -178,6 +178,54 @@
   },
 
   {
+    "id": 1011,
+    "type": 1011,
+    "title": "컨베이어 UP 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn":true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1012,
+    "type": 1012,
+    "title": "컨베이어 DOWN 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn":true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
     "id": 1020,
     "type": 1020,
     "title": "분배기",

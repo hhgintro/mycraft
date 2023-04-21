@@ -10,12 +10,5 @@ namespace MyCraft
         public int amount;
 
 
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
-
-
     }
 }

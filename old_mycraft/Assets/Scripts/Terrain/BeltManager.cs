@@ -28,12 +28,12 @@ namespace MyCraft
             if (null == script) return;
             base.CreateBlock(script);
 
-            //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
-            script.LinkedBelt();
+            ////새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
+            //script.LinkedBelt();
 
-            //생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
-            BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            if(script_front) script_front.manager.ChainBelt(script_front);
+            ////생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
+            //BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
+            //if(script_front) script_front.manager.ChainBelt(script_front);
         }
 
         public override void DeleteBlock(BlockScript script)
@@ -70,6 +70,26 @@ namespace MyCraft
         }
 
 
+        //센서:block간의 연결상태가 변경되면, 외형이 바뀔수 있다.
+        public override void LinkedSensor(BlockScript script)
+        {
+            //sensor가 작동했으니, 주변의 영향으로 [자신(script)]의 외형이 바뀌는지 확인한다.
+            BlockScript prefab = this.ChainBeltPrefab((BeltScript)script);
+            if (null == prefab) return;
+
+            //동일개체이면 무시.
+            if (script == prefab) return;
+
+            prefab.SetSensor(script);
+            Debug.LogWarning($"new prefab: {prefab.name}");
+
+            //HG_TODO: turn_weight을 체크할 필요가 있을지 고민할것.
+            //if (((BeltScript)prefab).turn_weight == ((BeltScript)script).turn_weight)
+            //  return;
+
+
+        }
+
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
         public override BlockScript ChainBelt(BlockScript script)
         {
@@ -84,6 +104,7 @@ namespace MyCraft
             BlockScript prefab = this.ChainBeltPrefab((BeltScript)script);
             if (null == prefab) return null;
 
+            prefab.SetSensor(script);
 
             if (((BeltScript)prefab).turn_weight != ((BeltScript)script).turn_weight)
             {
@@ -97,9 +118,9 @@ namespace MyCraft
                 newscript.manager = null;
 
                 //terrain에 위치시키다.
-                newscript.SetPos(Common.PosRounding(script.transform.position.x)
-                    , Common.PosRounding(script.transform.position.y)
-                    , Common.PosRounding(script.transform.position.z));
+                newscript.SetPos(Common.PosRound(script.transform.position.x)
+                    , Common.PosRound(script.transform.position.y)
+                    , Common.PosRound(script.transform.position.z));
                 GameManager.GetTerrainManager().block_layer.AddBlock(newscript);
 
                 script.manager.CreateBlock(newscript);
@@ -138,12 +159,12 @@ namespace MyCraft
              * right만 존재하는 경우는 TURN_RIGHT
              * */
             //weight
-            //if (0 == weight)
-            //{
-            //    prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-            //    prefab.transform.forward = script.transform.forward;
-            //    return prefab;
-            //}
+            if (0 == weight)
+            {
+                prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
+                prefab.transform.forward = script.transform.forward;
+                return prefab;
+            }
 
 
             if (Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT))

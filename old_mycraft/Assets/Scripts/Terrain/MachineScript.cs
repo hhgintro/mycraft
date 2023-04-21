@@ -84,15 +84,6 @@ namespace MyCraft
 
         }
 
-        //// Update is called once per frame
-        //void Update()
-        //{
-        //    //HG_TODO : 아이템이 추가되었을 때 coroutine으로 처리하도록 합니다.
-
-        //    //for(int i=0; i< this._progressList.Count; ++i)
-        //    //    this._progressList[i].Update();
-
-        //}
 
         public override void Reset()
         {

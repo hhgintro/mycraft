@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5414064955790407688}
   - component: {fileID: 6099946622199259720}
   - component: {fileID: 2040933440986596192}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pipe_Quadruple
   m_TagString: Untagged
   m_Icon: {fileID: 0}

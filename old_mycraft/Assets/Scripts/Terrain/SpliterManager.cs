@@ -26,20 +26,20 @@ namespace MyCraft
             base.CreateBlock(script);
 
 
-            //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
-            script.LinkedBelt();
+            ////새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
+            //script.LinkedBelt();
 
 
-            //생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
-            BlockScript script_lfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            BlockScript script_rfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward + script.transform.right);
-            if (null != script_lfront && script_lfront == script_rfront)
-                script_lfront.manager.ChainBelt(script_lfront);
-            else
-            {
-                if(script_lfront) script_lfront.manager.ChainBelt(script_lfront);
-                if(script_rfront) script_rfront.manager.ChainBelt(script_rfront);
-            }
+            ////생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
+            //BlockScript script_lfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
+            //BlockScript script_rfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward + script.transform.right);
+            //if (null != script_lfront && script_lfront == script_rfront)
+            //    script_lfront.manager.ChainBelt(script_lfront);
+            //else
+            //{
+            //    if(script_lfront) script_lfront.manager.ChainBelt(script_lfront);
+            //    if(script_rfront) script_rfront.manager.ChainBelt(script_rfront);
+            //}
         }
 
         public override void DeleteBlock(BlockScript script)
@@ -64,22 +64,22 @@ namespace MyCraft
             base.DeleteBlock(script);
         }
 
-        public override BlockScript GetChoicePrefab(TURN_WEIGHT weight)
-        {
-            if (this.prefabs.Count <= 0)
-                return null;
+        //public override BlockScript GetChoicePrefab(TURN_WEIGHT weight)
+        //{
+        //    if (this.prefabs.Count <= 0)
+        //        return null;
 
-            BlockScript prefab = null;
-            switch (weight)
-            {
-                case TURN_WEIGHT.FRONT: prefab = this.prefabs[0];  break;
-                case TURN_WEIGHT.LEFT:  prefab = this.prefabs[1];  break;
-                case TURN_WEIGHT.RIGHT: prefab = this.prefabs[2];  break;
-            }
-            if (null == prefab) return null;
-            prefab.GetComponent<Collider>().enabled = false;
-            return prefab;
-        }
+        //    BlockScript prefab = null;
+        //    switch (weight)
+        //    {
+        //        case TURN_WEIGHT.FRONT: prefab = this.prefabs[0];  break;
+        //        case TURN_WEIGHT.LEFT:  prefab = this.prefabs[1];  break;
+        //        case TURN_WEIGHT.RIGHT: prefab = this.prefabs[2];  break;
+        //    }
+        //    if (null == prefab) return null;
+        //    prefab.GetComponent<Collider>().enabled = false;
+        //    return prefab;
+        //}
 
 
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.

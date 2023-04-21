@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1284051155249932101}
   - component: {fileID: 4192430011702566948}
   - component: {fileID: 3035869873919426238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pipe_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}

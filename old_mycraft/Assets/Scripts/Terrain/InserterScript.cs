@@ -42,12 +42,6 @@ namespace MyCraft
             }
         }
 
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
-
         IEnumerator CheckBackBlock()
         {
             while(true)
@@ -79,6 +73,8 @@ namespace MyCraft
             switch(script_back._itembase.type)
             {
                 case BLOCKTYPE.BELT:
+                case BLOCKTYPE.BELT_UP:
+                case BLOCKTYPE.BELT_DOWN:
                 case BLOCKTYPE.SPLITER:
                 case BLOCKTYPE.CHEST:
                 case BLOCKTYPE.STONE_FURNACE:
