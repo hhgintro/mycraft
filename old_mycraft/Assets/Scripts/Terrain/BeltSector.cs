@@ -8,20 +8,25 @@ namespace MyCraft
 {
     public class BeltSector : MonoBehaviour
     {
-        public BeltBaseScript owner;    //this개체가 소속된 곳
+        public BeltBaseScript _owner;    //this개체가 소속된 곳
 
-        public BeltGoods obj = null; //등록된 object
-        public BeltSector next;
+        public BeltGoods _obj = null; //등록된 object
+        public BeltSector _next;
+
+        private void Awake()
+        {
+            this._owner = this.transform.parent.parent.GetComponent<BeltBaseScript>();
+        }
 
 
 
-        public BeltGoods GetObj() { return this.obj; }
+        public BeltGoods GetObj() { return this._obj; }
         public void SetObj(BeltGoods obj)
         {
-            this.obj = obj;
-            if(null != this.obj)
+            this._obj = obj;
+            if(null != this._obj)
             {
-                this.obj.sector = this;
+                this._obj.sector = this;
                 obj.transform.SetParent(this.transform);
             }
         }
@@ -32,7 +37,7 @@ namespace MyCraft
 
             //BeltGoods
             int itemid = 0;
-            if (null != this.obj) itemid = (int)this.obj.itemid;
+            if (null != this._obj) itemid = (int)this._obj.itemid;
             writer.Write(itemid);
             //...
 
@@ -46,16 +51,16 @@ namespace MyCraft
             int itemid = reader.ReadInt32();
             if (0 != itemid)
             {
-                this.obj = GameManager.CreateMineral(itemid, this.transform);//, this.transform.position);
+                this._obj = GameManager.CreateMineral(itemid, this.transform);//, this.transform.position);
                 //Hierarchy 위치설정
                 //this.obj.transform.SetParent(this.transform);
                 ////생성되는 mineral은 위치.
                 //this.obj.transform.position = this.owner.CheckDestPosFrontBlock(this.obj);
 
                 //sector 설정
-                this.obj.sector = this;
+                this._obj.sector = this;
                 //생성되는 mineral은 위치.
-                this.obj.transform.position = this.transform.position;
+                this._obj.transform.position = this.transform.position;
 
 
             }

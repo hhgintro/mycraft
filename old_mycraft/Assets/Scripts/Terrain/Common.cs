@@ -15,15 +15,25 @@ namespace MyCraft
         INTERMEDIATE_PRODUCTS,  //중간생산품
         
         CHEST           = 1000,
-        BELT            = 1010,
-        BELT_UP         = 1011,
-        BELT_DOWN       = 1012,
-        SPLITER         = 1020,
+
         INSERTER        = 1030,
         DRILL           = 1040,
         STONE_FURNACE   = 1050,
         MACHINE         = 1060,
 
+        BELT            = 1100,
+        BELT_UP         = 1110,
+        BELT_DOWN       = 1120,
+
+        BELT_VERTICAL_UP_BEGIN  = 1130,
+        BELT_VERTICAL_UP_MIDDLE = 1140,
+        BELT_VERTICAL_UP_END    = 1150,
+        BELT_VERTICAL_DOWN_BEGIN  = 1160,
+        BELT_VERTICAL_DOWN_MIDDLE = 1170,
+        BELT_VERTICAL_DOWN_END    = 1180,
+
+
+        SPLITER = 1200,
 
         SKILL           = 5000,
         TECH            = 6000,
@@ -74,6 +84,12 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:            return typeof(BeltItemBase);
                 case BLOCKTYPE.BELT_UP:         return typeof(BeltItemBase);
                 case BLOCKTYPE.BELT_DOWN:       return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:      return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:     return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_UP_END:        return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:    return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:   return typeof(BeltItemBase);
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:      return typeof(BeltItemBase);
                 case BLOCKTYPE.SPLITER:         return typeof(BeltItemBase);
 
                 case BLOCKTYPE.INSERTER:        return typeof(InserterItemBase);

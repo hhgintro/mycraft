@@ -6,7 +6,7 @@
     "desc": "스킬 0입니다.",
     "panels": [
       {"items": [{"itemid":1000}]},
-      {"items": [{"itemid":1010},{"itemid":1020}]}
+      {"items": [{"itemid":1100},{"itemid":1200}]}
     ],
     "icon": "logistics"
   },

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyCraft
 {
-    public class BeltUpManager : BlockManager
+    public class BeltVerticalDownMiddleManager : BlockManager
     {
         //private TerrainManager terrain_manager;
 
@@ -17,7 +17,7 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/transport-belt-up", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-vertical-down-middle", this.transform.GetChild(0));
         }
 
 

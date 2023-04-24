@@ -29,8 +29,14 @@ namespace MyCraft
         {
             LoadPrefab<ChestManager>("hierarchy/terrain", "chest");
             LoadPrefab<BeltManager>("hierarchy/terrain", "belt");
-            LoadPrefab<BeltUpManager>("hierarchy/terrain", "belt-up");
-            LoadPrefab<BeltDownManager>("hierarchy/terrain", "belt-down");
+            LoadPrefab<BeltSlopeUpManager>("hierarchy/terrain", "belt-slide-up");
+            LoadPrefab<BeltSlopeDownManager>("hierarchy/terrain", "belt-slide-down");
+            LoadPrefab<BeltVerticalUpBeginManager>("hierarchy/terrain", "belt-vertical-up-begin");
+            LoadPrefab<BeltVerticalUpMiddleManager>("hierarchy/terrain", "belt-vertical-up-middle");
+            LoadPrefab<BeltVerticalUpEndManager>("hierarchy/terrain", "belt-vertical-up-end");
+            LoadPrefab<BeltVerticalDownEndManager>("hierarchy/terrain", "belt-vertical-down-begin");
+            LoadPrefab<BeltVerticalDownBeginManager>("hierarchy/terrain", "belt-vertical-down-middle");
+            LoadPrefab<BeltVerticalDownMiddleManager>("hierarchy/terrain", "belt-vertical-down-end");
             LoadPrefab<SpliterManager>("hierarchy/terrain", "spliter");
             LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
             LoadPrefab<DrillManager>("hierarchy/terrain", "drill");
@@ -148,47 +154,56 @@ namespace MyCraft
             switch (blocktype)
             {
                 case BLOCKTYPE.CHEST:           script = GameManager.GetChestManager().GetChoicePrefab(weight);         break;
-                case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);          break;
-                case BLOCKTYPE.BELT_UP:         script = GameManager.GetBeltUpManager().GetChoicePrefab(weight);        break;
-                case BLOCKTYPE.BELT_DOWN:       script = GameManager.GetBeltDownManager().GetChoicePrefab(weight);      break;
-                case BLOCKTYPE.SPLITER:         script = GameManager.GetSpliterManager().GetChoicePrefab(weight);       break;
                 case BLOCKTYPE.INSERTER:        script = GameManager.GetInserterManager().GetChoicePrefab(weight);      break;
                 case BLOCKTYPE.DRILL:           script = GameManager.GetDrillManager().GetChoicePrefab(weight);         break;
                 case BLOCKTYPE.MACHINE:         script = GameManager.GetMachineManager().GetChoicePrefab(weight);       break;
+
+                case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);              break;
+                case BLOCKTYPE.BELT_UP:         script = GameManager.GetBeltSlopeUpManager().GetChoicePrefab(weight);       break;
+                case BLOCKTYPE.BELT_DOWN:       script = GameManager.GetBeltSlopeDownManager().GetChoicePrefab(weight);     break;
+                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:      script = GameManager.GetBeltVerticalUpBeginManager().GetChoicePrefab(weight);       break;
+                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:     script = GameManager.GetBeltVerticalUpMiddleManager().GetChoicePrefab(weight);      break;
+                case BLOCKTYPE.BELT_VERTICAL_UP_END:        script = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab(weight);         break;
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:    script = GameManager.GetBeltVerticalDownBeginManager().GetChoicePrefab(weight);     break;
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:   script = GameManager.GetBeltVerticalDownMiddleManager().GetChoicePrefab(weight);    break;
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:      script = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab(weight);       break;
+
+                case BLOCKTYPE.SPLITER:         script = GameManager.GetSpliterManager().GetChoicePrefab(weight);       break;
+
                 case BLOCKTYPE.STONE_FURNACE:   script = GameManager.GetStoneFurnaceManager().GetChoicePrefab(weight);  break;
              }
             return script;
         }
 
-        //선택된 prefab을 x,z 위치할때 주변의 영향으로 [자신의] 외형이 변경되어질 수 있다.
-        public void ChainBlock(int posx, int posy, int posz, BlockScript prefab)
-        {
-            if (null == prefab) return;
+        ////선택된 prefab을 x,z 위치할때 주변의 영향으로 [자신의] 외형이 변경되어질 수 있다.
+        //public void ChainBlock(int posx, int posy, int posz, BlockScript prefab)
+        //{
+        //    if (null == prefab) return;
 
-            //위치갱신:먼저 위치를 잡아줘야 ChainBeltPrefab()를 수행할 수 있습니다.
-            prefab.SetPos(posx, posy, posz);
-            ChainBlock(prefab);
-        }
-        public void ChainBlock(BlockScript prefab)
-        {
-            if (null == prefab) return;
+        //    //위치갱신:먼저 위치를 잡아줘야 ChainBeltPrefab()를 수행할 수 있습니다.
+        //    prefab.SetPos(posx, posy, posz);
+        //    ChainBlock(prefab);
+        //}
+        //public void ChainBlock(BlockScript prefab)
+        //{
+        //    if (null == prefab) return;
 
-            BeltScript newscript = null;
-            switch (prefab._itembase.type)
-            {
-                case BLOCKTYPE.BELT:
-                    newscript = GameManager.GetBeltManager().ChainBeltPrefab((BeltScript)prefab);
-                    break;
-                    //case BLOCKTYPE.GROUND_BELT:
-                    //    newscript = GameManager.GetSpliterManager().ChainBeltPrefab((BeltScript)prefab);
-                    //    break;
-            }
-            if (null != newscript)
-            {
-                newscript.SetPos(prefab.transform.position);    //위치갱신 : prefab이 변경된 경우 다시 위치 설정
-                this.SetChoicePrefab(newscript);
-            }
-        }
+        //    BeltScript newscript = null;
+        //    switch (prefab._itembase.type)
+        //    {
+        //        case BLOCKTYPE.BELT:
+        //            newscript = GameManager.GetBeltManager().ChainBeltPrefab((BeltScript)prefab);
+        //            break;
+        //            //case BLOCKTYPE.GROUND_BELT:
+        //            //    newscript = GameManager.GetSpliterManager().ChainBeltPrefab((BeltScript)prefab);
+        //            //    break;
+        //    }
+        //    if (null != newscript)
+        //    {
+        //        newscript.SetPos(prefab.transform.position);    //위치갱신 : prefab이 변경된 경우 다시 위치 설정
+        //        this.SetChoicePrefab(newscript);
+        //    }
+        //}
 
         public BlockScript CreateBlock(TerrainLayer layer, int x, int y, int z, BlockScript prefab)
         {
@@ -236,27 +251,28 @@ namespace MyCraft
             if (true == removeblock)
                 this.block_layer.SubBlock(script);
 
-            switch(script._itembase.type)
-            {
-                case BLOCKTYPE.BELT:
-                //case BLOCKTYPE.GROUND_BELT:
-                    GameManager.GetBeltManager().DeleteBlock(script);
-                    break;
-                case BLOCKTYPE.BELT_UP:
-                    GameManager.GetBeltUpManager().DeleteBlock(script);
-                    break;
-                case BLOCKTYPE.BELT_DOWN:
-                    GameManager.GetBeltDownManager().DeleteBlock(script);
-                    break;
+            //switch (script._itembase.type)
+            //{
+            //    case BLOCKTYPE.BELT:
+            //    //case BLOCKTYPE.GROUND_BELT:
+            //        GameManager.GetBeltManager().DeleteBlock(script);
+            //        break;
+            //    case BLOCKTYPE.BELT_UP:
+            //        GameManager.GetBeltSlopeUpManager().DeleteBlock(script);
+            //        break;
+            //    case BLOCKTYPE.BELT_DOWN:
+            //        GameManager.GetBeltSlopeDownManager().DeleteBlock(script);
+            //        break;
 
-                case BLOCKTYPE.SPLITER:
-                    GameManager.GetSpliterManager().DeleteBlock(script);
-                    break;
+            //    case BLOCKTYPE.SPLITER:
+            //        GameManager.GetSpliterManager().DeleteBlock(script);
+            //        break;
 
-                default:
-                    script.DeleteBlock();
-                    break;
-            }
+            //    default:
+            //        script.DeleteBlock();
+            //        break;
+            //}
+            script.manager.DeleteBlock(script);
 
             //인벤에 다시 넣어줍니다.
             GameManager.AddItem(script._itembase.id, 1);
@@ -269,10 +285,24 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:      //HG_TODO: 지금은 작동하니깐. 추후에 변경을 고려
                 case BLOCKTYPE.BELT_UP:
                 case BLOCKTYPE.BELT_DOWN:
+                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_UP_END:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:
                 case BLOCKTYPE.SPLITER:  //HG_TODO: 지금은 작동하니깐. 추후에 변경을 고려
                     {
-                        script.ForceMove(); //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
-                        script._destory = true; //OnTriggerExit()이후에 삭제할 개체들
+                        ////[자신]이 삭제될때 front의 외형이 바뀔 수 있다면 ForceMove()처리로 삭제되도록 합니다.
+                        //if (script._lf || script._rf || script._L || script._R || script._lb || script._rb)
+                        //{
+                        //    script.ForceMove(true); //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
+                        //    script._destory = true;
+                        //}
+                        //else
+                        //    GameObject.Destroy(script.gameObject);
+                        if(false == script.ForceMove())
+                            GameObject.Destroy(script.gameObject);
                     }
                     break;
 

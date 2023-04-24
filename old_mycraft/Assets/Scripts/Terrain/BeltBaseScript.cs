@@ -36,11 +36,6 @@ namespace MyCraft
             }
         }
 
-        protected virtual BeltSector GetNextSector(int idx)
-        {
-            return this.sectors[idx].next;
-        }
-
         void TranslateObject_Func()
         {
             //Debug.Log("Check TranslateObject()");
@@ -61,7 +56,7 @@ namespace MyCraft
                         int a = 0;
                         a = 0;
                     }
-                    float speed = ((BeltItemBase)this.sectors[i].GetObj().sector.owner._itembase).speed;//현 sector의 부모(owner)로 부터 speed의 정보를 가져옵니다.
+                    float speed = ((BeltItemBase)this.sectors[i].GetObj().sector._owner._itembase).speed;//현 sector의 부모(owner)로 부터 speed의 정보를 가져옵니다.
                     this.sectors[i].GetObj().transform.position += this.sectors[i].GetObj().forward * speed * Time.smoothDeltaTime;
                     //Debug.Log("cur pos : " + this.sectors[i].GetObj().transform.position);
                     continue;
@@ -92,16 +87,172 @@ namespace MyCraft
         {
             for (int i = 0; i < this.sectors.Length; ++i)
             {
-                if (null == this.sectors[i].obj)
+                if (null == this.sectors[i]._obj)
                     continue;
 
                 //sector가 가지고 있는 obj(BeltGoods)를 인벤토리에 넣어줍니다.
-                int amount = GameManager.AddItem(this.sectors[i].obj.itemid, 1);
+                int amount = GameManager.AddItem(this.sectors[i]._obj.itemid, 1);
                 if(amount <= 0)
-                    GameObject.Destroy(this.sectors[i].obj.gameObject);
+                    GameObject.Destroy(this.sectors[i]._obj.gameObject);
             }
         }
 
+        //새로 생성된 script의 back/left/right에서 link를 걸어줍니다.
+        public override void LinkedBelt()
+        {
+            //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
+            //    return;
+            if (false == this.IsBelt())
+                return;
+
+            //Debug.Log("LinkBetlt " + script._index);
+            // [자신]을 기준으로 back / left / right 의 belt 위치에 따라
+            // [자신의] 가중치를 결정합니다.
+            int weight = this.CheckWeightChainBelt();
+
+            bool turn_front = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT);
+            //bool turn_left = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.LEFT);
+            //bool turn_right = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.RIGHT);
+
+            //back으로 부터( [자신]의 가중치가 front - back이 belt가 있다)
+            if (true == turn_front)
+            {
+                //**************************************************************//
+                //영향력이 확인되었으므로 상태체크를 하지 않는다.( null / blocktype )
+
+
+                ////back(back에 belt가 있다면) - [자신]은 front 상태임(back에 belt가 있으므로)
+                ////BeltScript script_back = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.forward);
+                ////LinkBeltSector(script_back, (BeltScript)script, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+                //BlockScript block_lback = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.forward - this.transform.right);
+                //BlockScript block_mback = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.forward);
+                //if (null != block_mback)    //script_mback: 무조건 null이 아니어야 한다.
+                //{
+                //    if (block_lback == block_mback)
+                //        block_mback.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+                //    else
+                //        block_mback.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+                //}
+                if (base._lb)
+                {
+                    if (SENSOR.RF == base._lb._sensor)
+                        base._lb._owner.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+                    else
+                        base._lb._owner.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+                }
+                ////left에서 영향을 받고 있나?
+                //if (true == turn_left)
+                //{
+                //    //left에 belt가 있다면 - [자신]은 front 상태임(back에 belt가 있으므로)
+                //    //BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position - script.transform.right);
+                //    //LinkBeltSector(script_left, (BeltScript)script, BELT_ROW.ROW1, BELT_COL.FIRST, BELT_ROW.ROW1, BELT_COL.THIRD);
+                //    BlockScript block_lleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right + this.transform.forward);
+                //    BlockScript block_mleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right);
+                //    if (null != block_mleft)    //script_mleft: 무조건 null이 아니어야 한다.
+                //    {
+                //        if (block_lleft == block_mleft)
+                //            block_mleft.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW1, BELT_COL.FIRST, BELT_ROW.ROW1, BELT_COL.THIRD);
+                //        else
+                //            block_mleft.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW1, BELT_COL.FIRST, BELT_ROW.ROW1, BELT_COL.THIRD);
+                //    }
+                //}
+
+                ////right에서 영향을 받고 있나?
+                //if (true == turn_right)
+                //{
+                //    //right에 belt가 있다면 - [자신]은 front 상태임(back에 belt가 있으므로)
+                //    //BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.right);
+                //    //LinkBeltSector(script_right, (BeltScript)script, BELT_ROW.ROW2, BELT_COL.THIRD, BELT_ROW.ROW2, BELT_COL.FIRST);
+                //    BlockScript block_lright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right - this.transform.forward);
+                //    BlockScript block_mright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right);
+                //    if (null != block_mright)    //script_mleft: 무조건 null이 아니어야 한다.
+                //    {
+                //        if (block_lright == block_mright)
+                //            block_mright.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW2, BELT_COL.THIRD, BELT_ROW.ROW2, BELT_COL.FIRST);
+                //        else
+                //            block_mright.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW2, BELT_COL.THIRD, BELT_ROW.ROW2, BELT_COL.FIRST);
+                //    }
+                //}
+
+                return;//****중요(더 아래로 진행못하게)
+            }
+
+            //if (true == turn_left)
+            //{
+            //    //left에 belt가 있다면
+            //    //[자신]은 left 상태임(left 에 belt가 있으므로)
+            //    //BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(block.transform.position - block.transform.right);
+            //    //LinkBeltSector(script_left, (BeltScript)block, BELT_ROW.ROW1, BELT_COL.SECOND, BELT_ROW.ROW2, BELT_COL.FORTH);
+            //    BlockScript block_lleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right + this.transform.forward);
+            //    BlockScript block_mleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right);
+            //    if (null != block_mleft)    //script_mleft: 무조건 null이 아니어야 한다.
+            //    {
+            //        if (block_lleft == block_mleft)
+            //            block_mleft.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+            //        else
+            //            block_mleft.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+            //    }
+            //}
+
+            //if (true == turn_right)
+            //{
+            //    //right에 belt가 있다면
+            //    //[자신]은 right 상태임(right 에 belt가 있으므로)
+            //    //BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(block.transform.position + block.transform.right);
+            //    //LinkBeltSector(script_right, (BeltScript)block, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.SECOND);
+            //    BlockScript block_lright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right - this.transform.forward);
+            //    BlockScript block_mright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right);
+            //    if (null != block_mright)    //script_mleft: 무조건 null이 아니어야 한다.
+            //    {
+            //        if (block_lright == block_mright)
+            //            block_mright.LinkBeltSector(BELT_ROW.ROW3, BELT_ROW.ROW4, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+            //        else
+            //            block_mright.LinkBeltSector(BELT_ROW.ROW1, BELT_ROW.ROW2, this, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.FORTH);
+            //    }
+            //}
+        }
+
+        // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
+        public override int CheckWeightChainBelt()
+        {
+            //주변 block에 의한 가중치
+            int weight = 0;
+
+            if (base._lb) weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.FRONT);
+            return weight;
+
+            ////lback, mback : left-back, middle-back ( 뒤쪽에 belt/spliter가 있을때를 고려함 )
+            ////BlockScript script_lback = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.forward - this.transform.right);
+            //BlockScript script_mback = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.forward);
+            //////BlockScript script_lleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right + this.transform.up);
+            ////BlockScript script_mleft = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position - this.transform.right);
+            //////BlockScript script_lright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right - this.transform.forward);
+            ////BlockScript script_mright = GameManager.GetTerrainManager().block_layer.GetBlock(this.transform.position + this.transform.right);
+
+            ////back
+            ////if (true == this.WeightTurn(script_lback, this.transform.forward)
+            ////    || true == this.WeightTurn(script_mback, this.transform.forward))
+            //if(true == this.WeightTurn(script_mback, this.transform.forward))
+            //    weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.FRONT);
+            //////left
+            //////if (true == this.WeightTurn(script_lleft, this.transform.right)
+            //////    || true == this.WeightTurn(script_mleft, this.transform.right))
+            ////if(true == this.WeightTurn(script_mleft, this.transform.right))
+            ////    weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.LEFT);
+            //////right
+            //////if (true == this.WeightTurn(script_lright, -this.transform.right)
+            //////    || true == this.WeightTurn(script_mright, -this.transform.right))
+            ////if(true == this.WeightTurn(script_mright, -this.transform.right))
+            ////    weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.RIGHT);
+
+            //////check
+            ////bool turn_left = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.LEFT);
+            ////bool turn_right = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.RIGHT);
+            ////if (0 == weight || (true == turn_left && true == turn_right)) //외압이 없거나, left/right모두에서 올때
+            ////    weight = Common.ADD_BIT(weight, (int)TURN_WEIGHT.FRONT);
+
+            //return weight;  //무조건 3개중 1개 => TURN_WEIGHT.FRONT / TURN_WEIGHT.LEFT / TURN_WEIGHT.RIGHT
+        }
 
         //script의 forward와 일치히면 true를 리턴합니다.
         protected bool WeightTurn(BlockScript script, Vector3 forward)
@@ -121,21 +272,29 @@ namespace MyCraft
             return true;//가중치 적용
         }
 
+        protected virtual BeltSector GetNextSector(int idx)
+        {
+            return this.sectors[idx]._next;
+        }
+
         public override void LinkBeltSector(BELT_ROW row1, BELT_ROW row2, BlockScript next, BELT_ROW lrow, BELT_COL lcol, BELT_ROW rrow, BELT_COL rcol)
         {
             if (null == next || false == next.IsTransport())
                 return;
 
-            this.GetBeltSector(row1, BELT_COL.FIRST).next = ((BeltBaseScript)next).GetBeltSector(lrow, lcol);
-            this.GetBeltSector(row2, BELT_COL.FIRST).next = ((BeltBaseScript)next).GetBeltSector(rrow, rcol);
-
+            this.GetBeltSector(row1, BELT_COL.FIRST)._next = ((BeltBaseScript)next).GetBeltSector(lrow, lcol);
+            this.GetBeltSector(row2, BELT_COL.FIRST)._next = ((BeltBaseScript)next).GetBeltSector(rrow, rcol);
+            //Debug.LogWarning($"LinkBelt: ({this._index}){this.name} ==> ({next._index}){next.name}");
         }
 
         public BeltSector GetBeltSector(BELT_ROW r, BELT_COL c)
         {
             int idx = ((int)r * (int)BELT_COL.MAX) + (int)c;
             if (sectors.Length <= idx)
+            {
+                Debug.LogError($"{this.name}:sector수({sectors.Length})를 확인하세요");
                 return null;
+            }
             return sectors[idx];
         }
 
@@ -259,13 +418,13 @@ namespace MyCraft
                 //sector를 순회하면서 아이템을 가져오고 있습니다.
                 for (int s = 0; s < SEC.Count; ++s)
                 {
-                    if (null == SEC[s].obj)
+                    if (null == SEC[s]._obj)
                         continue;
-                    if (putdowns[i] != SEC[s].obj.itemid)
+                    if (putdowns[i] != SEC[s]._obj.itemid)
                         continue;
 
-                    BeltGoods obj = SEC[s].obj;
-                    SEC[s].obj = null;
+                    BeltGoods obj = SEC[s]._obj;
+                    SEC[s]._obj = null;
                     return obj;
                 }
             }

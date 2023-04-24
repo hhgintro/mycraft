@@ -23,8 +23,14 @@ namespace MyCraft
 
         private static TerrainManager _terrain_manager;
         private static BeltManager _belt_manager;
-        private static BeltUpManager _belt_up_manager;
-        private static BeltDownManager _belt_down_manager;
+        private static BeltSlopeUpManager _belt_slope_up_manager;
+        private static BeltSlopeDownManager _belt_slope_down_manager;
+        private static BeltVerticalUpBeginManager _belt_vertical_up_begin_manager;
+        private static BeltVerticalUpMiddleManager _belt_vertical_up_middle_manager;
+        private static BeltVerticalUpEndManager _belt_vertical_up_end_manager;
+        private static BeltVerticalDownBeginManager _belt_vertical_down_begin_manager;
+        private static BeltVerticalDownMiddleManager _belt_vertical_down_middle_manager;
+        private static BeltVerticalDownEndManager _belt_vertical_down_end_manager;
         private static SpliterManager _spliter_manager;
         private static InserterManager _inserter_manager;
         private static ChestManager _chest_manager;
@@ -59,6 +65,9 @@ namespace MyCraft
         private static GameObject _invenSkill;
         private static GameObject _invenReset;
 
+        //저장경로
+        public static string _save_dir = Application.dataPath + "/../save";
+
 
         public bool bNewGame { get; set; }
         public StringBuilder _locale;
@@ -87,7 +96,13 @@ namespace MyCraft
                 GameManager.GetInventory().AddItem(40, 54);     //iron-ore
                 GameManager.GetInventory().AddItem(50, 54);     //copper-ore
 
-                GameManager.GetInventory().AddItem(1010, 54);   //belt
+                GameManager.GetInventory().AddItem(1100, 54);   //belt
+                GameManager.GetInventory().AddItem(1130, 100);   //Vertical-Up-Begin
+                GameManager.GetInventory().AddItem(1140, 100);   //Vertical-Up-Middle
+                GameManager.GetInventory().AddItem(1150, 100);   //Vertical-Up-End
+                GameManager.GetInventory().AddItem(1160, 100);   //Vertical-Down-Begin
+                GameManager.GetInventory().AddItem(1170, 100);   //Vertical-Down-Middle
+                GameManager.GetInventory().AddItem(1180, 100);   //Vertical-Down-End
 
 
                 //quick slot
@@ -95,10 +110,10 @@ namespace MyCraft
                     GameManager.GetQuickInven()._panels[0].SetAmount(10);
 
                 GameManager.GetQuickInven().AddItem(1000, 54);  //chest
-                GameManager.GetQuickInven().AddItem(1010, 54);  //belt
-                GameManager.GetQuickInven().AddItem(1011, 100);  //belt-up
-                GameManager.GetQuickInven().AddItem(1012, 100);  //belt-down
-                GameManager.GetQuickInven().AddItem(1020, 54);  //spliter
+                GameManager.GetQuickInven().AddItem(1100, 54);  //belt
+                GameManager.GetQuickInven().AddItem(1110, 100); //belt-up
+                GameManager.GetQuickInven().AddItem(1120, 100); //belt-down
+                GameManager.GetQuickInven().AddItem(1200, 54);  //spliter
                 GameManager.GetQuickInven().AddItem(1030, 54);  //inserter
                 GameManager.GetQuickInven().AddItem(1040, 54);  //drill
                 GameManager.GetQuickInven().AddItem(1050, 54);  //stone-furnace
@@ -107,9 +122,7 @@ namespace MyCraft
             }
             else
             {
-
                 this.Load();
-
             }
             Application.runInBackground = true;
         }
@@ -191,17 +204,53 @@ namespace MyCraft
                 _belt_manager = GetTerrainManager().GetComponentInChildren<BeltManager>();
             return _belt_manager;
         }
-        public static BeltUpManager GetBeltUpManager()
+        public static BeltSlopeUpManager GetBeltSlopeUpManager()
         {
-            if (null == _belt_up_manager)
-                _belt_up_manager = GetTerrainManager().GetComponentInChildren<BeltUpManager>();
-            return _belt_up_manager;
+            if (null == _belt_slope_up_manager)
+                _belt_slope_up_manager = GetTerrainManager().GetComponentInChildren<BeltSlopeUpManager>();
+            return _belt_slope_up_manager;
         }
-        public static BeltDownManager GetBeltDownManager()
+        public static BeltSlopeDownManager GetBeltSlopeDownManager()
         {
-            if (null == _belt_down_manager)
-                _belt_down_manager = GetTerrainManager().GetComponentInChildren<BeltDownManager>();
-            return _belt_down_manager;
+            if (null == _belt_slope_down_manager)
+                _belt_slope_down_manager = GetTerrainManager().GetComponentInChildren<BeltSlopeDownManager>();
+            return _belt_slope_down_manager;
+        }
+        public static BeltVerticalUpBeginManager GetBeltVerticalUpBeginManager()
+        {
+            if (null == _belt_vertical_up_begin_manager)
+                _belt_vertical_up_begin_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpBeginManager>();
+            return _belt_vertical_up_begin_manager;
+        }
+        public static BeltVerticalUpMiddleManager GetBeltVerticalUpMiddleManager()
+        {
+            if (null == _belt_vertical_up_middle_manager)
+                _belt_vertical_up_middle_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpMiddleManager>();
+            return _belt_vertical_up_middle_manager;
+        }
+        public static BeltVerticalUpEndManager GetBeltVerticalUpEndManager()
+        {
+            if (null == _belt_vertical_up_end_manager)
+                _belt_vertical_up_end_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpEndManager>();
+            return _belt_vertical_up_end_manager;
+        }
+        public static BeltVerticalDownBeginManager GetBeltVerticalDownBeginManager()
+        {
+            if (null == _belt_vertical_down_begin_manager)
+                _belt_vertical_down_begin_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownBeginManager>();
+            return _belt_vertical_down_begin_manager;
+        }
+        public static BeltVerticalDownMiddleManager GetBeltVerticalDownMiddleManager()
+        {
+            if (null == _belt_vertical_down_middle_manager)
+                _belt_vertical_down_middle_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownMiddleManager>();
+            return _belt_vertical_down_middle_manager;
+        }
+        public static BeltVerticalDownEndManager GetBeltVerticalDownEndManager()
+        {
+            if (null == _belt_vertical_down_end_manager)
+                _belt_vertical_down_end_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownEndManager>();
+            return _belt_vertical_down_end_manager;
         }
         public static SpliterManager GetSpliterManager() {
             if (null == _spliter_manager)
@@ -421,7 +470,10 @@ namespace MyCraft
 
         public static void Save()
         {
-            using (FileStream fs = File.Create(Application.persistentDataPath + "/savefile.sav"))
+            if (false == Directory.Exists(_save_dir)) Directory.CreateDirectory(_save_dir);
+
+            //BinarySerialize(GetInventory(), Application.persistentDataPath + "/savefile.sav");
+            using (FileStream fs = File.Create(_save_dir + "/savefile.sav"))
             {
                 BinaryWriter writer = new BinaryWriter(fs);
 
@@ -433,15 +485,14 @@ namespace MyCraft
 
                 fs.Close();
             }
-
-            //BinarySerialize(GetInventory(), Application.persistentDataPath + "/savefile.sav");
         }
 
         void Load()
         {
-            if (File.Exists(Application.persistentDataPath + "/savefile.sav"))
+            //BinaryDeserialize<Inventory>(Application.persistentDataPath + "/savefile.sav");
+            if (File.Exists(_save_dir + "/savefile.sav"))
             {
-                using (FileStream fs = File.Open(Application.persistentDataPath + "/savefile.sav", FileMode.Open))
+                using (FileStream fs = File.Open(_save_dir + "/savefile.sav", FileMode.Open))
                 {
                     BinaryReader reader = new BinaryReader(fs);
 
@@ -453,12 +504,8 @@ namespace MyCraft
                     //    Debug.Log(i + " reader:" + reader.ReadInt32());
 
                     fs.Close();
-
                 }
-
-                //BinaryDeserialize<Inventory>(Application.persistentDataPath + "/savefile.sav");
             }
-
         }
 
         public static void BinarySerialize<T>(T t, string filepath)

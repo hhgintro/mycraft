@@ -63,9 +63,11 @@
     <Compile Include="Assets\Scripts\UI\inven\ItemBase.cs" />
     <Compile Include="Assets\Scripts\UI\inven\ItemData.cs" />
     <Compile Include="Assets\Scripts\Managers\DataManager.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalUpEndManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\CAvatar.cs" />
     <Compile Include="Assets\Scripts\Terrain\BlockScript.cs" />
     <Compile Include="Assets\Scripts\Terrain\BlockLeaf.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltSlopeUpManager.cs" />
     <Compile Include="Assets\Scripts\Utils\Extension.cs" />
     <Compile Include="Assets\Scripts\Terrain\BlockSlot.cs" />
     <Compile Include="Assets\Scripts\Utils\Console.cs" />
@@ -77,7 +79,6 @@
     <Compile Include="Assets\Scripts\Scenes\LogoScene.cs" />
     <Compile Include="Assets\Scripts\Terrain\BeltBaseScript.cs" />
     <Compile Include="Assets\Scripts\Managers\PoolManager.cs" />
-    <Compile Include="Assets\Scripts\Terrain\BeltDownScript.cs" />
     <Compile Include="Assets\Scripts\UI\inven\TechInvenBase.cs" />
     <Compile Include="Assets\Scripts\UI\inven\NewGame.cs" />
     <Compile Include="Assets\Scripts\Terrain\BeltSector.cs" />
@@ -95,8 +96,10 @@
     <Compile Include="Assets\Scripts\UI\inven\TechItemData.cs" />
     <Compile Include="Assets\Scripts\Terrain\Basic_Move.cs" />
     <Compile Include="Assets\Scripts\Utils\EditorStartInit.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltSlopeDownManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\Grass.cs" />
     <Compile Include="Assets\Scripts\UI\inven\Tooltip.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalUpMiddleManager.cs" />
     <Compile Include="Assets\Scripts\UI\inven\Progress.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Controllers\PlayerController.cs" />
@@ -109,9 +112,8 @@
     <Compile Include="Assets\Scripts\Terrain\MachineManager.cs" />
     <Compile Include="Assets\Scripts\UI\inven\StoneFurnaceInven.cs" />
     <Compile Include="Assets\Scripts\UI\inven\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalUpBeginManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\BeltGoods.cs" />
-    <Compile Include="Assets\Scripts\Terrain\BeltUpManager.cs" />
-    <Compile Include="Assets\Scripts\Terrain\BeltUpScript.cs" />
     <Compile Include="Assets\Scripts\Terrain\GameManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\TerrainLayer.cs" />
     <Compile Include="Assets\Scripts\UI\inven\ProgressBar.cs" />
@@ -123,11 +125,12 @@
     <Compile Include="Assets\Scripts\Scenes\BaseScene.cs" />
     <Compile Include="Assets\Scripts\UI\Scene\UI_Inven.cs" />
     <Compile Include="Assets\Scripts\UI\inven\LobbyManager.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalDownBeginManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\Scripts\UI\inven\ClickSound.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalDownEndManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\KeyController.cs" />
     <Compile Include="Assets\Scripts\Utils\Define.cs" />
-    <Compile Include="Assets\Scripts\Terrain\BeltDownManager.cs" />
     <Compile Include="Assets\Scripts\UI\inven\SkillItemData.cs" />
     <Compile Include="Assets\Scripts\UI\Popup\UI_Button.cs" />
     <Compile Include="Assets\Scripts\Terrain\InserterScript.cs" />
@@ -151,6 +154,7 @@
     <Compile Include="Assets\Scripts\UI\inven\LocaleManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\Sensor.cs" />
     <Compile Include="Assets\Scripts\Managers\SceneManagerEx.cs" />
+    <Compile Include="Assets\Scripts\Terrain\BeltVerticalDownMiddleManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\StoneManager.cs" />
     <Compile Include="Assets\Scripts\UI\inven\InvenBase.cs" />
     <Compile Include="Assets\Scripts\Scenes\LobbyScene.cs" />
@@ -181,7 +185,9 @@
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_hada.shader" />
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_fuku_ds.shader" />
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_eyelash_blend.shader" />
+    <None Include="Assets\Resources\Textures\ui\Materials\basic-transport-belt-left.shader" />
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_hada_blend.shader" />
+    <None Include="Assets\Resources\Textures\ui\Materials\basic-transport-belt-right.shader" />
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_eye.shader" />
     <None Include="Assets\Resources\Textures\ui\Materials\basic-transport-belt.shader" />
     <None Include="Assets\Resources\Art\UnityChan\Shader\Unitychan_chara_hair.shader" />

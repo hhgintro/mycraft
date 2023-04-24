@@ -116,7 +116,7 @@ namespace MyCraft
 
         protected override BeltSector GetNextSector(int idx)
         {
-            BeltSector sector = this.sectors[idx].next;
+            BeltSector sector = this.sectors[idx]._next;
             //3번째줄일때...분기한다.
             switch(idx)
             {

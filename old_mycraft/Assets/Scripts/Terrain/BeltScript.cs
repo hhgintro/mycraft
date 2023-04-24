@@ -108,7 +108,7 @@ namespace MyCraft
 
             //left에 belt가 있다면
             //[자신]은 left 상태임(left 에 belt가 있으므로)
-            if (true == turn_left)
+            if (true == turn_left)  //HG_TODO: 이부분이 필요한가???(아래 base._L 만 체크하면 되지 않을까)
             {
                 ////BeltScript script_left = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(block.transform.position - block.transform.right);
                 ////LinkBeltSector(script_left, (BeltScript)block, BELT_ROW.ROW1, BELT_COL.SECOND, BELT_ROW.ROW2, BELT_COL.FORTH);
@@ -132,7 +132,7 @@ namespace MyCraft
 
             //right에 belt가 있다면
             //[자신]은 right 상태임(right 에 belt가 있으므로)
-            if (true == turn_right)
+            if (true == turn_right)//HG_TODO: 이부분이 필요한가???(아래 base._R 만 체크하면 되지 않을까)
             {
                 ////BeltScript script_right = (BeltScript)GameManager.GetTerrainManager().block_layer.GetBlock(block.transform.position + block.transform.right);
                 ////LinkBeltSector(script_right, (BeltScript)block, BELT_ROW.ROW1, BELT_COL.FORTH, BELT_ROW.ROW2, BELT_COL.SECOND);

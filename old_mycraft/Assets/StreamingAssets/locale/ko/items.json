@@ -109,12 +109,18 @@
     "title": "권총",
     "desc": "",
     "speed": 1,
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 1010,"amount": 2}
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 1100,
+          "amount": 2
+        }
       ],
       "outputs": 1
     },
@@ -136,11 +142,14 @@
     "title": "나무상자",
     "desc": "",
     "slots": 21,
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2000,"amount": 3}
+        {
+          "itemid": 2000,
+          "amount": 3
+        }
       ],
       "outputs": 1
     },
@@ -154,113 +163,23 @@
   },
 
   {
-    "id": 1010,
-    "type": 1010,
-    "title": "컨베이어 밸트",
-    "desc": "물건이 이동하는 설비",
-    "speed": 1,
-    "learn":true,
-    "cost": {
-      "time": 2.1,
-      "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
-      ],
-      "outputs": 1
-    },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
-    "stackable": 100,
-    "icon": "basic-transport-belt"
-  },
-
-  {
-    "id": 1011,
-    "type": 1011,
-    "title": "컨베이어 UP 밸트",
-    "desc": "물건이 이동하는 설비",
-    "speed": 1,
-    "learn":true,
-    "cost": {
-      "time": 2.1,
-      "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
-      ],
-      "outputs": 1
-    },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
-    "stackable": 100,
-    "icon": "basic-transport-belt"
-  },
-
-  {
-    "id": 1012,
-    "type": 1012,
-    "title": "컨베이어 DOWN 밸트",
-    "desc": "물건이 이동하는 설비",
-    "speed": 1,
-    "learn":true,
-    "cost": {
-      "time": 2.1,
-      "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
-      ],
-      "outputs": 1
-    },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
-    "stackable": 100,
-    "icon": "basic-transport-belt"
-  },
-
-  {
-    "id": 1020,
-    "type": 1020,
-    "title": "분배기",
-    "desc": "물건이 이동하는 설비",
-    "speed": 1,
-    "learn":true,
-    "cost": {
-      "time": 2.1,
-      "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
-      ],
-      "outputs": 1
-    },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
-    "stackable": 100,
-    "icon": "basic-splitter"
-  },
-
-  {
     "id": 1030,
     "type": 1030,
     "title": "로봇팔",
     "desc": "물건이 잡거나 넣는 설비",
     "speed": 1,
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ],
       "outputs": 1
     },
@@ -279,12 +198,18 @@
     "title": "채광 드릴",
     "desc": "자원을 채광하는 설비",
     "delay": 1,
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ],
       "outputs": 1
     },
@@ -302,11 +227,14 @@
     "type": 1050,
     "title": "석재 용광로",
     "desc": "화력으로 재련하는 설비",
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 20,"amount": 5}
+        {
+          "itemid": 20,
+          "amount": 5
+        }
       ],
       "outputs": 1
     },
@@ -315,14 +243,41 @@
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2010},
-        {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010},
-        {"id": 50,"limit": 2,"build-time": 3.1,"output": 3000}
+        {
+          "id": 20,
+          "limit": 2,
+          "build-time": 3.1,
+          "output": 2010
+        },
+        {
+          "id": 40,
+          "limit": 2,
+          "build-time": 3.1,
+          "output": 2010
+        },
+        {
+          "id": 50,
+          "limit": 2,
+          "build-time": 3.1,
+          "output": 3000
+        }
       ],
       "fuel": [
-        {"id": 10,"limit": 2,"burning-time": 10},
-        {"id": 30,"limit": 2,"burning-time": 20},
-        {"id": 2000,"limit": 2,"burning-time": 15}
+        {
+          "id": 10,
+          "limit": 2,
+          "burning-time": 10
+        },
+        {
+          "id": 30,
+          "limit": 2,
+          "burning-time": 20
+        },
+        {
+          "id": 2000,
+          "limit": 2,
+          "burning-time": 15
+        }
       ]
     },
     "state": {
@@ -339,12 +294,18 @@
     "type": 1060,
     "title": "조립 생산 설비",
     "desc": "물건을 조립하는 설비",
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
       ],
       "outputs": 1
     },
@@ -362,6 +323,310 @@
     "icon": "machine"
   },
 
+  {
+    "id": 1100,
+    "type": 1100,
+    "title": "컨베이어 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1110,
+    "type": 1110,
+    "title": "컨베이어 Slope-UP 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1120,
+    "type": 1120,
+    "title": "컨베이어 Slope-DOWN 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1130,
+    "type": 1130,
+    "title": "컨베이어 Vertical-Up-Begin 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1140,
+    "type": 1140,
+    "title": "컨베이어 Vertical-Up-Middle 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1150,
+    "type": 1150,
+    "title": "컨베이어 Vertical-Up-End 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1160,
+    "type": 1160,
+    "title": "컨베이어 Vertical-Down-Begin 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1170,
+    "type": 1170,
+    "title": "컨베이어 Vertical-Down-Middle 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+  {
+    "id": 1180,
+    "type": 1180,
+    "title": "컨베이어 Vertical-Down-End 밸트",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-transport-belt"
+  },
+
+
+
+
+
+  {
+    "id": 1200,
+    "type": 1200,
+    "title": "분배기",
+    "desc": "물건이 이동하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {
+          "itemid": 2010,
+          "amount": 2
+        },
+        {
+          "itemid": 2011,
+          "amount": 2
+        }
+      ],
+      "outputs": 1
+    },
+    "state": {
+      "power": 1,
+      "defence": 2,
+      "vitality": 10
+    },
+    "stackable": 100,
+    "icon": "basic-splitter"
+  },
+
 
 
 
@@ -370,11 +635,14 @@
     "type": 2,
     "title": "목재",
     "desc": "",
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 10,"amount": 1}
+        {
+          "itemid": 10,
+          "amount": 1
+        }
       ],
       "outputs": 1
     },
@@ -392,12 +660,15 @@
     "type": 2,
     "title": "철판",
     "desc": "",
-    "learn":true,
-    "DIY":false,
+    "learn": true,
+    "DIY": false,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 40,"amount": 1}
+        {
+          "itemid": 40,
+          "amount": 1
+        }
       ],
       "outputs": 1
     },
@@ -415,11 +686,14 @@
     "type": 2,
     "title": "철 기어 휠",
     "desc": "",
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 1}
+        {
+          "itemid": 2010,
+          "amount": 1
+        }
       ],
       "outputs": 2
     },
@@ -437,12 +711,15 @@
     "type": 2,
     "title": "구리판",
     "desc": "",
-    "learn":true,
-    "DIY":false,
+    "learn": true,
+    "DIY": false,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 50,"amount": 1}
+        {
+          "itemid": 50,
+          "amount": 1
+        }
       ],
       "outputs": 1
     },
@@ -460,11 +737,14 @@
     "type": 2,
     "title": "구리선",
     "desc": "",
-    "learn":true,
+    "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 3000,"amount": 1}
+        {
+          "itemid": 3000,
+          "amount": 1
+        }
       ],
       "outputs": 2
     },

@@ -16,6 +16,8 @@ namespace MyCraft
 
         //private MouseController mouse_controller;
 
+        GameObject _cheat_text; //단축키 설명창(켜키/끄기)
+
         // Use this for initialization
         void Start()
         {
@@ -160,6 +162,11 @@ namespace MyCraft
                 GameManager.GetSkillInven().gameObject.SetActive(false);
             }
 
+            if (Input.GetKeyDown(KeyCode.Tab))  //"Tab"
+            {
+                if (null == _cheat_text)    _cheat_text = GameObject.Find("Canvas/My Craft/cheat_text");
+                if (_cheat_text)            _cheat_text.SetActive(!_cheat_text.activeSelf);
+            }
             if (Input.GetKeyDown(KeyCode.LeftBracket))  //"["
             {
                 Managers.Game.bNewGame = false;

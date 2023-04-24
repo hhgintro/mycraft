@@ -57,8 +57,8 @@ namespace MyCraft
         {
             //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
             //    return;
-            if (null == script || false == script.IsBelt())
-                return;
+            //if (null == script || false == script.IsBelt())
+            //    return;
 
 
             script.DeleteBlock();

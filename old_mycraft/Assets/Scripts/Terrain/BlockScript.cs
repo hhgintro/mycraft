@@ -11,7 +11,7 @@ namespace MyCraft
         private static int _static_idx = 0;
         public int _index { get; private set; }
         public bool _destory;   //OnTriggerExit()이후에 삭제하기 위해.
-        public bool _deactive;  //OnTriggerExit()이후에 SetActive(false)하기 위해.
+        //public bool _deactive;  //OnTriggerExit()이후에 SetActive(false)하기 위해.
         //..
 
 
@@ -48,12 +48,14 @@ namespace MyCraft
                 //센서:block간의 연결상태가 변경되면, 외형이 바뀔수 있다.
                 if (false == this._bOnTerrain)
                 {
+                    // *** prefab상태에서는 외형을 바꾸지 않습니다 *** //
                     //if (null != InvenBase.choiced_item)
                     //    GameManager.GetTerrainManager().SetChoicePrefab((ItemBase)InvenBase.choiced_item.database);
-                    GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
+                    //GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
                 }
                 else
                 {
+                    //GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
                     this.manager.ChainBelt(this);
                     //this.LinkedBelt();
                 }
@@ -89,7 +91,13 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:
                 case BLOCKTYPE.BELT_UP:
                 case BLOCKTYPE.BELT_DOWN:
-                return true;
+                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_UP_END:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:
+                    return true;
             }
             return false;
         }
@@ -108,6 +116,12 @@ namespace MyCraft
                 case BLOCKTYPE.BELT:
                 case BLOCKTYPE.BELT_UP:
                 case BLOCKTYPE.BELT_DOWN:
+                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_UP_END:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:
+                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:
                 case BLOCKTYPE.SPLITER:
                     return true;
             }
@@ -116,11 +130,18 @@ namespace MyCraft
 
         //교체된 이전 prefab이나 삭제를 위한 block의 경우
         //OnTriggerExit()을 위해 위치를 강제로 이동시킨다.
-        public virtual void ForceMove()
-        {
-            Vector3 pos = this.transform.localPosition;
-            pos.y = -251;
-            this.transform.localPosition = pos;
+        public virtual bool ForceMove()
+        {            
+            if (this._lf || this._rf || this._L || this._R || this._lb || this._rb)
+            {
+                Vector3 pos = this.transform.localPosition;
+                pos.y = -251;
+                this.transform.localPosition = pos;
+
+                this._destory = true; //OnTriggerExit()이후에 삭제할 개체들
+                return true;
+            }
+            return false;
         }
 
         public virtual void SetInven(ItemInvenBase inven)
@@ -218,7 +239,7 @@ namespace MyCraft
                 case SENSOR.LB:     this._lb = other;       break;
                 case SENSOR.RB:     this._rb = other;       break;
             }
-            Debug.Log($"{this.name}({this._index}):lf({_lf})/rf({_rf})/L({_L})/R({_R})/lb({_lb})/rb({_rb})");
+            //Debug.Log($"{this.name}({this._index}):lf({_lf})/rf({_rf})/L({_L})/R({_R})/lb({_lb})/rb({_rb})");
 
             //this.LinkedBelt();
 
@@ -448,9 +469,8 @@ namespace MyCraft
             switch (script_front._itembase.type)
             {
                 case BLOCKTYPE.BELT:
-                case BLOCKTYPE.BELT_UP:
-                case BLOCKTYPE.BELT_DOWN:
-                    //case BLOCKTYPE.GROUND_BELT:
+                //case BLOCKTYPE.BELT_UP:
+                //case BLOCKTYPE.BELT_DOWN:
                     {
                         //goods가 먼저 생성된 후에, belt를 설치하는 경우에는 null==sector이므로 설정해 줘야합니다ㅏ.
                         if(null == goods.sector)

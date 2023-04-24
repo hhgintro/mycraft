@@ -8,6 +8,10 @@ public class Sensor : MonoBehaviour
     public BlockScript _owner;    //소유자
     public SENSOR _sensor;        //Front, Left, Right, Back(어느방향판별용)
 
+    private void Awake()
+    {
+        this._owner = this.transform.parent.parent.GetComponent<BlockScript>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -19,9 +23,10 @@ public class Sensor : MonoBehaviour
         if (false == sensor._owner._bOnTerrain)
             return;
 
-        //[자신]이 prefab상태일때 외형잉 바꿔야 하므로 아래는 주석처리함
-        //if (false == this._owner._bOnTerrain)
-        //    return;
+        //[자신]이 prefab상태일때 외형을 바꾸지 않습니다(주석해제)
+        //[자신]이 prefab상태일때 외형이 바꿔야 하므로 아래는 주석처리함
+        if (false == this._owner._bOnTerrain)
+            return;
 
         if (false == this.WeightTurn(sensor))
             return;
@@ -35,21 +40,6 @@ public class Sensor : MonoBehaviour
         //block의 외형이 변경되는지 체크한다.
         ++this._owner._sensors;
 
-
-
-
-
-
-
-        //{
-
-        //    BlockScript block = GameManager.GetTerrainManager().GetChoicePrefab();
-        //    if (block) GameManager.GetTerrainManager().ChainBlock((int)block.transform.position.x, (int)block.transform.position.y, (int)block.transform.position.z, block);
-
-        //    //terrain에 설치된 경우만 체크합니다.
-        //    if (true == this._owner._bOnTerrain)
-        //        ++this._owner._sensors;
-        //}
     }
 
 
@@ -63,9 +53,10 @@ public class Sensor : MonoBehaviour
         if (false == sensor._owner._bOnTerrain)
             return;
 
-        //[자신]이 prefab상태일때 외형잉 바꿔야 하므로 아래는 주석처리함
-        //if (false == this._owner._bOnTerrain)
-        //    return;
+        //[자신]이 prefab상태일때 외형을 바꾸지 않습니다(주석해제)
+        //[자신]이 prefab상태일때 외형이 바꿔야 하므로 아래는 주석처리함
+        if (false == this._owner._bOnTerrain)
+            return;
 
         if (false == this.WeightTurn(sensor))
             return;
@@ -89,7 +80,7 @@ public class Sensor : MonoBehaviour
 
 
 
-        Deactive(sensor);       //OnTriggerExit()이후에 SetActive(false)하기 위해.
+        //Deactive(sensor);       //OnTriggerExit()이후에 SetActive(false)하기 위해.
         DestroyObject(sensor);  //OnTriggerExit()이후에 삭제하기 위해.
     }
 
@@ -119,13 +110,13 @@ public class Sensor : MonoBehaviour
         return true;//가중치 적용
     }
 
-    protected void Deactive(Sensor sensor)
-    {
-        //삭제를 위한 코드값
-        if (false == sensor._owner._deactive)
-            return;
-        sensor._owner.SetActive(false);
-    }
+    //protected void Deactive(Sensor sensor)
+    //{
+    //    //삭제를 위한 코드값
+    //    if (false == sensor._owner._deactive)
+    //        return;
+    //    sensor._owner.SetActive(false);
+    //}
     protected void DestroyObject(Sensor sensor)
     {
         //삭제를 위한 코드값
@@ -135,7 +126,7 @@ public class Sensor : MonoBehaviour
         sensor._owner._destory = false;
         //HG_TODO : 삭제하지 않고 pool에서 관리하도록 바꿔야 합니다.(crash발생)
         GameObject.Destroy(sensor._owner.gameObject);
-        Debug.Log($"other({sensor._sensor})가 파괴되었습니다.");
+        Debug.Log($"({sensor._owner._index}){sensor._owner.name}({sensor._sensor})가 파괴되었습니다.");
     }
 
 }

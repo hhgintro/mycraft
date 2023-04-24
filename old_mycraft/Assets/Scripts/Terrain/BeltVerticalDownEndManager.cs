@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MyCraft
 {
-    public class BeltDownManager : BlockManager
+    public class BeltVerticalDownEndManager : BlockManager
     {
         //private TerrainManager terrain_manager;
 
@@ -17,7 +17,7 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/transport-belt-down", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-vertical-down-end", this.transform.GetChild(0));
         }
 
 
@@ -30,7 +30,7 @@ namespace MyCraft
             //script.LinkedBelt();
 
             ////생성된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
-            //BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
+            //BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward + script.transform.up);
             //if(script_front) script_front.manager.ChainBelt(script_front);
         }
 

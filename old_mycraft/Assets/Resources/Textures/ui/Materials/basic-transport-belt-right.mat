@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: basic-transport-belt
-  m_Shader: {fileID: 4800000, guid: 2ce8a4c03a63c684b968ba17362c2ecf, type: 3}
+  m_Name: basic-transport-belt-right
+  m_Shader: {fileID: 4800000, guid: 0b30e23ac4698e142b36b2a66fda54a3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
