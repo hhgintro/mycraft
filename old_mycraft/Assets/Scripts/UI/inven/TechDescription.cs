@@ -88,7 +88,7 @@ namespace MyCraft
                 , this.transform.Find("Cost/Slot Panel").gameObject
                 , InvenBase._invenSlot);
             //cost-item
-            this.AddTime(this._panelCost, 0, techbase._cost.time);
+            this.AddTime(this._panelCost, 1, techbase._cost.time);
             for (int i = 0; i < techbase._cost.items.Count; ++i)
                 this.AddItem(this._panelCost, techbase._cost.items[i].itemid, techbase._cost.items[i].amount);
             //multiple

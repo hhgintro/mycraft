@@ -9,30 +9,12 @@ namespace MyCraft
 {
     public class SkillItemData : ItemData
     {
-        //public ItemInvenBase owner;
-        //public ItemBase itembase;
-        //public int amount;
-        //public int panel;
-        //public int slot;
-
-        //private Inventory inven;
-        //private Tooltip tooltip;
-        //private Vector2 offset;
-
-        //public Text textAmount;
-
-        void Awake()
+        string cantnot_make_by_hand;
+        private void Start()
         {
-            //if(0 < this.transform.childCount)
-            //    textAmount = this.transform.GetChild(0).GetComponent<Text>();
-
-            //inven = GameManager.GetInventory();
-            //tooltip = GameManager.GetTooltip();
+            cantnot_make_by_hand = LocaleManager.GetLocale("skill-item-data", "cantnot_make_by_hand");
         }
-        //private void Start()
-        //{
 
-        //}
         public override void OnPointerEnter(PointerEventData eventData)
         {
             //Debug.Log("point enter");
@@ -109,7 +91,13 @@ namespace MyCraft
         {
             ItemBase itembase = (ItemBase)base.database;
             //생산시설이 필요한 경우에는 직접 생산할 수 없습니다.
-            if (false == itembase.DIY) return false;
+            if (false == itembase.DIY)
+            {
+                //Debug.LogError($"{itembase.Title}은 수작업을 할 수 없습니다.");
+                //string msg = "{0}은 수작업을 할 수 없습니다.";
+                Debug.LogError(string.Format(cantnot_make_by_hand, itembase.Title));
+                return false;
+            }
 
             for (int i = 0; i < itembase.cost.items.Count; ++i)
             {

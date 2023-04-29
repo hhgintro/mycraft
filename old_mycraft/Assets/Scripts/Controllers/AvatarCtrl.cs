@@ -22,6 +22,9 @@ namespace MyCraft
         // Update is called once per frame
         void Update()
         {
+            if (Managers.Chat.gameObject.gameObject.activeSelf)
+                return; //chatting창 열려있으면 못움직인다.
+
             float h = Input.GetAxis("Horizontal");
             float v = Input.GetAxis("Vertical");
 

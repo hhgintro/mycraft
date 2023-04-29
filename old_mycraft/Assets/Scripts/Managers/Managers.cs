@@ -17,6 +17,10 @@ public class Managers : MonoBehaviour
     SoundManager _sound = new SoundManager();
     //UIManager _ui = new UIManager();
 
+    GameObject _systemmenu;
+    ChatManager _chat_manager;
+
+
     //public static DataManager Data { get { return Instance._data; } }
     public static GameManager Game { get {  return Instance._game; } }
     public static InputManager Input { get { return Instance._input; } }
@@ -25,6 +29,10 @@ public class Managers : MonoBehaviour
     public static SceneManagerEx Scene { get { return Instance._scene; } }
     public static SoundManager Sound { get { return Instance._sound; } }
     //public static UIManager UI { get { return Instance._ui; } }
+
+    public static GameObject SystemMenu { get { if (null == Instance._systemmenu) Instance._systemmenu = GameObject.Find("Canvas/SystemMenu"); return Instance._systemmenu; } }
+    public static ChatManager Chat { get { if (null == Instance._chat_manager) Instance._chat_manager = GameObject.Find("Canvas/Chatting").GetComponent<ChatManager>(); return Instance._chat_manager; } }
+
 
     void Start()
     {

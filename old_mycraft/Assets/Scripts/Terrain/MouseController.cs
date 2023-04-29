@@ -70,7 +70,7 @@ namespace MyCraft
         void OnMouseMove()
         {
             //this.choice_prefab = 1;
-            if (null != GameManager.GetTerrainManager().GetChoicePrefab())
+            //if (null != GameManager.GetTerrainManager().GetChoicePrefab())
             {
                 RaycastHit hit;
                 if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
@@ -81,11 +81,9 @@ namespace MyCraft
                     int posx = Common.PosRound(hitPoint.x);
                     int posy = Common.PosFloor(hitPoint.y);
                     int posz = Common.PosRound(hitPoint.z);
-                    //Debug.Log($"RaycastHit BLOCK:   ray({hit.point})");
-                    //Debug.Log($"RaycastHit BLOCK:   hitPoint({hitPoint})");
-                    //Debug.Log($"RaycastHit BLOCK:   pos({posx},{posy},{posz})");
-                    ShowChoicePrefab(posx, posy, posz);
 
+                    //GameManager.GetCoordinates().DrawCoordinate(posx, posy, posz);    //좌표 표기
+                    ShowChoicePrefab(posx, posy, posz);
                 }
                 else
                 if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.TERRAIN))//picking된 object 정보
@@ -93,8 +91,8 @@ namespace MyCraft
                     int posx = Common.PosRound(hit.point.x);
                     int posy = Common.PosFloor(hit.point.y);
                     int posz = Common.PosRound(hit.point.z);
-                    //Debug.Log($"RaycastHit TERRAIN:   ray({hit.point})");
-                    //Debug.Log($"RaycastHit TERRAIN:   pos({posx},{posy},{posz})");
+
+                    GameManager.GetCoordinates().DrawCoordinate(posx, posy, posz);  //좌표 표기
                     ShowChoicePrefab(posx, posy, posz);
 
 
@@ -223,7 +221,10 @@ namespace MyCraft
 
         private void ShowChoicePrefab(int posx, int posy, int posz)
         {
-            if (false == CheckMouse_Refresh(posx, posy, posz))
+            if (null == GameManager.GetTerrainManager().GetChoicePrefab())
+                return;
+
+                if (false == CheckMouse_Refresh(posx, posy, posz))
                 return;
 
             if(GameManager.GetTerrainManager().GetChoicePrefab())

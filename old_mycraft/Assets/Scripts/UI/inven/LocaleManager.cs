@@ -68,29 +68,15 @@ namespace MyCraft
 
         public static string GetLocale(string section, string key)
         {
-            if (false == sections.ContainsKey(section))
-                return key;
-
-            if (false == sections[section].ContainsKey(key))
-                return key;
+            if (false == sections.ContainsKey(section))         return key;
+            if (false == sections[section].ContainsKey(key))    return key;
             return sections[section][key];
         }
 
         public static void SetLocale(string section, Text title)
         {
-            //Debug.Log("key:" + title.text);
-            //foreach (var v in LocaleManager.values)
-            //{
-            //    Debug.Log("container key:" + v.Key);
-            //    Debug.Log("compare: " + string.Compare(title.text, v.Key));
-            //}
-            try {
-                title.text = GetLocale(section, title.text);
-            }
-            catch(Exception e)
-            {
-                Debug.LogError(e.Message);
-            }
+            try { title.text = GetLocale(section, title.text); }
+            catch(Exception e) { Debug.LogError(e.Message); }
         }
 
     }

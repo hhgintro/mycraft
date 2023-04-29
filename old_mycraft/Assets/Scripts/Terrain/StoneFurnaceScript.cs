@@ -476,7 +476,7 @@ namespace MyCraft
             GetPutdownItems<FurnaceFuelItem>(fuels, this._panels[1]._slots, 1, ref putdowns);
 
             //여기서 이미 아이템이 담겼다면 *2 할 필요없으니...리턴
-            if (0 > putdowns.Count) return false;
+            if (0 < putdowns.Count) return false;
 
             //limit * 2 까지 저장합니다.
             //0: input-panel

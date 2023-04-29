@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEngine;
 using LitJson;
+using UnityEngine.UI;
 
 namespace MyCraft
 {
@@ -76,6 +77,59 @@ namespace MyCraft
             this.Defence    = (int)json["state"]["defence"];
             this.Vitality   = (int)json["state"]["vitality"];
         }
+        
+        public override void EnterTooltip(Tooltip tooltip)
+        {
+            base.EnterTooltip(tooltip);
+
+            //cost
+            if (null != this.cost)
+            {
+                //time
+                GameObject slot_time = tooltip.CreateCost();
+                GameObject time = tooltip.CreateSkill(slot_time.transform.GetChild(0).transform);
+                //image
+                ItemBase itembase0 = GameManager.GetItemBase().FetchItemByID(1);    //time    
+                time.GetComponent<Image>().sprite = itembase0.Sprite;
+                time.name = itembase0.Title;
+                //amount
+                slot_time.transform.GetChild(1).GetComponent<Text>().text = " " + this.cost.time.ToString();
+
+                //items
+                for (int i = 0; i < this.cost.items.Count; ++i)
+                {
+                    GameObject slot_cost = tooltip.CreateCost();
+                    GameObject skill = tooltip.CreateSkill(slot_cost.transform.GetChild(0).transform);
+                    //image
+                    ItemBase itembase1 = GameManager.GetItemBase().FetchItemByID(this.cost.items[i].itemid);
+                    skill.GetComponent<Image>().sprite = itembase1.Sprite;
+                    skill.name = itembase1.Title;
+                    //amount(inven + quick) : 인벤의 아이템개수보다 적으면 GRAY로 표기됩니다.
+                    int amount = GameManager.GetInventory().GetAmount(this.cost.items[i].itemid);
+                    //amount += GameManager.GetInventory().GetAmount(this.cost.items[i].itemid);
+                    if (amount < this.cost.items[i].amount)  //부족할때
+                    {
+                        slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + amount.ToString() + "/" + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
+                        slot_cost.transform.GetChild(1).GetComponent<Text>().color = Color.gray;
+                    }
+                    else    //충분할때.
+                    {
+                        slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
+                    }
+
+                }
+            }
+
+            //comment
+            GameObject comment = tooltip.CreateComment();
+            //comment.GetComponent<Text>().text = this.desc;
+            int a = 0;
+            a = 0;
+
+            //totalcost(미구현)
+            //GameObject totalcost = tooltip.CreateTotalCost();
+        }
+
 
     }//..class Item
 

@@ -8,37 +8,19 @@ namespace MyCraft
 {
     public class KeyController : MonoBehaviour
     {
-        //private TerrainManager terrain_manager;
-        //private BeltManager belt_manager;
-        //private InserterManager inserter_manager;
-        //private ChestManager chest_manager;
-        //private DrillManager drill_manager;
+        GameObject _cheat_text;     //단축키 설명창(켜키/끄기)
 
-        //private MouseController mouse_controller;
-
-        GameObject _cheat_text; //단축키 설명창(켜키/끄기)
-
-        // Use this for initialization
         void Start()
         {
-            //this.terrain_manager = GameObject.Find("Terrain").GetComponent<TerrainManager>();
-            //this.belt_manager = terrain_manager.GetComponentInChildren<BeltManager>();
-            //this.inserter_manager = terrain_manager.GetComponentInChildren<InserterManager>();
-            //this.chest_manager = terrain_manager.GetComponentInChildren<ChestManager>();
-            //this.drill_manager = terrain_manager.GetComponentInChildren<DrillManager>();
+            if (null == _cheat_text) _cheat_text = GameObject.Find("Canvas/My Craft/cheat_text");
+            _cheat_text.SetActive(true);
 
-            //this.mouse_controller = GameObject.Find("Input/Mouse").GetComponent<MouseController>();
+            Managers.Chat.gameObject.SetActive(false);   //chatting
+
 
             StartCoroutine(CheckKey());
 
         }
-
-        // Update is called once per frame
-        //void Update () {
-
-        //    CheckKey_Func();
-
-        //}
 
         IEnumerator CheckKey()
         {
@@ -48,16 +30,20 @@ namespace MyCraft
                 yield return 0;
             }
         }
-
         void CheckKey_Func()
         {
-
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 //최상위 UI순
                 //  GetSystemMenu
                 //  GetTechInven / GetTechDesc
                 //  GetInventory / GetSkillInven / GetChestInven / GetMachineInven / GetStoneFurnaceInven
+
+                if(Managers.Chat.gameObject.activeSelf)
+                {
+                    Managers.Chat.gameObject.SetActive(false);
+                    return;
+                }
 
                 //tech
                 if (true == GameManager.GetTechInven().gameObject.activeSelf)
@@ -100,8 +86,32 @@ namespace MyCraft
                 }
 
                 if (true == bChecked) return;
-                GameManager.GetSystemMenu().gameObject.SetActive(!GameManager.GetSystemMenu().gameObject.activeSelf);
+                //GameManager.GetSystemMenu().gameObject.SetActive(!GameManager.GetSystemMenu().gameObject.activeSelf);
+                Managers.SystemMenu.SetActive(!Managers.SystemMenu.activeSelf);
+
             }
+            //"Enter"
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                //꺼져있으면 켜고
+                if (false == Managers.Chat.gameObject.activeSelf)
+                {
+                    Managers.Chat.gameObject.SetActive(true);
+                    return;
+                }
+                //("")를 입력하면 꺼진다.
+                else if (false == Managers.Chat.ready)
+                {
+                    Managers.Chat.gameObject.SetActive(false);
+                    return;
+                }
+
+                //그외 처리
+                //..
+            }
+
+            if (Managers.Chat.gameObject.activeSelf)
+                return; //chatting창 열려있으면 못움직인다.
 
             //KeyCode.Alpha0 ~ KeyCode.Alpha9
             //quick slot( 1~10 )에서 아이템을 줍는다.
@@ -164,7 +174,6 @@ namespace MyCraft
 
             if (Input.GetKeyDown(KeyCode.Tab))  //"Tab"
             {
-                if (null == _cheat_text)    _cheat_text = GameObject.Find("Canvas/My Craft/cheat_text");
                 if (_cheat_text)            _cheat_text.SetActive(!_cheat_text.activeSelf);
             }
             if (Input.GetKeyDown(KeyCode.LeftBracket))  //"["
@@ -185,41 +194,13 @@ namespace MyCraft
                     GameManager.GetTerrainManager().GetChoicePrefab().Clear();
                 }
 
-
-                //if (null != this.startblock)
-                //    Debug.Log("startblock forward: " + this.startblock.transform.forward);
-
-
                 //OnMouseMove()갱신을 위해서.
                 GameManager.GetMouseController().mouse_refresh = true;
             }
             if (Input.GetKeyDown(KeyCode.T))
             {
-                //GameObject obj = GameManager.GetInventory().gameObject;
-                //Debug.Log("active : " + obj.active);
-                //Debug.Log("active : " + obj.activeSelf);
-                //Debug.Log("active : " + obj.activeInHierarchy);
-                //GameManager.GetInventory().gameObject.SetActive(!GameManager.GetInventory().gameObject.activeSelf);
-
-                //GameManager.GetTechInven().SetActive(!GameManager.GetTechInven().GetActive());
-                //GameManager.GetTechDesc().SetActive(!GameManager.GetTechDesc().GetActive());
                 GameManager.GetTechInven().gameObject.SetActive(!GameManager.GetTechInven().gameObject.activeSelf);
                 GameManager.GetTechDesc().gameObject.SetActive(GameManager.GetTechInven().gameObject.activeSelf);
-
-                ////inven 이외에는 모두 닫는다.
-                //GameManager.GetChestInven().SetActive(false);
-                //GameManager.GetStoneFurnaceInven().SetActive(false);
-                //GameManager.GetMachineInven().SetActive(false);
-            }
-
-
-
-            if (Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl))
-            {
-                if(Input.GetKeyDown(KeyCode.S))
-                {
-                    Debug.Log("save mode");
-                }
             }
 
         }

@@ -405,28 +405,38 @@ namespace MyCraft
             return null;
         }
 
+        private BeltGoods PickupSector(List<BeltSector> sectors, int itemid)
+        {
+            //sector를 순회하면서 아이템을 가져오고 있습니다.
+            for (int s = 0; s < sectors.Count; ++s)
+            {
+                if (null == sectors[s]._obj)
+                    continue;
+                if (0 != itemid && itemid != sectors[s]._obj.itemid)
+                    continue;
+
+                BeltGoods obj = sectors[s]._obj;
+                sectors[s]._obj = null;
+                return obj;
+            }
+            return null;
+        }
         //inserter: 물건을 가져가는 로봇팔
         //dutdonws: block_front 에 넣을 수 있는 itemid(null인 경우도 있다. 필요한 경우에 사용하세요.)
         public override BeltGoods PickupGoods(BlockScript inserter, List<int> putdowns/*null*/)
         {
             //방향.
-            List<BeltSector> SEC = this.PickupInserter(inserter);
-            if (SEC == null) return null;
+            List<BeltSector> sectors = this.PickupInserter(inserter);
+            if (sectors == null) return null;
+
+            //chest인 경우
+            if(null == putdowns)
+                return PickupSector(sectors, 0);
 
             for (int i = 0; i < putdowns.Count; ++i)
             {
-                //sector를 순회하면서 아이템을 가져오고 있습니다.
-                for (int s = 0; s < SEC.Count; ++s)
-                {
-                    if (null == SEC[s]._obj)
-                        continue;
-                    if (putdowns[i] != SEC[s]._obj.itemid)
-                        continue;
-
-                    BeltGoods obj = SEC[s]._obj;
-                    SEC[s]._obj = null;
-                    return obj;
-                }
+                BeltGoods goods = PickupSector(sectors, putdowns[i]);
+                if (null != goods) return goods;
             }
 
             return null;

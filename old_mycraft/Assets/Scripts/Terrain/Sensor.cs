@@ -126,7 +126,7 @@ public class Sensor : MonoBehaviour
         sensor._owner._destory = false;
         //HG_TODO : 삭제하지 않고 pool에서 관리하도록 바꿔야 합니다.(crash발생)
         GameObject.Destroy(sensor._owner.gameObject);
-        Debug.Log($"({sensor._owner._index}){sensor._owner.name}({sensor._sensor})가 파괴되었습니다.");
+        //Debug.Log($"({sensor._owner._index}){sensor._owner.name}({sensor._sensor})가 파괴되었습니다.");
     }
 
 }

@@ -31,13 +31,8 @@ namespace MyCraft
             //inven = GameManager.GetInventory();
             //tooltip = GameManager.GetTooltip();
         }
-        //private void Start()
-        //{
 
-        //}
-        public virtual void OnPointerEnter(PointerEventData eventData)
-        { }
-
+        public virtual void OnPointerEnter(PointerEventData eventData) { }
         public virtual void OnPointerExit(PointerEventData eventData)
         {
             //Debug.Log("point exit");
@@ -52,11 +47,8 @@ namespace MyCraft
             else if (Input.GetMouseButtonDown(1)) OnMouseRButtonDown();
         }
 
-        protected virtual void OnMouseLButtonDown()
-        { }
-
-        protected virtual void OnMouseRButtonDown()
-        { }
+        protected virtual void OnMouseLButtonDown() { }
+        protected virtual void OnMouseRButtonDown() { }
 
         ////RETURN : 겹치고 남은 아이템 개수를 리턴합니다.
         //public virtual int CheckOverlapItem(int add)
@@ -108,10 +100,7 @@ namespace MyCraft
 
         //겹치고 남은 아이템의 개수를 리턴합니다.
         //this.amount <= 0 일때의 처리는 별도로 진행해 주셔야 됩니다.
-        public virtual int AddStackCount(int add, bool noti)
-        {
-            return 0;
-        }
+        public virtual int AddStackCount(int add, bool noti) { return 0; }
 
         //public int SetStackCount(int val, bool noti)
         //{

@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 namespace MyCraft
 {
-    public class SystemMenu : MonoBehaviour
+    public class SystemMenuManager : MonoBehaviour
     {
 
         //// Update is called once per frame

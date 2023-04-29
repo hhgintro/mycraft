@@ -6,7 +6,8 @@
     "desc": "스킬 0입니다.",
     "panels": [
       {"items": [{"itemid":1000}]},
-      {"items": [{"itemid":1100},{"itemid":1200}]}
+      {"items": [{"itemid":1100},{"itemid":1200},{"itemid":1110},{"itemid":1120}]},
+      {"items": [{"itemid":1130},{"itemid":1140},{"itemid":1150},{"itemid":1160},{"itemid":1170},{"itemid":1180}]}
     ],
     "icon": "logistics"
   },
@@ -30,7 +31,8 @@
     "desc": "스킬 2입니다.",
     "panels": [
       {"items": [{"itemid":2000},{"itemid":2010},{"itemid":2011}]},
-      {"items": [{"itemid":3000},{"itemid":3010}]}
+      {"items": [{"itemid":2020},{"itemid":2021}]},
+      {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]}
     ],
     "icon": "intermediate-products"
   },

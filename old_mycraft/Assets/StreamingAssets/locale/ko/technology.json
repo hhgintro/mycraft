@@ -12,14 +12,8 @@
         {"itemid": 2011,"amount": 2}
       ]
     },
-    "next-tech":[
-      {"techid":2},
-      {"techid":2}
-    ],
-    "reward":[
-      {"skill":1100},
-      {"skill":1200}
-    ],
+    "next-tech":[{"techid":2},{"techid":2}],
+    "reward":[{"skill":1100},{"skill":1200}],
     "icon":"automation"
   },
   {
@@ -35,18 +29,9 @@
         {"itemid": 1200,"amount": 2}
       ]
     },
-    "pre-tech":[
-      {"techid":1},
-      {"techid":1}
-    ],
-    "next-tech":[
-      {"techid":3},
-      {"techid":3}
-    ],
-    "reward":[
-      {"skill":1040},
-      {"skill":1050}
-    ],
+    "pre-tech":[{"techid":1},{"techid":1}],
+    "next-tech":[{"techid":3},{"techid":3}],
+    "reward":[{"skill":1040},{"skill":1050}],
     "icon":"electronics"
   },
   {
@@ -62,14 +47,8 @@
         {"itemid": 1050,"amount": 2}
       ]
     },
-    "pre-tech":[
-      {"techid":2},
-      {"techid":2}
-    ],
-    "reward":[
-      {"skill":2010},
-      {"skill":3000}
-    ],
+    "pre-tech":[{"techid":2},{"techid":2}],
+    "reward":[{"skill":2010},{"skill":3000}],
     "icon":"logistics"
   }
 

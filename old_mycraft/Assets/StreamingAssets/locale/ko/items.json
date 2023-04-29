@@ -22,11 +22,7 @@
     "type": 1,
     "title": "원목",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state":{"power":21,"defence":12,"vitality":50},
     "stackable": 100,
     "icon": "raw-wood"
   },
@@ -36,11 +32,7 @@
     "type": 1,
     "title": "돌",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "stone"
   },
@@ -50,11 +42,7 @@
     "type": 1,
     "title": "석탄",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "coal"
   },
@@ -64,11 +52,7 @@
     "type": 1,
     "title": "철광석",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "iron-ore"
   },
@@ -78,11 +62,7 @@
     "type": 1,
     "title": "구리광석",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "copper-ore"
   },
@@ -92,11 +72,7 @@
     "type": 1,
     "title": "원유",
     "desc": "",
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "crude-ole"
   },
@@ -113,22 +89,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 1100,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 1100,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "pistol"
   },
@@ -146,18 +112,11 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2000,
-          "amount": 3
-        }
+        {"itemid": 2000,"amount": 3}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "chest"
   },
@@ -172,22 +131,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "robotic-arm"
   },
@@ -202,22 +151,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "drill"
   },
@@ -231,10 +170,7 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 20,
-          "amount": 5
-        }
+        {"itemid": 20,"amount": 5}
       ],
       "outputs": 1
     },
@@ -243,48 +179,17 @@
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {
-          "id": 20,
-          "limit": 2,
-          "build-time": 3.1,
-          "output": 2010
-        },
-        {
-          "id": 40,
-          "limit": 2,
-          "build-time": 3.1,
-          "output": 2010
-        },
-        {
-          "id": 50,
-          "limit": 2,
-          "build-time": 3.1,
-          "output": 3000
-        }
+        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2010},
+        {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010},
+        {"id": 50,"limit": 2,"build-time": 3.1,"output": 2020}
       ],
       "fuel": [
-        {
-          "id": 10,
-          "limit": 2,
-          "burning-time": 10
-        },
-        {
-          "id": 30,
-          "limit": 2,
-          "burning-time": 20
-        },
-        {
-          "id": 2000,
-          "limit": 2,
-          "burning-time": 15
-        }
+        {"id": 10,"limit": 2,"burning-time": 10},
+        {"id": 30,"limit": 2,"burning-time": 20},
+        {"id": 2000,"limit": 2,"burning-time": 15}
       ]
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "stone-furnace"
   },
@@ -298,14 +203,8 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
@@ -314,11 +213,7 @@
       "chips": 4,
       "outputskill": [ 2, 9 ]
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "machine"
   },
@@ -333,22 +228,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -363,22 +248,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -393,22 +268,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -423,22 +288,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -453,22 +308,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -483,22 +328,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -513,22 +348,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -543,22 +368,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-transport-belt"
   },
@@ -573,21 +388,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
+    "state": {"power": 1,"defence": 2,"vitality": 10
     },
     "stackable": 100,
     "icon": "basic-transport-belt"
@@ -607,22 +413,12 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 2
-        },
-        {
-          "itemid": 2011,
-          "amount": 2
-        }
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 1,
-      "defence": 2,
-      "vitality": 10
-    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "basic-splitter"
   },
@@ -639,18 +435,11 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 10,
-          "amount": 1
-        }
+        {"itemid": 10,"amount": 1}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "wood"
   },
@@ -665,18 +454,11 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 40,
-          "amount": 1
-        }
+        {"itemid": 40,"amount": 1}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "iron-plate"
   },
@@ -690,24 +472,17 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 2010,
-          "amount": 1
-        }
+        {"itemid": 2010,"amount": 1}
       ],
       "outputs": 2
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "iron-gear-wheel"
   },
 
   {
-    "id": 3000,
+    "id": 2020,
     "type": 2,
     "title": "구리판",
     "desc": "",
@@ -716,24 +491,17 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 50,
-          "amount": 1
-        }
+        {"itemid": 50,"amount": 1}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "copper-plate"
   },
 
   {
-    "id": 3010,
+    "id": 2021,
     "type": 2,
     "title": "구리선",
     "desc": "",
@@ -741,20 +509,70 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {
-          "itemid": 3000,
-          "amount": 1
-        }
+        {"itemid": 2020,"amount": 1}
       ],
       "outputs": 2
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "copper-cable"
+  },
+
+
+  {
+    "id": 2030,
+    "type": 2,
+    "title": "녹색기판",
+    "desc": "",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 1},
+        {"itemid": 2021,"amount": 1}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "electronic-circuit"
+  },
+
+  {
+    "id": 2031,
+    "type": 2,
+    "title": "빨간기판",
+    "desc": "",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 50,"amount": 1}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "advanced-circuit"
+  },
+
+  {
+    "id": 2032,
+    "type": 2,
+    "title": "파란기판",
+    "desc": "",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 50,"amount": 1}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "processing-unit"
   }
+
 
 ]

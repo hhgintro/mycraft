@@ -50,11 +50,11 @@ namespace MyCraft
         public override void EnterTooltip(Tooltip tooltip)
         {
             //title
-            //tooltip.CreateTitle(this.Title);
-            tooltip.SetTitle(this.Title);
+            tooltip.CreateTitle(this.Title);
+            //tooltip.SetTitle(this.Title);
 
             ////cost
-            //if(null != this.cost)
+            //if (null != this.cost)
             //{
             //    //time
             //    GameObject slot_time = tooltip.CreateCost();
@@ -78,7 +78,7 @@ namespace MyCraft
             //        //amount(inven + quick) : 인벤의 아이템개수보다 적으면 GRAY로 표기됩니다.
             //        int amount = GameManager.GetInventory().GetAmount(this.cost.items[i].itemid);
             //        //amount += GameManager.GetInventory().GetAmount(this.cost.items[i].itemid);
-            //        if(amount < this.cost.items[i].amount)  //부족할때
+            //        if (amount < this.cost.items[i].amount)  //부족할때
             //        {
             //            slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + amount.ToString() + "/" + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
             //            slot_cost.transform.GetChild(1).GetComponent<Text>().color = Color.gray;

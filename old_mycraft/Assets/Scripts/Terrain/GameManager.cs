@@ -14,7 +14,8 @@ namespace MyCraft
         private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
 
 
-        private static SystemMenu systemmenu;
+        //private static SystemMenu _systemmenu;
+        //private static ChatManager _chat_manager;
 
         //private static ItemDatabase item_database;
         private static JSonParser<ItemBase> _itembase;
@@ -59,11 +60,13 @@ namespace MyCraft
         private static TechDescription _techdesc;
         private static Tooltip _tooltip;
 
-        private static GameObject _invenPanel;
-        private static GameObject _invenSlot;
-        private static GameObject _invenItem;
-        private static GameObject _invenSkill;
-        private static GameObject _invenReset;
+        private static Coordinates _coodinates;  //좌표
+
+        //private static GameObject _invenPanel;
+        //private static GameObject _invenSlot;
+        //private static GameObject _invenItem;
+        //private static GameObject _invenSkill;
+        //private static GameObject _invenReset;
 
         //저장경로
         public static string _save_dir = Application.dataPath + "/../save";
@@ -89,6 +92,8 @@ namespace MyCraft
                 //HG_TEST : 테스트 아이템 지급
                 GameManager.GetInventory().AddItem(2010, 100);  //iron-plate
                 GameManager.GetInventory().AddItem(2011, 100);  //iron-gear
+                GameManager.GetInventory().AddItem(2020, 100);  //copper-plate
+                GameManager.GetInventory().AddItem(2021, 100);  //copper-cable
                 GameManager.GetInventory().AddItem(2000, 100);  //wood
 
                 GameManager.GetInventory().AddItem(10, 54);     //raw-wood
@@ -163,19 +168,24 @@ namespace MyCraft
             GameManager.GetMachineInven().gameObject.SetActive(false);
             GameManager.GetSkillInven().gameObject.SetActive(false);
 
-            GameManager.GetSystemMenu().gameObject.SetActive(false);
+            //GameManager.GetSystemMenu().gameObject.SetActive(false);
+            Managers.SystemMenu.SetActive(false);
         }
 
 
 
-        public static SystemMenu GetSystemMenu() {
-            if (null == systemmenu)
-                systemmenu = GameObject.Find("Canvas/SystemMenu").GetComponent<SystemMenu>();
-            return systemmenu;
-        }
+        //public static SystemMenu GetSystemMenu() {
+        //    if (null == _systemmenu)
+        //        _systemmenu = GameObject.Find("Canvas/SystemMenu").GetComponent<SystemMenu>();
+        //    return _systemmenu;
+        //}
+        //public static ChatManager GetChatManager()
+        //{
+        //    if (null == _chat_manager)
+        //        _chat_manager  = GameObject.Find("Canvas/Chatting").GetComponent<ChatManager>();
+        //    return _chat_manager;
+        //}
         public static JSonParser<ItemBase> GetItemBase() {
-            //if (null == item_database)
-            //    item_database = GameObject.Find("Canvas/Inventory").GetComponent<ItemDatabase>();
             if(null == _itembase)
                 _itembase = new JSonParser<ItemBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/items.json");
             return _itembase;
@@ -379,36 +389,12 @@ namespace MyCraft
             return _tooltip;
         }
 
-        //public static GameObject GetInvenPanel()
-        //{
-        //    if(null == _invenPanel)
-        //        _invenPanel = Managers.Resource.Load<GameObject>("prefab/ui/Slot Panel");
-        //    return _invenPanel;
-        //}
-        //public static GameObject GetInvenSlot()
-        //{
-        //    if(null == _invenSlot)
-        //       _invenSlot = Managers.Resource.Load<GameObject>("prefab/ui/Slot");
-        //    return _invenSlot;
-        //}
-        //public static GameObject GetInvenItem()
-        //{
-        //    if(null == _invenItem)
-        //        _invenItem = Managers.Resource.Load<GameObject>("prefab/ui/Item");
-        //    return _invenItem;
-        //}
-        //public static GameObject GetInvenSkill()
-        //{
-        //    if(null == _invenSkill)
-        //        _invenSkill = Managers.Resource.Load<GameObject>("prefab/ui/Skill");
-        //    return _invenSkill;
-        //}
-        //public static GameObject GetInvenReset()
-        //{
-        //    if(null == _invenReset)
-        //        _invenReset = Managers.Resource.Load<GameObject>("prefab/ui/Reset");
-        //    return _invenReset;
-        //}
+        public static Coordinates GetCoordinates()
+        {
+            if (null == _coodinates)
+                _coodinates = GameObject.Find("Canvas/Coordinates").GetComponent<Coordinates>();
+            return _coodinates;
+        }
 
         public static BeltGoods CreateMineral(int itemid, Transform parent)//, Vector3 pos)
         {
@@ -500,8 +486,6 @@ namespace MyCraft
                     GameManager.GetQuickInven().Load(reader);
 
                     GameManager.GetTerrainManager().Load(reader);
-                    //for (int i = 0; i < 4; ++i)
-                    //    Debug.Log(i + " reader:" + reader.ReadInt32());
 
                     fs.Close();
                 }

@@ -171,8 +171,8 @@ namespace MyCraft
             if (Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT))
             {
                 prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-                //아래주석해제하면, 진행방향에 수직으로 방향전환시 prefab의 방향이 바뀐다
-                //prefab.transform.forward = script.transform.forward;
+                //[주석하지말것]아래를 주석했더니, left가 주변영향으로 front가 될때 기존방향을 상실하더라.
+                prefab.transform.forward = script.transform.forward;
                 return prefab;
             }
 

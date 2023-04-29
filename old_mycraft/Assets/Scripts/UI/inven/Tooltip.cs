@@ -32,12 +32,12 @@ namespace MyCraft
         {
             //this.tooltip = GameObject.Find("Canvas/Tooltip");
 
-            _title = Managers.Resource.Instantiate("ui/Tooltip-Title", this.transform);
-            _cost = Managers.Resource.Instantiate("ui/Tooltip-Cost", this.transform);
-            _comment = Managers.Resource.Instantiate("ui/Tooltip-Comment", this.transform);
-            _totalcost = Managers.Resource.Instantiate("ui/Tooltip-TotalCost", this.transform);
-            _slot = Managers.Resource.Instantiate("ui/Slot", this.transform);
-            _skill = Managers.Resource.Instantiate("ui/Skill", this.transform);
+            _title = Managers.Resource.Load<GameObject>("prefabs/ui/Tooltip-Title");
+            _cost = Managers.Resource.Load<GameObject>("prefabs/ui/Tooltip-Cost");
+            _comment = Managers.Resource.Load<GameObject>("prefabs/ui/Tooltip-Comment");
+            _totalcost = Managers.Resource.Load<GameObject>("prefabs/ui/Tooltip-TotalCost");
+            _slot = Managers.Resource.Load<GameObject>("prefabs/ui/Slot");
+            _skill = Managers.Resource.Load<GameObject>("prefabs/ui/Skill");
 
             this.GetComponent<CanvasGroup>().alpha = 0f;
             //this.gameObject.SetActive(false);
@@ -50,7 +50,7 @@ namespace MyCraft
         {
             GameObject clone = UnityEngine.Object.Instantiate(obj);
             clone.transform.SetParent(parent, false); //[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
-            clone.transform.position = parent.position;
+            //clone.transform.position = parent.position;
             this._objs.Add(clone);
             return clone;
         }
@@ -124,6 +124,7 @@ namespace MyCraft
                 pos += Vector3.up * rt.sizeDelta.y;
 
 
+            //this.gameObject.transform.position = new Vector3(1000, 500);
             this.gameObject.transform.position = pos;
 
         }

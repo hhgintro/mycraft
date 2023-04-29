@@ -140,7 +140,7 @@ namespace MyCraft
         bool CheckDelivery_Func()
         {
             if (null == this.obj)
-                return false;
+                return true;
 
             //Debug.Log("Check Delivery()");
             if (null == this.obj)

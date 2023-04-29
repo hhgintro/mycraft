@@ -107,8 +107,8 @@ namespace MyCraft
 
         public virtual void EnterTooltip(Tooltip tooltip)
         {
-            //tooltip.CreateTitle(this.Title);
-            tooltip.SetTitle(this.Title);
+            tooltip.CreateTitle(this.Title);
+            //tooltip.SetTitle(this.Title);
         }
         //public virtual void LeaveTooltip(Tooltip tooltip)
         //{ }
