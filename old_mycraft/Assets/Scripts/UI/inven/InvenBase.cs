@@ -116,7 +116,8 @@ namespace MyCraft
 
             RectTransform inven = this.GetComponent<RectTransform>();
             Debug.Log($"Resizing inven rect:({inven.rect} / {inven.sizeDelta}");
-            this.GetComponent<RectTransform>().sizeDelta = new Vector2(332,350);
+            //this.GetComponent<RectTransform>().sizeDelta = new Vector2(332,350);
+            this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
             return true;
         }
         ////Block에서 변경된 내용을 Inven에 반영합니다.

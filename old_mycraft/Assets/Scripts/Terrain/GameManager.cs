@@ -84,7 +84,7 @@ namespace MyCraft
             {
                 //inven slot
                 if(0 < GameManager.GetInventory()._panels.Count)
-                    GameManager.GetInventory()._panels[0].SetAmount(51);
+                    GameManager.GetInventory()._panels[0].SetAmount(71);
 
                 GameManager.GetInventory().Resize();
 

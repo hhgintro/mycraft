@@ -55,6 +55,7 @@ namespace MyCraft
                 }
                 else
                 {
+                    //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
                     //GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
                     this.manager.ChainBelt(this);
                     //this.LinkedBelt();

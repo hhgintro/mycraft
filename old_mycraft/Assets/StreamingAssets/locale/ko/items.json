@@ -124,21 +124,43 @@
   {
     "id": 1030,
     "type": 1030,
-    "title": "로봇팔",
+    "title": "투입기",
     "desc": "물건이 잡거나 넣는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2010,"amount": 2},
-        {"itemid": 2011,"amount": 2}
+        {"itemid": 2030,"amount": 1},
+        {"itemid": 2011,"amount": 1},
+        {"itemid": 2010,"amount": 1}
       ],
       "outputs": 1
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "robotic-arm"
+  },
+
+  {
+    "id": 1031,
+    "type": 1030,
+    "title": "긴팔 투입기",
+    "desc": "물건이 잡거나 넣는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 1030,"amount": 1},
+        {"itemid": 2011,"amount": 1},
+        {"itemid": 2010,"amount": 1}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "long-handed-inserter"
   },
 
   {

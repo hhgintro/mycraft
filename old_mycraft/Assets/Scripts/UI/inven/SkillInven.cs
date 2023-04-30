@@ -26,7 +26,7 @@ namespace MyCraft
             for(int i=0; i<GameManager.GetCategories().database.Count; ++i)
                 base.AddCategory(_group, i);
             //skills
-            for (int i=0; i<5; ++i)
+            for (int i=0; i<10; ++i)
             {
                 GameObject objPanel = UnityEngine.Object.Instantiate(InvenBase._invenPanel);
                 objPanel.transform.SetParent(parent, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution

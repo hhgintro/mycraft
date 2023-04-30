@@ -572,14 +572,12 @@ namespace MyCraft
                 if (0 == this._panels[0]._slots[i]._itemid)
                 {
                     putdowns.Add(this._output.cost.items[i].itemid);
-                    break;
+                    continue;
                 }
+
                 //overlap
                 if (this._panels[0]._slots[i]._amount < this._output.cost.items[i].amount)
-                {
                     putdowns.Add(this._output.cost.items[i].itemid);
-                    break;
-                }
             }
             //one more time: 위에서는 필요한 개수만큼만 먼저 가져가고,
             //  아래에서는 여유분만큼 더 가져갈 수 있도록 함.
@@ -591,12 +589,10 @@ namespace MyCraft
                 //    putdowns.Add(this._output.cost.items[i].itemid);
                 //    break;
                 //}
+
                 //overlap *2
                 if (this._panels[0]._slots[i]._amount < this._output.cost.items[i].amount*2)
-                {
                     putdowns.Add(this._output.cost.items[i].itemid);
-                    break;
-                }
             }
             return false;   //putdowns에 포함된 아이템만 가져올 수 있다.
         }

@@ -7,7 +7,11 @@
     "panels": [
       {"items": [{"itemid":1000}]},
       {"items": [{"itemid":1100},{"itemid":1200},{"itemid":1110},{"itemid":1120}]},
-      {"items": [{"itemid":1130},{"itemid":1140},{"itemid":1150},{"itemid":1160},{"itemid":1170},{"itemid":1180}]}
+      {"items": [{"itemid":1130},{"itemid":1140},{"itemid":1150},{"itemid":1160},{"itemid":1170},{"itemid":1180}]},
+      {"items": [{"itemid":1030},{"itemid":1031}]},
+      {"items": [{"itemid":1030},{"itemid":1031}]},
+      {"items": [{"itemid":1030},{"itemid":1031}]},
+      {"items": [{"itemid":1030},{"itemid":1031}]}
     ],
     "icon": "logistics"
   },
@@ -18,7 +22,6 @@
     "title": "생산품",
     "desc": "스킬 1입니다.",
     "panels": [
-      {"items": [{"itemid":1030}]},
       {"items": [{"itemid":1040},{"itemid":1050},{"itemid":1060}]}
     ],
     "icon": "production"

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace MyCraft
 {
@@ -127,6 +128,15 @@ namespace MyCraft
             //HG[2017.05.16] object생성되면서 바로 처리되기 때문에. 생성되는 로직 앞쪽에서 처리하도록 합니다.
             if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
             {
+#if UNITY_EDITOR
+                if (true == EventSystem.current.IsPointerOverGameObject())
+                    return;
+                //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+                if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    return;
+#endif
+
                 //Debug.Log($"RaycastHit BLOCK:({hit.normal})");
                 BlockScript script = hit.collider.GetComponent<BlockScript>();
                 if (null != script)
@@ -157,6 +167,15 @@ namespace MyCraft
             else
             if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.TERRAIN))//picking된 object 정보
             {
+#if UNITY_EDITOR
+                if (true == EventSystem.current.IsPointerOverGameObject())
+                    return;
+                //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+                if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    return;
+#endif
+
                 //HG_TODO : LButton을 눌렸을때 block 뒤에 새로운 block을 놓이기도 하고,
                 //          앞의 block이 "chest"인 경우에는 chest의 인벤정보를 보여줘야 합니다.
                 //      해결책 : block을 손에 들고 있는 경우에는 새로운 block을 놓도록 처리하며
@@ -179,6 +198,15 @@ namespace MyCraft
             RaycastHit hit;
             if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
             {
+#if UNITY_EDITOR
+                if (true == EventSystem.current.IsPointerOverGameObject())
+                    return;
+                //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+                if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    return;
+#endif
+
                 //Debug.Log("layer: " + hit.collider.gameObject.layer);
                 //Debug.Log("hit tag : " + hit.collider.tag.ToString());
                 //if (0 == hit.collider.tag.CompareTo("Block"))

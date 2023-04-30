@@ -101,6 +101,7 @@ namespace MyCraft
             //prefab이 생성되므로 인해
             //script_front의 주변의 영향으로 [자신의] 외형이 변경되어질 수 있다.
             //변경될 prefab을 가져옵니다.
+            Vector3 forward = script.transform.forward; //기존방향을 기억했다가
             BlockScript prefab = this.ChainBeltPrefab((BeltScript)script);
             if (null == prefab) return null;
 
@@ -116,6 +117,7 @@ namespace MyCraft
                 if (null == newscript) return null;
                 newscript._itembase = script._itembase;
                 newscript.manager = null;
+                newscript.transform.forward = forward;  //기존방향을 재설정합니다.
 
                 //terrain에 위치시키다.
                 newscript.SetPos(Common.PosRound(script.transform.position.x)
@@ -162,7 +164,8 @@ namespace MyCraft
             if (0 == weight)
             {
                 prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-                //아래주석해제하면, 진행방향에 수직으로 방향전환시 prefab의 방향이 바뀐다
+                //변경전 forword를 기억했다가 교체될때 재설정하도록 수정했습니다.
+                ////아래주석해제하면, 진행방향에 수직으로 방향전환시 prefab의 방향이 바뀐다
                 //prefab.transform.forward = script.transform.forward;
                 return prefab;
             }
@@ -171,8 +174,9 @@ namespace MyCraft
             if (Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT))
             {
                 prefab = (BeltScript)this.prefabs[0]; //TURN_FRONT
-                //[주석하지말것]아래를 주석했더니, left가 주변영향으로 front가 될때 기존방향을 상실하더라.
-                prefab.transform.forward = script.transform.forward;
+                //변경전 forword를 기억했다가 교체될때 재설정하도록 수정했습니다.
+                ////[주석하지말것]아래를 주석했더니, left가 주변영향으로 front가 될때 기존방향을 상실하더라.
+                //prefab.transform.forward = script.transform.forward;
                 return prefab;
             }
 
@@ -184,8 +188,9 @@ namespace MyCraft
             {
                 prefab = (BeltScript)this.prefabs[1];   //TURN_LEFT
                 prefab._itembase = script._itembase;
-                //[주석하지말것]위처럼 아래방향을 주석을하면, 생성된 블럭이 무한교체(깜빡이는 현상) 현상발생
-                prefab.transform.forward = script.transform.forward;
+                //변경전 forword를 기억했다가 교체될때 재설정하도록 수정했습니다.
+                ////[주석하지말것]위처럼 아래방향을 주석을하면, 생성된 블럭이 무한교체(깜빡이는 현상) 현상발생
+                //prefab.transform.forward = script.transform.forward;
                 return prefab;
             }
             //right
@@ -193,8 +198,9 @@ namespace MyCraft
             {
                 prefab = (BeltScript)this.prefabs[2];   //TURN_RIGHT
                 prefab._itembase = script._itembase;
-                //[주석하지말것]위처럼 아래방향을 주석을하면, 생성된 블럭이 무한교체(깜빡이는 현상) 현상발생
-                prefab.transform.forward = script.transform.forward;
+                //변경전 forword를 기억했다가 교체될때 재설정하도록 수정했습니다.
+                ////[주석하지말것]위처럼 아래방향을 주석을하면, 생성된 블럭이 무한교체(깜빡이는 현상) 현상발생
+                //prefab.transform.forward = script.transform.forward;
                 return prefab;
             }
 
