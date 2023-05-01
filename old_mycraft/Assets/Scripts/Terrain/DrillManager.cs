@@ -12,7 +12,7 @@ namespace MyCraft
         // Use this for initialization
         void Awake()
         {
-            base.LoadPrefab("blocks/drill", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/drill", 1040, this.transform.GetChild(0));
         }
 
     }

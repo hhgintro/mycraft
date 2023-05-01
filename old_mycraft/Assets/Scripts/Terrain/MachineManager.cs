@@ -11,7 +11,7 @@ namespace MyCraft
         // Use this for initialization
         void Awake()
         {
-            base.LoadPrefab("blocks/machine", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/machine", 1060, this.transform.GetChild(0));
         }
 
 

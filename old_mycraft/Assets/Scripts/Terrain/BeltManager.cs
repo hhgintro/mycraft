@@ -17,9 +17,9 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/transport-belt-front", this.transform.GetChild(0));
-            base.LoadPrefab("blocks/transport-belt-turn-left", this.transform.GetChild(0));
-            base.LoadPrefab("blocks/transport-belt-turn-right", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-front", 1100, this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-turn-left", 1100, this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-turn-right", 1100, this.transform.GetChild(0));
         }
 
 
@@ -51,7 +51,7 @@ namespace MyCraft
             base.DeleteBlock(script);
         }
 
-        public override BlockScript GetChoicePrefab(TURN_WEIGHT weight)
+        public override BlockScript GetChoicePrefab(TURN_WEIGHT weight = TURN_WEIGHT.FRONT)
         {
             if (this.prefabs.Count <= 0)
                 return null;

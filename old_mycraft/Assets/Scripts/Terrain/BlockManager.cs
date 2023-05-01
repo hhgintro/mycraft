@@ -12,9 +12,11 @@ namespace MyCraft
         protected List<BlockScript> prefabs = new List<BlockScript>();
 
 
-        protected void LoadPrefab(string path, Transform parent)
+        protected void LoadPrefab(string path, short itemid, Transform parent)
         {
             BlockScript block = Managers.Resource.Instantiate(path, parent).GetComponent<BlockScript>();
+            block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);
+            if(null == block._itembase) Debug.LogError($"Fail: not found itemid {itemid}");
             block.manager = this;
             block.GetComponent<Collider>().enabled = false;
             block.SetActive(false);

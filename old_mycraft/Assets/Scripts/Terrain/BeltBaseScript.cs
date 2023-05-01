@@ -51,11 +51,6 @@ namespace MyCraft
                 Vector3 lookat = this.sectors[i].GetObj().dest - this.sectors[i].GetObj().transform.position;
                 if (0f < Vector3.Dot(lookat, this.sectors[i].GetObj().forward))
                 {
-                    if (IsSpliter())
-                    {
-                        int a = 0;
-                        a = 0;
-                    }
                     float speed = ((BeltItemBase)this.sectors[i].GetObj().sector._owner._itembase).speed;//현 sector의 부모(owner)로 부터 speed의 정보를 가져옵니다.
                     this.sectors[i].GetObj().transform.position += this.sectors[i].GetObj().forward * speed * Time.smoothDeltaTime;
                     //Debug.Log("cur pos : " + this.sectors[i].GetObj().transform.position);

@@ -190,6 +190,7 @@ namespace MyCraft
             //Hierarchy 위치설정
             obj.transform.SetParent(this.transform.parent.parent);
             BlockScript script = obj.GetComponent<BlockScript>();
+            script._itembase = this._itembase;
             script.manager = this.manager;
             script.SetSensor(this);
 

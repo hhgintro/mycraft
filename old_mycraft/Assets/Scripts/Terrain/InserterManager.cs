@@ -13,7 +13,7 @@ namespace MyCraft
         // Use this for initialization
         void Awake()
         {
-            base.LoadPrefab("blocks/inserter", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/inserter", 1030, this.transform.GetChild(0));
         }
     }
 }

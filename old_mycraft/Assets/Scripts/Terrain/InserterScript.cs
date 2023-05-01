@@ -22,9 +22,9 @@ namespace MyCraft
 
         void Start()
         {
-            //_blocktype = BLOCKTYPE.INSERTER;
-            if (null == base._itembase)
-                base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);
+            ////_blocktype = BLOCKTYPE.INSERTER;
+            //if (null == base._itembase)
+            //    base._itembase = GameManager.GetItemBase().FetchItemByID(this._itembase.id);
 
             //this.terrain_manager = GameObject.Find("Terrain").GetComponent<TerrainManager>();
 

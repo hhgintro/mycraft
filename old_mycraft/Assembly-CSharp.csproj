@@ -147,7 +147,6 @@
     <Compile Include="Assets\Scripts\Scenes\BaseScene.cs" />
     <Compile Include="Assets\Scripts\UI\Scene\UI_Inven.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
-    <Compile Include="Assets\Scripts\UI\inven\LobbyManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\BeltVerticalDownBeginManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />

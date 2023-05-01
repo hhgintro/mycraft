@@ -17,7 +17,7 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/transport-belt-vertical-up-middle", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/transport-belt-vertical-up-middle", 1140, this.transform.GetChild(0));
         }
 
 

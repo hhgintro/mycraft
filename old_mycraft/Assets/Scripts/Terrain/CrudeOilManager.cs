@@ -12,7 +12,7 @@ namespace MyCraft
         // Use this for initialization
         void Awake()
         {
-            base.LoadPrefab("mineral/crude-oil", this.transform.GetChild(0));
+            base.LoadPrefab("mineral/crude-oil", 60, this.transform.GetChild(0));
         }
     }
 

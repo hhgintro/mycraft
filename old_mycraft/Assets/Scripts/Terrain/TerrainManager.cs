@@ -93,10 +93,10 @@ namespace MyCraft
 
             for (int i = 0; i < count; ++i)
             {
-                BlockScript block = CreateBlock(this.GetMineralLayer(), x-i, y, z, prefab);
-                block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);//BLOCKTYPE.RAW_WOOD
-                if (null == block._itembase)
-                    Debug.LogError($"Fail: not found itemid {itemid}");
+                CreateBlock(this.GetMineralLayer(), x-i, y, z, prefab);
+                //block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);//BLOCKTYPE.RAW_WOOD
+                //if (null == block._itembase)
+                //    Debug.LogError($"Fail: not found itemid {itemid}");
             }
         }
 

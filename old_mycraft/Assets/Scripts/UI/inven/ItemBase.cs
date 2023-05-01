@@ -123,8 +123,6 @@ namespace MyCraft
             //comment
             GameObject comment = tooltip.CreateComment();
             //comment.GetComponent<Text>().text = this.desc;
-            int a = 0;
-            a = 0;
 
             //totalcost(미구현)
             //GameObject totalcost = tooltip.CreateTotalCost();

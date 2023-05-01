@@ -12,7 +12,7 @@ namespace MyCraft
         // Use this for initialization
         void Awake()
         {
-            base.LoadPrefab("mineral/copper-ore", this.transform.GetChild(0));
+            base.LoadPrefab("mineral/copper-ore", 50, this.transform.GetChild(0));
         }
     }
 

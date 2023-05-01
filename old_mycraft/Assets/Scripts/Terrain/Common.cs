@@ -127,6 +127,23 @@ namespace MyCraft
             return (weight & val) == val;
         }
 
+        public static bool OnBound(float val, float bound)
+        {
+            float err_bound = 0.01f;
+            if (bound - err_bound < val && val < bound + err_bound)
+                return true;
+            return false;
+        }
+        public static bool IsSameForward(Vector3 lhs, Vector3 rhs)
+        {
+            float err_bound = 0.01f;
+
+            float bound = Vector3.Dot(lhs, rhs);
+            if (bound < 1-err_bound || 1+err_bound < bound)
+                return false;
+            return true;
+        }
+
         //block이 원점을 중심으로 두고 있기때문에
         //  block은 (-0.5 ~ 0.5)에 위치한다.
         public static int PosRound(float val)

@@ -137,6 +137,10 @@ namespace MyCraft
             //load ini
             Load(Application.dataPath + "/../config/config.ini");
             LocaleManager.Open(Application.streamingAssetsPath + "/locale/" + _locale.ToString() + "/ui.cfg");
+
+            GetItemBase();
+            GetTechBase();
+            GetCategories();
         }
 
         public void Clear()

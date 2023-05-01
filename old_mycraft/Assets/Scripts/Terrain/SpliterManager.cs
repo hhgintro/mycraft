@@ -17,7 +17,7 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/spliter", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/spliter", 1200, this.transform.GetChild(0));
         }
 
         public override void CreateBlock(BlockScript script)

@@ -10,7 +10,7 @@ namespace MyCraft
 
         void Awake()
         {
-            base.LoadPrefab("blocks/chest", this.transform.GetChild(0));
+            base.LoadPrefab("blocks/chest", 1000, this.transform.GetChild(0));
         }
 
     }
