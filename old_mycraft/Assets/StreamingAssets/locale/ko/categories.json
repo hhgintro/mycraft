@@ -9,9 +9,8 @@
       {"items": [{"itemid":1100},{"itemid":1200},{"itemid":1110},{"itemid":1120}]},
       {"items": [{"itemid":1130},{"itemid":1140},{"itemid":1150},{"itemid":1160},{"itemid":1170},{"itemid":1180}]},
       {"items": [{"itemid":1030},{"itemid":1031}]},
-      {"items": [{"itemid":1030},{"itemid":1031}]},
-      {"items": [{"itemid":1030},{"itemid":1031}]},
-      {"items": [{"itemid":1030},{"itemid":1031}]}
+      {"items": [{"itemid":1040}]},
+      {"items": [{"itemid":2040}]}
     ],
     "icon": "logistics"
   },
@@ -33,7 +32,7 @@
     "title": "중간 생산품",
     "desc": "스킬 2입니다.",
     "panels": [
-      {"items": [{"itemid":2000},{"itemid":2010},{"itemid":2011}]},
+      {"items": [{"itemid":2000},{"itemid":2010},{"itemid":2011},{"itemid":2012},{"itemid":2013}]},
       {"items": [{"itemid":2020},{"itemid":2021}]},
       {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]}
     ],
@@ -46,7 +45,8 @@
     "title": "전투",
     "desc": "스킬 3입니다.",
     "panels": [
-      {"items": [{"itemid":900}]}
+      {"items": [{"itemid":900}]},
+      {"items": [{"itemid":2041}]}
     ],
     "icon": "military"
   }

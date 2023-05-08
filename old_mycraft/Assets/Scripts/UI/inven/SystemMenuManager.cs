@@ -1,15 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace MyCraft
 {
     public class SystemMenuManager : MonoBehaviour
     {
+        void Start()
+        {
 
-        //// Update is called once per frame
-        //void Update () {
+            LocaleManager.SetLocale("systemmenu", this.transform.Find("Menu/Title").GetComponent<Text>());
+            LocaleManager.SetLocale("systemmenu", this.transform.Find("Menu/Continue/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("systemmenu", this.transform.Find("Menu/Retry/Text").GetComponent<Text>());
+            LocaleManager.SetLocale("systemmenu", this.transform.Find("Menu/Exit/Text").GetComponent<Text>());
 
-        //}
+        }
 
         //public bool GetActive_1()
         //{

@@ -43,6 +43,7 @@ namespace MyCraft
             LoadPrefab<MachineManager>("hierarchy/terrain", "machine");
             LoadPrefab<StoneFurnaceManager>("hierarchy/terrain", "stone-furnace");
             LoadPrefab<StoneManager>("hierarchy/terrain", "stone");
+            //LoadPrefab<StoneWallManager>("hierarchy/terrain", "stone-wall");
             LoadPrefab<TreeManager>("hierarchy/terrain", "tree");
             LoadPrefab<IronManager>("hierarchy/terrain", "iron-ore");
             LoadPrefab<CopperManager>("hierarchy/terrain", "copper-ore");
@@ -92,12 +93,7 @@ namespace MyCraft
             }
 
             for (int i = 0; i < count; ++i)
-            {
-                CreateBlock(this.GetMineralLayer(), x-i, y, z, prefab);
-                //block._itembase = GameManager.GetItemBase().FetchItemByID(itemid);//BLOCKTYPE.RAW_WOOD
-                //if (null == block._itembase)
-                //    Debug.LogError($"Fail: not found itemid {itemid}");
-            }
+                CreateBlock(GetMineralLayer(),x-i, y, z, prefab);
         }
 
         public TerrainLayer GetBlockLayer() { return block_layer; }
@@ -191,6 +187,20 @@ namespace MyCraft
 
             if(null != block.manager)
                 block.manager.CreateBlock(block);
+
+            //destroy
+            //한개 남았을때에는 prefab와 icon모드를 지워줍니다.
+            if (null != InvenBase.choiced_item)
+            {
+                InvenBase.choiced_item.AddStackCount(-1, false);
+                if (InvenBase.choiced_item.amount <= 0)
+                {
+                    SetChoicePrefab((BlockScript)null);
+                    Destroy(InvenBase.choiced_item.gameObject);
+                    InvenBase.choiced_item = null;
+                }
+            }
+
             return block;
         }
 

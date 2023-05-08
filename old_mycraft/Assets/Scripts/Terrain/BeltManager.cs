@@ -22,6 +22,245 @@ namespace MyCraft
             base.LoadPrefab("blocks/transport-belt-turn-right", 1100, this.transform.GetChild(0));
         }
 
+        public override void OnAutomaticConnectBelt(Vector3 belt_hold_start, Vector3 point, BlockScript prefab)
+        {
+            if (null == prefab) return;
+
+            Vector3 pos = belt_hold_start;  //현재위치(시작위치 부터 시작한다.)
+            Vector3 belt_hold_end = point;  //종료위치
+
+            //(-)음수이면 start/end를 바꿔준다.
+            Vector3 forward = prefab.transform.forward;
+            float dir = Vector3.Dot(prefab.transform.forward, point - belt_hold_start);
+            //Debug.LogWarning($"Dot:{dir}");
+            if (dir < 0)
+            {
+                pos = point;                        //현재위치(시작위치 부터 시작한다.)
+                belt_hold_end = belt_hold_start;    //종료위치
+
+                if (Common.OnBound(forward.x, 0)) pos.x = belt_hold_start.x;  // z방향을 향하므로 x값은 같게 설정
+                if (Common.OnBound(forward.z, 0)) pos.z = belt_hold_start.z;  // x방향을 향하므로 z값은 같게 설정
+            }
+            else
+            {
+                if (Common.OnBound(forward.x, 0)) belt_hold_end.x = belt_hold_start.x;  // z방향을 향하므로 x값은 같게 설정
+                if (Common.OnBound(forward.z, 0)) belt_hold_end.z = belt_hold_start.z;  // x방향을 향하므로 z값은 같게 설정
+            }
+            //Debug.Log($"자동연결: {belt_hold_start} ==> {belt_hold_end}");
+
+            //end position
+            int endx = Common.PosRound(belt_hold_end.x);
+            int endy = Common.PosFloor(belt_hold_end.y);
+            int endz = Common.PosRound(belt_hold_end.z);
+
+            bool isUp = false;          //(앞이 막혀서)위로 올라가야하나?
+            bool isDown = false;        //(앞이 막혀서)아래로 내려가야하나?
+
+            int count = -1;
+            while (++count < 20)   //최대 n개(무한 루프방지)
+            {
+                // ********************************** //
+                //1. 목표점 높이까지 먼저 올라간다.(내려간다.
+                //2. 올라가다(내려가다) 막히면 앞으로 전진
+                //3. 장벽이 있으면 넘는다.
+
+                //current position
+                int posx = Common.PosRound(pos.x);
+                int posy = Common.PosFloor(pos.y);
+                int posz = Common.PosRound(pos.z);
+                //현위치 점유중이면...종료
+                if (null != GameManager.GetTerrainManager().GetBlockLayer().GetBlock(posx, posy, posz))
+                    return;
+
+                //arrive
+                if (posx == endx && posy == endy && posz == endz)
+                {
+                    prefab = Automatic_End(ref isUp, ref isDown);
+                    if (null != prefab)
+                    {
+                        //terrain에 block을 생성합니다.
+                        prefab.transform.forward = forward; //방향.
+                        GameManager.GetTerrainManager().CreateBlock(GameManager.GetTerrainManager().GetBlockLayer(), posx, posy, posz, prefab);
+                    }
+                    return;
+                }
+
+                //목표점 위치와 다르면...높이부터 조정한다.
+                if (endy != posy)
+                {
+                    //목표점이 높다면...
+                    if (posy < endy)
+                    {
+                        // *********************** //
+                        //우선순위 : 위 -> 앞 -> 아래
+
+                        //설치할 곳.바로위
+                        prefab = Automatic_Up(pos, ref isUp);
+                        //설치할 곳.바로앞
+                        if (null == prefab) prefab = Automatic_Front(pos, forward, ref isUp, ref isDown);
+                        //설치할 곳.바로아래
+                        if (null == prefab) prefab = Automatic_Down(pos, ref isDown);
+                    }
+                    //목표점이 낮다면...
+                    else
+                    {
+                        // *********************** //
+                        //우선순위 : 아래 -> 앞 -> 위
+
+                        //설치할 곳.바로아래
+                        prefab = Automatic_Down(pos, ref isDown);
+                        //설치할 곳.바로앞
+                        if (null == prefab) prefab = Automatic_Front(pos, forward, ref isUp, ref isDown);
+                        //설치할 곳.바로위
+                        if (null == prefab) prefab = Automatic_Up(pos, ref isUp);
+                    }
+                }
+                //목표점과 같은 높이이다.
+                else
+                {
+                    // *********************** //
+                    //우선순위 : 앞 -> 위 -> 아래
+
+                    //설치할 곳.바로앞
+                    prefab = Automatic_Front(pos, forward, ref isUp, ref isDown);
+                    //설치할 곳.바로위
+                    if (null == prefab) prefab = Automatic_Up(pos, ref isUp);
+                    //설치할 곳.바로아래
+                    if (null == prefab) prefab = Automatic_Down(pos, ref isDown);
+                }
+
+                //terrain에 block을 생성합니다.
+                prefab.transform.forward = forward; //방향.
+                GameManager.GetTerrainManager().CreateBlock(GameManager.GetTerrainManager().GetBlockLayer(), posx, posy, posz, prefab);
+                ////arrive
+                //if (posx == endx && posy == endy && posz == endz)
+                //{
+                //    //prefab.transform.forward = forward; //방향.
+                //    //this.CreateBlock(posx, posy, posz, GameManager.GetBeltManager().GetChoicePrefab());
+                //    break;
+                //}
+
+                //다음 위치 설정
+                if (true == isUp) pos += Vector3.up;
+                else if (true == isDown) pos += Vector3.down;
+                else pos += forward;
+            }
+        }
+
+        private BlockScript Automatic_End(ref bool isUp, ref bool isDown)
+        {
+            BlockScript prefab = null;
+
+            //올라가는 중이면 up-end
+            if (true == isUp) prefab = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab();
+            //내려가는 중이면 down-end
+            else if (true == isDown) prefab = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab();
+            //전진중
+            else prefab = GameManager.GetBeltManager().GetChoicePrefab();
+
+            isUp = false;   //올라가는거 끝
+            isDown = false;   //내려가는거 끝
+            return prefab;
+        }
+
+        //pos: 현재위치
+        private BlockScript Automatic_Front(Vector3 pos, Vector3 forward, ref bool isUp, ref bool isDown)
+        {
+            BlockScript prefab = null;
+
+            //next: 설치할 곳보다 앞쪽.
+            Vector3 next = pos + forward;
+            int nextx = Common.PosRound(next.x);
+            int nexty = Common.PosFloor(next.y);
+            int nextz = Common.PosRound(next.z);
+
+            // *********************** //
+            //우선순위 : 앞 -> 위 -> 아래
+
+            //설치할 곳보다 앞쪽이 비어있다면.
+            BlockScript block = GameManager.GetTerrainManager().GetBlockLayer().GetBlock(nextx, nexty, nextz);
+            if (null == block)
+            {
+                //올라가는 중이면 up-end
+                if (true == isUp) prefab = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab();
+                //내려가는 중이면 down-end
+                else if (true == isDown) prefab = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab();
+                //전진중
+                else prefab = GameManager.GetBeltManager().GetChoicePrefab();
+
+                isUp = false;   //올라가는거 끝
+                isDown = false;   //내려가는거 끝
+            }
+            //else
+            //{
+            //    //임시테스트
+            //    //밸트이면 연결해 준다.
+            //    if(block.IsTransport())
+            //    {
+            //        //같은방향이면...
+            //        if (true == Common.IsSameForward(block.transform.forward, forward))
+            //        {
+            //            //올라가는 중이면 up-end
+            //            if (true == isUp)           prefab = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab();
+            //            //내려가는 중이면 down-end
+            //            else if (true == isDown)    prefab = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab();
+            //            //전진중
+            //            else                        prefab = GameManager.GetBeltManager().GetChoicePrefab();
+
+            //            isUp    = false;   //올라가는거 끝
+            //            isDown  = false;   //내려가는거 끝
+            //        }
+            //    }
+
+            //}
+            return prefab;
+        }
+
+        private BlockScript Automatic_Up(Vector3 pos, ref bool isUp)
+        {
+            BlockScript prefab = null;
+
+            //설치할 곳.바로위
+            Vector3 upper = pos + Vector3.up;
+            int upperx = Common.PosRound(upper.x);
+            int uppery = Common.PosFloor(upper.y);
+            int upperz = Common.PosRound(upper.z);
+
+            //설치할 곳.바로위 비어있다...올라간다.
+            if (null == GameManager.GetTerrainManager().GetBlockLayer().GetBlock(upperx, uppery, upperz))
+            {
+                //올라가는 중이면 up-middle
+                if (true == isUp) prefab = GameManager.GetBeltVerticalUpMiddleManager().GetChoicePrefab();
+                //막 올라가는 중이면 up-begin
+                else prefab = GameManager.GetBeltVerticalUpBeginManager().GetChoicePrefab();
+
+                isUp = true;    //올라가는중.
+            }
+            return prefab;
+        }
+
+        private BlockScript Automatic_Down(Vector3 pos, ref bool isDown)
+        {
+            BlockScript prefab = null;
+
+            //설치할 곳.바로아래
+            Vector3 under = pos + Vector3.down;
+            int underx = Common.PosRound(under.x);
+            int undery = Common.PosFloor(under.y);
+            int underz = Common.PosRound(under.z);
+
+            //설치할 곳.바로아래 비어있다.
+            if (null == GameManager.GetTerrainManager().GetBlockLayer().GetBlock(underx, undery, underz))
+            {
+                //내려가는 중이면 down-middle
+                if (true == isDown) prefab = GameManager.GetBeltVerticalDownMiddleManager().GetChoicePrefab();
+                //막 내려가는 중이면 down-begin
+                else prefab = GameManager.GetBeltVerticalDownBeginManager().GetChoicePrefab();
+
+                isDown = true;    //낼려가는중.
+            }
+            return prefab;
+        }
 
         public override void CreateBlock(BlockScript script)
         {

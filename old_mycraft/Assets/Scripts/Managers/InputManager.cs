@@ -13,8 +13,15 @@ public class InputManager
 
     public void OnUpdate()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+#if UNITY_EDITOR
+        //UI위를 클릭했을때...무시
+        if (true == EventSystem.current.IsPointerOverGameObject())
             return;
+        //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+                if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    return;
+#endif
 
         if (Input.anyKey && KeyAction != null)
 				KeyAction.Invoke();

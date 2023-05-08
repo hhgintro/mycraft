@@ -201,9 +201,10 @@
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2010},
+        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2040},
         {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010},
-        {"id": 50,"limit": 2,"build-time": 3.1,"output": 2020}
+        {"id": 50,"limit": 2,"build-time": 3.1,"output": 2020},
+        {"id": 2010,"limit": 2,"build-time": 3.1,"output": 2013}
       ],
       "fuel": [
         {"id": 10,"limit": 2,"burning-time": 10},
@@ -445,6 +446,24 @@
     "icon": "basic-splitter"
   },
 
+  {
+    "id": 1210,
+    "type": 1210,
+    "title": "파이프",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
 
 
 
@@ -501,6 +520,43 @@
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "iron-gear-wheel"
+  },
+
+  {
+    "id": 2012,
+    "type": 2,
+    "title": "쇠막대기",
+    "desc": "",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 1}
+      ],
+      "outputs": 2
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "iron-stick"
+  },
+
+  {
+    "id": 2013,
+    "type": 2,
+    "title": "철강",
+    "desc": "",
+    "learn": true,
+    "DIY": false,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 1}
+      ],
+      "outputs": 2
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "steel-plate"
   },
 
   {
@@ -594,7 +650,43 @@
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "processing-unit"
-  }
+  },
 
+  {
+    "id": 2040,
+    "type": 2,
+    "title": "벽돌",
+    "desc": "",
+    "learn": true,
+    "DIY": false,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 20,"amount": 1}
+      ],
+      "outputs": 2
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+        "stackable": 100,
+    "icon": "stone-brick"
+  },
+
+  {
+    "id": 2041,
+    "type": 2,
+    "title": "석벽",
+    "desc": "",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2040,"amount": 1}
+      ],
+      "outputs": 2
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "stone-wall"
+  }
 
 ]

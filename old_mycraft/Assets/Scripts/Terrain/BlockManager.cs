@@ -46,7 +46,7 @@ namespace MyCraft
 
         }
 
-
+        public virtual void OnAutomaticConnectBelt(Vector3 belt_hold_start, Vector3 point, BlockScript prefab) { }
         public virtual void CreateBlock(BlockScript script)
         {
             if (null == script) return;
