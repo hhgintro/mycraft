@@ -38,6 +38,7 @@ namespace MyCraft
             LoadPrefab<BeltVerticalDownBeginManager>("hierarchy/terrain", "belt-vertical-down-middle");
             LoadPrefab<BeltVerticalDownMiddleManager>("hierarchy/terrain", "belt-vertical-down-end");
             LoadPrefab<SpliterManager>("hierarchy/terrain", "spliter");
+            LoadPrefab<PipeManager>("hierarchy/terrain", "pipe");
             LoadPrefab<InserterManager>("hierarchy/terrain", "inserter");
             LoadPrefab<DrillManager>("hierarchy/terrain", "drill");
             LoadPrefab<MachineManager>("hierarchy/terrain", "machine");
@@ -125,37 +126,38 @@ namespace MyCraft
         }
         public BlockScript SetChoicePrefab(ItemBase itembase)
         {
-            BlockScript block = this.GetBlockPrefab(itembase.type, TURN_WEIGHT.FRONT);
+            BlockScript block = this.GetBlockPrefab((short)itembase.id, TURN_WEIGHT.FRONT);
             if (null == block) return null;
             block._itembase = itembase;
             this.SetChoicePrefab(block);
             return block;
         }
-        public BlockScript GetBlockPrefab(BLOCKTYPE blocktype, TURN_WEIGHT weight)
+        public BlockScript GetBlockPrefab(short itemid, TURN_WEIGHT weight)
         {
-            BlockScript script = null;
-            switch (blocktype)
+            BlockScript prefab = null;
+            switch (itemid)
             {
-                case BLOCKTYPE.CHEST:           script = GameManager.GetChestManager().GetChoicePrefab(weight);         break;
-                case BLOCKTYPE.INSERTER:        script = GameManager.GetInserterManager().GetChoicePrefab(weight);      break;
-                case BLOCKTYPE.DRILL:           script = GameManager.GetDrillManager().GetChoicePrefab(weight);         break;
-                case BLOCKTYPE.MACHINE:         script = GameManager.GetMachineManager().GetChoicePrefab(weight);       break;
+                case (int)BLOCKTYPE.CHEST:                       prefab = GameManager.GetChestManager().GetChoicePrefab(weight);                    break;
+                case (int)BLOCKTYPE.INSERTER:                    prefab = GameManager.GetInserterManager().GetChoicePrefab(weight);                 break;
+                case (int)BLOCKTYPE.DRILL:                       prefab = GameManager.GetDrillManager().GetChoicePrefab(weight);                    break;
+                case (int)BLOCKTYPE.MACHINE:                     prefab = GameManager.GetMachineManager().GetChoicePrefab(weight);                  break;
 
-                case BLOCKTYPE.BELT:            script = GameManager.GetBeltManager().GetChoicePrefab(weight);              break;
-                case BLOCKTYPE.BELT_UP:         script = GameManager.GetBeltSlopeUpManager().GetChoicePrefab(weight);       break;
-                case BLOCKTYPE.BELT_DOWN:       script = GameManager.GetBeltSlopeDownManager().GetChoicePrefab(weight);     break;
-                case BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:      script = GameManager.GetBeltVerticalUpBeginManager().GetChoicePrefab(weight);       break;
-                case BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:     script = GameManager.GetBeltVerticalUpMiddleManager().GetChoicePrefab(weight);      break;
-                case BLOCKTYPE.BELT_VERTICAL_UP_END:        script = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab(weight);         break;
-                case BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:    script = GameManager.GetBeltVerticalDownBeginManager().GetChoicePrefab(weight);     break;
-                case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:   script = GameManager.GetBeltVerticalDownMiddleManager().GetChoicePrefab(weight);    break;
-                case BLOCKTYPE.BELT_VERTICAL_DOWN_END:      script = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab(weight);       break;
+                case (int)BLOCKTYPE.BELT:                        prefab = GameManager.GetBeltManager().GetChoicePrefab(weight);                     break;
+                case (int)BLOCKTYPE.BELT_UP:                     prefab = GameManager.GetBeltSlopeUpManager().GetChoicePrefab(weight);              break;
+                case (int)BLOCKTYPE.BELT_DOWN:                   prefab = GameManager.GetBeltSlopeDownManager().GetChoicePrefab(weight);            break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_UP_BEGIN:      prefab = GameManager.GetBeltVerticalUpBeginManager().GetChoicePrefab(weight);      break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_UP_MIDDLE:     prefab = GameManager.GetBeltVerticalUpMiddleManager().GetChoicePrefab(weight);     break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_UP_END:        prefab = GameManager.GetBeltVerticalUpEndManager().GetChoicePrefab(weight);        break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_DOWN_BEGIN:    prefab = GameManager.GetBeltVerticalDownBeginManager().GetChoicePrefab(weight);    break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:   prefab = GameManager.GetBeltVerticalDownMiddleManager().GetChoicePrefab(weight);   break;
+                case (int)BLOCKTYPE.BELT_VERTICAL_DOWN_END:      prefab = GameManager.GetBeltVerticalDownEndManager().GetChoicePrefab(weight);      break;
 
-                case BLOCKTYPE.SPLITER:         script = GameManager.GetSpliterManager().GetChoicePrefab(weight);       break;
+                case (int)BLOCKTYPE.SPLITER:                     prefab = GameManager.GetSpliterManager().GetChoicePrefab(weight);                  break;
+                case (int)BLOCKTYPE.PIPE:                        prefab = GameManager.GetPipeManager().GetChoicePrefab(weight);                     break;
 
-                case BLOCKTYPE.STONE_FURNACE:   script = GameManager.GetStoneFurnaceManager().GetChoicePrefab(weight);  break;
+                case (int)BLOCKTYPE.STONE_FURNACE:               prefab = GameManager.GetStoneFurnaceManager().GetChoicePrefab(weight);             break;
              }
-            return script;
+            return prefab;
         }
 
         public BlockScript CreateBlock(TerrainLayer layer, int x, int y, int z, BlockScript prefab)
@@ -340,10 +342,11 @@ namespace MyCraft
             if (BLOCKTYPE.BELT == (BLOCKTYPE)itembase.type)
             {
                 turn_weight = reader.ReadByte();
+                //turn_weight = (byte)TURN_WEIGHT.FRONT;
                 //Debug.Log("read turn_weight:" + turn_weight);
             }
 
-            BlockScript prefab = GameManager.GetTerrainManager().GetBlockPrefab(itembase.type, (TURN_WEIGHT)turn_weight);
+            BlockScript prefab = GameManager.GetTerrainManager().GetBlockPrefab((short)itembase.id, (TURN_WEIGHT)turn_weight);
             if (null == prefab) return;
             prefab._itembase = itembase;
 

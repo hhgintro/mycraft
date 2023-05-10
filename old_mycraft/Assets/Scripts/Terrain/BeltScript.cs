@@ -21,7 +21,7 @@ namespace MyCraft
             //Debug.Log("LinkBetlt " + script._index);
             // [자신]을 기준으로 back / left / right 의 belt 위치에 따라
             // [자신의] 가중치를 결정합니다.
-            int weight = this.CheckWeightChainBelt();
+            int weight = this.CheckWeightChainBlock();
 
             bool turn_front = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.FRONT);
             bool turn_left = Common.CHECK_BIT(weight, (int)TURN_WEIGHT.LEFT);
@@ -157,7 +157,7 @@ namespace MyCraft
         }
 
         // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
-        public override int CheckWeightChainBelt()
+        public override int CheckWeightChainBlock()
         {
             //주변 block에 의한 가중치
             int weight = 0;

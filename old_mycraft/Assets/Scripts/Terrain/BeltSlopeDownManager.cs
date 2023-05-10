@@ -43,7 +43,7 @@ namespace MyCraft
 
             //삭제된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
             BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            if (script_front) script_front.manager.ChainBelt(script_front);
+            if (script_front) script_front.manager.ChainBlock(script_front);
 
             //script.DeleteBlock();
             base.DeleteBlock(script);
@@ -69,7 +69,7 @@ namespace MyCraft
 
 
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public override BlockScript ChainBelt(BlockScript script)
+        public override BlockScript ChainBlock(BlockScript script)
         {
             //if (null == script || null == script._itembase) return null;
             //if (BLOCKTYPE.BELT != script._itembase.type) return null;

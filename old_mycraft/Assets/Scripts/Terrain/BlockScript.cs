@@ -57,7 +57,7 @@ namespace MyCraft
                 {
                     //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
                     //GameManager.GetTerrainManager().ChainBlock(GameManager.GetTerrainManager().GetChoicePrefab());
-                    this.manager.ChainBelt(this);
+                    this.manager.ChainBlock(this);
                     //this.LinkedBelt();
                 }
             }
@@ -124,6 +124,22 @@ namespace MyCraft
                 case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:
                 case BLOCKTYPE.BELT_VERTICAL_DOWN_END:
                 case BLOCKTYPE.SPLITER:
+                    return true;
+            }
+            return false;
+        }
+        public bool IsPipe()
+        {
+            if (null == this._itembase) return false;
+            switch (this._itembase.type)
+            {
+                case BLOCKTYPE.PIPE:
+                case BLOCKTYPE.PIPE_VERTICAL_UP_BEGIN:
+                case BLOCKTYPE.PIPE_VERTICAL_UP_MIDDLE:
+                case BLOCKTYPE.PIPE_VERTICAL_UP_END:
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_BEGIN:
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_MIDDLE:
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_END:
                     return true;
             }
             return false;
@@ -250,7 +266,7 @@ namespace MyCraft
         }
 
         // [자신]을 기준으로 back / left / right 의 belt 위치에 따라 [자신의] 가중치를 결정합니다.
-        public virtual int CheckWeightChainBelt() { return 0; }
+        public virtual int CheckWeightChainBlock() { return 0; }
         public virtual void LinkBeltSector(BELT_ROW row1, BELT_ROW row2, BlockScript next, BELT_ROW lrow, BELT_COL lcol, BELT_ROW rrow, BELT_COL rcol) { }
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
         public virtual BlockScript ChainBelt(BlockScript script) { return this; }

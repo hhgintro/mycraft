@@ -25,15 +25,23 @@ namespace MyCraft
         BELT_UP         = 1110,
         BELT_DOWN       = 1120,
 
-        BELT_VERTICAL_UP_BEGIN  = 1130,
-        BELT_VERTICAL_UP_MIDDLE = 1140,
-        BELT_VERTICAL_UP_END    = 1150,
-        BELT_VERTICAL_DOWN_BEGIN  = 1160,
-        BELT_VERTICAL_DOWN_MIDDLE = 1170,
-        BELT_VERTICAL_DOWN_END    = 1180,
+        BELT_VERTICAL_UP_BEGIN      = 1130,
+        BELT_VERTICAL_UP_MIDDLE     = 1140,
+        BELT_VERTICAL_UP_END        = 1150,
+        BELT_VERTICAL_DOWN_BEGIN    = 1160,
+        BELT_VERTICAL_DOWN_MIDDLE   = 1170,
+        BELT_VERTICAL_DOWN_END      = 1180,
 
+        SPLITER         = 1200,
 
-        SPLITER = 1200,
+        PIPE            = 1210,
+
+        PIPE_VERTICAL_UP_BEGIN      = 1220,
+        PIPE_VERTICAL_UP_MIDDLE     = 1230,
+        PIPE_VERTICAL_UP_END        = 1240,
+        PIPE_VERTICAL_DOWN_BEGIN    = 1250,
+        PIPE_VERTICAL_DOWN_MIDDLE   = 1260,
+        PIPE_VERTICAL_DOWN_END      = 1270,
 
         SKILL           = 5000,
         TECH            = 6000,
@@ -70,8 +78,7 @@ namespace MyCraft
         LEFT = 1 << 1, //left
         RIGHT = 1 << 2, //right
 
-        //ground-belt
-        BACK = 1 << 3,  //back
+        BOTH = 1 << 3,  // left & right
     }
 
 
@@ -91,6 +98,14 @@ namespace MyCraft
                 case BLOCKTYPE.BELT_VERTICAL_DOWN_MIDDLE:   return typeof(BeltItemBase);
                 case BLOCKTYPE.BELT_VERTICAL_DOWN_END:      return typeof(BeltItemBase);
                 case BLOCKTYPE.SPLITER:         return typeof(BeltItemBase);
+
+                case BLOCKTYPE.PIPE:                        return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_UP_BEGIN:      return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_UP_MIDDLE:     return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_UP_END:        return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_BEGIN:    return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_MIDDLE:   return typeof(PipeItemBase);
+                case BLOCKTYPE.PIPE_VERTICAL_DOWN_END:      return typeof(PipeItemBase);
 
                 case BLOCKTYPE.INSERTER:        return typeof(InserterItemBase);
                 case BLOCKTYPE.CHEST:           return typeof(ChestItemBase);

@@ -171,6 +171,17 @@ namespace MyCraft
         }
     }
 
+    public class PipeItemBase : ItemBase
+    {
+        //goods의 이동속도
+        public float speed;
+
+        public PipeItemBase(JsonData json) : base(json)
+        {
+            this.speed = float.Parse(json["speed"].ToString());
+        }
+    }
+
     public class InserterItemBase : ItemBase
     {
         //goods를 운반하는 속도

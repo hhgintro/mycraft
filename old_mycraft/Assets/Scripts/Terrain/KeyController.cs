@@ -189,7 +189,7 @@ namespace MyCraft
             {
                 if (null != GameManager.GetTerrainManager().GetChoicePrefab())
                 {
-                    GameManager.GetTerrainManager().SetChoicePrefab(GameManager.GetTerrainManager().GetChoicePrefab()._itembase);
+                    //GameManager.GetTerrainManager().SetChoicePrefab(GameManager.GetTerrainManager().GetChoicePrefab()._itembase);
                     GameManager.GetTerrainManager().GetChoicePrefab().transform.Rotate(Vector3.up * 90f);
                     GameManager.GetTerrainManager().GetChoicePrefab().Clear();
                 }

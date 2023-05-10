@@ -38,7 +38,7 @@ namespace MyCraft
         //센서:block간의 연결상태가 변경되면, 외형이 바뀔수 있다.
         public virtual void LinkedSensor(BlockScript block) { }
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public virtual BlockScript ChainBelt(BlockScript script) {
+        public virtual BlockScript ChainBlock(BlockScript block) {
             return null;
         }
         public virtual void ChainBelt(Sensor self)
@@ -47,15 +47,15 @@ namespace MyCraft
         }
 
         public virtual void OnAutomaticConnectBelt(Vector3 belt_hold_start, Vector3 point, BlockScript prefab) { }
-        public virtual void CreateBlock(BlockScript script)
+        public virtual void CreateBlock(BlockScript block)
         {
-            if (null == script) return;
-            script.manager = this;
-            script._bOnTerrain = true;
-            script.SetMeshRender(1.0f);
+            if (null == block) return;
+            block.manager = this;
+            block._bOnTerrain = true;
+            block.SetMeshRender(1.0f);
         }
 
-        public virtual void DeleteBlock(BlockScript script)
+        public virtual void DeleteBlock(BlockScript block)
         {
             //if (null == script || null == script._itembase || BLOCKTYPE.BELT != script._itembase.type)
             //    return;
@@ -63,7 +63,7 @@ namespace MyCraft
             //    return;
 
 
-            script.DeleteBlock();
+            block.DeleteBlock();
         }
 
 

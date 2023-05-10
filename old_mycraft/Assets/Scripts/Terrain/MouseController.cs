@@ -21,12 +21,12 @@ namespace MyCraft
         public bool mouse_refresh = false;
 
         
-        private Vector3 offset; //이거 뭐하는거야?
-
+        private Vector3 offset; //인벤아이템을 잡았을때 마우스와 이격거리
+        private GameObject _delete_obj; //삭제하려는 obj. Rbutton을 일정시간 누르면 삭제할 수 있다.
 
         void Start()
         {
-            offset = new Vector3(16f, -16f, 0);
+            offset = new Vector3(50f, -16f, 0);
             //terrain_manager = GameObject.Find("Terrain").GetComponent<TerrainManager>();
 
             StartCoroutine(CheckMouse());
@@ -41,41 +41,50 @@ namespace MyCraft
             }
         }
 
-
-
-        bool CheckMouse_Refresh(int posx, int posy, int posz)
-        {
-            if (posx == mouse_pos_x
-                && posy == mouse_pos_y
-                && posz == mouse_pos_z
-                && false == mouse_refresh)
-                return false;
-
-            mouse_pos_x = posx;
-            mouse_pos_y = posy;
-            mouse_pos_z = posz;
-            mouse_refresh = false;
-            //Debug.Log($"RaycastHit:({posx},{posy},{posz})");
-            return true;
-        }
-
         void CheckMouse_Func()
         {
             OnMouseMove();
 
-            ////인벤이 활성상태이면 L/R button을 막는다.
-            //if (true == GameManager.GetInventory().GetActive())
-            //    return;
+            //mouse left
+            if (Input.GetMouseButtonDown(0))    OnMouseLButtonDown();
+            if (Input.GetMouseButtonUp(0))      OnMouseLButtonUp();
+            //mouse right
+            if (Input.GetMouseButtonDown(1))    OnMouseRButtonDown();
+            if (Input.GetMouseButton(1))        OnMouseRButton();
+            if (Input.GetMouseButtonUp(1))      OnMouseRButtonUp();
+            //mouse middle
+            //if (Input.GetMouseButtonDown(2))  OnMouseMButtonDown();
+        }
 
-            if (Input.GetMouseButtonDown(0))//mouse left
-                OnMouseLButtonDown();
-            if (Input.GetMouseButtonUp(0))//mouse left
-                OnMouseLButtonUp();
+        bool GetRayCast(Vector3 pos, out RaycastHit hit, int layer)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(pos);//현재 마우스의 클릭 위치
+            return Physics.Raycast(ray, out hit, Mathf.Infinity, layer);//picking된 object 정보
+        }
 
-            if (Input.GetMouseButtonUp(1))//mouse right
-                OnMouseRButtonUp();
-            //if (Input.GetMouseButtonDown(2))//mouse middle
-            //    OnMouseMButtonDown();
+        private void ShowChoicePrefab(int posx, int posy, int posz)
+        {
+            BlockScript prefab = GameManager.GetTerrainManager().GetChoicePrefab();
+            if (null == prefab) return;
+
+            if (false == CheckMouse_Refresh(posx, posy, posz))
+                return;
+
+            prefab.SetPos(posx, posy, posz);
+        }
+
+        bool CheckMouse_Refresh(int posx, int posy, int posz)
+        {
+            if (false == mouse_refresh
+                && posx == mouse_pos_x && posy == mouse_pos_y && posz == mouse_pos_z)
+                return false;
+
+            mouse_pos_x     = posx;
+            mouse_pos_y     = posy;
+            mouse_pos_z     = posz;
+            mouse_refresh   = false;
+            //Debug.Log($"RaycastHit:({posx},{posy},{posz})");
+            return true;
         }
 
         void OnMouseMove()
@@ -108,15 +117,24 @@ namespace MyCraft
                 }
             }
 
+            //인벤아이템을 잡았을때 마우스와 이격거리
             if (null != InvenBase.choiced_item)
-            {
                 InvenBase.choiced_item.transform.position = Input.mousePosition + offset;
-            }
 
         }
 
         void OnMouseLButtonDown()
         {
+#if UNITY_EDITOR
+            //UI위를 클릭했을때...무시
+            if (true == EventSystem.current.IsPointerOverGameObject())
+                return;
+            //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+                if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    return;
+#endif
+
             BlockScript prefab = GameManager.GetTerrainManager().GetChoicePrefab();
             if (null == prefab) return;
 
@@ -185,8 +203,7 @@ namespace MyCraft
                             break;
                     }
                 }
-
-            }//..if(GetRayCast())
+            }//..if(GetRayCast(LAYER_TYPE.BLOCK))
             else
             if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.TERRAIN))//picking된 object 정보
             {
@@ -223,51 +240,80 @@ namespace MyCraft
                 //terrain에 block을 생성합니다.
                 GameManager.GetTerrainManager().CreateBlock(GameManager.GetTerrainManager().GetBlockLayer(), posx, posy, posz, GameManager.GetTerrainManager().GetChoicePrefab());
 
-            }//..if(GetRayCast())
+            }//..if(GetRayCast(LAYER_TYPE.TERRAIN))
 
+        }
+
+        void OnMouseRButtonDown()
+        {
+#if UNITY_EDITOR
+            //UI위를 클릭했을때...무시
+            if (true == EventSystem.current.IsPointerOverGameObject())
+                return;
+            //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+            if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                return;
+#endif
+
+            //RaycastHit hit;
+            //if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
+            //{
+            //    //Debug.Log("hit tag : " + hit.collider.tag.ToString());
+            //    //GameManager.GetTerrainManager().DeleteBlock(hit.collider.gameObject, true);
+            //}
+
+            GameManager.GetDeleteProgress().SetProgress(null);
+            GameManager.GetDeleteProgress().gameObject.SetActive(true);
+        }
+
+        void OnMouseRButton()
+        {
+#if UNITY_EDITOR
+            //UI위를 클릭했을때...무시
+            if (true == EventSystem.current.IsPointerOverGameObject())
+                return;
+            //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+#elif UNITY_ANDROID // or iOS 
+            if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                return;
+#endif
+
+            RaycastHit hit;
+            if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
+            {
+                //Debug.Log("hit tag : " + hit.collider.tag.ToString());
+                //GameManager.GetTerrainManager().DeleteBlock(hit.collider.gameObject, true);
+                GameManager.GetDeleteProgress().SetProgress(hit.collider.gameObject);
+                GameManager.GetDeleteProgress().gameObject.SetActive(true);
+            }
+            //지정한 block을 벗어나면...초기화.
+            else
+            {
+                GameManager.GetDeleteProgress().SetProgress(null);
+                GameManager.GetDeleteProgress().gameObject.SetActive(false);
+            }
         }
 
         void OnMouseRButtonUp()
         {
-            RaycastHit hit;
-            if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
-            {
 #if UNITY_EDITOR
-                //UI위를 클릭했을때...무시
-                if (true == EventSystem.current.IsPointerOverGameObject())
-                    return;
-                //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
+            //UI위를 클릭했을때...무시
+            if (true == EventSystem.current.IsPointerOverGameObject())
+                return;
+            //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
 #elif UNITY_ANDROID // or iOS 
-                if (EventSystem.current.IsPointerOverGameObject(0) == false)
-                    return;
+            if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                return;
 #endif
 
-                //Debug.Log("layer: " + hit.collider.gameObject.layer);
-                //Debug.Log("hit tag : " + hit.collider.tag.ToString());
-                //if (0 == hit.collider.tag.CompareTo("Block"))
-                {
-                    //Debug.Log("hit tag : " + hit.collider.tag.ToString());
-                    GameManager.GetTerrainManager().DeleteBlock(hit.collider.gameObject, true);
-                }
-            }
-        }
-
-        bool GetRayCast(Vector3 pos, out RaycastHit hit, int layer)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(pos);//현재 마우스의 클릭 위치
-            return Physics.Raycast(ray, out hit, Mathf.Infinity, layer);//picking된 object 정보
-        }
-
-        private void ShowChoicePrefab(int posx, int posy, int posz)
-        {
-            if (null == GameManager.GetTerrainManager().GetChoicePrefab())
-                return;
-
-                if (false == CheckMouse_Refresh(posx, posy, posz))
-                return;
-
-            if(GameManager.GetTerrainManager().GetChoicePrefab())
-                GameManager.GetTerrainManager().GetChoicePrefab().SetPos(posx, posy, posz);
+            //RaycastHit hit;
+            //if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
+            //{
+            //    //Debug.Log("hit tag : " + hit.collider.tag.ToString());
+            //    GameManager.GetTerrainManager().DeleteBlock(hit.collider.gameObject, true);
+            //}
+            GameManager.GetDeleteProgress().gameObject.SetActive(false);
         }
 
     }//..class MouseController

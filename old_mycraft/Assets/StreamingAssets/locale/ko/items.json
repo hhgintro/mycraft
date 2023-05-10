@@ -465,7 +465,119 @@
     "icon": "pipe"
   },
 
+  {
+    "id": 1220,
+    "type": 1220,
+    "title": "파이프 Vertical-Up-Begin",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
 
+  {
+    "id": 1230,
+    "type": 1230,
+    "title": "파이프 Vertical-Up-Middle",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
+
+  {
+    "id": 1240,
+    "type": 1240,
+    "title": "파이프 Vertical-Up-End",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
+
+  {
+    "id": 1250,
+    "type": 1250,
+    "title": "파이프 Vertical-Down-Begin",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
+
+  {
+    "id": 1260,
+    "type": 1260,
+    "title": "파이프 Vertical-Down-Middle",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
+
+  {
+    "id": 1270,
+    "type": 1270,
+    "title": "파이프 Vertical-Down-End",
+    "desc": "액체를 운반하는 설비",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "pipe"
+  },
 
   {
     "id": 2000,

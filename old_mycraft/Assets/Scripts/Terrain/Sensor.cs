@@ -24,10 +24,15 @@ public class Sensor : MonoBehaviour
             return;
 
         //[자신]이 prefab상태일때 외형을 바꾸지 않습니다(주석해제)
-        //[자신]이 prefab상태일때 외형이 바꿔야 하므로 아래는 주석처리함
         if (false == this._owner._bOnTerrain)
             return;
 
+        ////같은 block끼리만 반응한다.
+        //if (this._owner._itembase.type != sensor._owner._itembase.type)
+        //    return;
+
+        //sensor의 영향을 주는 방향과 영향을 받는 방향이 같아야 한다.
+        //[자신]의 forward와 일치히면 true를 리턴합니다.
         if (false == this.WeightTurn(sensor))
             return;
 

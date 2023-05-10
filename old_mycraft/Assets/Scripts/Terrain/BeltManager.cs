@@ -284,7 +284,7 @@ namespace MyCraft
 
             //삭제된 script의 front가 (외형)변경되어져야 하는지 체크합니다.
             BlockScript script_front = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
-            if (script_front) script_front.manager.ChainBelt(script_front);
+            if (script_front) script_front.manager.ChainBlock(script_front);
 
             //script.DeleteBlock();
             base.DeleteBlock(script);
@@ -330,7 +330,7 @@ namespace MyCraft
         }
 
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public override BlockScript ChainBelt(BlockScript script)
+        public override BlockScript ChainBlock(BlockScript script)
         {
             //if (null == script || null == script._itembase) return null;
             //if (BLOCKTYPE.BELT != script._itembase.type) return null;
@@ -381,7 +381,7 @@ namespace MyCraft
             }
 
             //외형이 변경되지 않은 경우
-            //script_front와 link는 잡아준다.
+            //script의 back/left/right에서 link를 걸어줍니다.
             script.LinkedBelt();
             return script;
         }
@@ -390,7 +390,7 @@ namespace MyCraft
         //변경될 prefab을 가져옵니다.
         public BeltScript ChainBeltPrefab(BeltScript script)
         {
-            int weight = script.CheckWeightChainBelt();
+            int weight = script.CheckWeightChainBlock();
 
             BeltScript prefab = null;
             /*

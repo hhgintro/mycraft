@@ -33,6 +33,7 @@ namespace MyCraft
         private static BeltVerticalDownMiddleManager _belt_vertical_down_middle_manager;
         private static BeltVerticalDownEndManager _belt_vertical_down_end_manager;
         private static SpliterManager _spliter_manager;
+        private static PipeManager _pipe_manager;
         private static InserterManager _inserter_manager;
         private static ChestManager _chest_manager;
         private static DrillManager _drill_manager;
@@ -59,6 +60,7 @@ namespace MyCraft
         private static TechInven _techinven;
         private static TechDescription _techdesc;
         private static Tooltip _tooltip;
+        private static DeleteBlockProgress _delete_progress;
 
         private static Coordinates _coodinates;  //좌표
 
@@ -102,12 +104,14 @@ namespace MyCraft
                 GameManager.GetInventory().AddItem(50, 54);     //copper-ore
 
                 GameManager.GetInventory().AddItem(1100, 54);   //belt
-                GameManager.GetInventory().AddItem(1130, 100);   //Vertical-Up-Begin
-                GameManager.GetInventory().AddItem(1140, 100);   //Vertical-Up-Middle
-                GameManager.GetInventory().AddItem(1150, 100);   //Vertical-Up-End
-                GameManager.GetInventory().AddItem(1160, 100);   //Vertical-Down-Begin
-                GameManager.GetInventory().AddItem(1170, 100);   //Vertical-Down-Middle
-                GameManager.GetInventory().AddItem(1180, 100);   //Vertical-Down-End
+                GameManager.GetInventory().AddItem(1110, 100);  //belt-up
+                GameManager.GetInventory().AddItem(1120, 100);  //belt-down
+                GameManager.GetInventory().AddItem(1130, 100);  //Vertical-Up-Begin
+                GameManager.GetInventory().AddItem(1140, 100);  //Vertical-Up-Middle
+                GameManager.GetInventory().AddItem(1150, 100);  //Vertical-Up-End
+                GameManager.GetInventory().AddItem(1160, 100);  //Vertical-Down-Begin
+                GameManager.GetInventory().AddItem(1170, 100);  //Vertical-Down-Middle
+                GameManager.GetInventory().AddItem(1180, 100);  //Vertical-Down-End
 
 
                 //quick slot
@@ -116,8 +120,7 @@ namespace MyCraft
 
                 GameManager.GetQuickInven().AddItem(1000, 54);  //chest
                 GameManager.GetQuickInven().AddItem(1100, 54);  //belt
-                GameManager.GetQuickInven().AddItem(1110, 100); //belt-up
-                GameManager.GetQuickInven().AddItem(1120, 100); //belt-down
+                GameManager.GetQuickInven().AddItem(1210, 54);  //pipe
                 GameManager.GetQuickInven().AddItem(1200, 54);  //spliter
                 GameManager.GetQuickInven().AddItem(1030, 54);  //inserter
                 GameManager.GetQuickInven().AddItem(1040, 54);  //drill
@@ -171,6 +174,7 @@ namespace MyCraft
             GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
             GameManager.GetMachineInven().gameObject.SetActive(false);
             GameManager.GetSkillInven().gameObject.SetActive(false);
+            GameManager.GetDeleteProgress().gameObject.SetActive(false);
 
             //GameManager.GetSystemMenu().gameObject.SetActive(false);
             Managers.SystemMenu.SetActive(false);
@@ -270,6 +274,12 @@ namespace MyCraft
             if (null == _spliter_manager)
                 _spliter_manager = GetTerrainManager().GetComponentInChildren<SpliterManager>();
             return _spliter_manager;
+        }
+        public static PipeManager GetPipeManager()
+        {
+            if (null == _pipe_manager)
+                _pipe_manager = GetTerrainManager().GetComponentInChildren<PipeManager>();
+            return _pipe_manager;
         }
         public static InserterManager GetInserterManager() {
             if(null == _inserter_manager)
@@ -391,6 +401,12 @@ namespace MyCraft
             if (null == _tooltip)
                 _tooltip = GameObject.Find("Canvas/Inventory/Tooltip").GetComponent<Tooltip>();
             return _tooltip;
+        }
+        public static DeleteBlockProgress GetDeleteProgress()
+        {
+            if (null == _delete_progress)
+                _delete_progress = GameObject.Find("Canvas/Inventory/Delete Block").GetComponent<DeleteBlockProgress>();
+            return _delete_progress;
         }
 
         public static Coordinates GetCoordinates()

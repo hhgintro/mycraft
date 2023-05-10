@@ -16,6 +16,7 @@
     "reward":[{"skill":1100},{"skill":1200}],
     "icon":"automation"
   },
+
   {
     "type":6000,
     "id":2,
@@ -34,6 +35,7 @@
     "reward":[{"skill":1040},{"skill":1050}],
     "icon":"electronics"
   },
+
   {
     "type":6000,
     "id":3,

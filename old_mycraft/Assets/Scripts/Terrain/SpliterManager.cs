@@ -53,11 +53,11 @@ namespace MyCraft
             BlockScript script_lfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward);
             BlockScript script_rfront = GameManager.GetTerrainManager().block_layer.GetBlock(script.transform.position + script.transform.forward + script.transform.right);
             if (null != script_lfront && script_lfront == script_rfront)
-                script_lfront.manager.ChainBelt(script_lfront);
+                script_lfront.manager.ChainBlock(script_lfront);
             else
             {
-                if (script_lfront) script_lfront.manager.ChainBelt(script_lfront);
-                if (script_rfront) script_rfront.manager.ChainBelt(script_rfront);
+                if (script_lfront) script_lfront.manager.ChainBlock(script_lfront);
+                if (script_rfront) script_rfront.manager.ChainBlock(script_rfront);
             }
 
             //script.DeleteBlock();
@@ -83,7 +83,7 @@ namespace MyCraft
 
 
         //자신의 front(script)가 (외형)변경되어져야 하는지 체크합니다.
-        public override BlockScript ChainBelt(BlockScript script)
+        public override BlockScript ChainBlock(BlockScript script)
         {
             //if (null == script || null == script._itembase) return null;
             //if (BLOCKTYPE.BELT != script._itembase.type) return null;
