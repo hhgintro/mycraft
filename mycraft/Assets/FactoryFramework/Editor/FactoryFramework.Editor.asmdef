@@ -1,0 +1,18 @@
+{
+    "name": "FactoryFramework.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:abee4de56381f8f4695313b4ab2e00a0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

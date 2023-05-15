@@ -1,0 +1,68 @@
+
+V1.4.4 Mesh Generation UV Hotfix
+* fixed an issue in the mesh slicer that caused incorrect uv mappings
+
+V1.4.3 UIElements Hotfix and Belt Placement Collisions
+* fixed a small issue where OnValidate was not getting called soon enough
+* adjusted collisions of belts to better utilize terrain
+* allowed belts to be placed without starting buildings
+
+V1.4.2 Additional Helpful UI
+* hover to display building names
+* hover to show AOE radius for power towers
+* hints for connecting with power cables
+* sort order for placeable scriptable objects
+
+V1.4.1 UI Document Hotfix
+* include the default unity runtime theme in the upload
+
+V 1.4.0 Power Systems Update
+* Power Grids and PowerGridComponents for energy use and production
+* Renewable and Non-renewable types of energy production
+* Power delivery can be direct connections or area-of-effect
+* Existing buildings use power grid features
+* Shadergraph shaders for URP and HDRP
+* Backup shaders for built-in RP
+* Serialization improvements across all buildings
+* Serialization changes for Processor and Storage
+* Removed serialized InstanceIDs in facor of resource path
+* Moved all dynamically loaded demo assets into Resources
+* Revamped Demo Scene
+* New Demo UI using UIElements
+* Simple Procedural terrain for demo scene
+
+V1.3.0 Socket Refactor and Serialization Bugfixes
+* Removed Conveyor-Building Sockets
+* Removed ConveyorBridge (2 conveyors) Sockets
+* Added Input and Output Socket types
+* Added sockets to both ends of Conveyors 
+* Fixed Splitter/Merger Serialization
+* Fixed Conveyor speed Serialization
+
+V1.2.1 Bugfixes and Y-position Belt Placement
+* Fixed null errors in Storage object
+* Fixed StartScreen GUID issues
+* Added Hold LShift to cahnge conveyor height
+
+V1.2.0 Save and Load Support
+* Added complete save and load support for buildings and belts!
+
+V1.1.1 Bugfix
+* Fixed an issue with VRAM continuously increasing due to meshes not being disposed properly
+
+v1.1.0 Jobs + Burst Mesh Generation
+* Implemented Jobs accelerated mesh generation for significant performance increase
+* Fixed issue with not being able to build due to editor scripts
+
+v1.0.1 Initial BugFixes and Basic Events
+* Fixed belt height when placing endpoint on terrain
+* Added basic lifecycle events for buildings and conveyors
+* Added Start screen for easy setup upon new version download
+* Fixed Conveyor Belt collision maskings
+* Demo scene to illustrate custom belts
+
+v1.0.0 Initial Release
+* Base Classes for Conveyor Belts, Sockets, and Buildings
+* Path Solving for Linear, Spline, or Smart Path types
+* Demo scene playable sandbox
+* Customizable Belt model system

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 6b4ca6ffb0c858644ab1b8b2ac86784e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - startPlacementEvent: {fileID: 11400000, guid: a6b2bd71e01bfea448fe4100128defae, type: 2}
+  - finishPlacementEvent: {fileID: 11400000, guid: cc6ba31f00e6b7745b57dc7155ed45e1, type: 2}
+  - cancelPlacementEvent: {fileID: 11400000, guid: 4b0633616cce7c449844b0d90f14598d, type: 2}
+  - conveyorPrefab: {instanceID: 0}
+  - originalFrameMat: {instanceID: 0}
+  - originalBeltMat: {instanceID: 0}
+  - greenGhostMat: {instanceID: 0}
+  - redGhostMat: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -11,7 +11,7 @@ namespace MyCraft
         Image _progress;
         float _time = 1f;//(¥‹¿ß:s)
 
-        void Start()
+        void Awake()
         {
             _progress = this.transform.GetChild(0).GetChild(0).GetComponent<Image>();
             this._progress.fillAmount = 0;

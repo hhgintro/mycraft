@@ -50,7 +50,7 @@ namespace MyCraft
 
             //end position
             int endx = Common.PosRound(belt_hold_end.x);
-            int endy = Common.PosFloor(belt_hold_end.y);
+            int endy = Common.PosRound(belt_hold_end.y);
             int endz = Common.PosRound(belt_hold_end.z);
 
             bool isUp = false;          //(앞이 막혀서)위로 올라가야하나?
@@ -66,7 +66,7 @@ namespace MyCraft
 
                 //current position
                 int posx = Common.PosRound(pos.x);
-                int posy = Common.PosFloor(pos.y);
+                int posy = Common.PosRound(pos.y);
                 int posz = Common.PosRound(pos.z);
                 //현위치 점유중이면...종료
                 if (null != GameManager.GetTerrainManager().GetBlockLayer().GetBlock(posx, posy, posz))
@@ -171,7 +171,7 @@ namespace MyCraft
             //next: 설치할 곳보다 앞쪽.
             Vector3 next = pos + forward;
             int nextx = Common.PosRound(next.x);
-            int nexty = Common.PosFloor(next.y);
+            int nexty = Common.PosRound(next.y);
             int nextz = Common.PosRound(next.z);
 
             // *********************** //
@@ -223,7 +223,7 @@ namespace MyCraft
             //설치할 곳.바로위
             Vector3 upper = pos + Vector3.up;
             int upperx = Common.PosRound(upper.x);
-            int uppery = Common.PosFloor(upper.y);
+            int uppery = Common.PosRound(upper.y);
             int upperz = Common.PosRound(upper.z);
 
             //설치할 곳.바로위 비어있다...올라간다.
@@ -246,7 +246,7 @@ namespace MyCraft
             //설치할 곳.바로아래
             Vector3 under = pos + Vector3.down;
             int underx = Common.PosRound(under.x);
-            int undery = Common.PosFloor(under.y);
+            int undery = Common.PosRound(under.y);
             int underz = Common.PosRound(under.z);
 
             //설치할 곳.바로아래 비어있다.

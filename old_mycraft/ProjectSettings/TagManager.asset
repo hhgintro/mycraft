@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Block
   - Terrain
+  - Building
+  - Resources
   layers:
   - Default
   - TransparentFX
@@ -13,14 +14,14 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
   - Terrain
-  - Mineral
-  - Block
-  - Player
-  - Monster
-  - Sensor
+  - Belt Collideable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

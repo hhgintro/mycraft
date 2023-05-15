@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/FactoryFramework/Demo/UI/DemoStyle.uss?fileID=7433441132597879392&amp;guid=6cca6fd700456a640b7ff24e3756a098&amp;type=3#DemoStyle" />
+    <ui:VisualElement class="resource" style="height: 35px;">
+        <ui:VisualElement style="flex-direction: row;">
+            <ui:VisualElement name="icon" style="width: 35px; background-image: resource(&apos;Items/Models/icon_a_ingot&apos;); -unity-background-scale-mode: scale-and-crop;" />
+            <ui:Label text="Resource Name" display-tooltip-when-elided="true" name="key" />
+        </ui:VisualElement>
+        <ui:Label text="0" display-tooltip-when-elided="true" name="value" />
+    </ui:VisualElement>
+</ui:UXML>

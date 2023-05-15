@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -140,6 +141,19 @@ namespace MyCraft
         public static bool CHECK_BIT(int weight, int val)
         {
             return (weight & val) == val;
+        }
+
+        //origin: 상공에서 수직아래로 ray를 쏜다.
+        public static Vector3 GetMapHeight(Vector3 point, int layerMask)
+        {
+            float maxDistance = 300f;
+            Vector3 origin = new Vector3(point.x, maxDistance-10, point.z);
+
+            Ray ray = new Ray(origin, Vector3.down);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
+                return hit.point;
+            return Vector3.zero;
         }
 
         public static bool OnBound(float val, float bound)

@@ -1,0 +1,60 @@
+VisualElement {
+}
+
+.resource {
+    background-color: rgba(45, 43, 65, 0.78);
+    height: 32px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgba(255, 255, 255, 255);
+    -unity-text-align: middle-center;
+}
+
+.build {
+    height: 100%;
+    width: 65px;
+    background-image: url('project://database/Assets/FactoryFramework/Demo/Art/UI/forge_icon.png?fileID=21300000&guid=2162aa85c8edf8e4d894d1510a9f0a63&type=3#forge_icon');
+    -unity-background-scale-mode: scale-and-crop;
+    border-left-color: rgba(255, 255, 255, 0.25);
+    border-right-color: rgba(255, 255, 255, 0.25);
+    border-top-color: rgba(255, 255, 255, 0.25);
+    border-bottom-color: rgba(255, 255, 255, 0.25);
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    transition-duration: 0.5s;
+}
+
+.build:hover {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(255, 196, 0, 255);
+    border-right-color: rgba(255, 196, 0, 255);
+    border-top-color: rgba(255, 196, 0, 255);
+    border-bottom-color: rgba(255, 196, 0, 255);
+    height: 110%;
+    width: 70px;
+    margin-left: 8px;
+    margin-right: 8px;
+}

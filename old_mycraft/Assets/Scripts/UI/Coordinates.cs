@@ -16,13 +16,17 @@ public class Coordinates : MonoBehaviour
         _coordinate = LocaleManager.GetLocale("coordinates", "coordinate");
     }
 
-    public void DrawCoordinate(int posx, int posy, int posz)
+    public void DrawCoordinate(Vector3 point, int posx, int posy, int posz)
     {
         //int posx = Common.PosRound(pos.x);
-        //int posy = Common.PosFloor(pos.y);
+        //int posy = Common.PosRound(pos.y);
         //int posz = Common.PosRound(pos.z);
 
         //_text.text = string.Format($"ÁÂÇ¥(x,y,z): {pos}");
-        _text.text = string.Format($"{_coordinate}: ({posx},{ posy},{posz})");
+        _text.text = string.Format($"{_coordinate}: ({posx},{ posy},{posz})/{point}");
+
+        
+        int layer = 1 << (int)LAYER_TYPE.BLOCK | 1 << (int)LAYER_TYPE.TERRAIN;
+        Debug.Log($"Height:{Common.GetMapHeight(point, layer)}");
     }
 }

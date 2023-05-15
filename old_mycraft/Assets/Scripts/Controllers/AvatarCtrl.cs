@@ -46,4 +46,4 @@ namespace MyCraft
             //this.animator.SetFloat("Speed", Input.GetAxis("Vertical"));
         }
     }
-}
+}//..namespace MyCraft

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/FactoryFramework/Demo/UI/DemoStyle.uss?fileID=7433441132597879392&amp;guid=6cca6fd700456a640b7ff24e3756a098&amp;type=3#DemoStyle" />
+    <ui:VisualElement style="position: absolute; width: 100%; height: 100%;">
+        <ui:VisualElement name="resources" style="left: 0; top: 0; width: 20%; height: 33%; max-width: 300px; min-height: 400px;" />
+        <ui:VisualElement name="build-menu-container" style="position: absolute; bottom: 0; width: 100%; height: 100px; flex-direction: row; justify-content: center;">
+            <ui:VisualElement name="build-menu" picking-mode="Ignore" style="width: 80%; max-width: 1080px; background-color: rgba(45, 43, 65, 0.78); border-top-left-radius: 50px; border-top-right-radius: 50px; bottom: 10px; top: 0; height: 100px; flex-direction: row; padding-left: 24px; padding-right: 24px; padding-top: 16px; padding-bottom: 16px; justify-content: center;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="messages" style="position: absolute; width: 30%; align-items: center; top: 0; left: 35%; right: 35%; height: 65px; background-color: rgba(45, 43, 65, 0.78); border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; color: rgb(255, 255, 255); font-size: 17px; -unity-font-style: bold; -unity-text-align: middle-center; justify-content: center; flex-direction: column;" />
+        <ui:VisualElement style="position: absolute; top: 0; right: 0; width: 300px; height: 40px; flex-direction: row; font-size: 32px; -unity-font-style: bold; color: rgb(41, 35, 35);">
+            <ui:Button text="Save" display-tooltip-when-elided="true" enable-rich-text="false" name="save" style="flex-grow: 1; background-color: rgb(137, 231, 132); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;" />
+            <ui:Button text="Load" display-tooltip-when-elided="true" name="load" style="flex-grow: 1; background-color: rgb(226, 124, 57); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="left: 0; height: 50%; width: 33%; top: 25%; bottom: 25%; position: absolute;">
+            <ui:Label text="Demo Instructions&#10;&#10;All buildings you can place are along the bottom&#10;&#10;You should start by placing a power source and connecting it to your buildings with cables&#10;&#10;wind and solar power are limiteless power but they are weaker than a coal plant&#10;&#10;if a building does not have power it will not work at maximum efficiency&#10;&#10;Hovering over buildings should provide additional info" display-tooltip-when-elided="true" enable-rich-text="false" style="white-space: normal; font-size: 20px; color: rgb(231, 223, 223); -unity-text-outline-width: 0; -unity-font-style: bold; opacity: 1; -unity-text-outline-color: rgb(0, 0, 0); text-shadow: 1px 1px 3px rgb(0, 0, 0);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -96,10 +96,10 @@ namespace MyCraft
                 if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.BLOCK))//picking된 object 정보
                 {
                     //0.6:맞닫는면의 수선의 길이가 block의 1칸을 넘지 않도록
-                    Vector3 hitPoint = hit.point + hit.normal*0.6f;
+                    Vector3 hitPoint = hit.point + hit.normal*0.5f;
 
                     int posx = Common.PosRound(hitPoint.x);
-                    int posy = Common.PosFloor(hitPoint.y);
+                    int posy = Common.PosRound(hitPoint.y);
                     int posz = Common.PosRound(hitPoint.z);
 
                     //GameManager.GetCoordinates().DrawCoordinate(posx, posy, posz);    //좌표 표기
@@ -109,10 +109,10 @@ namespace MyCraft
                 if (GetRayCast(Input.mousePosition, out hit, 1 << (int)LAYER_TYPE.TERRAIN))//picking된 object 정보
                 {
                     int posx = Common.PosRound(hit.point.x);
-                    int posy = Common.PosFloor(hit.point.y);
+                    int posy = Common.PosRound(hit.point.y);
                     int posz = Common.PosRound(hit.point.z);
 
-                    GameManager.GetCoordinates().DrawCoordinate(posx, posy, posz);  //좌표 표기
+                    GameManager.GetCoordinates().DrawCoordinate(hit.point, posx, posy, posz);  //좌표 표기
                     ShowChoicePrefab(posx, posy, posz);
                 }
             }
@@ -195,7 +195,7 @@ namespace MyCraft
                                 Vector3 hisPoint = hit.point + hit.normal*0.6f;
 
                                 int posx = Common.PosRound(hisPoint.x);
-                                int posy = Common.PosFloor(hisPoint.y);
+                                int posy = Common.PosRound(hisPoint.y);
                                 int posz = Common.PosRound(hisPoint.z);
 
                                 GameManager.GetTerrainManager().CreateBlock(GameManager.GetTerrainManager().GetBlockLayer(), posx, posy, posz, GameManager.GetTerrainManager().GetChoicePrefab());
@@ -234,7 +234,7 @@ namespace MyCraft
                 //..
 
                 int posx = Common.PosRound(hit.point.x);
-                int posy = Common.PosFloor(hit.point.y);
+                int posy = Common.PosRound(hit.point.y);
                 int posz = Common.PosRound(hit.point.z);
 
                 //terrain에 block을 생성합니다.
