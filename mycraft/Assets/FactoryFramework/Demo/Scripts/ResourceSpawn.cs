@@ -10,6 +10,10 @@ using FactoryFramework;
 
 public class ResourceSpawn : Resource
 {
+    /// <summary>
+    /// Should the generated field of meshes get merged together into one mesh
+    /// </summary>
+    public bool mergeMeshes = true;
     public float radius = .5f;
     public Vector2 region = new Vector2(5,5);
 
@@ -39,29 +43,31 @@ public class ResourceSpawn : Resource
             obj.transform.position = pos;
             obj.transform.rotation = transform.rotation * Quaternion.AngleAxis(Random.value * 360f, transform.up);
         }
-        // combine meshes
-        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-        // grab material
-        Material m = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
-        // add meshes to combine
-        for (int i = 0; i < meshFilters.Length; i++)
+        if (mergeMeshes)
         {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            //meshFilters[i].gameObject.SetActive(false);
-            Destroy(meshFilters[i].gameObject);
+            // combine meshes
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            // grab material
+            Material m = meshFilters[0].GetComponent<MeshRenderer>().sharedMaterial;
+            // add meshes to combine
+            for (int i = 0; i < meshFilters.Length; i++)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                //meshFilters[i].gameObject.SetActive(false);
+                Destroy(meshFilters[i].gameObject);
+            }
+            // setup rendering and combine into one mesh
+            MeshFilter filter = gameObject.AddComponent<MeshFilter>();
+            MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.sharedMaterial = m;
+            filter.mesh = new Mesh();
+            filter.mesh.CombineMeshes(combine);
+            // reset position and rotation
+            transform.position = oldPos;
+            transform.rotation = oldRot;
         }
-        // setup rendering and combine into one mesh
-        MeshFilter filter = gameObject.AddComponent<MeshFilter>();
-        MeshRenderer renderer = gameObject.AddComponent<MeshRenderer>();
-        renderer.sharedMaterial = m;
-        filter.mesh = new Mesh();
-        filter.mesh.CombineMeshes(combine);
-        // reset position and rotation
-        transform.position = oldPos;
-        transform.rotation = oldRot;
-
         // add a trigger 
         BoxCollider bc = gameObject.AddComponent<BoxCollider>();
         bc.size = new Vector3(region.x, 2f, region.y);

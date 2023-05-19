@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: Alien Metal Gear
   m_EditorClassIdentifier: 
+  _guid: c625fa2ea2a526b408f1621a04296e74
+  resourcesPath: Items/Alien Metal Gear
   icon: {fileID: 21300000, guid: 5206a774ae5a934428a3933b78e72624, type: 3}
   prefab: {fileID: 615613533953733511, guid: 5d5b63400b13217499eb04fd6abca05b, type: 3}
   itemData:

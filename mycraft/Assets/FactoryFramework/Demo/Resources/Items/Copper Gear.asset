@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: Copper Gear
   m_EditorClassIdentifier: 
+  _guid: 3fd1f5c84acb8c54298d509d3de520f8
+  resourcesPath: Items/Copper Gear
   icon: {fileID: 21300000, guid: fc620a60f85105a458fb4e4f13103a6b, type: 3}
   prefab: {fileID: 1336409999357225476, guid: 4df69ab63fab48040b96cfa09de3c22f, type: 3}
   itemData:

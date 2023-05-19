@@ -32,7 +32,7 @@ public class IPathTesterEditor : Editor
 
         //draw anchors
         Handles.color = Color.white;
-        var fmh_35_68_638195123406441682 = Quaternion.identity; Vector3 newStartPos = Handles.FreeMoveHandle(holder.start, 0.1f, Vector3.zero, Handles.CircleHandleCap);
+        var fmh_35_68_638200915685360858 = Quaternion.identity; Vector3 newStartPos = Handles.FreeMoveHandle(holder.start, 0.1f, Vector3.zero, Handles.CircleHandleCap);
         if (newStartPos != holder.start)
         {
             holder.start = newStartPos;
@@ -40,7 +40,7 @@ public class IPathTesterEditor : Editor
         }
 
         Handles.color = Color.black;
-        var fmh_43_64_638195123406467602 = Quaternion.identity; Vector3 newEndPos = Handles.FreeMoveHandle(holder.end, 0.1f, Vector3.zero, Handles.CircleHandleCap);
+        var fmh_43_64_638200915685407570 = Quaternion.identity; Vector3 newEndPos = Handles.FreeMoveHandle(holder.end, 0.1f, Vector3.zero, Handles.CircleHandleCap);
         if (newEndPos != holder.end)
         {
             holder.end = newEndPos;
@@ -110,9 +110,9 @@ public class IPathTesterEditor : Editor
 
         //Draw closestPoint holder
         Handles.color = Color.yellow;
-        var fmh_113_69_638195123406472596 = Quaternion.identity; closestPosTarget = Handles.FreeMoveHandle(closestPosTarget, 0.1f, Vector3.zero, Handles.CircleHandleCap);
+        var fmh_113_69_638200915685412926 = Quaternion.identity; closestPosTarget = Handles.FreeMoveHandle(closestPosTarget, 0.1f, Vector3.zero, Handles.CircleHandleCap);
         var closest = holder.p.GetClosestPoint(closestPosTarget);
-        var fmh_115_47_638195123406477397 = Quaternion.identity; Handles.FreeMoveHandle(closest.Item1, 0.05f, Vector3.zero, Handles.CircleHandleCap);
+        var fmh_115_47_638200915685417914 = Quaternion.identity; Handles.FreeMoveHandle(closest.Item1, 0.05f, Vector3.zero, Handles.CircleHandleCap);
 
         if (changed)
             holder.Regen();

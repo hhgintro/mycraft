@@ -1,0 +1,20 @@
+{
+    "saveData": [
+        "{\"position\":{\"x\":29.510974884033204,\"y\":3.3406124114990236,\"z\":58.607513427734378},\"rotation\":{\"x\":0.0,\"y\":0.9955079555511475,\"z\":0.0,\"w\":0.0946783721446991},\"guid\":\"ea55cc39-4add-47b9-8ce5-72174748d48b\",\"resourcesPath\":\"Buildings/Storage Building\",\"storage\":[{\"itemResourcePath\":\"Items/Iron Ingot\",\"amount\":50},{\"itemResourcePath\":\"\",\"amount\":0},{\"itemResourcePath\":\"\",\"amount\":0}],\"capacity\":3}",
+        "{\"position\":{\"x\":24.996618270874025,\"y\":4.0292510986328129,\"z\":73.77393341064453},\"rotation\":{\"x\":0.0,\"y\":-0.036287009716033939,\"z\":0.0,\"w\":0.9993414282798767},\"guid\":\"dc3128dd-b4be-45dd-becf-ac1009a7fb83\",\"resourcesPath\":\"Buildings/Drill Building\",\"itemStack\":{\"itemResourcePath\":\"Items/Iron Mineral\",\"amount\":50},\"overrideMaxStack\":false,\"overrideMaxStackNum\":1}",
+        "{\"position\":{\"x\":28.488439559936525,\"y\":3.053616523742676,\"z\":65.90438079833985},\"rotation\":{\"x\":0.0,\"y\":-0.10377039760351181,\"z\":0.0,\"w\":0.994601309299469},\"guid\":\"44eee360-e92f-4bdc-8233-a9d7f6539e8b\",\"resourcesPath\":\"Buildings/Forge\",\"recipeResourcePath\":\"Recipes/Iron Smelt\",\"currentInputs\":[{\"itemResourcePath\":\"Items/Iron Mineral\",\"amount\":7}],\"currentOutputs\":[{\"itemResourcePath\":\"Items/Iron Ingot\",\"amount\":0}]}",
+        "{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"guid\":\"8d7bed32-8301-40bc-bbc0-2a6983172dd5\",\"resourcesPath\":\"Buildings/Conveyor\",\"startPos\":{\"x\":25.21419334411621,\"y\":4.2792510986328129,\"z\":70.78182983398438},\"startDir\":{\"x\":0.07252509146928787,\"y\":0.0,\"z\":-0.9973665475845337},\"endPos\":{\"x\":28.218029022216798,\"y\":3.303616523742676,\"z\":67.18616485595703},\"endDir\":{\"x\":0.20642034709453584,\"y\":0.0,\"z\":-0.9784635305404663},\"speed\":1.0,\"capacity\":0,\"inputSocketGUID\":\"dc3128dd-b4be-45dd-becf-ac1009a7fb83\",\"inputSocketIndex\":0,\"outputSocketGUID\":\"44eee360-e92f-4bdc-8233-a9d7f6539e8b\",\"outputSocketIndex\":0,\"items\":[{\"resourcesPath\":\"Items/Iron Mineral\",\"position\":4.2782301902771},{\"resourcesPath\":\"Items/Iron Mineral\",\"position\":3.084149122238159},{\"resourcesPath\":\"Items/Iron Mineral\",\"position\":1.9820151329040528},{\"resourcesPath\":\"Items/Iron Mineral\",\"position\":0.9090873599052429}]}",
+        "{\"position\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"rotation\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"guid\":\"417f0208-6367-454b-9b68-f40e782d7696\",\"resourcesPath\":\"Buildings/Conveyor\",\"startPos\":{\"x\":28.751419067382814,\"y\":3.303616523742676,\"z\":64.65782165527344},\"startDir\":{\"x\":0.20642034709453584,\"y\":0.0,\"z\":-0.9784635305404663},\"endPos\":{\"x\":29.03971290588379,\"y\":3.5906124114990236,\"z\":61.06269454956055},\"endDir\":{\"x\":0.18850602209568025,\"y\":0.0,\"z\":-0.9820722341537476},\"speed\":1.0,\"capacity\":0,\"inputSocketGUID\":\"44eee360-e92f-4bdc-8233-a9d7f6539e8b\",\"inputSocketIndex\":0,\"outputSocketGUID\":\"ea55cc39-4add-47b9-8ce5-72174748d48b\",\"outputSocketIndex\":0,\"items\":[{\"resourcesPath\":\"Items/Iron Ingot\",\"position\":2.873211145401001},{\"resourcesPath\":\"Items/Iron Ingot\",\"position\":1.6272239685058594},{\"resourcesPath\":\"Items/Iron Ingot\",\"position\":0.383230984210968}]}"
+    ],
+    "saveDataTypes": [
+        "FactoryFramework.SerializeManager+StorageSaveData",
+        "FactoryFramework.SerializeManager+ProducerSaveData",
+        "FactoryFramework.SerializeManager+ProcessorSaveData",
+        "FactoryFramework.SerializeManager+ConveyorSaveData",
+        "FactoryFramework.SerializeManager+ConveyorSaveData"
+    ],
+    "powerGrids": [
+        "ea55cc39-4add-47b9-8ce5-72174748d48b:",
+        "44eee360-e92f-4bdc-8233-a9d7f6539e8b:"
+    ]
+}

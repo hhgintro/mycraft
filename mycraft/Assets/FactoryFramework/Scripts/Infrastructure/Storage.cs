@@ -21,7 +21,7 @@ namespace FactoryFramework
             foreach (ItemStack stack in storage)
             {
                 if (stack.item == item && stack.amount < item.itemData.maxStack) return true;
-                if (stack.item == null) return true;
+                if (stack.item == null || stack.amount == 0) return true;
             }
             return false;
         }

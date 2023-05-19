@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: End Product
   m_EditorClassIdentifier: 
+  _guid: 53ea624115572c042b27cfce3b46ad60
+  resourcesPath: Items/End Product
   icon: {fileID: 21300000, guid: 7662adb41fcc4754da3dd44918e96931, type: 3}
   prefab: {fileID: 4253800514321184955, guid: 8ff98833b1f365b448a6240bc1c94815, type: 3}
   itemData:

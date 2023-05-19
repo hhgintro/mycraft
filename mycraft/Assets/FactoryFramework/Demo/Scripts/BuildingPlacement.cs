@@ -27,11 +27,7 @@ public class BuildingPlacement : MonoBehaviour
     public Material redPlacementMaterial;
 
     // list of valid materials so we don't change any other materials
-    private Material[] validMaterials {
-        get { 
-            return new Material[3] { originalMaterial, greenPlacementMaterial, redPlacementMaterial }; 
-        } 
-    }
+    private Material[] validMaterials { get { return new Material[3] { originalMaterial, greenPlacementMaterial, redPlacementMaterial }; } }
 
     [Header("Controls")]
     public KeyCode CancelKey = KeyCode.Escape;
@@ -67,20 +63,19 @@ public class BuildingPlacement : MonoBehaviour
     private void ForceCancel()
     {
         if (current != null)
-        {
             Destroy(current.gameObject);
-        }
+
         current = null;
         this.state = State.None;
     }
 
-    public void PlaceMiner() => StartPlacingBuilding(Miner, true);
-    public void PlaceProcessor() => StartPlacingBuilding(Processor);
-    public void PlaceFactory() => StartPlacingBuilding(Factory);
-    public void PlaceAssembler() => StartPlacingBuilding(Assembler);
-    public void PlaceStorage() => StartPlacingBuilding(Storage);
-    public void PlaceSplitter() => StartPlacingBuilding(Splitter);
-    public void PlaceMerger() => StartPlacingBuilding(Merger);
+    public void PlaceMiner()        => StartPlacingBuilding(Miner, true);
+    public void PlaceProcessor()    => StartPlacingBuilding(Processor);
+    public void PlaceFactory()      => StartPlacingBuilding(Factory);
+    public void PlaceAssembler()    => StartPlacingBuilding(Assembler);
+    public void PlaceStorage()      => StartPlacingBuilding(Storage);
+    public void PlaceSplitter()     => StartPlacingBuilding(Splitter);
+    public void PlaceMerger()       => StartPlacingBuilding(Merger);
 
     public void StartPlacingBuilding(GameObject prefab, bool requireDeposit=false)
     {
@@ -119,6 +114,18 @@ public class BuildingPlacement : MonoBehaviour
 
     private void HandleIdleState()
     {
+        if(Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+            {
+                if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
+                {
+                    Debug.Log($"{building.name}");
+                }
+            }
+        }
+        
         // right click to delete
         if (Input.GetMouseButtonDown(1))
         {

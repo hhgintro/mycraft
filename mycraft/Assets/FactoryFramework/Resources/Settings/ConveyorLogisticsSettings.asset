@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ConveyorLogisticsSettings
   m_EditorClassIdentifier: 
   BELT_SCALE: 0.35
-  BELT_SPACING: 0.6
+  BELT_SPACING: 1
   BELT_SEGMENTS_PER_UNIT: 4
   BELT_TURN_RADIUS: 1
   BELT_RAMP_RADIUS: 0.5

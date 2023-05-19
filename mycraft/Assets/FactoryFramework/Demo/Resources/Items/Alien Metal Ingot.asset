@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: Alien Metal Ingot
   m_EditorClassIdentifier: 
+  _guid: 504592ec92a69be4c91ae1b8ac965511
+  resourcesPath: Items/Alien Metal Ingot
   icon: {fileID: 21300000, guid: d1f7780b71c32be4db91c8fa2baeb358, type: 3}
   prefab: {fileID: 9008315631786441923, guid: c934e5e828057be44947057f0a40b9e8, type: 3}
   itemData:

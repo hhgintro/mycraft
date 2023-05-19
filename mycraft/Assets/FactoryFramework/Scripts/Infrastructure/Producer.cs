@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace FactoryFramework
 {
+    //Drill
     public class Producer : Building, IOutput
     {
         public LocalStorage resource;
@@ -14,7 +15,8 @@ namespace FactoryFramework
 
         public void SetOutputResource(Item item)
         {
-            if (item == resource.itemStack.item) return;
+            if (item == resource.itemStack.item)
+                return;
             resource.itemStack.amount = 0;
             resource.itemStack.item = item;
             _t = 0f;
@@ -37,16 +39,18 @@ namespace FactoryFramework
 
         public override void ProcessLoop()
         {
-
             if (resource.itemStack.item == null)
             {
-                IsWorking = false; return;
+                IsWorking = false;
+                return;
             }
             // maybe move this to coroutine or async
             if (resource.itemStack.amount == resource.itemStack.item.itemData.maxStack)
             {
-                IsWorking = false; return;
+                IsWorking = false;
+                return;
             }
+
             IsWorking = true;
             _t += Time.deltaTime * PowerEfficiency; // FIXME maybe
             if (_t > secondsPerResource)
@@ -54,7 +58,6 @@ namespace FactoryFramework
                 resource.itemStack.amount += 1;
                 _t = _t % secondsPerResource;
             }
-
         }
 
         public bool CanGiveOutput(Item filter = null)

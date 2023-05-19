@@ -34,13 +34,15 @@ namespace FactoryFramework
             get { return _onSaveComplete; }
         }
 
+        private string saveFileDefault = "save.json";
         private string saveFilePath;
         private void Awake()
         {
-            saveFilePath = Application.persistentDataPath + "/";
+            //saveFilePath = Application.persistentDataPath + "/";
+            saveFilePath = Application.dataPath + "/../save";
         }
 
-        public void Load() => Load("save.json");
+    public void Load() => Load(saveFileDefault);
         public async void Load(string path)
         {
             string filePath = Path.Combine(saveFilePath, path);
@@ -171,10 +173,11 @@ namespace FactoryFramework
                     foreach(KeyValuePair<Guid, HashSet<Guid>> adj in pGrid)
                     {
                         PowerGridComponent a = lookup[adj.Key].GetComponent<PowerGridComponent>();
+                        if (a == null) continue;
                         foreach (Guid connection in adj.Value)
                         {
-                            PowerGridComponent b = lookup[connection].GetComponent<PowerGridComponent>();
-                            a.Connect(b);
+                            if (lookup.TryGetValue(connection, out SerializationReference b))
+                                a.Connect(b.GetComponent<PowerGridComponent>());
                         }
                         
                     }
@@ -189,7 +192,7 @@ namespace FactoryFramework
                 throw e;
             }
         }
-        public void Save() => Save("save.json");
+        public void Save() => Save(saveFileDefault);
         public void Save(string path)
         {
             string filePath = Path.Combine(saveFilePath, path);

@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: -4884882062333270462}
   - component: {fileID: -1752648384648681749}
   - component: {fileID: 8024195507401982720}
-  - component: {fileID: -7412033419036592912}
   m_Layer: 7
   m_Name: Drill Building
   m_TagString: Building
@@ -162,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89d5fee23dde1284b819fa89e835b7e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  message: Message Goes Here.
 --- !u!114 &8024195507401982720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,32 +175,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourcesPath: Buildings/Drill Building
---- !u!114 &-7412033419036592912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3937589444953038711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc615501dd0e548428dbda0b216b4ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 0}
-  basePowerDraw: 1
-  connectionPoint: {x: 0, y: 5.25, z: -2.45}
-  useConnectionRadius: 0
-  connectionRadius: 0
-  OnDisconnect:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRemoveConnection:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAddConnection:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8176356052912994827
 GameObject:
   m_ObjectHideFlags: 0

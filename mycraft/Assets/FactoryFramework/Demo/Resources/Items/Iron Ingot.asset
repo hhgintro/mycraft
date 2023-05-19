@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: Iron Ingot
   m_EditorClassIdentifier: 
+  _guid: d6d61a2531e55cb49abbb961c11a5ffb
+  resourcesPath: Items/Iron Ingot
   icon: {fileID: 21300000, guid: afb79cce2e9eea44ab97f1af61f247d8, type: 3}
   prefab: {fileID: 2782980965853948548, guid: 2fb1eec9eadc727449b12dfa7b61f77e, type: 3}
   itemData:

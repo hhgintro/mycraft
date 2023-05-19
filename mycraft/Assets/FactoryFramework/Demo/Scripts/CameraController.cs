@@ -28,6 +28,9 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         camera = GetComponentInChildren<Camera>();
+        //시작위치
+        _desiredPosition = new Vector3(28f, 0, 67f);
+        _desiredRotation = new Vector3(0f, 79f, 0f);
     }
 
     // Update is called once per frame

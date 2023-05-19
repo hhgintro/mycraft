@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace FactoryFramework
 {
+    //Forge
     public class Processor : Building, IInput, IOutput
     {
         public Recipe recipe;
@@ -12,16 +13,17 @@ namespace FactoryFramework
         public int numInputs;
         public int numOutputs;
 
-        private Dictionary<Item, int> _inputs = new Dictionary<Item, int>();
-        private Dictionary<Item, int> _outputs = new Dictionary<Item, int>();
+        //HG_TEST:private->public
+        public Dictionary<Item, int> _inputs = new Dictionary<Item, int>();
+        public Dictionary<Item, int> _outputs = new Dictionary<Item, int>();
 
         public Recipe[] validRecipes;
+        public Recipe[] invalidRecipes;
 
         private IEnumerator currentRoutine;
 
         public override void ProcessLoop()
-        {
-            
+        {            
             if (CanStartProduction())
             {
                 IsWorking = true;
@@ -53,13 +55,9 @@ namespace FactoryFramework
             {
                 if (_inputs.Keys.Count == 0) return false;
                 // we can try to find a recipe
-                Recipe[] matchedRecipes = RecipeFinder.FilterRecipes(_inputs.Keys.ToArray(), numOutputs, validRecipes);
-                if (matchedRecipes.Length > 0)
-                {
-                    AssignRecipe(matchedRecipes[0]);
-    
-                } else
-                    return false;
+                Recipe[] matchedRecipes = RecipeFinder.FilterRecipes(_inputs.Keys.ToArray(), numOutputs, validRecipes, invalidRecipes);
+                if (matchedRecipes.Length <= 0) return false;
+                AssignRecipe(matchedRecipes[0]);
             }
             // cannot start a new production cycle while one is running
             if (currentRoutine != null) return false;
@@ -162,14 +160,9 @@ namespace FactoryFramework
         public bool CanTakeInput(Item item)
         {
             if (item == null) return false;
-            
-            if (_inputs.ContainsKey(item))
-            {
-                return _inputs[item] < item.itemData.maxStack;
-            } else
-            {
-                return _inputs.Keys.Count < numInputs;
-            }
+
+            if (_inputs.ContainsKey(item))  return _inputs[item] < item.itemData.maxStack;
+            else                            return _inputs.Keys.Count < numInputs;
         }
 
         IEnumerator MakeOutput()
@@ -187,13 +180,9 @@ namespace FactoryFramework
             // do we need to un-assign the current recipe? Check if we can make any more
             bool isEmpty = true;
             foreach(KeyValuePair<Item,int> pair in _inputs)
-            {
                 isEmpty &= pair.Value == 0;
-            }
-            if (isEmpty)
-            {
-                AssignRecipe(null,true);
-            }
+
+            if (isEmpty) AssignRecipe(null,true);
             currentRoutine = null;
         }
 

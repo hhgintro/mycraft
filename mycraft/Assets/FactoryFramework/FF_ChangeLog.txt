@@ -1,4 +1,9 @@
 
+V1.4.5 Minor fixes to resource spawn, storage, and producers
+* resource spawn now has bool option to merge meshes or not
+* storage fixed a bug with empty item stacks not being overwritten
+* producers added a blacklist recipes option "invalid recipes"
+
 V1.4.4 Mesh Generation UV Hotfix
 * fixed an issue in the mesh slicer that caused incorrect uv mappings
 

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc93331e9d78834392e6618f7c1427e, type: 3}
   m_Name: Copper Ingot
   m_EditorClassIdentifier: 
+  _guid: 82a32649be0def94d92aa3c4c3bac2d8
+  resourcesPath: Items/Copper Ingot
   icon: {fileID: 21300000, guid: 597a1f2ae5e4c47418d8053b1f76f406, type: 3}
   prefab: {fileID: 408116279888327950, guid: b35a9cdac2df9484285a203c727c6ffa, type: 3}
   itemData:

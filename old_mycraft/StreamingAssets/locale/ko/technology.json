@@ -1,0 +1,59 @@
+﻿[
+  {
+    "type":6000,
+    "id":1,
+    "title":"과학 기술 1",
+    "desc":"과학 기술 1입니다.",
+    "cost":{
+      "multiple":11,
+      "time":1.1,
+      "item":[
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ]
+    },
+    "next-tech":[{"techid":2},{"techid":2}],
+    "reward":[{"skill":1100},{"skill":1200}],
+    "icon":"automation"
+  },
+
+  {
+    "type":6000,
+    "id":2,
+    "title":"과학 기술 2",
+    "desc":"과학 기술 2입니다.",
+    "cost":{
+      "multiple":12,
+      "time":2.1,
+      "item":[
+        {"itemid": 1100,"amount": 2},
+        {"itemid": 1200,"amount": 2}
+      ]
+    },
+    "pre-tech":[{"techid":1},{"techid":1}],
+    "next-tech":[{"techid":3},{"techid":3}],
+    "reward":[{"skill":1040},{"skill":1050}],
+    "icon":"electronics"
+  },
+
+  {
+    "type":6000,
+    "id":3,
+    "title":"과학 기술 3",
+    "desc":"과학 기술 3입니다.",
+    "cost":{
+      "multiple":13,
+      "time":3.1,
+      "item":[
+        {"itemid": 1040,"amount": 2},
+        {"itemid": 1050,"amount": 2}
+      ]
+    },
+    "pre-tech":[{"techid":2},{"techid":2}],
+    "reward":[{"skill":2010},{"skill":3000}],
+    "icon":"logistics"
+  }
+
+
+
+]

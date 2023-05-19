@@ -18,9 +18,9 @@ namespace FactoryFramework
     public class Conveyor : LogisticComponent, IInput, IOutput
     {
         public ConveyorData data;
-        private float Length { get { return (p == null) ? 0f : p.GetTotalLength(); } }
+        private float Length { get { return (_path == null) ? 0f : _path.GetTotalLength(); } }
 
-        [SerializeField, SerializeReference] public IPath p; // ? maybe should be included in serialization data
+        [SerializeField, SerializeReference] public IPath _path; // ? maybe should be included in serialization data
         public BeltMeshSO frameBM;
         public BeltMeshSO beltBM;
         private bool _validMesh = true;
@@ -45,6 +45,7 @@ namespace FactoryFramework
         //private List<Transform> _transforms = new List<Transform>();
         private ItemOnBelt LastItem { get { return items[items.Count - 1]; } }
         // private int currentLoad; 
+        Vector3 _distanceAboveBelt = Vector3.up * 0.1f;    //밸트위 아이템이 뭍히지 않게 조금 띄운다
 
         private ConveyorJob _conveyorJob;
         private JobHandle _jobHandle;
@@ -60,7 +61,7 @@ namespace FactoryFramework
 
             beltMeshRenderer = beltFilter.gameObject.GetComponent<MeshRenderer>();
 
-            p = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
+            _path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
             CalculateCapacity();
         }
 
@@ -94,7 +95,7 @@ namespace FactoryFramework
             }
             items.Clear();
             Reset();
-            p?.CleanUp();
+            _path?.CleanUp();
             Disconnect();
             OnConveyorDestroyed?.Invoke(this);
         }
@@ -104,7 +105,8 @@ namespace FactoryFramework
             // this function also serves as a sort of Init()
 
             // capcity is a simple calculation that depends on belt length and belt_spacing
-            capacity = (_capacity == -1) ? Mathf.Max(1,Mathf.FloorToInt(Length / settings.BELT_SPACING)) : _capacity;
+            //capacity = (_capacity == -1) ? Mathf.Max(1,Mathf.FloorToInt(Length / settings.BELT_SPACING)) : _capacity;
+            capacity = (_capacity == -1) ? Mathf.FloorToInt(Length/settings.BELT_SPACING)+1 : _capacity;
 
             // create a pool of gameobjects with rendering capabilities
             // pool => CreateFunc, DestroyFunc, GetFunc, ReleaseFunc, capacity
@@ -244,11 +246,11 @@ namespace FactoryFramework
 
                 Transform t = item.model;
                 float pos = item.position;
-                float percent = pos / p.GetTotalLength();
-                Vector3 worldPos = p.GetWorldPointFromPathSpace(percent);
-                Quaternion worldRotation = p.GetRotationAtPoint(percent);
+                float percent = pos / _path.GetTotalLength();
+                Vector3 worldPos = _path.GetWorldPointFromPathSpace(percent) + _distanceAboveBelt;
+                Quaternion worldRotation = _path.GetRotationAtPoint(percent);
                 t.SetPositionAndRotation(worldPos, worldRotation);
-                
+
 
                 // update max cumulative position
                 cumulativeMaxPos -= 1f * settings.BELT_SPACING;
@@ -308,18 +310,18 @@ namespace FactoryFramework
         public void UpdateMesh(bool finalize = false, Collider[] ignored = null, int startskip = 0, int endskip = 0)
         {
             _validMesh = true;
-            p?.CleanUp();
-            p = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
+            _path?.CleanUp();
+            _path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
 
-            if (!p.IsValid)
+            if (!_path.IsValid)
             {
                 if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to path");
                 _validMesh = false;
             }
-            int length = Mathf.Max(1,(int)(p.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
+            int length = Mathf.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
             //Debug.Log($"Length is {length}"); // development debug
 
-            bool collision = PathFactory.CollisionAlongPath(p, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip: startskip, endskip: endskip); //only collide belt collideable layer
+            bool collision = PathFactory.CollisionAlongPath(_path, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip: startskip, endskip: endskip); //only collide belt collideable layer
             if (collision)
             {
                 if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to collision");
@@ -340,8 +342,8 @@ namespace FactoryFramework
             }
             
 
-            frameFilter.mesh = BeltMeshGenerator.Generate(p, frameBM, length, ConveyorLogisticsUtils.settings.BELT_SCALE);
-            beltFilter.mesh = BeltMeshGenerator.Generate(p, beltBM, length, ConveyorLogisticsUtils.settings.BELT_SCALE, 1f, true);
+            frameFilter.mesh = BeltMeshGenerator.Generate(_path, frameBM, length, ConveyorLogisticsUtils.settings.BELT_SCALE);
+            beltFilter.mesh = BeltMeshGenerator.Generate(_path, beltBM, length, ConveyorLogisticsUtils.settings.BELT_SCALE, 1f, true);
 
             beltMeshRenderer = beltFilter.gameObject.GetComponent<MeshRenderer>();
 
@@ -448,11 +450,10 @@ namespace FactoryFramework
                 Gizmos.color = i.item.DebugColor;
 
                 float pos = i.position;
-                float percent = pos / p.GetTotalLength();
-                Vector3 worldPos = p.GetWorldPointFromPathSpace(percent);
+                float percent = pos / _path.GetTotalLength();
+                Vector3 worldPos = _path.GetWorldPointFromPathSpace(percent) + _distanceAboveBelt;
 
-                Gizmos.DrawWireSphere(worldPos, settings.BELT_SPACING / 2f);
-
+                Gizmos.DrawWireSphere(worldPos, settings.BELT_SPACING/2f);
             }
         }
 #endif
