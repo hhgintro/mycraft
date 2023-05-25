@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/FactoryFramework/Demo/Demo_01_Sandbox.unity
-    guid: c22181d5e8c455c4c8f93f48944f680f
+    path: Assets/00.Scene/00_logo.unity
+    guid: 4beaa01176e71c3488d8fd009b1c180f
+  - enabled: 1
+    path: Assets/00.Scene/10_lobby.unity
+    guid: d3d5518db0cfc734487c8b54518a3da7
+  - enabled: 1
+    path: Assets/00.Scene/30.World.unity
+    guid: f04d5b9793301d24680cbf05f643aa01
   m_configObjects: {}

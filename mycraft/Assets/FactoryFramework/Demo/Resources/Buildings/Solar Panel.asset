@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3710937415867634324, guid: 69a5c1919027c9146b16513185b21bab, type: 3}
   icon: {fileID: 21300000, guid: 0a8531b210d78a24cb35d678b3725c49, type: 3}
-  displayPriority: 7
+  displayPriority: 9

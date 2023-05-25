@@ -42,7 +42,7 @@ namespace FactoryFramework
             saveFilePath = Application.dataPath + "/../save";
         }
 
-    public void Load() => Load(saveFileDefault);
+        public void Load() => Load(saveFileDefault);
         public async void Load(string path)
         {
             string filePath = Path.Combine(saveFilePath, path);

@@ -167,7 +167,7 @@ public class ConveyorPlacement : MonoBehaviour
         {
             startHeight = startSocket.transform.position.y - Terrain.activeTerrain.SampleHeight(worldPos);
         }
-        
+
         //ignore colliders from start and end points
         List<Collider> collidersToIgnore = new List<Collider>();
         // add colliders associated with the connected start socket
@@ -307,6 +307,9 @@ public class ConveyorPlacement : MonoBehaviour
             current.SetMaterials(greenGhostMat, greenGhostMat);
         else
             current.SetMaterials(redGhostMat, redGhostMat);
+
+        //coordinate
+        MyCraft.Managers.Coordinates.DrawCoordinate(worldPos);
 
         if (Input.GetMouseButtonDown(0) && current.ValidMesh)
         {

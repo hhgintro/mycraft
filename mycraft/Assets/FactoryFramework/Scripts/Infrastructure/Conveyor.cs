@@ -45,7 +45,7 @@ namespace FactoryFramework
         //private List<Transform> _transforms = new List<Transform>();
         private ItemOnBelt LastItem { get { return items[items.Count - 1]; } }
         // private int currentLoad; 
-        Vector3 _distanceAboveBelt = Vector3.up * 0.1f;    //밸트위 아이템이 뭍히지 않게 조금 띄운다
+        private Vector3 _distanceAboveBelt = Vector3.up * 0.1f;    //밸트위 아이템이 뭍히지 않게 조금 띄운다
 
         private ConveyorJob _conveyorJob;
         private JobHandle _jobHandle;
@@ -325,7 +325,7 @@ namespace FactoryFramework
             if (collision)
             {
                 if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to collision");
-                _validMesh = false;
+                _validMesh = false;   //HG_TEST:(주석처리하면) 모든 collider의 충돌을 무시한다.
             }
 
             frameFilter.sharedMesh?.Clear();

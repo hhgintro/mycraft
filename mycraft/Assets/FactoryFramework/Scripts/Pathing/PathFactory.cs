@@ -47,10 +47,11 @@ namespace FactoryFramework
                 foreach (Collider collider in hitColliders)
                 {
                     if (collider == null) continue;
+                    if (collider.name == "Cube (2)") continue;  //HG_TEST: terrain에 안보이는 충돌이 있어서 예외처리 추가함.
                     if (ignored != null && !ignored.Contains(collider))
                     {
                         if (settings.SHOW_DEBUG_LOGS)
-                            Debug.Log("colliding with " + collider + " at position " + collider.gameObject.transform.position);
+                            Debug.Log($"colliding with {collider} at position {collider.gameObject.transform.position}");
                         return true;
                     }
                     else if (ignored == null)
