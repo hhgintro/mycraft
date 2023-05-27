@@ -9,10 +9,10 @@ namespace MyCraft
         void Start()
         {
             //locale
-            LocaleManager.SetLocale("lobby", this.transform.Find("Title").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("NewGame/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("LoadGame/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("Back/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("Title").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("NewGame/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("LoadGame/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("Back/Text").GetComponent<Text>());
 
         }
 

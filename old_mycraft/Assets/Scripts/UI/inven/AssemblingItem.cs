@@ -30,37 +30,37 @@ namespace MyCraft
         }
     }
 
-    public class AssemblingOutput
-    {
-        public int itemid;          //생성할 아이템
-        public float build_time;    //생성에 필요한 시간
-        public List<AssemblingInput> inputs = new List<AssemblingInput>();  //재료아이템 list
-        public AssemblingOutput(JsonData json)
-        {
-            this.itemid = (int)json["itemid"];
-            this.build_time = float.Parse(json["build-time"].ToString());
-            //Debug.Log("assembling: itemid[" + this.itemid + "], build-time[" + this.build_time + "]");
+    //public class AssemblingOutput
+    //{
+    //    public int itemid;          //생성할 아이템
+    //    public float build_time;    //생성에 필요한 시간
+    //    public List<AssemblingInput> inputs = new List<AssemblingInput>();  //재료아이템 list
+    //    public AssemblingOutput(JsonData json)
+    //    {
+    //        this.itemid = (int)json["itemid"];
+    //        this.build_time = float.Parse(json["build-time"].ToString());
+    //        //Debug.Log("assembling: itemid[" + this.itemid + "], build-time[" + this.build_time + "]");
 
-            for (int i=0; i<json["input"].Count; ++i)
-                inputs.Add(new AssemblingInput(json["input"][i]));
-        }
-    }
-    public class AssemblingInput
-    {
-        public int itemid;      //재료아이템
-        public int amount;      //개수
-        public int limit;       //자동겹침 제한
+    //        for (int i=0; i<json["input"].Count; ++i)
+    //            inputs.Add(new AssemblingInput(json["input"][i]));
+    //    }
+    //}
+    //public class AssemblingInput
+    //{
+    //    public int itemid;      //재료아이템
+    //    public int amount;      //개수
+    //    public int limit;       //자동겹침 제한
 
-        public AssemblingInput(JsonData json)
-        {
-            if (json.Count <= 0)
-                return;
+    //    public AssemblingInput(JsonData json)
+    //    {
+    //        if (json.Count <= 0)
+    //            return;
 
-            this.itemid = (int)json["itemid"];
-            this.amount = (int)json["amount"];
-            this.limit = (int)json["limit"];
-            //Debug.Log("assembling: input[" + this.itemid + "], amount[" + this.amount + "]");
-        }
-    }
+    //        this.itemid = (int)json["itemid"];
+    //        this.amount = (int)json["amount"];
+    //        this.limit = (int)json["limit"];
+    //        //Debug.Log("assembling: input[" + this.itemid + "], amount[" + this.amount + "]");
+    //    }
+    //}
     
 }//..namespace MyCraft

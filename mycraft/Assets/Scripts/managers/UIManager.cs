@@ -44,7 +44,7 @@ namespace MyCraft
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
 
-            GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
+            GameObject go = Managers.Resource.Instantiate($"Prefabs/UI/SubItem/{name}");
             if (parent != null)
                 go.transform.SetParent(parent);
 
@@ -56,7 +56,7 @@ namespace MyCraft
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
 
-            GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
+            GameObject go = Managers.Resource.Instantiate($"Prefabs/UI/Scene/{name}");
             T sceneUI = Util.GetOrAddComponent<T>(go);
             _sceneUI = sceneUI;
 
@@ -70,7 +70,7 @@ namespace MyCraft
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
 
-            GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
+            GameObject go = Managers.Resource.Instantiate($"Prefabs/UI/Popup/{name}");
             T popup = Util.GetOrAddComponent<T>(go);
             _popupStack.Push(popup);
 

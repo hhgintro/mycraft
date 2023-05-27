@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace MyCraft
@@ -25,7 +26,7 @@ namespace MyCraft
 
         public GameObject Instantiate(string path, Transform parent = null)
         {
-            GameObject original = Load<GameObject>($"Prefabs/{path}");
+            GameObject original = Load<GameObject>(path);
             if (original == null)
             {
                 Debug.Log($"Failed to load prefab : {path}");
@@ -34,6 +35,22 @@ namespace MyCraft
 
             if (original.GetComponent<Poolable>() != null)
                 return Managers.Pool.Pop(original, parent).gameObject;
+
+            GameObject go = UnityEngine.Object.Instantiate(original, parent);
+            go.name = original.name;
+            return go;
+        }
+
+        public GameObject Instantiate(GameObject original, Transform parent = null)
+        {
+            if(null == original)
+            {
+                Debug.Log("Failed to load prefab");
+                return null;
+            }
+
+            if(original.GetComponent<Poolable>() != null)
+                return Managers.Pool.Pop(original,parent).gameObject;
 
             GameObject go = Object.Instantiate(original, parent);
             go.name = original.name;

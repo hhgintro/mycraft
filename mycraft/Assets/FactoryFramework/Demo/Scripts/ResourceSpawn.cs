@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Rendering.CameraUI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,7 +23,7 @@ public class ResourceSpawn : Resource
     // Start is called before the first frame update
     void Awake()
     {
-        if (item == null)
+        if (0 == base.itemid)
         {
             Debug.LogError("Resource Spawn Area does not have assigned resource type");
             return;
@@ -38,7 +39,8 @@ public class ResourceSpawn : Resource
         foreach(Vector2 point in Points)
         {
             Vector3 pos = transform.TransformPoint(new Vector3(point.x, 0f, point.y));
-            GameObject obj = Instantiate(item.prefab, transform);
+            MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(base.itemid);
+            GameObject obj = Instantiate(itembase.prefab, transform);
             obj.name = "Resource Model";
             obj.transform.position = pos;
             obj.transform.rotation = transform.rotation * Quaternion.AngleAxis(Random.value * 360f, transform.up);
@@ -150,24 +152,31 @@ public class ResourceSpawn : Resource
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        Color c = (item == null) ? Color.black : item.DebugColor;
-        c.a = .25f;
-        Gizmos.color = c;
-        Handles.color = c;
-        Gizmos.matrix = transform.localToWorldMatrix;
-        Handles.matrix = transform.localToWorldMatrix;
-
-        Rect rect = new Rect(Vector2.zero, region);
-        Gizmos.DrawCube(Vector3.zero, new Vector3(region.x,.15f,region.y));
-
-        c.a = 1f;
-        Handles.color = c;
-        if (Points == null) RegeneratePoints();
-        foreach(Vector3 point in Points)
+        try
         {
-            Handles.DrawSolidDisc(new Vector3(point.x,0f,point.y), transform.up, 0.1f);
+            MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(base.itemid);
+            Color c = (null == itembase) ? Color.black : itembase.DebugColor;
+            c.a = .25f;
+            Gizmos.color = c;
+            Handles.color = c;
+            Gizmos.matrix = transform.localToWorldMatrix;
+            Handles.matrix = transform.localToWorldMatrix;
+
+            Rect rect = new Rect(Vector2.zero, region);
+            Gizmos.DrawCube(Vector3.zero, new Vector3(region.x, .15f, region.y));
+
+            c.a = 1f;
+            Handles.color = c;
+            if (Points == null) RegeneratePoints();
+            foreach (Vector3 point in Points)
+            {
+                Handles.DrawSolidDisc(new Vector3(point.x, 0f, point.y), transform.up, 0.1f);
+            }
         }
-        
+        catch (System.InvalidOperationException) {
+            //Debug.Log("InvalidOperationException");
+        }
+
     }
 #endif
 }

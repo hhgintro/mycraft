@@ -296,20 +296,20 @@ namespace MyCraft
         //InvenItemData가 없이,
         //id로 아이템을 추가하고가 할때 사용합니다.
         //InvenItemData를 이동하거나, 인벤에 넣어줄때는 Additem(InvenItemData itemData)를 사용하세요.
-        public virtual void AddSkill(InvenSlotPanel panel, int id, int amount)
+        public virtual void AddSkill(InvenSlotPanel panel, int itemid, int amount)
         {
-            if (id <= 0)
+            if (itemid <= 0)
             {
-                Debug.LogError("you need check skill id: " + id);
+                Debug.LogError("you need check skill id: " + itemid);
                 return;
             }
 
             //database
-            ItemBase itembase = GameManager.GetItemBase().FetchItemByID(id);
+            ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
             //ItemBase itemToAdd = GameManager.GetItemBase().FetchItemByID(id);
             if (null == itembase)
             {
-                Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + id + "]");
+                Debug.LogError("Database is empty : Need Checking Script Execute Order[id:" + itemid + "]");
                 return;
             }
 

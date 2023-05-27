@@ -9,7 +9,7 @@ using FactoryFramework;
 
 namespace FactoryFramework.Editor
 {
-    [CustomEditor(typeof(Producer))]
+    [CustomEditor(typeof(Driller))]
     public class ProducerEditor : UnityEditor.Editor
     {
         public override VisualElement CreateInspectorGUI()

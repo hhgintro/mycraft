@@ -10,6 +10,11 @@ namespace MyCraft
     {
         [SerializeField] float load_delay;
 
+        void Awake()
+        {
+            Init();
+        }
+
         void Start()
         {
             StartCoroutine(LoadNextScene1());
@@ -24,8 +29,10 @@ namespace MyCraft
         protected override void Init()
         {
             base.Init();
-
             SceneType = Define.Scene.Logo;
+
+            //load ini
+            Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.streamingAssetsPath + "/locale/");
         }
 
         public override void Clear()
