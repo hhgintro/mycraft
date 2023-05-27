@@ -1,12 +1,15 @@
+using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.GridLayoutGroup;
 
 
 public class DestoryProcess : MonoBehaviour
 {
-    GameObject _target;
+	IPlacement _owner;
+	GameObject _target;
     Image _progress;
     float _time = 1f;//(단위:s)
 
@@ -17,22 +20,26 @@ public class DestoryProcess : MonoBehaviour
     }
 
 
-    public void SetProgress(GameObject target)
+    public void SetProgress(IPlacement owner, GameObject target, float time=1f)
     {
-        //target이 바꿨어면 처음부터...
+		//target이 바꿨어면 처음부터...
         if (_target != target)
         {
-            _target = target;
-            this._progress.fillAmount = 0;
-        }
+			this._owner     = owner;
+			this._target    = target;
+            this._time      = time;
+            this._progress.fillAmount = 1f;
+		}
         if (null == _target) return;
 
-        this._progress.fillAmount += Time.smoothDeltaTime / _time;
-        if (1f <= this._progress.fillAmount)
+        this._progress.fillAmount -= Time.deltaTime / _time;
+		Debug.Log($"fill: {this._progress.fillAmount}");
+		if (this._progress.fillAmount <= 0f)
         {
-            //Debug.Log($"{_target} 삭제됨");
+            //Debug.Log($"{_target.name} 철거");
             //GameManager.GetTerrainManager().DeleteBlock(_target, true);
-            this._progress.fillAmount = 0;
+            _owner.DestroyBuilding(_target);
+            this._progress.fillAmount = 1f;
         }
     }
 }

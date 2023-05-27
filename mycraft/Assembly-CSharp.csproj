@@ -58,64 +58,142 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.2.5f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\ui\inven\Tooltip.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\ForgeInven.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Driller.cs" />
+    <Compile Include="Assets\Scripts\ui\item\BaseComponent.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IInput.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\ConveyorLogisticsUtils.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\MouseHoverBuildingTooltip.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshDebug.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Mesh\MeshSlicer.cs" />
     <Compile Include="Assets\01.Script\Scene\LobbyController.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\MouseHoverTooltip.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechItemData.cs" />
     <Compile Include="Assets\Scripts\ui\UI_Base.cs" />
+    <Compile Include="Assets\Scripts\ui\item\ItemData.cs" />
     <Compile Include="Assets\Scripts\ui\menu\Menu.cs" />
     <Compile Include="Assets\01.Script\AssetBundle\CachingDownloadExample.cs" />
     <Compile Include="Assets\Scripts\Data\Data.Contents.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Building.cs" />
     <Compile Include="Assets\Scripts\managers\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\FurnaceItem.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\PanelBase.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchManager.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\BuildingPlacement.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Socket.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Forge.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechnologyCost.cs" />
+    <Compile Include="Assets\Scripts\managers\LocaleManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IOutput.cs" />
     <Compile Include="Assets\02.Resource\samples\industrial\Scripts\Punch.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshGenerator.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\MachineInven.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeManager.cs" />
     <Compile Include="Assets\Scripts\ui\Coordinates.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\Slot.cs" />
     <Compile Include="Assets\Scripts\scenes\EditorStartInit.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\InventoryTitle.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Mesh\SerializableMesh.cs" />
     <Compile Include="Assets\Scripts\utils\Extension.cs" />
     <Compile Include="Assets\Scripts\ui\menu\PlayMenu.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Resource.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\AssemblingItem.cs" />
     <Compile Include="Assets\Scripts\scenes\LogoScene.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\QuickInven.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\TerracedTerrain.cs" />
     <Compile Include="Assets\02.Resource\samples\Smart Turret Template\Scripts\Turret.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Splitter.cs" />
     <Compile Include="Assets\Scripts\managers\GameManager.cs" />
     <Compile Include="Assets\02.Resource\samples\industrial\Scripts\CaptureNormals.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\TEST_PATHS.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\PathFactory.cs" />
     <Compile Include="Assets\Scripts\managers\Managers.cs" />
+    <Compile Include="Assets\Scripts\utils\Common.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\SolarPower.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Data\Item.cs" />
     <Compile Include="Assets\Scripts\ui\UI_EventHandler.cs" />
     <Compile Include="Assets\Scripts\managers\SceneManagerEx.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\SkillItemData.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\LocalStorage.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Storage.cs" />
     <Compile Include="Assets\01.Script\Scene\LoadingSceneManager.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\ConveyorPlacement.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechBase.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchController.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Data\Placeable.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\Rotater.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\Progress.cs" />
     <Compile Include="Assets\Scripts\managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\scenes\GameScene.cs" />
     <Compile Include="Assets\Scripts\ui\menu\LoadGame.cs" />
     <Compile Include="Assets\Scripts\utils\Define.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\ResetItemData.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\Inventory.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\SegmentPath.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechInven.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Events\VoidEventChannel_SO.cs" />
     <Compile Include="Assets\01.Script\Scene\StageController.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\FactoryInven.cs" />
     <Compile Include="Assets\Scripts\ui\menu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Factory.cs" />
     <Compile Include="Assets\Scripts\ui\menu\NewGame.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Merger.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Conveyor.cs" />
+    <Compile Include="Assets\FactoryFramework\Demo\Scripts\IPlacement.cs" />
     <Compile Include="Assets\Scripts\managers\ResourceManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerGridComponent.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechDescription.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\GentlePulse.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Scene.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\ChestInven.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\ArcPath.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshSO.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\DemoUIManager.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\SkillGroupData.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerGrid.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\CableRendererManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\IPathTester.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\CableManagement.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\InputSocket.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\TestGlobalPowerGrid.cs" />
     <Compile Include="Assets\01.Script\ExcelLoader\ExcelLoader.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\TechInvenBase.cs" />
+    <Compile Include="Assets\Scripts\ui\item\ItemBase.cs" />
     <Compile Include="Assets\02.Resource\samples\Smart Turret Template\Scripts\Actor.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\MouseLook.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\ResourceSpawn.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\CableRenderer.cs" />
+    <Compile Include="Assets\Scripts\utils\JSonParser.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\GlobalLogisticsSettings.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeableScriptableObject.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\BuildingSlot.cs" />
     <Compile Include="Assets\Scripts\managers\Poolable.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Data\Recipe.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchInfo.cs" />
     <Compile Include="Assets\01.Script\Scene\LogoManager.cs" />
     <Compile Include="Assets\01.Script\AssetBundle\LoadAssetBundleExample.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\SkillInven.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\ui\item\Category.cs" />
     <Compile Include="Assets\Scripts\managers\PoolManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializationReference.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\ui\item\JSonDatabase.cs" />
     <Compile Include="Assets\01.Script\Scene\StageManager.cs" />
     <Compile Include="Assets\Scripts\managers\UIManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\IPath.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\LogisticComponent.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\OutputSocket.cs" />
     <Compile Include="Assets\Scripts\utils\Util.cs" />
     <Compile Include="Assets\Scripts\scenes\LobbyScene.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\SmartPath.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\RecipeFinder.cs" />
+    <Compile Include="Assets\Scripts\ui\inven\InvenBase.cs" />
     <Compile Include="Assets\Scripts\managers\DataManager.cs" />
     <Compile Include="Assets\Scripts\scenes\BaseScene.cs" />
-    <Compile Include="Assets\Scripts\ui\LocaleManager.cs" />
+    <Compile Include="Assets\Scripts\ui\item\InvenItemData.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Pathing\CubicBezierPath.cs" />
     <Compile Include="Assets\Scripts\ui\popup\UI_Button.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Inven.cs" />
     <Compile Include="Assets\Scripts\ui\DestoryProcess.cs" />
@@ -126,7 +204,7 @@
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Tonemapper.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GlobalFog.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\VortexEffect.shader" />
-    <None Include="Assets\FactoryFramework\Demo\Art\Shader\PT_Water_Shader.shader" />
+    <None Include="Assets\Resources\Art\FactoryFramework\Shader\PT_Water_Shader.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseAndGrain.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\DLAA.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\EdgeDetectX.shader" />
@@ -184,7 +262,7 @@
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\MotionBlur.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\SeparableBlur.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
-    <None Include="Assets\FactoryFramework\Demo\Art\Shader\FF_Simple_Conveyor.shader" />
+    <None Include="Assets\Resources\Art\FactoryFramework\Shader\FF_Simple_Conveyor.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Plants_Shader_VS.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\PrepareSunShaftsBlur.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ShowAlphaChannel.shader" />
@@ -201,7 +279,7 @@
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\EdgeDetectNormals.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
-    <None Include="Assets\FactoryFramework\Demo\Art\Shader\FF_Simple_Lit.shader" />
+    <None Include="Assets\Resources\Art\FactoryFramework\Shader\FF_Simple_Lit.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Rock_Shader.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\FXAA2.shader" />
     <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseEffectShaderYUV.shader" />
@@ -489,6 +567,9 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@1.11.4\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>Assets\Plugins\LitJson.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
@@ -1047,14 +1128,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="FactoryFramework.Editor.csproj">
-      <Project>{B6577E9D-A074-AF80-C04D-21EE37408203}</Project>
-      <Name>FactoryFramework.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="FactoryFramework.csproj">
-      <Project>{BA63E0C5-1A21-0E90-3471-41CB13334EF5}</Project>
-      <Name>FactoryFramework</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

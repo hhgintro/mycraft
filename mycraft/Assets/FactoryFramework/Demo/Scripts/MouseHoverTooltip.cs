@@ -15,8 +15,7 @@ public class MouseHoverTooltip : MonoBehaviour
 
     private void Awake()
     {
-        uiManager = GameObject.FindObjectOfType<DemoUIManager>();
-        
+        uiManager ??= GameObject.FindObjectOfType<DemoUIManager>();
     }
 
     protected virtual string DisplayMessage()
@@ -26,7 +25,7 @@ public class MouseHoverTooltip : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        uiManager?.SetText(DisplayMessage());
+        //uiManager?.SetText(DisplayMessage());
 
         if (TryGetComponent(out PowerGridComponent pgc))
         {
@@ -35,7 +34,7 @@ public class MouseHoverTooltip : MonoBehaviour
     }
     private void OnMouseExit()
     {
-        uiManager?.SetText("");
+        //uiManager?.SetText("");
 
         if (TryGetComponent(out PowerGridComponent pgc))
         {

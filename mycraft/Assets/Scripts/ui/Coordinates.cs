@@ -13,7 +13,7 @@ public class Coordinates : MonoBehaviour
     {
         _text = this.transform.GetChild(0).GetComponent<Text>();
 
-        _coordinate = LocaleManager.GetLocale("coordinates", "coordinate");
+        _coordinate = Managers.Locale.GetLocale("coordinates", "coordinate");
     }
 
     public void DrawCoordinate(Vector3 point)

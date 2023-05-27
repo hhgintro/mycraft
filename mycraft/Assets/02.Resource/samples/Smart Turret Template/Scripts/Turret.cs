@@ -177,7 +177,7 @@ public class Turret : MonoBehaviour {
 		bool Match = false;
 
 		for (int i = 0; i < targeting.tagsToFire.Length; i++) {
-			if (toMatch.tag == targeting.tagsToFire [i]) {
+			if (toMatch.CompareTag(targeting.tagsToFire[i])) {
 				Match = true;
 			}
 		}

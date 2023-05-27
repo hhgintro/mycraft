@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -42,7 +43,7 @@ namespace MyCraft
                                 //Debug.Log("key: " + key);
                                 if(true == sections.ContainsKey(key))
                                 {
-                                    Debug.LogError("critical: same key");
+                                    Debug.LogError($"critical: same key({key})");
                                     continue;
                                 }
 

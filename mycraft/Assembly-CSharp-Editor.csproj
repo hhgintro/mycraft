@@ -58,16 +58,36 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2022.2.5f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\FactoryFramework\Editor\FFStartScreen.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\PowerGridComponentEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\ProcessorEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\ItemEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\BeltMeshDebugEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\EditorUtils.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\LogisticComponentEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\PrefabProcessor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\ConveyorBeltEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\IPathTesterEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\SerializeManagerEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\RecipeEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\ProducerEditor.cs" />
     <Compile Include="Assets\01.Script\AssetBundle\Editor\BuildAssetBundles.cs" />
     <Compile Include="Assets\01.Script\ExcelLoader\Editor\ExcelLoaderEditor.cs" />
+    <Compile Include="Assets\FactoryFramework\Editor\BeltMeshSOEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\FactoryFramework\Editor\RecipeIngredientEditor.uxml" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.IOSResolver.dll" />
+    <None Include="Assets\FactoryFramework\Editor\FFStartScreen.uxml" />
     <None Include="Assets\Editor\MediationAdapterDependencies.xml" />
+    <None Include="Assets\FactoryFramework\Editor\FactoryFramework.uss" />
     <None Include="Assets\MobileDependencyResolver\Editor\mobile-dependency-resolver.txt" />
+    <None Include="Assets\FactoryFramework\Editor\ItemEditor.uxml" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandlerImpl.dll" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.JarResolver.dll" />
+    <None Include="Assets\FactoryFramework\Editor\FFStartScreen.uss" />
     <None Include="Assets\MobileDependencyResolver\Editor\Google.VersionHandler.dll" />
+    <None Include="Assets\FactoryFramework\Editor\RecipeEditor.uxml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -384,6 +404,9 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>Library\PackageCache\com.unity.nuget.mono-cecil@1.11.4\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="LitJson">
+      <HintPath>Assets\Plugins\LitJson.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
       <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
@@ -966,14 +989,6 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{BF0561A1-B9D5-8EF0-760F-85571D3A37B0}</Project>
       <Name>Assembly-CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="FactoryFramework.Editor.csproj">
-      <Project>{B6577E9D-A074-AF80-C04D-21EE37408203}</Project>
-      <Name>FactoryFramework.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="FactoryFramework.csproj">
-      <Project>{BA63E0C5-1A21-0E90-3471-41CB13334EF5}</Project>
-      <Name>FactoryFramework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

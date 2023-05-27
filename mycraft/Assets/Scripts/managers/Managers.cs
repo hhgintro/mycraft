@@ -1,6 +1,7 @@
 ﻿using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 namespace MyCraft
@@ -13,49 +14,40 @@ namespace MyCraft
         //DataManager _data = new DataManager();
         GameManager _game = new GameManager();
         InputManager _input = new InputManager();
+        LocaleManager _locale = new LocaleManager();
         PoolManager _pool = new PoolManager();
         ResourceManager _resource = new ResourceManager();
         SceneManagerEx _scene = new SceneManagerEx();
         SoundManager _sound = new SoundManager();
         //UIManager _ui = new UIManager();
 
-        GameObject _systemmenu;
-        //ChatManager _chat_manager;
-
-        private static Coordinates _coodinates;  //좌표
 
 
         //public static DataManager Data { get { return Instance._data; } }
         public static GameManager Game { get { return Instance._game; } }
         public static InputManager Input { get { return Instance._input; } }
+        public static LocaleManager Locale {  get { return Instance._locale; } }
         public static PoolManager Pool { get { return Instance._pool; } }
         public static ResourceManager Resource { get { return Instance._resource; } }
         public static SceneManagerEx Scene { get { return Instance._scene; } }
         public static SoundManager Sound { get { return Instance._sound; } }
         //public static UIManager UI { get { return Instance._ui; } }
 
-        public static GameObject SystemMenu { get { if (null == Instance._systemmenu) Instance._systemmenu = GameObject.Find("Canvas/SystemMenu"); return Instance._systemmenu; } }
-        //public static ChatManager Chat { get { if (null == Instance._chat_manager) Instance._chat_manager = GameObject.Find("Canvas/Chatting").GetComponent<ChatManager>(); return Instance._chat_manager; } }
 
-        public static Coordinates Coordinates
-        {
-            get
-            {
-                if (null == _coodinates)
-                    _coodinates = GameObject.Find("Gameplay UI/Coordinates").GetComponent<Coordinates>();
-                return _coodinates;
-            }
-        }
-
+        public static BuildingPlacement _buildingPlacement;
+        public static ConveyorPlacement _conveyorPlacement;
+        public static GameObject _choiced_building = null;
 
         void Start()
         {
             Init();
+
+
         }
 
         void Update()
         {
-            //_input.OnUpdate();
+            _input.OnUpdate();
         }
 
         static void Init()

@@ -93,7 +93,7 @@ namespace MyCraft
             return false;
         }
 
-        bool CheckStartAssembling()
+        bool StartAssembling()
         {
             //이미 작동중...
             if (true == this._bRunning)
@@ -298,7 +298,7 @@ namespace MyCraft
                 return false;
 
             //아이템이 등록되면 시작 여부를 판단합니다.
-            this.CheckStartAssembling();
+            this.StartAssembling();
             return true;
         }
 
@@ -309,7 +309,7 @@ namespace MyCraft
             BeltGoods goods = base.PickupGoods(inserter, putdowns);
 
             //아이템이 등록되면 시작 여부를 판단합니다.
-            this.CheckStartAssembling();
+            this.StartAssembling();
             return goods;
         }
         //public override BeltGoods PickupGoods(BlockScript script_front)
@@ -334,15 +334,15 @@ namespace MyCraft
                 case 0://자원이 있어야 진행가능합니다.
                 case 1://자원이 있어야 진행가능합니다.
                     if(null != this._panels[panel].GetFillSlot(1))
-                        this.CheckStartAssembling();
+                        this.StartAssembling();
                     break;
 
                 case 2://가득찬 경우에는 더이상 진행할 수 없습니다.
                     if(false == this._panels[panel].GetIsFull(itemid))
-                        this.CheckStartAssembling();
+                        this.StartAssembling();
                     break;
             }
-            this.CheckStartAssembling();
+            this.StartAssembling();
         }
 
 

@@ -27,8 +27,18 @@ public class Define
 
     public enum MouseEvent
     {
-        Press,
-        Click,
+        Move,
+
+        L_Press,
+        L_Click,
+
+        //미구현
+        L_DblClick,
+
+        R_Press,
+        R_Click,
+        R_DblClick,
+
     }
 
     public enum CameraMode

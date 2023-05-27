@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using FactoryFramework;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -6,527 +9,392 @@ using UnityEngine;
 
 namespace MyCraft
 {
-    public class GameManager
-    {
-        [DllImport("kernel32")]
-        private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
-        [DllImport("kernel32")]
-        private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
-
-
-        ////private static SystemMenu _systemmenu;
-        ////private static ChatManager _chat_manager;
-
-        ////private static ItemDatabase item_database;
-        //private static JSonParser<ItemBase> _itembase;
-        //private static JSonParser<TechBase> _techbase;
-        //private static JSonParser<Categories> _categories;
-
-        //private static TerrainManager _terrain_manager;
-        //private static BeltManager _belt_manager;
-        //private static BeltSlopeUpManager _belt_slope_up_manager;
-        //private static BeltSlopeDownManager _belt_slope_down_manager;
-        //private static BeltVerticalUpBeginManager _belt_vertical_up_begin_manager;
-        //private static BeltVerticalUpMiddleManager _belt_vertical_up_middle_manager;
-        //private static BeltVerticalUpEndManager _belt_vertical_up_end_manager;
-        //private static BeltVerticalDownBeginManager _belt_vertical_down_begin_manager;
-        //private static BeltVerticalDownMiddleManager _belt_vertical_down_middle_manager;
-        //private static BeltVerticalDownEndManager _belt_vertical_down_end_manager;
-        //private static SpliterManager _spliter_manager;
-        //private static PipeManager _pipe_manager;
-        //private static InserterManager _inserter_manager;
-        //private static ChestManager _chest_manager;
-        //private static DrillManager _drill_manager;
-        //private static MachineManager _machine_manager;
-        //private static StoneFurnaceManager _stone_furnace_manager;
-
-        //private static IronManager _iron_manager;
-        //private static CopperManager _copper_manager;
-        //private static CoalManager _coal_manager;
-        //private static StoneManager _stone_manager;
-        //private static TreeManager _tree_manager;
-        //private static CrudeOilManager _crudeoil_manager;
-
-        //private static MouseController _mouse_controller;
-
-        //private static BeltGoods _belt_package;
-
-        //private static Inventory _inventory;
-        //private static ChestInven _chestinven;
-        //private static QuickInven _quickinven;
-        //private static MachineInven _machineinven;
-        //private static StoneFurnaceInven _stone_furnace_inven;
-        //private static SkillInven _skillinven;
-        //private static TechInven _techinven;
-        //private static TechDescription _techdesc;
-        //private static Tooltip _tooltip;
-        //private static DeleteBlockProgress _delete_progress;
-
-        //private static Coordinates _coodinates;  //좌표
-
-        ////private static GameObject _invenPanel;
-        ////private static GameObject _invenSlot;
-        ////private static GameObject _invenItem;
-        ////private static GameObject _invenSkill;
-        ////private static GameObject _invenReset;
-
-        //저장경로
-        public static string _save_dir = Application.dataPath + "/../save";
-
-
-        public bool bNewGame { get; set; }
-        public StringBuilder _locale;
-
-
-        //public void OnGame()
-        //{
-        //    ShowInitUIs();
-
-        //    if (true == this.bNewGame)
-        //    {
-        //        //inven slot
-        //        if(0 < GameManager.GetInventory()._panels.Count)
-        //            GameManager.GetInventory()._panels[0].SetAmount(71);
-
-        //        GameManager.GetInventory().Resize();
-
-
-        //        //HG_TEST : 테스트 아이템 지급
-        //        GameManager.GetInventory().AddItem(2010, 100);  //iron-plate
-        //        GameManager.GetInventory().AddItem(2011, 100);  //iron-gear
-        //        GameManager.GetInventory().AddItem(2020, 100);  //copper-plate
-        //        GameManager.GetInventory().AddItem(2021, 100);  //copper-cable
-        //        GameManager.GetInventory().AddItem(2000, 100);  //wood
-
-        //        GameManager.GetInventory().AddItem(10, 54);     //raw-wood
-        //        GameManager.GetInventory().AddItem(20, 54);     //stone
-        //        GameManager.GetInventory().AddItem(40, 54);     //iron-ore
-        //        GameManager.GetInventory().AddItem(50, 54);     //copper-ore
-
-        //        GameManager.GetInventory().AddItem(1100, 54);   //belt
-        //        GameManager.GetInventory().AddItem(1110, 100);  //belt-up
-        //        GameManager.GetInventory().AddItem(1120, 100);  //belt-down
-        //        GameManager.GetInventory().AddItem(1130, 100);  //Vertical-Up-Begin
-        //        GameManager.GetInventory().AddItem(1140, 100);  //Vertical-Up-Middle
-        //        GameManager.GetInventory().AddItem(1150, 100);  //Vertical-Up-End
-        //        GameManager.GetInventory().AddItem(1160, 100);  //Vertical-Down-Begin
-        //        GameManager.GetInventory().AddItem(1170, 100);  //Vertical-Down-Middle
-        //        GameManager.GetInventory().AddItem(1180, 100);  //Vertical-Down-End
-
-
-        //        //quick slot
-        //        if (0 < GameManager.GetQuickInven()._panels.Count)
-        //            GameManager.GetQuickInven()._panels[0].SetAmount(10);
-
-        //        GameManager.GetQuickInven().AddItem(1000, 54);  //chest
-        //        GameManager.GetQuickInven().AddItem(1100, 54);  //belt
-        //        GameManager.GetQuickInven().AddItem(1210, 54);  //pipe
-        //        GameManager.GetQuickInven().AddItem(1200, 54);  //spliter
-        //        GameManager.GetQuickInven().AddItem(1030, 54);  //inserter
-        //        GameManager.GetQuickInven().AddItem(1040, 54);  //drill
-        //        GameManager.GetQuickInven().AddItem(1050, 54);  //stone-furnace
-        //        GameManager.GetQuickInven().AddItem(1060, 54);  //machine
-
-        //    }
-        //    else
-        //    {
-        //        this.Load();
-        //    }
-        //    Application.runInBackground = true;
-        //}
-
-        public void Init()
-        {
-            //load ini
-            Load(Application.dataPath + "/../config/config.ini");
-            LocaleManager.Open(Application.streamingAssetsPath + "/locale/" + _locale.ToString() + "/ui.cfg");
-
-            //GetItemBase();
-            //GetTechBase();
-            //GetCategories();
-        }
-
-        public void Clear()
-        {
-        
-        }
-
-        private void Load(string filepath)
-        {
-            if (null != _locale) return;
-
-            //locale
-            _locale = new StringBuilder(255);
-            GetPrivateProfileString("common", "locale", "(empty)", _locale, 255, filepath);
-            if (0 == string.Compare(_locale.ToString(), "(empty)"))
-                Debug.LogError("Fail : Not Read Locale");
-        }
-
-        //private void ShowInitUIs()
-        //{
-        //    GameManager.GetQuickInven().gameObject.SetActive(true);
-        //    GameManager.GetTechInven().gameObject.SetActive(true);
-        //    GameManager.GetTechDesc().gameObject.SetActive(true);
-        //    GameManager.GetTooltip().gameObject.SetActive(true);
-
-        //    GameManager.GetInventory().gameObject.SetActive(false);
-        //    GameManager.GetChestInven().gameObject.SetActive(false);
-        //    GameManager.GetStoneFurnaceInven().gameObject.SetActive(false);
-        //    GameManager.GetMachineInven().gameObject.SetActive(false);
-        //    GameManager.GetSkillInven().gameObject.SetActive(false);
-        //    GameManager.GetDeleteProgress().gameObject.SetActive(false);
-
-        //    //GameManager.GetSystemMenu().gameObject.SetActive(false);
-        //    Managers.SystemMenu.SetActive(false);
-        //}
-
-
-
-        ////public static SystemMenu GetSystemMenu() {
-        ////    if (null == _systemmenu)
-        ////        _systemmenu = GameObject.Find("Canvas/SystemMenu").GetComponent<SystemMenu>();
-        ////    return _systemmenu;
-        ////}
-        ////public static ChatManager GetChatManager()
-        ////{
-        ////    if (null == _chat_manager)
-        ////        _chat_manager  = GameObject.Find("Canvas/Chatting").GetComponent<ChatManager>();
-        ////    return _chat_manager;
-        ////}
-        //public static JSonParser<ItemBase> GetItemBase() {
-        //    if(null == _itembase)
-        //        _itembase = new JSonParser<ItemBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/items.json");
-        //    return _itembase;
-        //}
-
-        //public static JSonParser<TechBase> GetTechBase() {
-        //    if (null == _techbase)
-        //        _techbase = new JSonParser<TechBase>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/technology.json");
-        //    return _techbase;
-        //}
-
-        //public static JSonParser<Categories> GetCategories()
-        //{
-        //    if (null == _categories)
-        //        _categories = new JSonParser<Categories>(Application.streamingAssetsPath + "/locale/" + Managers.Game._locale.ToString() + "/categories.json");
-        //    return _categories;
-        //}
-
-        //public static TerrainManager GetTerrainManager() {
-        //    if(null == _terrain_manager)
-        //        _terrain_manager = GameObject.Find("Terrain").GetComponent<TerrainManager>();
-        //    return _terrain_manager;
-        //}
-        //public static BeltManager GetBeltManager() {
-        //    if(null == _belt_manager)
-        //        _belt_manager = GetTerrainManager().GetComponentInChildren<BeltManager>();
-        //    return _belt_manager;
-        //}
-        //public static BeltSlopeUpManager GetBeltSlopeUpManager()
-        //{
-        //    if (null == _belt_slope_up_manager)
-        //        _belt_slope_up_manager = GetTerrainManager().GetComponentInChildren<BeltSlopeUpManager>();
-        //    return _belt_slope_up_manager;
-        //}
-        //public static BeltSlopeDownManager GetBeltSlopeDownManager()
-        //{
-        //    if (null == _belt_slope_down_manager)
-        //        _belt_slope_down_manager = GetTerrainManager().GetComponentInChildren<BeltSlopeDownManager>();
-        //    return _belt_slope_down_manager;
-        //}
-        //public static BeltVerticalUpBeginManager GetBeltVerticalUpBeginManager()
-        //{
-        //    if (null == _belt_vertical_up_begin_manager)
-        //        _belt_vertical_up_begin_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpBeginManager>();
-        //    return _belt_vertical_up_begin_manager;
-        //}
-        //public static BeltVerticalUpMiddleManager GetBeltVerticalUpMiddleManager()
-        //{
-        //    if (null == _belt_vertical_up_middle_manager)
-        //        _belt_vertical_up_middle_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpMiddleManager>();
-        //    return _belt_vertical_up_middle_manager;
-        //}
-        //public static BeltVerticalUpEndManager GetBeltVerticalUpEndManager()
-        //{
-        //    if (null == _belt_vertical_up_end_manager)
-        //        _belt_vertical_up_end_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalUpEndManager>();
-        //    return _belt_vertical_up_end_manager;
-        //}
-        //public static BeltVerticalDownBeginManager GetBeltVerticalDownBeginManager()
-        //{
-        //    if (null == _belt_vertical_down_begin_manager)
-        //        _belt_vertical_down_begin_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownBeginManager>();
-        //    return _belt_vertical_down_begin_manager;
-        //}
-        //public static BeltVerticalDownMiddleManager GetBeltVerticalDownMiddleManager()
-        //{
-        //    if (null == _belt_vertical_down_middle_manager)
-        //        _belt_vertical_down_middle_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownMiddleManager>();
-        //    return _belt_vertical_down_middle_manager;
-        //}
-        //public static BeltVerticalDownEndManager GetBeltVerticalDownEndManager()
-        //{
-        //    if (null == _belt_vertical_down_end_manager)
-        //        _belt_vertical_down_end_manager = GetTerrainManager().GetComponentInChildren<BeltVerticalDownEndManager>();
-        //    return _belt_vertical_down_end_manager;
-        //}
-        //public static SpliterManager GetSpliterManager() {
-        //    if (null == _spliter_manager)
-        //        _spliter_manager = GetTerrainManager().GetComponentInChildren<SpliterManager>();
-        //    return _spliter_manager;
-        //}
-        //public static PipeManager GetPipeManager()
-        //{
-        //    if (null == _pipe_manager)
-        //        _pipe_manager = GetTerrainManager().GetComponentInChildren<PipeManager>();
-        //    return _pipe_manager;
-        //}
-        //public static InserterManager GetInserterManager() {
-        //    if(null == _inserter_manager)
-        //        _inserter_manager = GetTerrainManager().GetComponentInChildren<InserterManager>();
-        //    return _inserter_manager;
-        //}
-        //public static ChestManager GetChestManager() {
-        //    if(null == _chest_manager)
-        //        _chest_manager = GetTerrainManager().GetComponentInChildren<ChestManager>();
-        //    return _chest_manager;
-        //}
-        //public static DrillManager GetDrillManager() {
-        //    if(null == _drill_manager)
-        //        _drill_manager = GetTerrainManager().GetComponentInChildren<DrillManager>();
-        //    return _drill_manager;
-        //}
-        //public static MachineManager GetMachineManager() {
-        //    if (null == _machine_manager)
-        //        _machine_manager = GetTerrainManager().GetComponentInChildren<MachineManager>();
-        //    return _machine_manager;
-        //}
-        //public static StoneFurnaceManager GetStoneFurnaceManager() {
-        //    if (null == _stone_furnace_manager)
-        //        _stone_furnace_manager = GetTerrainManager().GetComponentInChildren<StoneFurnaceManager>();
-        //    return _stone_furnace_manager;
-        //}
-        //public static IronManager GetIronManager() {
-        //    if (null == _iron_manager)
-        //        _iron_manager = GetTerrainManager().GetComponentInChildren<IronManager>();
-        //    return _iron_manager;
-        //}
-        //public static CopperManager GetCopperManager()
-        //{
-        //    if (null == _copper_manager)
-        //        _copper_manager = GetTerrainManager().GetComponentInChildren<CopperManager>();
-        //    return _copper_manager;
-        //}
-        //public static CoalManager GetCoalManager()
-        //{
-        //    if (null == _coal_manager)
-        //        _coal_manager = GetTerrainManager().GetComponentInChildren<CoalManager>();
-        //    return _coal_manager;
-        //}
-        //public static StoneManager GetStoneManager() {
-        //    if (null == _stone_manager)
-        //        _stone_manager = GetTerrainManager().GetComponentInChildren<StoneManager>();
-        //    return _stone_manager;
-        //}
-        //public static TreeManager GetTreeManager() {
-        //    if (null == _tree_manager)
-        //        _tree_manager = GetTerrainManager().GetComponentInChildren<TreeManager>();
-        //    return _tree_manager;
-        //}
-        //public static CrudeOilManager GetCrudeOilManager()
-        //{
-        //    if (null == _crudeoil_manager)
-        //        _crudeoil_manager = GetTerrainManager().GetComponentInChildren<CrudeOilManager>();
-        //    return _crudeoil_manager;
-        //}
-
-        //public static MouseController GetMouseController() {
-        //    if(null == _mouse_controller)
-        //        _mouse_controller = GameObject.Find("Input/Mouse").GetComponent<MouseController>();
-        //    return _mouse_controller;
-        //}
-
-        //public static BeltGoods GetBeltGoods() {
-        //    if(null == _belt_package)
-        //        _belt_package = Managers.Resource.Load<BeltGoods>("prefabs/blocks/belt-goods");
-        //    return _belt_package;
-        //}
-
-        //public static Inventory GetInventory() {
-        //    if(null == _inventory)
-        //        _inventory = GameObject.Find("Canvas/Inventory/Inventory Panel").GetComponent<Inventory>();
-        //    return _inventory;
-        //}
-
-        //public static ChestInven GetChestInven() {
-        //    if (null == _chestinven)
-        //        _chestinven = GameObject.Find("Canvas/Inventory/Chest Panel").GetComponent<ChestInven>();
-        //    return _chestinven;
-        //}
-
-        //public static QuickInven GetQuickInven() {
-        //    if (null == _quickinven)
-        //        _quickinven = GameObject.Find("Canvas/Inventory/Quick Panel").GetComponent<QuickInven>();
-        //    return _quickinven;
-        //}
-
-        //public static MachineInven GetMachineInven() {
-        //    if (null == _machineinven)
-        //        _machineinven = GameObject.Find("Canvas/Inventory/Machine Panel").GetComponent<MachineInven>();
-        //    return _machineinven;
-        //}
-        //public static StoneFurnaceInven GetStoneFurnaceInven() {
-        //    if (null == _stone_furnace_inven)
-        //        _stone_furnace_inven = GameObject.Find("Canvas/Inventory/Stone-Furnace Panel").GetComponent<StoneFurnaceInven>();
-        //    return _stone_furnace_inven;
-        //}
-        //public static SkillInven GetSkillInven() {
-        //    if (null == _skillinven)
-        //        _skillinven = GameObject.Find("Canvas/Inventory/Skill Panel").GetComponent<SkillInven>();
-        //    return _skillinven;
-        //}
-        //public static TechInven GetTechInven() {
-        //    if (null == _techinven)
-        //        _techinven = GameObject.Find("Canvas/Inventory/Technology Panel").GetComponent<TechInven>();
-        //    return _techinven;
-        //}
-
-        //public static TechDescription GetTechDesc() {
-        //    if (null == _techdesc)
-        //        _techdesc = GameObject.Find("Canvas/Inventory/TechDescription Panel").GetComponent<TechDescription>();
-        //    return _techdesc;
-        //}
-
-        //public static Tooltip GetTooltip() {
-        //    if (null == _tooltip)
-        //        _tooltip = GameObject.Find("Canvas/Inventory/Tooltip").GetComponent<Tooltip>();
-        //    return _tooltip;
-        //}
-        //public static DeleteBlockProgress GetDeleteProgress()
-        //{
-        //    if (null == _delete_progress)
-        //        _delete_progress = GameObject.Find("Canvas/Inventory/Delete Block").GetComponent<DeleteBlockProgress>();
-        //    return _delete_progress;
-        //}
-
-        //public static Coordinates GetCoordinates()
-        //{
-        //    if (null == _coodinates)
-        //        _coodinates = GameObject.Find("Canvas/Coordinates").GetComponent<Coordinates>();
-        //    return _coodinates;
-        //}
-
-        //public static BeltGoods CreateMineral(int itemid, Transform parent)//, Vector3 pos)
-        //{
-        //    ItemBase itembase = GameManager.GetItemBase().FetchItemByID(itemid);
-        //    if (null == itembase) return null;
-
-        //    GameObject obj = UnityEngine.Object.Instantiate(GameManager.GetBeltGoods().gameObject);
-        //    obj.SetActive(true);
-        //    //Hierarchy 위치설정
-        //    obj.transform.SetParent(parent);
-        //    //생성위치
-        //    //obj.transform.position = pos;
-
-        //    BeltGoods goods             = obj.GetComponent<BeltGoods>();
-        //    goods.itemid                = itemid;    //HG_TODO : item.json에서 설정된 값을 넣어줘야 합니다.
-        //    MeshRenderer render         = goods.transform.GetChild(0).GetComponent<MeshRenderer>();
-        //    render.material.mainTexture = itembase.Sprite.texture;
-        //    return goods;
-        //}
-
-        //public static int AddItem(int itemid, int amount)
-        //{
-        //    //quick inven
-        //    amount = GetQuickInven().AddItem(itemid, amount, false);
-        //    if (amount <= 0)
-        //        return 0;
-
-        //    //inventory
-        //    amount = GetInventory().AddItem(itemid, amount);
-        //    if (amount <= 0)
-        //        return 0;
-
-        //    ////그래도 남아있으면...생성해준다.
-        //    //amount = GetQuickInven().AddItem(itemid, amount);
-        //    //if (amount <= 0)
-        //    //    return 0;
-
-        //    return amount;
-        //}
-
-        //public static int AddItem(InvenItemData itemData)
-        //{
-        //    //quick inven
-        //    int amount = GetQuickInven().AddItem(itemData);
-        //    if (amount <= 0)
-        //        return 0;
-        //    itemData.amount = amount;
-
-        //    //inventory
-        //    amount = GetInventory().AddItem(itemData);
-        //    if (amount <= 0)
-        //        return 0;
-        //    itemData.amount = amount;
-
-        //    return amount;
-        //}
-
-
-
-        //public static void Save()
-        //{
-        //    if (false == Directory.Exists(_save_dir)) Directory.CreateDirectory(_save_dir);
-
-        //    //BinarySerialize(GetInventory(), Application.persistentDataPath + "/savefile.sav");
-        //    using (FileStream fs = File.Create(_save_dir + "/savefile.sav"))
-        //    {
-        //        BinaryWriter writer = new BinaryWriter(fs);
-
-        //        GameManager.GetInventory().Save(writer);
-        //        GameManager.GetQuickInven().Save(writer);
-
-        //        GameManager.GetTerrainManager().Save(writer);
-
-
-        //        fs.Close();
-        //    }
-        //}
-
-        //void Load()
-        //{
-        //    //BinaryDeserialize<Inventory>(Application.persistentDataPath + "/savefile.sav");
-        //    if (File.Exists(_save_dir + "/savefile.sav"))
-        //    {
-        //        using (FileStream fs = File.Open(_save_dir + "/savefile.sav", FileMode.Open))
-        //        {
-        //            BinaryReader reader = new BinaryReader(fs);
-
-        //            GameManager.GetInventory().Load(reader);
-        //            GameManager.GetQuickInven().Load(reader);
-
-        //            GameManager.GetTerrainManager().Load(reader);
-
-        //            fs.Close();
-        //        }
-        //    }
-        //}
-
-        //public static void BinarySerialize<T>(T t, string filepath)
-        //{
-        //    BinaryFormatter formatter = new BinaryFormatter();
-        //    FileStream stream = new FileStream(filepath, FileMode.Create);
-        //    formatter.Serialize(stream, t);
-        //    stream.Close();
-        //}
-        //public T BinaryDeserialize<T>(string filepath)
-        //{
-        //    BinaryFormatter formatter = new BinaryFormatter();
-        //    FileStream stream = new FileStream(filepath, FileMode.Open);
-        //    T t = (T)formatter.Deserialize(stream);
-        //    stream.Close();
-        //    return t;
-        //}
-
-    }
+	public class GameManager
+	{
+		[DllImport("kernel32")]
+		private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+		[DllImport("kernel32")]
+		private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
+
+
+		//private GameObject _systemmenu;
+		//ChatManager _chat_manager;
+
+		private JSonParser<ItemBase> _itembase;
+		private JSonParser<TechBase> _techbase;
+		private JSonParser<Category> _categories;
+
+		private Inventory _inventory;
+		private QuickInven _quickinven;
+		private ChestInven _chestinven;
+		private ForgeInven _forgeinven;
+		private FactoryInven _factoryinven;
+		private SkillInven _skillinven;
+		private TechInven _techinven;
+		private TechDescription _techdesc;
+
+		private Tooltip _tooltip;
+		private Coordinates _coodinates;  //좌표
+		private DestoryProcess _destoryProcess;
+
+
+		//public GameObject SystemMenu { get { if (null == _systemmenu) _systemmenu = GameObject.FindObjectOfType(typeof(SystemMenu)); return _systemmenu; } }
+		//public ChatManager Chat { get { if (null == Instance._chat_manager) Instance._chat_manager = GameObject.Find("Gameplay UI/Chatting").GetComponent<ChatManager>(); return Instance._chat_manager; } }
+		public JSonParser<ItemBase> ItemBases { get { if (null == _itembase) _itembase = new JSonParser<ItemBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "items.json")); return _itembase; } }
+		public JSonParser<TechBase> TechBases { get { if (null == _techbase) _techbase = new JSonParser<TechBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "technology.json")); return _techbase; } }
+		public JSonParser<Category> Categories { get { if (null == _categories) _categories = new JSonParser<Category>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "categories.json")); return _categories; } }
+
+		public Inventory Inventories { get { if (null == _inventory) _inventory = GameObject.FindObjectOfType(typeof(Inventory)) as Inventory; return _inventory; } }
+		public QuickInven QuickInvens { get { if (null == _quickinven) _quickinven = GameObject.FindObjectOfType(typeof(QuickInven)) as QuickInven; return _quickinven; } }
+		public ChestInven ChestInvens { get { if (null == _chestinven) _chestinven = GameObject.FindObjectOfType(typeof(ChestInven)) as ChestInven; return _chestinven; } }
+		public ForgeInven ForgeInvens { get { if (null == _forgeinven) _forgeinven = GameObject.FindObjectOfType(typeof(ForgeInven)) as ForgeInven; return _forgeinven; } }
+		public FactoryInven FactoryInvens { get { if (null == _factoryinven) _factoryinven = GameObject.FindObjectOfType(typeof(FactoryInven)) as FactoryInven; return _factoryinven; } }
+		public SkillInven SkillInvens { get { if (null == _skillinven) _skillinven = GameObject.FindObjectOfType(typeof(SkillInven)) as SkillInven; return _skillinven; } }
+		public TechInven TechInvens { get { if (null == _techinven) _techinven = GameObject.FindObjectOfType(typeof(TechInven)) as TechInven; return _techinven; } }
+		public TechDescription TechDescs { get { if (null == _techdesc) _techdesc = GameObject.FindObjectOfType(typeof(TechDescription)) as TechDescription; return _techdesc; } }
+
+		public Tooltip Tooltips { get { if (null == _tooltip) _tooltip = GameObject.FindObjectOfType(typeof(Tooltip)) as Tooltip; return _tooltip; } }
+		public Coordinates Coordinates { get { if (null == _coodinates) _coodinates = GameObject.FindObjectOfType(typeof(Coordinates)) as Coordinates; return _coodinates; } }
+		public DestoryProcess DestoryProcess { get { if (null == _destoryProcess) _destoryProcess = GameObject.FindObjectOfType(typeof(DestoryProcess)) as DestoryProcess; return _destoryProcess; } }
+
+
+
+		//저장경로
+		public string _save_dir = Application.dataPath + "/../save";
+
+
+		public bool bNewGame;
+		//public StringBuilder _locale;
+
+		//FactoryFramework
+		private BuildingPlacement _buildingPlacement;
+		private ConveyorPlacement _conveyorPlacement;
+		private GameObject _choiced_building = null;
+
+		public void Init()
+		{
+			////HG_TEST: 임시로 불러올수 있는지 체크용(성공)
+			//_buildingPlacement = FindObjectOfType<BuildingPlacement>();
+			//_conveyorPlacement = FindObjectOfType<ConveyorPlacement>();
+		}
+		public void Clear()
+		{
+
+		}
+
+		public void InitPlacement(BuildingPlacement building, ConveyorPlacement conveyor)
+		{
+			_buildingPlacement = building;
+			_conveyorPlacement = conveyor;
+
+			//building
+			_buildingPlacement.finishPlacementEvent.OnEvent -= FinishPlaceBuilding;
+			_buildingPlacement.finishPlacementEvent.OnEvent += FinishPlaceBuilding;
+			//conveyor
+			_conveyorPlacement.finishPlacementEvent.OnEvent -= FinishPlaceBuilding;
+			_conveyorPlacement.finishPlacementEvent.OnEvent += FinishPlaceBuilding;
+		}
+
+		public void PlaceBuilding(InvenItemData item)
+		{
+			if (null == item || null == item.database) return;
+			GameObject prefab = item.database.prefab;
+			if (null == prefab) return;
+
+			if (prefab.TryGetComponent(out FactoryFramework.Conveyor _))
+			{
+				_choiced_building = _conveyorPlacement.StartPlacingConveyor(prefab);
+				_choiced_building.GetComponent<FactoryFramework.Conveyor>()._itembase = (ItemBase)item.database;
+			}
+			else if (prefab.TryGetComponent(out FactoryFramework.Driller _))
+			{
+				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, true);
+				_choiced_building.GetComponent<FactoryFramework.Driller>()._itembase = (ItemBase)item.database;
+			}
+			else if (prefab.TryGetComponent(out FactoryFramework.LogisticComponent _))
+			{
+				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, false);
+				_choiced_building.GetComponent<FactoryFramework.LogisticComponent>()._itembase = (ItemBase)item.database;
+			}
+			else if (prefab.TryGetComponent(out FactoryFramework.PowerGridComponent _))
+				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, false);
+		}
+		public void DestoryBuilding()
+		{
+			if (null == _choiced_building) return;
+
+			if (_choiced_building.TryGetComponent(out FactoryFramework.Conveyor _))
+				_conveyorPlacement.ForceCancel();
+			else if (_choiced_building.TryGetComponent(out FactoryFramework.Driller _))
+				_buildingPlacement.ForceCancel();
+			else if (_choiced_building.TryGetComponent(out FactoryFramework.PowerGridComponent _) || _choiced_building.TryGetComponent(out FactoryFramework.LogisticComponent _))
+				_buildingPlacement.ForceCancel();
+			_choiced_building = null;
+		}
+
+		private void FinishPlaceBuilding()
+		{
+			Debug.Log($"{_choiced_building.name} 완공");
+			_choiced_building = null;   //재할당을 받기위해 null로 설정한다.
+
+			//각 이벤트 위치어서 개수를 미리 정산해 줍니다.
+			//InvenBase.choiced_item.AddStackCount(-1, false);
+			if (InvenBase.choiced_item.amount <= 0)
+			{
+				Managers.Resource.Destroy(InvenBase.choiced_item.gameObject);
+				InvenBase.choiced_item = null;
+				return;
+			}
+			//개수가 남아있다면...건물을 생성해서 들고있는다.
+			if (null != InvenBase.choiced_item) this.PlaceBuilding(InvenBase.choiced_item);
+		}
+
+		//private void FinishPlaceConveyor()
+		//{
+		//    //들고있는것에서 val 만큼 뺀다.
+		//    //GameManager.SubItem(InvenBase.choiced_item.database.id, val);
+
+		//    FinishPlaceBuilding();
+		//}
+
+		//소유한 아이템 개수
+		public int GetAmount(int itemid)
+		{
+			int amount = 0;
+			if (itemid == InvenBase.choiced_item.database.id)
+				amount += InvenBase.choiced_item.amount;
+			amount += Managers.Game.Inventories.GetAmount(itemid);
+			amount += Managers.Game.QuickInvens.GetAmount(itemid);
+			return amount;
+		}
+
+		public int AddItem(int itemid, int amount)
+		{
+			if (0 == amount) return 0;
+
+			////choice item
+			//if (itemid == InvenBase.choiced_item.database.id)
+			//    InvenBase.choiced_item.AddStackCount()
+
+			//quick inven
+			//HG_TEST: 테스트로 bCreate를 true로 설정합니다.(default:false)
+			//  인벤아이템을 모두 가져왔을때 자리를 완전히 비우지말고 amount만 0 으로 설정 이미지는 "흑백"으로 처리함으로
+			//  이후 회수될때 원자리를 찾아 가면 좋을듯 싶다.
+			amount = Managers.Game.QuickInvens.AddItem(itemid, amount, true);
+			if (amount <= 0) return 0;
+
+			//inventory
+			amount = Managers.Game.Inventories.AddItem(itemid, amount);
+			if (amount <= 0) return 0;
+
+			////그래도 남아있으면...생성해준다.
+			//amount = GetQuickInven().AddItem(itemid, amount);
+			//if (amount <= 0)
+			//    return 0;
+
+			return amount;
+		}
+
+		public int AddItem(InvenItemData itemData)
+		{
+			//quick inven
+			int amount = Managers.Game.QuickInvens.AddItem(itemData);
+			if (amount <= 0)
+				return 0;
+			itemData.amount = amount;
+
+			//inventory
+			amount = Managers.Game.Inventories.AddItem(itemData);
+			if (amount <= 0)
+				return 0;
+			itemData.amount = amount;
+
+			return amount;
+		}
+
+		public int SubItem(int itemid, int amount)
+		{
+			//quick inven
+			amount = Managers.Game.QuickInvens.SubItem(itemid, amount);
+			if (amount <= 0)
+				return 0;
+
+			//inventory
+			amount = Managers.Game.Inventories.SubItem(itemid, amount);
+			if (amount <= 0)
+				return 0;
+
+			////그래도 남아있으면...생성해준다.
+			//amount = GetQuickInven().AddItem(itemid, amount);
+			//if (amount <= 0)
+			//    return 0;
+
+			return amount;
+		}
+
+		#region SAVE
+		public void Save()
+		{
+			if (false == Directory.Exists(_save_dir)) Directory.CreateDirectory(_save_dir);
+
+			//BinarySerialize(GetInventory(), Application.persistentDataPath + "/savefile.sav");
+			using (FileStream fs = File.Create(_save_dir + "/savefile.sav"))
+			{
+				BinaryWriter writer = new BinaryWriter(fs);
+				_inventory.Save(writer);
+				_quickinven.Save(writer);
+
+
+				//// build a lookup of Guid -> SerializationReference
+				//// this is used to re-link the conveyor belts to buildings
+				//Dictionary<Guid, SerializationReference> lookup = new Dictionary<Guid, SerializationReference>();
+				//// keep conveyors for a seoncd pass once all buildings are setup
+				//List<SerializationReference> conveyors = new List<SerializationReference>();
+
+				List<Conveyor> conveyors = new List<Conveyor>();
+
+				var serializables = _buildingPlacement.gameObject.GetComponentsInChildren<SerializationReference>();
+				writer.Write(serializables.Length);     //building count
+				foreach (var obj in serializables)
+				{
+					////HG_CHECK:InstantiateBuildingData()를 추가해야 하나???(테스트 할것)
+					//lookup.Add(obj.GUID, obj);
+
+					//conveyor는 별도로 빼서 아래에서 처리한다. connect처리때문에.
+					if (obj.TryGetComponent<Conveyor>(out Conveyor conveyor))
+					{
+						conveyors.Add(conveyor);
+						continue;
+					}
+
+					if (obj.TryGetComponent(out LogisticComponent logistic))
+					{
+						logistic.Save(writer);
+						continue;
+					}
+					Debug.LogError($"{obj.name}을 Save할 로직이 준비되어있지 않습니다.");
+				}
+
+				//conveyor는 별도로 빼서 아래에서 처리한다. connect처리때문에.
+				foreach (var obj in conveyors)
+				{
+					Conveyor conveyor = obj.GetComponent<Conveyor>();
+					conveyor.Save(writer);
+				}
+
+
+				fs.Close();
+			}
+		}
+
+		public void Load()
+		{
+			//BinaryDeserialize<Inventory>(Application.persistentDataPath + "/savefile.sav");
+			string filepath = _save_dir + "/savefile.sav";
+			if (false == File.Exists(filepath))
+			{
+				Debug.LogError($"load failed({filepath})");
+				return;
+			}
+
+			using (FileStream fs = File.Open(filepath, FileMode.Open))
+			{
+				BinaryReader reader = new BinaryReader(fs);
+				_inventory.Load(reader);
+				_quickinven.Load(reader);
+
+
+				// build a lookup of Guid -> SerializationReference
+				// this is used to re-link the conveyor belts to buildings
+				Dictionary<Guid, LogisticComponent> lookup = new Dictionary<Guid, LogisticComponent>();
+				// keep conveyors for a seoncd pass once all buildings are setup
+				List<Conveyor> conveyors = new List<Conveyor>();
+
+				//GameManager.GetTerrainManager().Load(reader);
+				int cntBuilding = reader.ReadInt32();   //building count
+				for (int i = 0; i < cntBuilding; ++i)
+				{
+					string path = reader.ReadString();
+					GameObject prefab = Managers.Resource.Load<GameObject>(path);
+					if (null == prefab)
+					{
+						Debug.LogError($"Fail: prefab({path})");
+						continue;
+					}
+					GameObject instantiated = Managers.Resource.Instantiate(prefab);    //HG[2023.06.01]테스트필요
+					instantiated.transform.parent = _buildingPlacement.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = _buildingPlacement.transform } }).transform;
+
+					////conveyor는 별도로 빼서 아래에서 처리한다. connect처리때문에.
+					//if (instantiated.TryGetComponent<Conveyor>(out Conveyor conveyor))
+					//{
+					//	conveyors.Add(conveyor);
+					//	continue;
+					//}
+
+					//conveyor는 save할때 맨 뒤쪽에 추가됨니다.
+					if (instantiated.TryGetComponent<Conveyor>(out Conveyor conveyor))
+					{
+						conveyor.Load(reader);
+						conveyors.Add(conveyor);
+						//conveyor랑 연결될 buildings GUID
+						lookup.Add(conveyor.GUID, conveyor);
+						continue;
+					}
+
+
+					if (instantiated.TryGetComponent(out LogisticComponent building))
+					{
+						building._itembase = prefab.GetComponent<LogisticComponent>()._itembase;
+						building.Load(reader);
+
+						//conveyor랑 연결될 buildings GUID
+						lookup.Add(building.GUID, building);
+						continue;
+					}
+					Debug.LogError($"{instantiated.name}을 Load할 로직이 준비되어있지 않습니다.");
+				}
+				fs.Close();
+
+				foreach( var conveyor in conveyors)
+				{
+					string inputSocketGUID = conveyor.tmpInputGuid;// conveyor.InputSocketGuid;
+					string outputSocketGUID = conveyor.tmpOutputGuid;// conveyor.OutputSocketGuid;
+
+					///
+					// This part may look confusing. Input sockets only connect to output sockets and vice versa.
+					// if inputSocketGUID exists, it is pointing to a building or other conveyor's output socket
+					///
+					if (inputSocketGUID != null && !inputSocketGUID.Equals(""))
+					{
+						var inputConnection = lookup[new Guid(inputSocketGUID)];
+						if (inputConnection.TryGetComponent(out Building building))
+						{
+							OutputSocket osocket = building.GetOutputSocketByIndex(conveyor.data.inputSocketIndex);
+							osocket?.Connect(conveyor.inputSocket);
+						}
+						else if (inputConnection.TryGetComponent(out Conveyor conv))
+						{
+							conv.outputSocket.Connect(conveyor.inputSocket);
+						}
+					}
+					if (outputSocketGUID != null && !outputSocketGUID.Equals(""))
+					{
+						var outputConnection = lookup[new Guid(outputSocketGUID)];
+						if (outputConnection.TryGetComponent(out Building building))
+						{
+							InputSocket isocket = building.GetInputSocketByIndex(conveyor.data.outputSocketIndex);
+							isocket?.Connect(conveyor.outputSocket);
+						}
+						else if (outputConnection.TryGetComponent(out Conveyor conv))
+						{
+							conveyor.outputSocket.Connect(conv.inputSocket);
+						}
+					}
+				}
+			}
+		}
+
+		#endregion //..SAVE
+
+	}
 }

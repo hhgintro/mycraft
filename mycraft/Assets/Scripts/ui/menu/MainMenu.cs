@@ -10,11 +10,11 @@ namespace MyCraft
         void Start()
         {
             //locale
-            LocaleManager.SetLocale("lobby", this.transform.Find("Title").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("PlayButton/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("MapEditButton/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("OptionButton/Text").GetComponent<Text>());
-            LocaleManager.SetLocale("lobby", this.transform.Find("Exit/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("Title").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("PlayButton/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("MapEditButton/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("OptionButton/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("lobby", this.transform.Find("Exit/Text").GetComponent<Text>());
         }
 
         public void OnPlayMenu()

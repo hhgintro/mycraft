@@ -33,14 +33,17 @@ public class MouseHoverBuildingTooltip : MouseHoverTooltip
             }
         }
 
-        if (TryGetComponent(out Producer producer))
+        if (TryGetComponent(out Driller producer))
         {
-            if (producer.resource.itemStack.item == null) return "";
-            return $"{gameObject.name} producing {producer.resource.itemStack.amount} {producer.resource.itemStack.item.name}";
+            //if (producer.resource.itemStack.item == null) return "";
+            //return $"{gameObject.name} producing {producer.resource.itemStack.amount} {producer.resource.itemStack.item.name}";
+            return $"{gameObject.name} producing ...아이템명 아이템개수 노출할것";
         }
-        if (TryGetComponent(out Processor proc))
+        if (TryGetComponent(out Forge proc))
         {
-            return $"{gameObject.name} processing items to make {proc.recipe?.name ?? "nothing"}";
+            //HG[2023.06.09] Item -> MyCraft.ItemBase
+            //return $"{gameObject.name} processing items to make {proc.recipe?.name ?? "nothing"}";
+            return $"{gameObject.name} processing items to make recipe nothing";
         }
         if (TryGetComponent(out Splitter _))
         {
