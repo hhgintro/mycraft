@@ -2,8 +2,6 @@
   {
     "id": 0,
     "type": "ItemBase",
-    "title": "reset",
-    "desc": "",
     "stackable": 1,
     "icon": "reset"
   },
@@ -11,8 +9,6 @@
   {
     "id": 1,
     "type": "ItemBase",
-    "title": "시간",
-    "desc": "",
     "stackable": 1,
     "icon": "clock-icon"
   },
@@ -20,8 +16,6 @@
   {
     "id": 10,
     "type": "ItemBase",
-    "title": "원목",
-    "desc": "",
     "state":{"power":21,"defence":12,"vitality":50},
     "stackable": 100,
     "icon": "raw-wood",
@@ -31,8 +25,6 @@
   {
     "id": 20,
     "type": "ItemBase",
-    "title": "돌",
-    "desc": "",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "stone",
@@ -42,8 +34,6 @@
   {
     "id": 30,
     "type": "ItemBase",
-    "title": "석탄",
-    "desc": "",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "coal",
@@ -53,8 +43,6 @@
   {
     "id": 40,
     "type": "ItemBase",
-    "title": "철광석",
-    "desc": "",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "iron-ore",
@@ -64,8 +52,6 @@
   {
     "id": 50,
     "type": "ItemBase",
-    "title": "구리광석",
-    "desc": "",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "copper-ore",
@@ -75,11 +61,9 @@
   {
     "id": 60,
     "type": "ItemBase",
-    "title": "원유",
-    "desc": "",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "crude-ole"
+    "icon": "crude-oil"
 },
 
 
@@ -87,8 +71,6 @@
   {
     "id": 900,
     "type": "ItemBase",
-    "title": "권총",
-    "desc": "",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -111,8 +93,6 @@
   {
     "id": 1000,
     "type": "ChestItemBase",
-    "title": "나무상자",
-    "desc": "",
     "slots": 21,
     "learn": true,
     "cost": {
@@ -132,8 +112,6 @@
   {
     "id": 1030,
     "type": "InserterItemBase",
-    "title": "투입기",
-    "desc": "물건이 잡거나 넣는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -154,8 +132,6 @@
   {
     "id": 1031,
     "type": "InserterItemBase",
-    "title": "긴팔 투입기",
-    "desc": "물건이 잡거나 넣는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -176,8 +152,6 @@
   {
     "id": 1040,
     "type": "DrillItemBase",
-    "title": "채광 드릴",
-    "desc": "자원을 채광하는 설비",
     "perSecond": 1,
     "learn": true,
     "cost": {
@@ -197,8 +171,6 @@
   {
     "id": 1050,
     "type": "FurnaceItemBase",
-    "title": "석재 용광로",
-    "desc": "화력으로 재련하는 설비",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -212,10 +184,10 @@
       "fuels": 1,
       "outputs": 1,
       "input": [
-        {"id": 20,"limit": 2,"build-time": 3.1,"output": 2040},
-        {"id": 40,"limit": 2,"build-time": 3.1,"output": 2010},
-        {"id": 50,"limit": 2,"build-time": 3.1,"output": 2020},
-        {"id": 2010,"limit": 2,"build-time": 3.1,"output": 2013}
+        {"id": 20,"limit": 2,"build-time": 1.1,"output": 2040},
+        {"id": 40,"limit": 2,"build-time": 1.1,"output": 2010},
+        {"id": 50,"limit": 2,"build-time": 1.1,"output": 2020},
+        {"id": 2010,"limit": 2,"build-time": 1.1,"output": 2013}
       ],
       "fuel": [
         {"id": 10,"limit": 2,"burning-time": 10},
@@ -232,8 +204,6 @@
   {
     "id": 1060,
     "type": "MachineItemBase",
-    "title": "조립 생산 설비",
-    "desc": "물건을 조립하는 설비",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -257,8 +227,6 @@
   {
     "id": 1100,
     "type": "BeltItemBase",
-    "title": "컨베이어 밸트",
-    "desc": "물건이 이동하는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -283,8 +251,6 @@
   {
     "id": 1200,
     "type": "BeltItemBase",
-    "title": "분배기",
-    "desc": "물건 분배하는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -304,8 +270,6 @@
   {
     "id": 1210,
     "type": "BeltItemBase",
-    "title": "통합기",
-    "desc": "물건을 통합하는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -325,8 +289,6 @@
   {
     "id": 1310,
     "type": "PipeItemBase",
-    "title": "파이프",
-    "desc": "액체를 운반하는 설비",
     "speed": 1,
     "learn": true,
     "cost": {
@@ -349,8 +311,6 @@
   {
     "id": 2000,
     "type": "ItemBase",
-    "title": "목재",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -368,8 +328,6 @@
   {
     "id": 2010,
     "type": "ItemBase",
-    "title": "철판",
-    "desc": "",
     "learn": true,
     "DIY": false,
     "cost": {
@@ -388,8 +346,6 @@
   {
     "id": 2011,
     "type": "ItemBase",
-    "title": "철 기어 휠",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -407,8 +363,6 @@
   {
     "id": 2012,
     "type": "ItemBase",
-    "title": "쇠막대기",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -426,8 +380,6 @@
   {
     "id": 2013,
     "type": "ItemBase",
-    "title": "철강",
-    "desc": "",
     "learn": true,
     "DIY": false,
     "cost": {
@@ -446,8 +398,6 @@
   {
     "id": 2020,
     "type": "ItemBase",
-    "title": "구리판",
-    "desc": "",
     "learn": true,
     "DIY": false,
     "cost": {
@@ -466,8 +416,6 @@
   {
     "id": 2021,
     "type": "ItemBase",
-    "title": "구리선",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -486,8 +434,6 @@
   {
     "id": 2030,
     "type": "ItemBase",
-    "title": "녹색기판",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -510,8 +456,6 @@
   {
     "id": 2031,
     "type": "ItemBase",
-    "title": "빨간기판",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -529,8 +473,6 @@
   {
     "id": 2032,
     "type": "ItemBase",
-    "title": "파란기판",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,
@@ -548,8 +490,6 @@
   {
     "id": 2040,
     "type": "ItemBase",
-    "title": "벽돌",
-    "desc": "",
     "learn": true,
     "DIY": false,
     "cost": {
@@ -568,8 +508,6 @@
   {
     "id": 2041,
     "type": "ItemBase",
-    "title": "석벽",
-    "desc": "",
     "learn": true,
     "cost": {
       "time": 2.1,

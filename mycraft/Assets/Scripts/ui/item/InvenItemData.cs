@@ -52,6 +52,13 @@ namespace MyCraft
 			//pickAll의 경우에 교체시에는 pickup이 마지막으로 처리되어 0이 되는 결과가 발생
 			bool noti2block = true;
 
+			//pickup할 수 없다.
+			if (false == this.owner.CheckPickupGoods())
+			{
+				Debug.Log(this.owner.ToString() + "은 pickup 할 수 없습니다.");
+				return;
+			}
+
 			//들고 있다면...
 			if (null != InvenBase.choiced_item)
 			{
@@ -64,7 +71,7 @@ namespace MyCraft
 					{
 						Managers.Resource.Destroy(InvenBase.choiced_item.gameObject);
 						InvenBase.choiced_item = null;
-						Managers.Game.DestoryBuilding();    //선택된 건물이있다면 내려놓는다.
+						Managers.Game.DestoryBuilding();    //들고있는 건물을 내려놓는다.
 					}
 					return;
 				}
@@ -78,22 +85,20 @@ namespace MyCraft
 				//들고 있던건 내려놓고(다른아이템인 경우)
 				//this.owner.slots[this.slot].AddItem(InvenBase.choiced_item);
 				Slot s = this.owner.GetInvenSlot(this.panel, this.slot);
-				if (null != s) s.AddItem(InvenBase.choiced_item);
-				InvenBase.choiced_item = null;
-				Managers.Game.DestoryBuilding();    //선택된 건물이있다면 내려놓는다.
+				s?.PutdownChoicedItem();
 				noti2block = false;//교체시에는 Pickup을 block으로 전달하지 않는다.
-			}
-
-			//들 수 없다.
-			if (false == this.owner.CheckPickupGoods())
-			{
-				Debug.Log(this.owner.ToString() + "은 pickup 할 수 없습니다.");
-				return;
 			}
 
 			//모두 집어든다.(아이템이 있다면)
 			if (0 != this.database.id)
+			{
+				if(this.amount <= 0)
+				{
+					Managers.Resource.Destroy(this.gameObject);
+					return;
+				}
 				InvenBase.choiced_item = this.PickupAll(this.transform.parent.parent.parent.parent, noti2block);
+			}
 
 		}
 

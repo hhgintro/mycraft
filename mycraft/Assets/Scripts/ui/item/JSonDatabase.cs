@@ -21,7 +21,7 @@ namespace MyCraft
 		{
 			this.id = (ushort)json["id"];
 			this.type = json["type"].ToString();
-			this.Title = json["title"].ToString();
+			this.Title = Managers.Locale.GetLocale("items", string.Format($"{this.id.ToString()}-title"));
 
 			this.icon = Managers.Resource.Load<Sprite>(_iconPath() + json["icon"].ToString());
 

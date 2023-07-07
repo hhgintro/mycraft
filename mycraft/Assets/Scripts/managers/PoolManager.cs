@@ -24,6 +24,13 @@ namespace MyCraft
                     Push(Create());
             }
 
+            public void Clear()
+            {
+                foreach(var pool in _poolStack)
+                    GameObject.Destroy(pool.gameObject);
+				_poolStack.Clear();
+			}
+
             Poolable Create()
             {
                 GameObject go = Object.Instantiate<GameObject>(Original);
@@ -58,8 +65,11 @@ namespace MyCraft
                 //if (parent == null)
                 //    poolable.transform.parent = Managers.Scene.CurrentScene.transform;
 
+                //if(parent.TryGetComponent<RectTransform>(out RectTransform _))
+                //    poolable.transform.SetParent(parent);
+                //else
                 poolable.transform.parent = parent;
-                poolable.IsUsing = true;
+				poolable.IsUsing = true;
 
                 return poolable;
             }
@@ -119,7 +129,10 @@ namespace MyCraft
             foreach (Transform child in _root)
                 GameObject.Destroy(child.gameObject);
 
-            _pool.Clear();
+            foreach (var pool in _pool.Values)
+                pool.Clear();
+
+			_pool.Clear();
         }
     }
 }//..namespace MyCraft

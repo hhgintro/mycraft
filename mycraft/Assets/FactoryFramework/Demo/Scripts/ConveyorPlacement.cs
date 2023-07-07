@@ -95,8 +95,7 @@ public class ConveyorPlacement : IPlacement
 			return;
 		
 		Debug.Log($"{conveyor.name} Ã¶°Å");
-		conveyor.Disconnect();
-		MyCraft.Managers.Game.AddItem(conveyor._itembase.id, conveyor.Capacity);
+		conveyor.OnDeleted();
 		MyCraft.Managers.Resource.Destroy(conveyor.gameObject);
 	}
 

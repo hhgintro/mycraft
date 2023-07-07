@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.Image;
 using Unity.VisualScripting;
-using static UnityEditor.Rendering.CameraUI;
 
 namespace MyCraft
 {

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 
@@ -112,6 +114,18 @@ namespace MyCraft
             return (weight & val) == val;
         }
 
-    }//..class Common
+		//folderPath내 파일목록을 수정일자순으로 가져오는 코드
+		public static string[] GetFilesInFolderWithExtensionOrderByCreationTime(string folderPath, string extension)
+		{
+			DirectoryInfo directory = new DirectoryInfo(folderPath);
+			List<FileInfo> fileInfoList = directory.GetFiles("*" + extension)
+													.OrderBy(file => file.LastWriteTime)
+                                                    .ToList();
+			string[] filePaths = new string[fileInfoList.Count];
+			for (int i = 0; i < fileInfoList.Count; i++)
+				filePaths[i] = Path.GetFileNameWithoutExtension(fileInfoList[i].Name);
+			return filePaths;
+		}
+	}//..class Common
 
 }//..namespace MyCraft

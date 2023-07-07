@@ -1,7 +1,10 @@
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEditor;
+#if UNITY_EDITOR
+using UnityEditor.SceneManagement;
+#endif
 
+#if UNITY_EDITOR
 [InitializeOnLoad]
 public class EditorStartInit
 {
@@ -14,3 +17,4 @@ public class EditorStartInit
         Debug.Log(pathOfFirstScene + " 씬이 에디터 플레이 모드 시작 씬으로 지정됨");
     }
 }
+#endif

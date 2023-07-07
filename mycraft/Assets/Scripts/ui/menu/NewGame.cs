@@ -11,15 +11,16 @@ namespace MyCraft
         void Start()
         {
             //locale
-            Managers.Locale.SetLocale("lobby", this.transform.Find("Title").GetComponent<Text>());
-            Managers.Locale.SetLocale("lobby", this.transform.Find("Create/Text").GetComponent<Text>());
-            Managers.Locale.SetLocale("lobby", this.transform.Find("Back/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("new-game", this.transform.Find("Title").GetComponent<Text>());
+            Managers.Locale.SetLocale("new-game", this.transform.Find("Create/Text").GetComponent<Text>());
+            Managers.Locale.SetLocale("new-game", this.transform.Find("Back/Text").GetComponent<Text>());
 
         }
 
         public void OnNewGame()
         {
-            Managers.Game.bNewGame = true;
+            //Managers.Game.bNewGame = true;
+            Managers.Game._load_filename = null;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 

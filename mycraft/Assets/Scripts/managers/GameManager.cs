@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
+using UnityEngine.XR;
 
 namespace MyCraft
 {
@@ -17,7 +18,7 @@ namespace MyCraft
 		private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
 
 
-		//private GameObject _systemmenu;
+		private SystemMenuManager _systemmenu;
 		//ChatManager _chat_manager;
 
 		private JSonParser<ItemBase> _itembase;
@@ -38,7 +39,7 @@ namespace MyCraft
 		private DestoryProcess _destoryProcess;
 
 
-		//public GameObject SystemMenu { get { if (null == _systemmenu) _systemmenu = GameObject.FindObjectOfType(typeof(SystemMenu)); return _systemmenu; } }
+		public SystemMenuManager SystemMenu { get { if (null == _systemmenu) _systemmenu = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager; return _systemmenu; } }
 		//public ChatManager Chat { get { if (null == Instance._chat_manager) Instance._chat_manager = GameObject.Find("Gameplay UI/Chatting").GetComponent<ChatManager>(); return Instance._chat_manager; } }
 		public JSonParser<ItemBase> ItemBases { get { if (null == _itembase) _itembase = new JSonParser<ItemBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "items.json")); return _itembase; } }
 		public JSonParser<TechBase> TechBases { get { if (null == _techbase) _techbase = new JSonParser<TechBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "technology.json")); return _techbase; } }
@@ -63,7 +64,8 @@ namespace MyCraft
 		public string _save_dir = Application.dataPath + "/../save";
 
 
-		public bool bNewGame;
+		//public bool bNewGame;
+		public string _load_filename;
 		//public StringBuilder _locale;
 
 		//FactoryFramework
@@ -97,7 +99,7 @@ namespace MyCraft
 
 		public void PlaceBuilding(InvenItemData item)
 		{
-			if (null == item || null == item.database) return;
+			if (null == item || null == item.database || item.amount <= 0) return;
 			GameObject prefab = item.database.prefab;
 			if (null == prefab) return;
 
@@ -233,16 +235,21 @@ namespace MyCraft
 		}
 
 		#region SAVE
-		public void Save()
+		public void Save(string filename)
 		{
 			if (false == Directory.Exists(_save_dir)) Directory.CreateDirectory(_save_dir);
+			if(false == filename.Contains(".sav"))	filename += ".sav";	//확장자 추가
 
 			//BinarySerialize(GetInventory(), Application.persistentDataPath + "/savefile.sav");
-			using (FileStream fs = File.Create(_save_dir + "/savefile.sav"))
+			using (FileStream fs = File.Create(Path.Combine(_save_dir, filename)))
 			{
-				BinaryWriter writer = new BinaryWriter(fs);
-				_inventory.Save(writer);
-				_quickinven.Save(writer);
+				BinaryWriter bw = new BinaryWriter(fs);
+
+				//screen-shot
+				SaveScreenShot(bw);
+
+				_inventory.Save(bw);
+				_quickinven.Save(bw);
 
 
 				//// build a lookup of Guid -> SerializationReference
@@ -254,7 +261,7 @@ namespace MyCraft
 				List<Conveyor> conveyors = new List<Conveyor>();
 
 				var serializables = _buildingPlacement.gameObject.GetComponentsInChildren<SerializationReference>();
-				writer.Write(serializables.Length);     //building count
+				bw.Write(serializables.Length);     //building count
 				foreach (var obj in serializables)
 				{
 					////HG_CHECK:InstantiateBuildingData()를 추가해야 하나???(테스트 할것)
@@ -269,7 +276,7 @@ namespace MyCraft
 
 					if (obj.TryGetComponent(out LogisticComponent logistic))
 					{
-						logistic.Save(writer);
+						logistic.Save(bw);
 						continue;
 					}
 					Debug.LogError($"{obj.name}을 Save할 로직이 준비되어있지 않습니다.");
@@ -279,7 +286,7 @@ namespace MyCraft
 				foreach (var obj in conveyors)
 				{
 					Conveyor conveyor = obj.GetComponent<Conveyor>();
-					conveyor.Save(writer);
+					conveyor.Save(bw);
 				}
 
 
@@ -290,7 +297,8 @@ namespace MyCraft
 		public void Load()
 		{
 			//BinaryDeserialize<Inventory>(Application.persistentDataPath + "/savefile.sav");
-			string filepath = _save_dir + "/savefile.sav";
+			string filepath = Path.Combine(_save_dir, _load_filename);
+			if(false == filepath.Contains(".sav")) filepath += ".sav";	//확장자 추가
 			if (false == File.Exists(filepath))
 			{
 				Debug.LogError($"load failed({filepath})");
@@ -300,6 +308,11 @@ namespace MyCraft
 			using (FileStream fs = File.Open(filepath, FileMode.Open))
 			{
 				BinaryReader reader = new BinaryReader(fs);
+
+				//이미지 만큼 건너띄고 읽오옵니다.
+				int offset = 4 + reader.ReadInt32(); //총길이( 4(int) + bytes.Length ) 
+				fs.Seek(offset, SeekOrigin.Begin);
+
 				_inventory.Load(reader);
 				_quickinven.Load(reader);
 
@@ -369,7 +382,7 @@ namespace MyCraft
 						var inputConnection = lookup[new Guid(inputSocketGUID)];
 						if (inputConnection.TryGetComponent(out Building building))
 						{
-							OutputSocket osocket = building.GetOutputSocketByIndex(conveyor.data.inputSocketIndex);
+							OutputSocket osocket = building.GetOutputSocketByIndex(conveyor.data.outputSocketIndex);
 							osocket?.Connect(conveyor.inputSocket);
 						}
 						else if (inputConnection.TryGetComponent(out Conveyor conv))
@@ -382,7 +395,7 @@ namespace MyCraft
 						var outputConnection = lookup[new Guid(outputSocketGUID)];
 						if (outputConnection.TryGetComponent(out Building building))
 						{
-							InputSocket isocket = building.GetInputSocketByIndex(conveyor.data.outputSocketIndex);
+							InputSocket isocket = building.GetInputSocketByIndex(conveyor.data.inputSocketIndex);
 							isocket?.Connect(conveyor.outputSocket);
 						}
 						else if (outputConnection.TryGetComponent(out Conveyor conv))
@@ -393,6 +406,42 @@ namespace MyCraft
 				}
 			}
 		}
+
+		private void SaveScreenShot(BinaryWriter bw)
+		{
+			// 캡쳐할 이미지의 크기를 결정합니다.
+			int width = Screen.width;
+			int height = Screen.height;
+
+			// Texture2D 객체를 생성합니다. 이 때 크기를 이전에 정한 width와 height로 지정합니다.
+			Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+
+			// 캡쳐한 내용을 Texture2D에 저장합니다.
+			tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+			tex.Apply();
+
+			// Texture2D를 byte 배열로 변환합니다.
+			byte[] bytes = tex.EncodeToPNG();
+
+			//save : 총길이( 4(int) + bytes.Length ) 
+			bw.Write(bytes.Length);
+			bw.Write(bytes);
+
+			// Texture2D 객체를 메모리에서 해제합니다.
+			UnityEngine.Object.Destroy(tex);
+		}
+
+		//private void LoadScreenShot(BinaryReader br)
+		//{
+		//	// byte 배열을 Texture2D로 변환합니다.
+		//	Texture2D tex = new Texture2D(1, 1);
+		//	int length = br.Read();
+		//	tex.LoadImage(br.ReadBytes(length));
+
+		//	// SpriteRenderer를 사용하여 Texture2D를 Sprite로 변환하여 화면에 나타냅니다.
+		//	Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+		//	spriteRenderer.sprite = sprite;
+		//}
 
 		#endregion //..SAVE
 

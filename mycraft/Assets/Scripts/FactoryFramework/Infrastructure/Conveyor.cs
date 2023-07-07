@@ -98,15 +98,25 @@ namespace FactoryFramework
 			items?.Clear();
 		}
 
-		private void OnDestroy()
+        public virtual void OnDeleted()
 		{
-			//_itemPositionsArray.Dispose();
-			//_transformsArray.Dispose();
-			for (int x = 0; x < items.Count; x++)
-			{
-				Destroy(items[0]._model.gameObject);
-			}
+            for (int i = 0; i < items.Count; i++)
+            {
+                MyCraft.Managers.Game.AddItem(this.items[i]._itembase.id, 1);
+                MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
+            }
+            items.Clear();
+            this.Disconnect();
+            MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity);
+        }
+
+        private void OnDestroy()
+		{
+			for (int i = 0; i < items.Count; i++)
+				MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
+
 			items.Clear();
+			this.Disconnect();
 			Reset();
 			_path?.CleanUp();
 			Disconnect();
@@ -551,12 +561,12 @@ namespace FactoryFramework
 			{
 				writer.Write(items[i]._itembase.id);
 				writer.Write(items[i]._position);
-				Debug.Log($"SAVE:{i}-{items.Count}/{items[i]._itembase.id}/{items[i]._position}");
+				//Debug.Log($"SAVE:{i}-{items.Count}/{items[i]._itembase.id}/{items[i]._position}");
 			}
 
 			writer.Write(this.InputSocketGuid??"");
 			writer.Write(this.OutputSocketGuid??"");
-			Debug.Log($"SAVE:{this.InputSocketGuid ?? ""}/{this.OutputSocketGuid ?? ""}");
+			//Debug.Log($"SAVE:{this.InputSocketGuid ?? ""}/{this.OutputSocketGuid ?? ""}");
 		}
 		public override void Load(BinaryReader reader)
 		{
@@ -576,7 +586,7 @@ namespace FactoryFramework
 			{
 				int itemid = reader.ReadInt32();
 				float position = reader.ReadSingle();
-				Debug.Log($"LOAD:{i}-{itemcount}/{itemid}/{position}");
+				//Debug.Log($"LOAD:{i}-{itemcount}/{itemid}/{position}");
 				SetItemOnBelt(itemid, position);
 			}
 
@@ -584,6 +594,7 @@ namespace FactoryFramework
 			//this.OutputSocketGuid = reader.ReadString();
 			this.tmpInputGuid = reader.ReadString();
 			this.tmpOutputGuid = reader.ReadString();
+			//Debug.Log($"LOAD:{this.tmpInputGuid}/{this.tmpOutputGuid}");
 		}
 		#endregion //..SAVE
 
@@ -674,8 +685,7 @@ namespace FactoryFramework
 			
 			writer.Write(inputSocketIndex);
 			writer.Write(outputSocketIndex);
-
-			Debug.Log($"SAVE:{speed}/{inputSocketIndex}/{outputSocketIndex}");
+			//Debug.Log($"SAVE(conveyor):{speed}/{inputSocketIndex}/{outputSocketIndex}");
 
 		}
 		public void Load(BinaryReader reader)
@@ -688,7 +698,7 @@ namespace FactoryFramework
 
 			inputSocketIndex	= reader.ReadInt32();
 			outputSocketIndex	= reader.ReadInt32();
-			Debug.Log($"LOAD:{speed}/{inputSocketIndex}/{outputSocketIndex}");
+			//Debug.Log($"LOAD(conveyor):{speed}/{inputSocketIndex}/{outputSocketIndex}");
 		}
 		#endregion //..SAVE
 

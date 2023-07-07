@@ -64,7 +64,7 @@ namespace FactoryFramework
 			writer.Write(this._sRef.resourcesPath);
 			writer.Write(this._itembase.id);
 			writer.Write(this._sRef.GUID.ToString());
-			Debug.Log($"SAVE:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
+			//Debug.Log($"SAVE:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
 		}
 		public virtual void Load(BinaryReader reader)
 		{
@@ -73,7 +73,7 @@ namespace FactoryFramework
 			string guid = reader.ReadString();
 
 			_itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
-			Debug.Log($"READ:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
+			//Debug.Log($"LOAD:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
 			this._sRef.GUID = Guid.Parse(guid);
 		}
 		#endregion //..SAVE

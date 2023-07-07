@@ -54,7 +54,7 @@ namespace MyCraft
 
         protected override void OnMouseLButtonDown()
         {
-            base.owner.Reset();
+            base.owner.OnReset();
         }
         //protected override void OnMouseRButtonDown() { }
 

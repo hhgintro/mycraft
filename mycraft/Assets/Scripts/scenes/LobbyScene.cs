@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace MyCraft
 {
@@ -22,11 +23,13 @@ namespace MyCraft
             JSonParser<ItemBase> itembases =  Managers.Game.ItemBases;
             JSonParser<TechBase> techbases =  Managers.Game.TechBases;
             JSonParser<Category> categories =  Managers.Game.Categories;
+
         }
 
         public override void Clear()
         {
             Debug.Log("Lobby Scene Clear!");
         }
+
     }
 }

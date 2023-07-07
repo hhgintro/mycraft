@@ -50,7 +50,13 @@ namespace MyCraft
             _input.OnUpdate();
         }
 
-        static void Init()
+		private void OnDestroy()
+		{
+            Debug.Log("Manager.Clear()");
+            Clear(true);
+		}
+
+		static void Init()
         {
             if (s_instance == null)
             {
@@ -71,14 +77,14 @@ namespace MyCraft
             }
         }
 
-        public static void Clear()
+        public static void Clear(bool destory)
         {
             Game.Clear();
             Input.Clear();
             Sound.Clear();
             Scene.Clear();
             //UI.Clear();
-            Pool.Clear();
+            if(true == destory) Pool.Clear(); //불러오기를 위해서 삭제하지 않는다.
         }
     }
 }//..namespace MyCraft

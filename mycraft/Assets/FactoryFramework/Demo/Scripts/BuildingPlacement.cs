@@ -6,7 +6,6 @@ using FactoryFramework;
 using MyCraft;
 using UnityEngine.EventSystems;
 using Unity.Burst.CompilerServices;
-using static UnityEditor.PlayerSettings;
 
 public class BuildingPlacement : IPlacement
 {
@@ -130,7 +129,6 @@ public class BuildingPlacement : IPlacement
 
 		Debug.Log($"{building.name} 철거");
 		building.OnDeleted();
-		MyCraft.Managers.Game.AddItem(building._itembase.id, 1);
 		MyCraft.Managers.Resource.Destroy(building.gameObject);
 	}
 
@@ -144,7 +142,7 @@ public class BuildingPlacement : IPlacement
 			{
 				if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
 				{
-					Debug.Log($"클릭:{building.name}");
+					//Debug.Log($"클릭:{building.name}");
 					building.OnClicked();
 				}
 			}
@@ -277,8 +275,10 @@ public class BuildingPlacement : IPlacement
 		if (Input.GetMouseButtonUp(0))
 		{
 			TryChangeState(State.None);
-		}
-	}
+			//들고있는 수량이 남아 있다면, 생성해 줍니다.
+            Managers.Game.PlaceBuilding(InvenBase.choiced_item);
+        }
+    }
 
 	private bool ValidLocation()
 	{

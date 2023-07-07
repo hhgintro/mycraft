@@ -9,8 +9,9 @@ namespace MyCraft
     public class GameScene : BaseScene
     {
         Vector3 offset = new Vector3(50f, -16f, 0); //인벤아이템을 잡았을때 마우스와 이격거리
+        public GameObject _cheat_text;
 
-        void Awake()
+		void Awake()
         {
             Init();
         }
@@ -28,7 +29,7 @@ namespace MyCraft
             //Managers.Game._conveyorPlacement = FindObjectOfType<ConveyorPlacement>();
             Managers.Game.InitPlacement(FindObjectOfType<BuildingPlacement>(), FindObjectOfType<ConveyorPlacement>());
 
-            if(true == Managers.Game.bNewGame)
+            if(string.IsNullOrEmpty(Managers.Game._load_filename))
             {
                 AddInvenItems();    //인벤 아이템
                 AddQuickItems();    //퀵인벤 아이템
@@ -74,10 +75,12 @@ namespace MyCraft
             Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			Managers.Game.SkillInvens.gameObject.SetActive(false);
 
-			//    GameManager.GetDeleteProgress().gameObject.SetActive(false);
+            //GameManager.GetDeleteProgress().gameObject.SetActive(false);
 
-			//    //GameManager.GetSystemMenu().gameObject.SetActive(false);
-			//    Managers.SystemMenu.SetActive(false);
+            SystemMenuManager go = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager;
+
+            Managers.Game.SystemMenu.gameObject.SetActive(false);
+			//Managers.SystemMenu.SetActive(false);
 		}
 
 		private void AddInvenItems()
@@ -129,6 +132,9 @@ namespace MyCraft
         {
             //ESC
             if (Input.GetKeyDown(KeyCode.Escape)) { OnKeyDownEsc(); return; }
+            //system mune창이 열려있으면...아래는 무시
+            if (Managers.Game.SystemMenu.gameObject.activeSelf) return;
+
             //0~9
             if (true == OnKeyDownNum()) return;
 
@@ -141,11 +147,21 @@ namespace MyCraft
             //  GetTechInven / GetTechDesc
             //  GetInventory / GetSkillInven / GetChestInven / GetMachineInven / GetStoneFurnaceInven
 
-            //if (Managers.SystemMenu.gameObject.activeSelf)
-            //{
-            //    Managers.SystemMenu.gameObject.SetActive(false);
-            //    return;
-            //}
+            //CLOSE system menu
+            if (Managers.Game.SystemMenu.gameObject.activeSelf)
+            {
+                Managers.Game.SystemMenu.gameObject.SetActive(false);
+                return;
+            }
+
+            //들고있는 아이템은 Quick / Inventory에 넣어준다.
+            if( null != InvenBase.choiced_item)
+            {
+                Managers.Game.AddItem(InvenBase.choiced_item);
+                InvenBase.choiced_item = null;
+			    Managers.Game.DestoryBuilding();    //들고있는 건물을 내려놓는다.
+                return;
+            }
 
             //if (Managers.Chat.gameObject.activeSelf)
             //{
@@ -162,14 +178,18 @@ namespace MyCraft
             //}
 
             //inven
-            Managers.Game.Inventories.gameObject.SetActive(false);
-            Managers.Game.ChestInvens.gameObject.SetActive(false);
-			Managers.Game.FactoryInvens.gameObject.SetActive(false);
-            Managers.Game.ForgeInvens.gameObject.SetActive(false);
-			Managers.Game.SkillInvens.gameObject.SetActive(false);
-		}
+            bool deactive = false;
+            if(Managers.Game.Inventories.gameObject.activeSelf)     { Managers.Game.Inventories.gameObject.SetActive(false); deactive=true; }
+            if(Managers.Game.ChestInvens.gameObject.activeSelf)     { Managers.Game.ChestInvens.gameObject.SetActive(false); deactive=true; }
+			if(Managers.Game.FactoryInvens.gameObject.activeSelf)   { Managers.Game.FactoryInvens.gameObject.SetActive(false); deactive=true; }
+            if(Managers.Game.ForgeInvens.gameObject.activeSelf)     { Managers.Game.ForgeInvens.gameObject.SetActive(false); deactive=true; }
+            if (Managers.Game.SkillInvens.gameObject.activeSelf)    { Managers.Game.SkillInvens.gameObject.SetActive(false); deactive = true; }
 
-		bool OnKeyDownNum()
+            //OPEN system menu
+            if(false == deactive) Managers.Game.SystemMenu.gameObject.SetActive(true);
+        }
+
+        bool OnKeyDownNum()
         {
             for (int i = 0; i < 10; ++i)
             {
@@ -178,8 +198,13 @@ namespace MyCraft
                     //InvenItemData itemData = GameManager.GetQuickInven().slots[i].GetItemData();
                     Slot s = Managers.Game.QuickInvens.GetInvenSlot(0, i);
                     InvenItemData itemData = (InvenItemData)s.GetItemData();
-                    if (null != itemData)
+                    if (null == itemData)
                     {
+						//빈공간에 들고 있던 아이템을 내려 놓는다.
+						s.PutdownChoicedItem();
+					}
+					else
+					{
                         //pickAll의 경우에 교체시에는 pickup이 마지막으로 처리되어 0이 되는 결과가 발생
                         bool noti2block = true;
 
@@ -194,31 +219,19 @@ namespace MyCraft
                                 break;
                             }
 
-                            //들고 있던건 내려놓고(다른아이템인 경우)
-                            //InvenItemData.owner.slots[InvenItemData.slot].AddItem(InvenBase.choiced_item);
-                            Slot s1 = itemData.owner.GetInvenSlot(itemData.panel, itemData.slot);
-                            if (null != s1) s1.AddItem(InvenBase.choiced_item);
-                            InvenBase.choiced_item = null;
-                            noti2block = false;//교체시에는 Pickup을 block으로 전달하지 않는다.
+							//들고 있던건 내려놓고(다른아이템인 경우)
+							////InvenItemData.owner.slots[InvenItemData.slot].AddItem(InvenBase.choiced_item);
+							//Slot s1 = itemData.owner.GetInvenSlot(itemData.panel, itemData.slot);
+							//if (null != s1) s1.AddItem(InvenBase.choiced_item);
+		            		s.PutdownChoicedItem();
+							noti2block = false;//교체시에는 Pickup을 block으로 전달하지 않는다.
                         }
 
                         //모두 줍는다.
                         InvenBase.choiced_item = itemData.PickupAll(itemData.transform.parent.parent.parent.parent.parent, noti2block);
-                        //UI
-                        //this.ActiveIcon(InvenBase.choiced_item); //HG_TEST: 이 코드가 필요할지 체크할 것
-                        ////private void ActiveIcon(InvenItemData itemData)
-                        ////{
-                        ////    if (null == itemData)
-                        ////        return;
-
-                        ////    if (true == ItemInvenBase.bPointerEnter)
-                        ////        itemData.owner.ActiveIcon();
-                        ////    else
-                        ////        itemData.owner.DeactiveIcon();
-                        ////}
-
-                    }
-                    return true;
+			            Managers.Game.PlaceBuilding(InvenBase.choiced_item);
+					}
+					return true;
                 }
             }
             return false;
@@ -240,17 +253,19 @@ namespace MyCraft
 			    Managers.Game.FactoryInvens.gameObject.SetActive(false);
                 Managers.Game.ForgeInvens.gameObject.SetActive(false);
 				Managers.Game.SkillInvens.gameObject.SetActive(false);
+
+                Managers.Game.Tooltips.gameObject.SetActive(false);
 				return;
             }
 
             if (Input.GetKeyDown(KeyCode.Tab))  //"Tab"
             {
-                //if (_cheat_text) _cheat_text.SetActive(!_cheat_text.activeSelf);
+                if (this._cheat_text) this._cheat_text.SetActive(!this._cheat_text.activeSelf);
                 return;
             }
             if (Input.GetKeyDown(KeyCode.LeftBracket))  //"["
             {
-                Managers.Game.bNewGame = false;
+                //Managers.Game.bNewGame = false;
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                 return;
             }
@@ -258,7 +273,7 @@ namespace MyCraft
             {
                 //GameManager.Save();
                 //FindObjectOfType<SerializeManager>().Save();
-                Managers.Game.Save();
+                Managers.Game.Save("savefile");
 				return;
             }
             //if (Input.GetKeyDown(KeyCode.R))

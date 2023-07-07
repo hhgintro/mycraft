@@ -55,9 +55,9 @@ namespace MyCraft
             //this.AddReset(base._panels[0]);
         }
 
-        public override void Reset()
+        public override void OnReset()
         {
-            base._building.Reset();
+            base._building.OnReset();
             this.Clear();
             this.gameObject.SetActive(false);
             Managers.Game.Inventories.gameObject.SetActive(false);

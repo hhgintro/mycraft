@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using MyCraft;
-using static UnityEditor.Rendering.CameraUI;
 using UnityEngine.Windows;
 using System.IO;
 
@@ -74,10 +73,10 @@ namespace FactoryFramework
 			//active
 			Managers.Game.Inventories.gameObject.SetActive(true);
 			Managers.Game.FactoryInvens.gameObject.SetActive(true);
+			Managers.Game.SkillInvens.gameObject.SetActive(true);
 			//de-active
 			Managers.Game.ChestInvens.gameObject.SetActive(false);
 			Managers.Game.ForgeInvens.gameObject.SetActive(false);
-			Managers.Game.SkillInvens.gameObject.SetActive(false);
 		}
 
 
@@ -106,14 +105,16 @@ namespace FactoryFramework
 		//}
 
 		//machine의 output=null설정
-		public override void Reset()
+		public override void OnReset()
 		{
 			this._recipe = null;
 
+			//input
 			foreach(int itemid in INPUT.Keys)
 				if (0 < INPUT[itemid]) Managers.Game.AddItem(itemid, INPUT[itemid]);
-
 			INPUT.Clear();
+
+			base.OnReset();
 		}
 
 		public override bool AssignRecipe(ItemBase itembase)
@@ -222,10 +223,22 @@ namespace FactoryFramework
 			this.StartAssembling();
 		}
 
+		//block에 id인 아이템을 넣을 수 있는지 체크
+		public override bool CheckPutdownGoods(int panel, int slot, int itemid)
+		{
+			switch (panel)
+			{
+				case 0:
+					if (INPUT.ContainsKey(itemid)) return true;    //넣을 수 있다.
+					break;
+			}
+			return false;//넣을 수 없다.
+		}
+
 		#region GIVE_OUTPUT
 		public bool CanGiveOutput()
 		{
-			if (0 == OUTPUT._slots[0]._itemid || 0 == OUTPUT._slots[0]._amount) return false;
+			if (0 == OUTPUT._slots[0]._itemid || OUTPUT._slots[0]._amount <= 0) return false;
 			return true;
 		}
 
@@ -402,7 +415,7 @@ namespace FactoryFramework
 		{
 			base.Load(reader);
 
-			this._recipe = MyCraft.Managers.Game.ItemBases.FetchItemByID(reader.ReadInt32());
+			AssignRecipe(MyCraft.Managers.Game.ItemBases.FetchItemByID(reader.ReadInt32()));
 		}
 		#endregion //..SAVE
 

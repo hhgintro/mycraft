@@ -39,7 +39,7 @@ namespace MyCraft
 			return this._building.CheckPutdownGoods(panel, slot, itemid);
 		}
 		public virtual bool CheckPickupGoods() { return false; }
-		public virtual void Reset() {}
+		public virtual void OnReset() {}
 		public virtual bool AssignRecipe(ItemBase itembase) { return false; }
 		public virtual void Clear()
 		{
@@ -302,7 +302,10 @@ namespace MyCraft
 			InvenItemData itemData = (InvenItemData)s.GetItemData();
 			if (null != itemData)
 			{
-				if (amount <= 0)
+				Color color = itemData.GetComponent<Image>().color;
+				color.a = 1.0f;
+
+                if (amount <= 0)
 				{
 					//이미지를 남길경우에 대한 처리필요
 					if (true == destroy)
@@ -310,10 +313,12 @@ namespace MyCraft
 						Managers.Resource.Destroy(itemData.gameObject);
 						return;
 					}
+					color.a = 0.3f;
 				}
 				itemData.SetStackCount(amount, false);
-				return;
-			}
+                itemData.GetComponent<Image>().color = color;
+                return;
+            }
 
 			if(amount <= 0)
 			{
@@ -574,10 +579,10 @@ namespace MyCraft
 		#endregion //..POINT_ENTER
 
 		#region SAVE
-		public virtual void Save(BinaryWriter writer)
+		public virtual void Save(BinaryWriter bw)
 		{
 			//1. slot amount
-			writer.Write(this._panels[0]._slot);
+			bw.Write(this._panels[0]._slot);
 
 			//임시 List<> 에 저장
 			List<ItemData> items = new List<ItemData>();
@@ -589,13 +594,13 @@ namespace MyCraft
 			}
 
 			//2. item count
-			writer.Write(items.Count);
+			bw.Write(items.Count);
 			//3. item info
 			for (int i = 0; i < items.Count; ++i)
 			{
-				writer.Write(items[i].slot);    //slot
-				writer.Write(items[i].database.id); //item id
-				writer.Write(items[i].amount);  //amount
+				bw.Write(items[i].slot);    //slot
+				bw.Write(items[i].database.id); //item id
+				bw.Write(items[i].amount);  //amount
 			}
 		}
 

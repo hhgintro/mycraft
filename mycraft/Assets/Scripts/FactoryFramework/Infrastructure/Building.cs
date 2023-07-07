@@ -33,6 +33,10 @@ namespace FactoryFramework
 			//_IsWorking = false;
 			this.ProcessLoop();
 		}
+		private void OnDestroy()
+		{
+			OnBuildingDestroyed?.Invoke(this);
+		}
 
 		//파괴될 때.
 		public virtual void OnDeleted()
@@ -43,6 +47,18 @@ namespace FactoryFramework
 				this._inven.gameObject.SetActive(false);
 			}
 
+			OnDisconnect();
+			OnReset();
+			MyCraft.Managers.Game.AddItem(base._itembase.id, 1);
+		}
+		public virtual void OnDisconnect()
+		{
+			foreach(var inputSocket in this.inputSockets) inputSocket.Disconnect();
+			foreach(var outputSocket in this.outputSockets) outputSocket.Disconnect();
+		}
+		//machine의 output=null설정할 때.
+		public virtual void OnReset()
+		{
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
 				List<BuildingSlot> slots = this._panels[p]._slots;
@@ -55,12 +71,6 @@ namespace FactoryFramework
 				}
 			}
 		}
-		private void OnDestroy()
-		{
-			OnBuildingDestroyed?.Invoke(this);
-		}
-
-		public virtual void Reset() { }     //machine의 output=null설정
 		public virtual bool AssignRecipe(ItemBase itembase) { return false; }
 		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }
 		public virtual void OnClicked() { }
@@ -85,15 +95,17 @@ namespace FactoryFramework
 			if (this._panels[panel]._slots.Count <= slot)
 				return;
 
-			if (0 != _panels[panel]._slots[slot]._itemid && _panels[panel]._slots[slot]._itemid != itemid)
-			{
-				Debug.LogError("error: block different item id");
-				return;
-			}
+			//HG[2023.07.13]forge의 input에 "구리광석"을 "철광석으로 대체할 때를 위해 주석처리함.
+			//if ( (0 != _panels[panel]._slots[slot]._itemid) && (_panels[panel]._slots[slot]._itemid != itemid) )
+			//{
+			//	Debug.LogError("error: block different item id");
+			//	//return;	//HG[2023.07.13]forge의 input에 "구리광석"을 "철광석으로 대체할 때를 위해 주석처리함.
+			//	// 잘못들어오는 경우를 인지하기 위해 LogError()는 유지합니다.
+			//}
 
 			if (amount <= 0)
 			{
-				//this._panels[panel]._slots[slot]._itemid = 0;
+				this._panels[panel]._slots[slot]._itemid = 0;
 				this._panels[panel]._slots[slot]._amount = 0;
 				//Debug.Log("block slot" + slot + ": " + base._panels[panel]._slots[slot].amount);
 				return;
@@ -187,8 +199,8 @@ namespace FactoryFramework
 			//writer.Write(this._panels.Count);
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
-				//1. slot amount
-				writer.Write(this._panels[p]._slot);
+				//1. slot amount : //forge로드시 slot이 2배된다.
+				//writer.Write(this._panels[p]._slot);
 
 				//임시 List<> 에 저장
 				List<BuildingSlot> items = new List<BuildingSlot>();
@@ -225,9 +237,9 @@ namespace FactoryFramework
 			//if (this._panels.Count <= 0) return;
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
-				//1. slot amount
-				int slotAmount = reader.ReadInt32();
-				this._panels[p].SetSlots(slotAmount);
+				//1. slot amount: //forge로드시 slot이 2배된다.
+				//int slotAmount = reader.ReadInt32();
+				//this._panels[p].SetSlots(slotAmount);
 				//Debug.Log("slot = " + slotAmount);
 
 				//2. item count

@@ -35,13 +35,17 @@ namespace MyCraft
                     && false == this.owner.CheckPutdownGoods(this._panel, this._slot, InvenBase.choiced_item.database.id))
                     return;
 
-                this.AddItem(InvenBase.choiced_item);
-                InvenBase.choiced_item = null;
-                Managers.Game.DestoryBuilding();    //선택된 건물이있다면 내려놓는다.
-            }
+				this.PutdownChoicedItem();
+			}
         }
 
-        public void AddItem(ItemData itemData)
+        public void PutdownChoicedItem()
+        {
+			this.AddItem(InvenBase.choiced_item);
+			InvenBase.choiced_item = null;
+			Managers.Game.DestoryBuilding();    //들고있는 건물을 내려놓는다.
+		}
+		public void AddItem(ItemData itemData)
         {
             itemData.GetComponent<Image>().enabled = true;
             itemData.panel = this._panel;

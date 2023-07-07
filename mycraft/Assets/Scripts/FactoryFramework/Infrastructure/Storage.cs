@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using static UnityEditor.Rendering.CameraUI;
 
 namespace FactoryFramework
 {
@@ -25,10 +24,10 @@ namespace FactoryFramework
             //active
             Managers.Game.Inventories.gameObject.SetActive(true);
             Managers.Game.ChestInvens.gameObject.SetActive(true);
+			Managers.Game.SkillInvens.gameObject.SetActive(true);
 			//de-active
 			Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			Managers.Game.ForgeInvens.gameObject.SetActive(false);
-			Managers.Game.SkillInvens.gameObject.SetActive(false);
 		}
 
 

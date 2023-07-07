@@ -23,8 +23,9 @@ namespace FactoryFramework
             outputConnection = sock as OutputSocket;
             outputConnection.inputConnection = this;
         }
-        public override void Disconnect() => outputConnection = null;
-        public override bool IsOpen() { return outputConnection == null; }
+		public override void Disconnect() => outputConnection = null;
+		//public override void Disconnect() { if (null == outputConnection) return; outputConnection.Disconnect(); outputConnection = null; }
+		public override bool IsOpen() { return outputConnection == null; }
 
         void HandleVisualIndicator()
         {

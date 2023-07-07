@@ -22,7 +22,8 @@ namespace FactoryFramework
             inputConnection.outputConnection = this;      
         }
         public override void Disconnect() => inputConnection = null;
-        public override bool IsOpen() { return inputConnection==null; }
+        //public override void Disconnect() { if (null == inputConnection) return; inputConnection.Disconnect(); inputConnection = null; }
+		public override bool IsOpen() { return inputConnection==null; }
 
         void HandleVisualIndicator()
         {

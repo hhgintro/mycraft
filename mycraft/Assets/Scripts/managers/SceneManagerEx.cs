@@ -11,7 +11,7 @@ namespace MyCraft
 
         public void LoadScene(Define.Scene type)
         {
-            Managers.Clear();
+            Managers.Clear(false);
 
             SceneManager.LoadScene(GetSceneName(type));
         }
@@ -24,7 +24,7 @@ namespace MyCraft
 
         public void Clear()
         {
-            CurrentScene.Clear();
+            CurrentScene?.Clear();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using MyCraft;
-using static UnityEditor.Rendering.CameraUI;
 using UnityEngine.Windows;
 
 namespace FactoryFramework
@@ -17,6 +16,8 @@ namespace FactoryFramework
 
 		MyCraft.Progress PROGRESS       => _progresses[0];
 		MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
+
+		int _recipe = 0;	//생산할 결과물
 
 		void Start()
 		{
@@ -41,7 +42,11 @@ namespace FactoryFramework
 
 		public override void ProcessLoop()
 		{
-			if (false == base._IsWorking) return;
+			if (false == base._IsWorking)
+			{
+				StartAssembling();
+				return;
+			}
 
 			for (int i = 0; i < this._progresses.Count; ++i)
 				this._progresses[i].Update();
@@ -66,6 +71,28 @@ namespace FactoryFramework
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
 		}
+		//block에 id인 아이템을 넣을 수 있는지 체크
+		public override bool CheckPutdownGoods(int panel, int slot, int itemid)
+		{
+			switch(panel)
+			{
+				case 0:
+					{
+						List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
+						for (int i = 0; i < inputs.Count; ++i)
+							if (itemid == inputs[i].itemid) return true;    //넣을 수 있다.
+					} break;
+
+				case 1:
+					{
+						List<FurnaceFuelItem> fuels = ((FurnaceItemBase)base._itembase)._furnace.fuel;
+						for (int i = 0; i < fuels.Count; ++i)
+							if (itemid == fuels[i].itemid) return true;    //넣을 수 있다.
+					} break;
+			}
+			return false;//넣을 수 없다.
+		}
+
 		//public void ClearInternalStorage()
 		//{
 		//    //HG[2023.06.09] Item -> MyCraft.ItemBase
@@ -97,33 +124,47 @@ namespace FactoryFramework
 				return;
 			}
 			//같다면...무시
-			if (itemid == OUTPUT._slots[0]._itemid) return;
-			//다른데...아이템이 남아있으면 무시
-			if (0 < OUTPUT._slots[0]._amount)
-			{
-				Debug.LogError($"Fail: AssignRecipe(diff itemid:{itemid}/{OUTPUT._slots[0]._itemid})");
-				return;
-			}
+			if (itemid == this._recipe) return;
+			////다른데...아이템이 남아있으면 무시
+			//if (0 < OUTPUT._slots[0]._amount)
+			//{
+			//	Debug.LogError($"Fail: AssignRecipe(diff itemid:{itemid}/{OUTPUT._slots[0]._itemid})");
+			//	return;
+			//}
 			//등록
-			OUTPUT._slots[0]._itemid = itemid;
+			this._recipe = itemid;
 		}
 
 		public override void OnProgressCompleted(MyCraft.PROGRESSID id)
 		{
 			if (MyCraft.PROGRESSID.Progress == id)
 			{
-				//아이템을 생성해 준다.
+				//아이템을 생성해 준다. / 가득 찼는지 체크
 				if (false == CreateOutputProducts())
 				{
 					this._IsWorking = false;
 					return;
 				}
-				ConsumeInputs();    //재료아이템 소모
-				return;
+				//check...자원
+				for (int s = 0; s < INPUT._slots.Count; ++s)
+				{
+					if (0 == INPUT._slots[s]._itemid || INPUT._slots[s]._amount <= 0)
+					{
+						this._IsWorking = false;
+						return; //자원이 없으면...중단
+					}
+				}
+
+				if(false == ConsumeInputs())    //재료아이템 소모 : output이 다르면... 중지.
+				{
+					this._IsWorking = false;
+					return; //자원이 없으면...중단
+				}
+				return;	//여기까지 INPUT
 			}
 
 			//자원/연료가 없으면 null, 있으면 해당 slot을 리턴합니다.
-			if (0 == FUEL._slots[0]._itemid || 0 == FUEL._slots[0]._amount)
+			if (0 == FUEL._slots[0]._itemid || FUEL._slots[0]._amount <= 0)
 			{
 				this._IsWorking = false;
 				return;
@@ -152,13 +193,13 @@ namespace FactoryFramework
 		private bool CanStartProduction()
 		{
 			//check fuel
-			if(0 == FUEL._slots[0]._itemid || 0 == FUEL._slots[0]._amount)
+			if(0 == FUEL._slots[0]._itemid || FUEL._slots[0]._amount <= 0)
 				return false;//연료가 없으면...중단
 
 			//check...자원
 			for (int s = 0; s < INPUT._slots.Count; ++s)
 			{
-				if (0 == INPUT._slots[s]._itemid || 0 == INPUT._slots[s]._amount)
+				if (0 == INPUT._slots[s]._itemid || INPUT._slots[s]._amount <= 0)
 					return false;//자원이 없으면...중단
 			}
 
@@ -178,16 +219,19 @@ namespace FactoryFramework
 			//need a recipe to make!
 		}
 		//재료 소모
-		private void ConsumeInputs()
+		private bool ConsumeInputs()
 		{
 			//output 설정(소모되는 아이템(intput.Key)에 따라 결정된다.)
-			int itemid = INPUT._slots[0]._itemid;//input
 			//재련할 수 있는 아이템이면...recipe을 설정해 줍니다.
 			List<FurnaceInputItem> inputs = ((FurnaceItemBase)base._itembase)._furnace.input;
 			for (int i = 0; i < inputs.Count; ++i)
 			{
-				if (itemid == inputs[i].itemid)
+				if (INPUT._slots[0]._itemid == inputs[i].itemid)
 				{
+					//output이 다르면... 중지.
+					if (0 != OUTPUT._slots[0]._itemid && OUTPUT._slots[0]._itemid != inputs[i].output)
+						return false;
+
 					AssignRecipe(inputs[i].output);
 					PROGRESS.SetTime(inputs[i].build_time);
 					break;
@@ -195,9 +239,12 @@ namespace FactoryFramework
 			}
 
 			//아이템 차감
+			int input = INPUT._slots[0]._itemid;
 			INPUT._slots[0]._amount -= 1;
+			if(INPUT._slots[0]._amount <= 0) INPUT._slots[0]._itemid = 0;
 			//UI
-			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._itemid, INPUT._slots[0]._amount, false);
+			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, input, INPUT._slots[0]._amount, true);
+			return true;
 		}
 		//연료 소모
 		private void ConsumeFuels()
@@ -213,24 +260,44 @@ namespace FactoryFramework
 				}
 			}
 			//아이템 차감
+			int fuel = FUEL._slots[0]._itemid;
 			FUEL._slots[0]._amount -= 1;
+			if(FUEL._slots[0]._amount <= 0) FUEL._slots[0]._itemid = 0;
 			//UI
-			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._itemid, FUEL._slots[0]._amount, false);
+			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, fuel, FUEL._slots[0]._amount, true);
 		}
 		//false:가득찼거나, 생성이 불가능할때. true:계속생성가능하다.
 		private bool CreateOutputProducts()
 		{
 			if (base._panels.Count < 3) return false;
+			if (0 != OUTPUT._slots[0]._itemid && this._recipe != OUTPUT._slots[0]._itemid) return false;
+
+			OUTPUT._slots[0]._itemid = this._recipe;
 			OUTPUT._slots[0]._amount += 1;
 			//UI
 			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+
+			//is full
+			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(OUTPUT._slots[0]._itemid);
+			if (itembase.Stackable <= OUTPUT._slots[0]._amount)
+			{
+				Debug.Log("output is full");
+				return false;
+			}
+
+			if(this._recipe != OUTPUT._slots[0]._itemid)
+			{
+				Debug.LogError($"error: recipe({this._recipe}) is different with output({OUTPUT._slots[0]._itemid})");
+				return false;
+			}
+
 			return true;
 		}
 
 		#region GIVE_OUTPUT
 		public bool CanGiveOutput()
 		{
-			if (0 == OUTPUT._slots[0]._itemid || 0 == OUTPUT._slots[0]._amount) return false;
+			if (0 == OUTPUT._slots[0]._itemid || OUTPUT._slots[0]._amount <= 0) return false;
 			return true;
 		}
 
@@ -250,14 +317,16 @@ namespace FactoryFramework
 		public int GiveOutput()
 		{
 			//아이템 차감
+			int output = OUTPUT._slots[0]._itemid;
 			OUTPUT._slots[0]._amount -= 1;
+			if (OUTPUT._slots[0]._amount <= 0) OUTPUT._slots[0]._itemid = 0;
 			//UI
-			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, output, OUTPUT._slots[0]._amount, true);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
 
-			return OUTPUT._slots[0]._itemid;
+			return output;
 		}
 		#endregion //..GIVE_OUTPUT
 
@@ -281,6 +350,8 @@ namespace FactoryFramework
 			{
 				INPUT._slots[0]._itemid = itemid;
 				INPUT._slots[0]._amount = 1;
+				//UI
+				this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._itemid, INPUT._slots[0]._amount, false);
 				return true;
 			}
 			if (itemid != INPUT._slots[0]._itemid) return false;
@@ -297,6 +368,8 @@ namespace FactoryFramework
 			{
 				FUEL._slots[0]._itemid = itemid;
 				FUEL._slots[0]._amount = 1;
+				//UI
+				this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._itemid, FUEL._slots[0]._amount, false);
 				return true;
 			}
 			if (itemid != FUEL._slots[0]._itemid) return false;
@@ -338,6 +411,7 @@ namespace FactoryFramework
 			//is full
 			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
 			if (itembase.Stackable <= INPUT._slots[0]._amount) return false;
+
 			return true;
 		}
 		private bool CanTakeInputFuel(int itemid)
@@ -356,6 +430,7 @@ namespace FactoryFramework
 			//is full
 			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
 			if (itembase.Stackable <= FUEL._slots[0]._amount) return false;
+
 			return true;
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase

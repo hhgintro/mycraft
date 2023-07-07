@@ -8,6 +8,7 @@ Obj/
 UnityGenerated/
 Library/
 UserSettings/
+bin/
 
 # ===================================== #
 # Visual Studio / MonoDevelop generated #
