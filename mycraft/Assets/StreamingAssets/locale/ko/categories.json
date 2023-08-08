@@ -30,7 +30,7 @@
     "title": "중간 생산품",
     "desc": "스킬 2입니다.",
     "panels": [
-      {"items": [{"itemid":2000},{"itemid":2010},{"itemid":2011},{"itemid":2012},{"itemid":2013}]},
+      {"items": [{"itemid":2010},{"itemid":2011},{"itemid":2012},{"itemid":2013}]},
       {"items": [{"itemid":2020},{"itemid":2021}]},
       {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]}
     ],

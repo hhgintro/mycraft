@@ -413,12 +413,30 @@ namespace MyCraft
 			int width = Screen.width;
 			int height = Screen.height;
 
+			// UI를 제외한 스크린샷을 찍기 위해 메인 카메라의 Culling Mask 임시 변경
+			Camera mainCamera = Camera.main;
+			int originalCullingMask = mainCamera.cullingMask;
+			mainCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+
+			// RenderTexture 생성하여 메인 카메라 출력 설정
+			RenderTexture rt = new RenderTexture(width, height, 24);
+			mainCamera.targetTexture = rt;
+
+			// RenderTexture에 렌더링
+			mainCamera.Render();
+
 			// Texture2D 객체를 생성합니다. 이 때 크기를 이전에 정한 width와 height로 지정합니다.
+			RenderTexture.active = rt;
 			Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
 
 			// 캡쳐한 내용을 Texture2D에 저장합니다.
 			tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
 			tex.Apply();
+
+			// 메인 카메라 출력 설정과 Culling Mask 복구
+			mainCamera.targetTexture = null;
+			mainCamera.cullingMask = originalCullingMask;
+			RenderTexture.active = null;
 
 			// Texture2D를 byte 배열로 변환합니다.
 			byte[] bytes = tex.EncodeToPNG();

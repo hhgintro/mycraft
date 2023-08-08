@@ -31,6 +31,15 @@ namespace MyCraft
 		{
 			_load_game?.SetActive(false);
 			_save_game?.SetActive(false);
+
+			Time.timeScale = 0.0f;
+			AudioListener.pause = true;		//음악정지
+		}
+
+		private void OnDisable()
+		{
+			Time.timeScale = 1.0f;
+			AudioListener.pause = false;
 		}
 
 		//public bool GetActive_1()

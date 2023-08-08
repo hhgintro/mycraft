@@ -98,7 +98,7 @@
     "cost": {
       "time": 2.1,
       "items": [
-        {"itemid": 2000,"amount": 1}
+        {"itemid": 10,"amount": 1}
       ],
       "outputs": 1
     },
@@ -191,8 +191,7 @@
       ],
       "fuel": [
         {"id": 10,"limit": 2,"burning-time": 10},
-        {"id": 30,"limit": 2,"burning-time": 20},
-        {"id": 2000,"limit": 2,"burning-time": 15}
+        {"id": 30,"limit": 2,"burning-time": 20}
       ]
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
@@ -208,6 +207,7 @@
     "cost": {
       "time": 2.1,
       "items": [
+        {"itemid": 2030,"amount": 2},
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
       ],
@@ -230,7 +230,7 @@
     "speed": 1,
     "learn": true,
     "cost": {
-      "time": 2.1,
+      "time": 0.5,
       "items": [
         {"itemid": 2010,"amount": 2},
         {"itemid": 2011,"amount": 2}
@@ -307,24 +307,6 @@
 
 
 
-
-  {
-    "id": 2000,
-    "type": "ItemBase",
-    "learn": true,
-    "cost": {
-      "time": 2.1,
-      "items": [
-        {"itemid": 10,"amount": 1}
-      ],
-      "outputs": 1
-    },
-    "state": {"power": 21,"defence": 12,"vitality": 50},
-    "stackable": 100,
-    "icon": "wood",
-    "prefab": "mineral/Wood-Plate"
-  },
-
   {
     "id": 2010,
     "type": "ItemBase",
@@ -348,11 +330,11 @@
     "type": "ItemBase",
     "learn": true,
     "cost": {
-      "time": 2.1,
+      "time": 0.5,
       "items": [
-        {"itemid": 2010,"amount": 1}
+        {"itemid": 2010,"amount": 2}
       ],
-      "outputs": 2
+      "outputs": 1
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
@@ -365,7 +347,7 @@
     "type": "ItemBase",
     "learn": true,
     "cost": {
-      "time": 2.1,
+      "time": 0.5,
       "items": [
         {"itemid": 2010,"amount": 1}
       ],
@@ -383,11 +365,11 @@
     "learn": true,
     "DIY": false,
     "cost": {
-      "time": 2.1,
+      "time": 16.0,
       "items": [
-        {"itemid": 2010,"amount": 1}
+        {"itemid": 2010,"amount": 5}
       ],
-      "outputs": 2
+      "outputs": 1
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
@@ -401,7 +383,7 @@
     "learn": true,
     "DIY": false,
     "cost": {
-      "time": 2.1,
+      "time": 3.2,
       "items": [
         {"itemid": 50,"amount": 1}
       ],
@@ -418,7 +400,7 @@
     "type": "ItemBase",
     "learn": true,
     "cost": {
-      "time": 2.1,
+      "time": 0.5,
       "items": [
         {"itemid": 2020,"amount": 1}
       ],
@@ -436,18 +418,14 @@
     "type": "ItemBase",
     "learn": true,
     "cost": {
-      "time": 2.1,
+      "time": 0.5,
       "items": [
         {"itemid": 2010,"amount": 1},
-        {"itemid": 2021,"amount": 1}
+        {"itemid": 2021,"amount": 3}
       ],
       "outputs": 1
     },
-    "state": {
-      "power": 21,
-      "defence": 12,
-      "vitality": 50
-    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
     "icon": "electronic-circuit",
     "prefab": "mineral/Sci-Fi-Chip"

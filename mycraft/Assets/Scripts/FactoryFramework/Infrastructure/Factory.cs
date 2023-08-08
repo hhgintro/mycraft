@@ -5,6 +5,7 @@ using UnityEngine;
 using MyCraft;
 using UnityEngine.Windows;
 using System.IO;
+using UnityEngine.UI;
 
 namespace FactoryFramework
 {
@@ -25,12 +26,19 @@ namespace FactoryFramework
 		MyCraft.Progress PROGRESS		=> _progresses[0];
 		//MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
 
+		Material outline;
+		Renderer renderers;
+		List<Material> materials = new List<Material>();
+		int cnt = 0;
+
 		void Start()
 		{
 			Init();
 		}
 		public override void Init()
 		{
+			this.outline = new Material(Shader.Find("Draw/OutlineShader"));
+
 			if (0 == base._panels.Count)
 			{
 				//base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count, 0));// base._itembase._assembling.inputs));//input
@@ -77,6 +85,27 @@ namespace FactoryFramework
 			//de-active
 			Managers.Game.ChestInvens.gameObject.SetActive(false);
 			Managers.Game.ForgeInvens.gameObject.SetActive(false);
+
+			if(0 == (++cnt %2))
+			{
+				Renderer renderer = this.transform.GetChild(0).GetComponent<Renderer>();
+
+				materials.Clear();
+				materials.AddRange(renderer.sharedMaterials);
+				materials.Remove(outline);
+
+				renderer.materials = materials.ToArray();
+			}
+			else
+			{
+				renderers = this.transform.GetChild(0).GetComponent<Renderer>();
+
+				materials.Clear();
+				materials.AddRange(renderers.sharedMaterials);
+				materials.Add(outline);
+
+				renderers.materials = materials.ToArray();
+			}
 		}
 
 

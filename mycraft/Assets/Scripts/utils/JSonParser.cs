@@ -16,9 +16,15 @@ namespace MyCraft
 
         public JSonParser(string filename)
         {
-            //this.json = JsonMapper.ToObject(File.ReadAllText(Application.streamingAssetsPath + "/skills.json"));
-            this.json = JsonMapper.ToObject(File.ReadAllText(filename));
-            ConstructDatabase();
+            try
+            {
+                //this.json = JsonMapper.ToObject(File.ReadAllText(Application.streamingAssetsPath + "/skills.json"));
+                this.json = JsonMapper.ToObject(File.ReadAllText(filename));
+                ConstructDatabase();
+            }catch(Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         public void ConstructDatabase()

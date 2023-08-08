@@ -104,7 +104,7 @@ namespace MyCraft
 					skill.name = itembase1.Title;
 					//amount(inven + quick) : 인벤의 아이템개수보다 적으면 GRAY로 표기됩니다.
 					int amount = Managers.Game.Inventories.GetAmount(this.cost.items[i].itemid);
-					//amount += GameManager.GetInventory().GetAmount(this.cost.items[i].itemid);
+					amount += Managers.Game.QuickInvens.GetAmount(this.cost.items[i].itemid);
 					if (amount < this.cost.items[i].amount)  //부족할때
 					{
 						slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + amount.ToString() + "/" + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();

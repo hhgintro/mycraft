@@ -97,7 +97,6 @@ namespace MyCraft
             Managers.Game.Inventories.AddItem(2011, 54);    //iron-gear
             Managers.Game.Inventories.AddItem(2020, 54);    //copper-plate
             Managers.Game.Inventories.AddItem(2021, 54);    //copper-cable
-            Managers.Game.Inventories.AddItem(2000, 54);    //wood
 
             Managers.Game.Inventories.AddItem(10, 54);     //raw-wood
             Managers.Game.Inventories.AddItem(20, 54);     //stone
