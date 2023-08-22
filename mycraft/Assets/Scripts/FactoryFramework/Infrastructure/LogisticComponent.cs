@@ -57,6 +57,11 @@ namespace FactoryFramework
 
 		public virtual void ProcessLoop() { }
 
+		public virtual void SetEnable_2(bool enable) { }   //설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
+
+		public virtual Mesh GetSharedMesh() {  return this._itembase.prefab.GetComponent<MeshFilter>().sharedMesh; }
+		public virtual Material GetSharedMaterial() { return this._itembase.prefab.GetComponent<MeshRenderer>().sharedMaterial; }
+		public virtual float GetLocalScale() { return this._itembase.scaleOnBelt; }
 
 		#region SAVE
 		public virtual void Save(BinaryWriter writer)

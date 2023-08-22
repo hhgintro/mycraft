@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Driller.cs" />
     <Compile Include="Assets\Scripts\ui\item\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IInput.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\WaterPurificationPlant.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\ConveyorLogisticsUtils.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\MouseHoverBuildingTooltip.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshDebug.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Scripts\Data\Data.Contents.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Building.cs" />
     <Compile Include="Assets\Scripts\managers\SoundManager.cs" />
+    <Compile Include="Assets\StarterAssets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\ui\inven\FurnaceItem.cs" />
     <Compile Include="Assets\Scripts\ui\inven\PanelBase.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchManager.cs" />
@@ -86,7 +88,6 @@
     <Compile Include="Assets\Scripts\ui\inven\TechnologyCost.cs" />
     <Compile Include="Assets\Scripts\managers\LocaleManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IOutput.cs" />
-    <Compile Include="Assets\02.Resource\samples\industrial\Scripts\Punch.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshGenerator.cs" />
     <Compile Include="Assets\Scripts\ui\inven\MachineInven.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeManager.cs" />
@@ -102,10 +103,8 @@
     <Compile Include="Assets\Scripts\scenes\LogoScene.cs" />
     <Compile Include="Assets\Scripts\ui\inven\QuickInven.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\TerracedTerrain.cs" />
-    <Compile Include="Assets\02.Resource\samples\Smart Turret Template\Scripts\Turret.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Splitter.cs" />
     <Compile Include="Assets\Scripts\managers\GameManager.cs" />
-    <Compile Include="Assets\02.Resource\samples\industrial\Scripts\CaptureNormals.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\TEST_PATHS.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\PathFactory.cs" />
     <Compile Include="Assets\Scripts\managers\Managers.cs" />
@@ -126,6 +125,7 @@
     <Compile Include="Assets\Scripts\ui\inven\Progress.cs" />
     <Compile Include="Assets\Scripts\managers\InputManager.cs" />
     <Compile Include="Assets\Scripts\scenes\GameScene.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\RampDown.cs" />
     <Compile Include="Assets\Scripts\ui\menu\LoadGame.cs" />
     <Compile Include="Assets\Scripts\utils\Define.cs" />
     <Compile Include="Assets\Scripts\ui\inven\ResetItemData.cs" />
@@ -143,6 +143,7 @@
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\IPlacement.cs" />
     <Compile Include="Assets\Scripts\managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerGridComponent.cs" />
+    <Compile Include="Assets\Resources\Art\Metal Barrels\Orbit.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechDescription.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\GentlePulse.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Scene.cs" />
@@ -160,8 +161,8 @@
     <Compile Include="Assets\01.Script\ExcelLoader\ExcelLoader.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechInvenBase.cs" />
     <Compile Include="Assets\Scripts\ui\item\ItemBase.cs" />
-    <Compile Include="Assets\02.Resource\samples\Smart Turret Template\Scripts\Actor.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\MouseLook.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Floor.cs" />
     <Compile Include="Assets\Scripts\ui\menu\SaveGame.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\ResourceSpawn.cs" />
     <Compile Include="Assets\Scripts\ui\menu\SaveContext.cs" />
@@ -179,11 +180,13 @@
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\ui\item\Category.cs" />
     <Compile Include="Assets\Scripts\managers\PoolManager.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\RampUp.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializationReference.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\ui\item\JSonDatabase.cs" />
     <Compile Include="Assets\01.Script\Scene\StageManager.cs" />
     <Compile Include="Assets\Scripts\managers\UIManager.cs" />
+    <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\IPath.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\LogisticComponent.cs" />
     <Compile Include="Assets\Scripts\managers\SystemMenuManager.cs" />
@@ -193,107 +196,41 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\SmartPath.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\RecipeFinder.cs" />
     <Compile Include="Assets\Scripts\ui\inven\InvenBase.cs" />
+    <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scripts\managers\DataManager.cs" />
     <Compile Include="Assets\Scripts\scenes\BaseScene.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\FootingSocket.cs" />
     <Compile Include="Assets\Scripts\ui\item\InvenItemData.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\CubicBezierPath.cs" />
     <Compile Include="Assets\Scripts\ui\popup\UI_Button.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Inven.cs" />
+    <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\ThirdPersonController.cs" />
     <Compile Include="Assets\Scripts\ui\DestoryProcess.cs" />
     <Compile Include="Assets\Scripts\ui\popup\UI_Popup.cs" />
-    <Compile Include="Assets\02.Resource\samples\industrial\Scripts\Rotator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Tonemapper.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GlobalFog.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\VortexEffect.shader" />
     <None Include="Assets\Resources\Art\FactoryFramework\Shader\PT_Water_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseAndGrain.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\DLAA.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\EdgeDetectX.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Water_Shader_WebGl.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\frag_ao.cginc" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GlowEffectDownsample.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\FXAAPreset3.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\CameraMotionBlurDX11.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\VignettingShader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ColorCorrectionCurves.shader" />
     <None Include="Assets\Resources\Shaders\Outline.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\TiltShift.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\MultiPassHollywoodFlares.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Plants_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ColorCorrectionCurvesSimple.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\Blend.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\SSAA.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\SunShaftsComposite.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ConvertDepth.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\TwirlEffect.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Contrast Stretch\Apply.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Contrast Stretch\Adaptation.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Shaders\ReflectiveDiffuseSpecTransp.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\LensFlareCreate.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\CameraMotionBlur.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\CreaseApply.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\FXAA3Console.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ColorCorrectionSelective.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\RadialBlur.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\VignetteShader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\MotionBlurClear.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Opaque_Shader_VS.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GlowCompose.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\SepiaToneEffect.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ColorCorrection3DLut.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\SimpleClear.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ContrastComposite.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Opaque_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Contrast Stretch\MinMaxReduction.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\BlurEffectConeTaps.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\Bokeh34.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ColorCorrectionEffect.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Foliage_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\FisheyeShader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BrightPassFilter.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\DepthOfField34.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\DepthOfFieldDX11.shader" />
+    <None Include="Assets\StarterAssets\license.txt" />
     <None Include="Assets\FactoryFramework\Demo\UI\DemoGameplayUI.uxml" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Water_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Shaders\DiffuseReflectiveShader.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Flowers_Shader.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Rock_Shader_VS.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\SeparableBlurPlus.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\MotionBlur.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\SeparableBlur.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
     <None Include="Assets\Resources\Art\FactoryFramework\Shader\FF_Simple_Conveyor.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Plants_Shader_VS.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\PrepareSunShaftsBlur.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ShowAlphaChannel.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GrayscaleEffect.shader" />
     <None Include="Assets\FactoryFramework\Demo\UI\global-resource.uxml" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\ChromaticAberrationShader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseAndGrainDX11.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\GlowConeTap.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Flowers_Shader_VS.shader" />
     <None Include="Assets\FactoryFramework\Demo\UI\DemoStyle.uss" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\BlendModesOverlay.shader" />
     <None Include="Assets\FactoryFramework\FF_ChangeLog.txt" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\EdgeDetectNormals.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseEffectShaderRGB.shader" />
     <None Include="Assets\Resources\Art\FactoryFramework\Shader\FF_Simple_Lit.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Rock_Shader.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\FXAA2.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\NoiseEffectShaderYUV.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\VS_indirect.cginc" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\Contrast Stretch\Luminance.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_BloomAndFlares\BlurAndFlares.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\NFAA.shader" />
     <None Include="Assets\Polytope Studio\Lowpoly_Environments\Sources\Shaders\PT_Vegetation_Foliage_Shader_VS.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Image Effects\_Sources\Shaders\_Antialiasing\FXAAPreset2.shader" />
-    <None Include="Assets\02.Resource\samples\industrial\Shaders\ReflectiveDiffuseSpec.shader" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -968,17 +905,20 @@
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.cinemachine.editor">
+      <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.AI.Navigation">
       <HintPath>Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Analytics.DataPrivacy">
+      <HintPath>Library\ScriptAssemblies\Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Services.Core">
       <HintPath>Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
@@ -1016,6 +956,9 @@
     <Reference Include="UnityEngine.Purchasing.Codeless">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.Codeless.dll</HintPath>
     </Reference>
+    <Reference Include="PPv2URPConverters">
+      <HintPath>Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Collections.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
     </Reference>
@@ -1034,11 +977,17 @@
     <Reference Include="Unity.VSCode.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>Library\ScriptAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.XR.LegacyInputHelpers">
       <HintPath>Library\ScriptAssemblies\UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
@@ -1097,8 +1046,14 @@
     <Reference Include="Unity.VisualScripting.Flow.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
@@ -1121,6 +1076,9 @@
     <Reference Include="Unity.Splines">
       <HintPath>Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
@@ -1132,6 +1090,9 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+    </Reference>
+    <Reference Include="Cinemachine">
+      <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>

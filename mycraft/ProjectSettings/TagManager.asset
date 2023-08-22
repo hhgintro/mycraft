@@ -7,6 +7,9 @@ TagManager:
   - Terrain
   - Building
   - Resources
+  - Safe-Footing
+  - CinemachineTarget
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -16,9 +19,9 @@ TagManager:
   - UI
   - Terrain
   - Belt Collideable
-  - 
-  - 
-  - 
+  - Player
+  - Building
+  - Monster
   - 
   - 
   - 

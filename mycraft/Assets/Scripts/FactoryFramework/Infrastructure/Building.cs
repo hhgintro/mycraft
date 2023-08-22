@@ -20,12 +20,21 @@ namespace FactoryFramework
 		public List<MyCraft.BuildingPanel> _panels = new List<MyCraft.BuildingPanel>();
 		public List<MyCraft.Progress> _progresses = new List<MyCraft.Progress>();
 
+		//outline
+		Material outline;
+		Renderer renderers;
+		List<Material> materials = new List<Material>();
+
 		public virtual void Init()
 		{
 			base._IsWorking = false;
 
 			for (int i = 0; i < this._progresses.Count; ++i)
 				this._progresses[i].InitProgress();
+
+			//outline
+			this.outline = new Material(Shader.Find("Draw/OutlineShader"));
+			this.renderers = this.transform.GetComponent<Renderer>();
 		}
 
 		private void Update()
@@ -71,6 +80,19 @@ namespace FactoryFramework
 				}
 			}
 		}
+
+		//설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
+		public override void SetEnable_2(bool enable)
+		{
+			//this.enabled = enable;
+			this.GetComponent<BoxCollider>().enabled = enable;
+
+			foreach (var input in inputSockets)		input.GetComponent<BoxCollider>().enabled = enable;
+			foreach (var output in outputSockets)	output.GetComponent<BoxCollider>().enabled = enable;
+		}
+
+		//socket에 의한 위치보정
+		public virtual bool LocationCorrectForSocket(RaycastHit hit, ref Vector3 groundPos, ref Vector3 groundDir) { return false; }
 		public virtual bool AssignRecipe(ItemBase itembase) { return false; }
 		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }
 		public virtual void OnClicked() { }
@@ -184,8 +206,17 @@ namespace FactoryFramework
 			return -1;
 		}
 
+		//bOnOff: true이면 ON, false이면 OFF
+		public virtual void OutLine(bool bOnOff)
+		{
+			this.materials.Clear();
+			this.materials.AddRange(this.renderers.sharedMaterials);
+			if (true == bOnOff) this.materials.Add(outline);
+			else this.materials.Remove(outline);
+			this.renderers.materials = this.materials.ToArray();
+		}
 
-        #region SAVE
+		#region SAVE
 		public override void Save(BinaryWriter writer)
 		{
 			base.Save(writer);
@@ -233,6 +264,7 @@ namespace FactoryFramework
 
 			this.Init();
 
+
 			//panel count
 			//if (this._panels.Count <= 0) return;
 			for (int p = 0; p < this._panels.Count; ++p)
@@ -256,7 +288,9 @@ namespace FactoryFramework
 					SetItem(p, slot, id, amount);
 				}
 			}
+
+			//this.SetEnable(true);
         }
-        #endregion //..SAVE
-    }
+		#endregion //..SAVE
+	}
 }

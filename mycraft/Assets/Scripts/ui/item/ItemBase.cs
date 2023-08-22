@@ -84,38 +84,11 @@ namespace MyCraft
 			if (null != this.cost)
 			{
 				//time
-				GameObject slot_time = tooltip.CreateCost();
-				GameObject time = tooltip.CreateSkill(slot_time.transform.GetChild(0).transform);
-				//image
-				ItemBase itembase0 = Managers.Game.ItemBases.FetchItemByID(1);    //time    
-				time.GetComponent<Image>().sprite = itembase0.icon;
-				time.name = itembase0.Title;
-				//amount
-				slot_time.transform.GetChild(1).GetComponent<Text>().text = " " + this.cost.time.ToString();
+				CostDescription(tooltip, 1, 0);
 
 				//items
 				for (int i = 0; i < this.cost.items.Count; ++i)
-				{
-					GameObject slot_cost = tooltip.CreateCost();
-					GameObject skill = tooltip.CreateSkill(slot_cost.transform.GetChild(0).transform);
-					//image
-					ItemBase itembase1 = Managers.Game.ItemBases.FetchItemByID(this.cost.items[i].itemid);
-					skill.GetComponent<Image>().sprite = itembase1.icon;
-					skill.name = itembase1.Title;
-					//amount(inven + quick) : 인벤의 아이템개수보다 적으면 GRAY로 표기됩니다.
-					int amount = Managers.Game.Inventories.GetAmount(this.cost.items[i].itemid);
-					amount += Managers.Game.QuickInvens.GetAmount(this.cost.items[i].itemid);
-					if (amount < this.cost.items[i].amount)  //부족할때
-					{
-						slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + amount.ToString() + "/" + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
-						slot_cost.transform.GetChild(1).GetComponent<Text>().color = Color.gray;
-					}
-					else    //충분할때.
-					{
-						slot_cost.transform.GetChild(1).GetComponent<Text>().text = " " + this.cost.items[i].amount.ToString() + " x " + itembase1.Title.ToString();
-						slot_cost.transform.GetChild(1).GetComponent<Text>().color = Color.white;
-					}
-				}
+					CostDescription(tooltip, this.cost.items[i].itemid, this.cost.items[i].amount);
 			}
 
 			//comment
@@ -126,7 +99,47 @@ namespace MyCraft
 			//GameObject totalcost = tooltip.CreateTotalCost();
 		}
 
+		private void CostDescription(Tooltip tooltip, int itemid, int amount)
+		{
+			//item
+			GameObject slot_cost = tooltip.CreateCost();
+			GameObject skill = tooltip.CreateSkill(slot_cost.transform.GetChild(0).transform);
+			//image
+			ItemBase itembase = Managers.Game.ItemBases.FetchItemByID(itemid);
+			skill.GetComponent<Image>().sprite = itembase.icon;
+			skill.name = itembase.Title;
 
+			Color color = Color.white;
+			string text = "";
+			if (1 == itemid)	//time
+			{
+				color = Color.white;
+				text  = string.Format($" {this.cost.time.ToString()}");
+			}
+			else //item
+			{
+				//amount(inven + quick) : 인벤의 아이템개수보다 적으면 GRAY로 표기됩니다.
+				int itemcount = Managers.Game.Inventories.GetAmount(itemid);
+				itemcount += Managers.Game.QuickInvens.GetAmount(itemid);
+				if (itemcount < amount)  //부족할때
+				{
+					color = Color.gray;
+					text  = string.Format($" {itemcount.ToString()}/{amount.ToString()} x {itembase.Title.ToString()}");
+				}
+				else    //충분할때.
+				{
+					color = Color.white;
+					text  = string.Format($" {amount.ToString()} x {itembase.Title.ToString()}");
+				}
+
+				//수작업 불가
+				if (false == this.DIY) color = Color.red;
+			}
+
+			//amount
+			slot_cost.transform.GetChild(1).GetComponent<Text>().color = color;
+			slot_cost.transform.GetChild(1).GetComponent<Text>().text  = text;
+		}
 	}//..class Item
 
 	public class BuildCost
@@ -180,6 +193,17 @@ namespace MyCraft
 		}
 	}
 
+	public class FloorItemBase : ItemBase
+	{
+		////goods의 이동속도
+		//public float speed;
+
+		public FloorItemBase(JsonData json) : base(json)
+		{
+			//this.speed = float.Parse(json["speed"].ToString());
+		}
+	}
+
 	public class InserterItemBase : ItemBase
 	{
 		//goods를 운반하는 속도
@@ -230,6 +254,17 @@ namespace MyCraft
 		{
 			this._furnace = new FurnaceItem(json["furnace"]);
 		}        
+	}
+
+	public class WaterPlantItemBase : ItemBase
+	{
+		public float perSecond; //(단위:s)초당채굴량
+
+		public WaterPlantItemBase(JsonData json) : base(json)
+		{
+			this.perSecond = float.Parse(json["perSecond"].ToString());
+		}
+
 	}
 
 }//..namespace MyCraft

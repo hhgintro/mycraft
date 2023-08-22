@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyCraft;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,32 +15,36 @@ public class InputManager
 
     public void OnUpdate()
     {
-//#if UNITY_EDITOR
-//        //UI위를 클릭했을때...무시
-//        if (true == EventSystem.current.IsPointerOverGameObject())
-//            return;
-//        //if (EventSystem.current.IsPointerOverGameObject(-1) == false)
-//#elif UNITY_ANDROID // or iOS 
-//                if (EventSystem.current.IsPointerOverGameObject(0) == false)
-//                    return;
-//#endif
-
-        if (Input.anyKeyDown && KeyAction != null)
+		if (KeyAction != null && Input.anyKeyDown)
 				KeyAction.Invoke();
 
         if (MouseAction != null)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0))        //left
             {
                 MouseAction.Invoke(Define.MouseEvent.L_Press);
                 _lpressed = true;
+                //Debug.Log("L down");
             }
-            else
-            {
-                if (_lpressed)
+			else if (Input.GetMouseButton(1))   //right
+			{
+				MouseAction.Invoke(Define.MouseEvent.R_Press);
+				_rpressed = true;
+				//Debug.Log("R down");
+			}
+			else
+			{
+                if (_lpressed) {
                     MouseAction.Invoke(Define.MouseEvent.L_Click);
-                _lpressed = false;
-            }
+                    _lpressed = false;
+					//Debug.Log("L up");
+				}
+				if (_rpressed) {
+                    MouseAction.Invoke(Define.MouseEvent.R_Click);
+                    _rpressed = false;
+                    //Debug.Log("R up");
+				}
+			}
 
             MouseAction.Invoke(Define.MouseEvent.Move);
         }
@@ -50,4 +55,21 @@ public class InputManager
         KeyAction = null;
         MouseAction = null;
     }
+
+	public void KeyActionList()
+    {
+		Delegate[] delegates = this.KeyAction.GetInvocationList();
+        ActionList(this.KeyAction.ToString(), delegates);
+	}
+	public void MouseActionList<T>(Action<T> action)
+    {
+		Delegate[] delegates = this.MouseAction.GetInvocationList();
+        ActionList(this.MouseAction.ToString(), delegates);
+	}
+    private void ActionList(string name, Delegate[] delegates)
+    {
+		Debug.Log($"Registered {name} Delegates({delegates.Length}):");
+		for (int i = 0; i < delegates.Length; i++)
+			Debug.Log($"  {i,2}:{delegates[i].Method.Name}");   //{i,n}:n전체필드의폭(오른쪽정렬)
+	}
 }

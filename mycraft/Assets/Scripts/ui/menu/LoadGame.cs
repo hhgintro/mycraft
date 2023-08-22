@@ -40,11 +40,13 @@ namespace MyCraft
         public void OnLoadGame()
         {
             if (string.IsNullOrEmpty(Managers.Game._load_filename)) return;
-            //Managers.Game.bNewGame = false;
+			//Managers.Game.bNewGame = false;
 
-            //HG_TODO:[통합방법모색] lobby에 호출될 때와 world에서 호출될 때. 각각 다른값을 호출하고 있다,
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            SceneManager.LoadScene("30.World");
+			Managers.Input.Clear();
+
+			//HG_TODO:[통합방법모색] lobby에 호출될 때와 world에서 호출될 때. 각각 다른값을 호출하고 있다,
+			//SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+			SceneManager.LoadScene("30.World");
         }
 
         public void OnBack()

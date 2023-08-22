@@ -20,7 +20,7 @@ public class DestoryProcess : MonoBehaviour
     }
 
 
-    public void SetProgress(IPlacement owner, GameObject target, float time=1f)
+    public void SetProgress(IPlacement owner, GameObject target, float time=2f)
     {
 		//target이 바꿨어면 처음부터...
         if (_target != target)
@@ -33,13 +33,13 @@ public class DestoryProcess : MonoBehaviour
         if (null == _target) return;
 
         this._progress.fillAmount -= Time.deltaTime / _time;
-		Debug.Log($"fill: {this._progress.fillAmount}");
+		//Debug.Log($"fill: {this._progress.fillAmount}");
 		if (this._progress.fillAmount <= 0f)
         {
             //Debug.Log($"{_target.name} 철거");
-            //GameManager.GetTerrainManager().DeleteBlock(_target, true);
             _owner.DestroyBuilding(_target);
-            this._progress.fillAmount = 1f;
+            ////this._progress.fillAmount = 0f;
+            //this._progress.fillAmount = 1f;
         }
     }
 }

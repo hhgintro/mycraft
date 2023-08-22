@@ -38,12 +38,13 @@ namespace MyCraft
     public enum LAYER_TYPE : byte
     {//unity에서 설정하는 값입니다.
         //BELT_COLLIDEABLE = 7,
-        TERRAIN     = 8,
-        MINERAL,
-        BLOCK,      //10
+        TERRAIN     = 6,
+        BELT_COLLIDEABLE,
         PLAYER,
+        BUILDING,
         MONSTER,
-        SENSOR,
+
+        //MINERAL,
     }
 
     class Common

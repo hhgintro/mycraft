@@ -32,7 +32,7 @@ namespace MyCraft
             SceneType = Define.Scene.Logo;
 
             //load ini
-            Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.streamingAssetsPath + "/locale/");
+            Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.dataPath + "/../config/locale/");
         }
 
         public override void Clear()

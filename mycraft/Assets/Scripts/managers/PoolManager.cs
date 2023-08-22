@@ -6,8 +6,10 @@ namespace MyCraft
 {
     public class PoolManager
     {
+		static object lockObject = new object();
+		
         #region Pool
-        class Pool
+		class Pool
         {
             public GameObject Original { get; private set; }
             public Transform Root { get; set; }
@@ -81,10 +83,13 @@ namespace MyCraft
 
         public void Init()
         {
-            if (_root == null)
+            lock (lockObject)   // 동시에 접근되지 않아야 하는 코드 작성
             {
-                _root = new GameObject { name = "@Pool_Root" }.transform;
-                Object.DontDestroyOnLoad(_root);
+                if (_root == null)
+                {
+                    _root = new GameObject { name = "@Pool_Root" }.transform;
+                    Object.DontDestroyOnLoad(_root);
+                }
             }
         }
 

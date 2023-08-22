@@ -37,11 +37,6 @@ namespace MyCraft
 
         void Open(string filename)
         {
-            //this.cfg.Open(Application.streamingAssetsPath + "/locale" + "/ko" + "/locale.cfg");
-            //this.cfg.Open(filename);
-            //foreach(var v in cfg.values)
-            //    Debug.Log("[" + v.Key.ToString() + ":" + v.Value.ToString() + "]");
-
             //clear
             sections.Clear();
 

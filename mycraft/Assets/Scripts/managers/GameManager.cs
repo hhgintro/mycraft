@@ -1,4 +1,5 @@
 ﻿using FactoryFramework;
+using StarterAssets;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ namespace MyCraft
 		private static extern int GetPrivateProfileInt(string section, string key, int def, string filePath);
 
 
-		private SystemMenuManager _systemmenu;
+		private GameObject _systemmenu;
 		//ChatManager _chat_manager;
 
 		private JSonParser<ItemBase> _itembase;
@@ -38,26 +39,29 @@ namespace MyCraft
 		private Coordinates _coodinates;  //좌표
 		private DestoryProcess _destoryProcess;
 
+		private ThirdPersonController _player;
 
-		public SystemMenuManager SystemMenu { get { if (null == _systemmenu) _systemmenu = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager; return _systemmenu; } }
-		//public ChatManager Chat { get { if (null == Instance._chat_manager) Instance._chat_manager = GameObject.Find("Gameplay UI/Chatting").GetComponent<ChatManager>(); return Instance._chat_manager; } }
-		public JSonParser<ItemBase> ItemBases { get { if (null == _itembase) _itembase = new JSonParser<ItemBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "items.json")); return _itembase; } }
-		public JSonParser<TechBase> TechBases { get { if (null == _techbase) _techbase = new JSonParser<TechBase>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "technology.json")); return _techbase; } }
-		public JSonParser<Category> Categories { get { if (null == _categories) _categories = new JSonParser<Category>(Path.Combine(Application.streamingAssetsPath, "locale", Managers.Locale._locale.ToString(), "categories.json")); return _categories; } }
 
-		public Inventory Inventories { get { if (null == _inventory) _inventory = GameObject.FindObjectOfType(typeof(Inventory)) as Inventory; return _inventory; } }
-		public QuickInven QuickInvens { get { if (null == _quickinven) _quickinven = GameObject.FindObjectOfType(typeof(QuickInven)) as QuickInven; return _quickinven; } }
-		public ChestInven ChestInvens { get { if (null == _chestinven) _chestinven = GameObject.FindObjectOfType(typeof(ChestInven)) as ChestInven; return _chestinven; } }
-		public ForgeInven ForgeInvens { get { if (null == _forgeinven) _forgeinven = GameObject.FindObjectOfType(typeof(ForgeInven)) as ForgeInven; return _forgeinven; } }
-		public FactoryInven FactoryInvens { get { if (null == _factoryinven) _factoryinven = GameObject.FindObjectOfType(typeof(FactoryInven)) as FactoryInven; return _factoryinven; } }
-		public SkillInven SkillInvens { get { if (null == _skillinven) _skillinven = GameObject.FindObjectOfType(typeof(SkillInven)) as SkillInven; return _skillinven; } }
-		public TechInven TechInvens { get { if (null == _techinven) _techinven = GameObject.FindObjectOfType(typeof(TechInven)) as TechInven; return _techinven; } }
-		public TechDescription TechDescs { get { if (null == _techdesc) _techdesc = GameObject.FindObjectOfType(typeof(TechDescription)) as TechDescription; return _techdesc; } }
+        //public SystemMenuManager SystemMenu	{ get { if (null == _systemmenu) _systemmenu = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager; return _systemmenu; } }
+        public GameObject SystemMenu			{ get { if (null == _systemmenu) _systemmenu = GameObject.Find("Canvas").transform.GetChild(4).gameObject; return _systemmenu; } }
+		public JSonParser<ItemBase> ItemBases	{ get { if (null == _itembase) _itembase = new JSonParser<ItemBase>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "items.json")); return _itembase; } }
+		public JSonParser<TechBase> TechBases	{ get { if (null == _techbase) _techbase = new JSonParser<TechBase>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "technology.json")); return _techbase; } }
+		public JSonParser<Category> Categories	{ get { if (null == _categories) _categories = new JSonParser<Category>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "categories.json")); return _categories; } }
 
-		public Tooltip Tooltips { get { if (null == _tooltip) _tooltip = GameObject.FindObjectOfType(typeof(Tooltip)) as Tooltip; return _tooltip; } }
-		public Coordinates Coordinates { get { if (null == _coodinates) _coodinates = GameObject.FindObjectOfType(typeof(Coordinates)) as Coordinates; return _coodinates; } }
-		public DestoryProcess DestoryProcess { get { if (null == _destoryProcess) _destoryProcess = GameObject.FindObjectOfType(typeof(DestoryProcess)) as DestoryProcess; return _destoryProcess; } }
+		public Inventory Inventories			{ get { if (null == _inventory) _inventory = GameObject.FindObjectOfType(typeof(Inventory)) as Inventory; return _inventory; } }
+		public QuickInven QuickInvens			{ get { if (null == _quickinven) _quickinven = GameObject.FindObjectOfType(typeof(QuickInven)) as QuickInven; return _quickinven; } }
+		public ChestInven ChestInvens			{ get { if (null == _chestinven) _chestinven = GameObject.FindObjectOfType(typeof(ChestInven)) as ChestInven; return _chestinven; } }
+		public ForgeInven ForgeInvens			{ get { if (null == _forgeinven) _forgeinven = GameObject.FindObjectOfType(typeof(ForgeInven)) as ForgeInven; return _forgeinven; } }
+		public FactoryInven FactoryInvens		{ get { if (null == _factoryinven) _factoryinven = GameObject.FindObjectOfType(typeof(FactoryInven)) as FactoryInven; return _factoryinven; } }
+		public SkillInven SkillInvens			{ get { if (null == _skillinven) _skillinven = GameObject.FindObjectOfType(typeof(SkillInven)) as SkillInven; return _skillinven; } }
+		public TechInven TechInvens				{ get { if (null == _techinven) _techinven = GameObject.FindObjectOfType(typeof(TechInven)) as TechInven; return _techinven; } }
+		public TechDescription TechDescs		{ get { if (null == _techdesc) _techdesc = GameObject.FindObjectOfType(typeof(TechDescription)) as TechDescription; return _techdesc; } }
 
+		public Tooltip Tooltips					{ get { if (null == _tooltip) _tooltip = GameObject.FindObjectOfType(typeof(Tooltip)) as Tooltip; return _tooltip; } }
+		public Coordinates Coordinates			{ get { if (null == _coodinates) _coodinates = GameObject.FindObjectOfType(typeof(Coordinates)) as Coordinates; return _coodinates; } }
+		public DestoryProcess DestoryProcess	{ get { if (null == _destoryProcess) _destoryProcess = GameObject.FindObjectOfType(typeof(DestoryProcess)) as DestoryProcess; return _destoryProcess; } }
+
+		public ThirdPersonController Player		{ get { if (null == _player) _player = GameObject.FindObjectOfType(typeof(ThirdPersonController)) as ThirdPersonController; return _player; } }
 
 
 		//저장경로
@@ -78,10 +82,29 @@ namespace MyCraft
 			////HG_TEST: 임시로 불러올수 있는지 체크용(성공)
 			//_buildingPlacement = FindObjectOfType<BuildingPlacement>();
 			//_conveyorPlacement = FindObjectOfType<ConveyorPlacement>();
+			//GameObject inven = GameObject.Find("Canvas\Inventory").transform.GetChild(4).gameObject
 		}
 		public void Clear()
 		{
+			_systemmenu = null;
+			_itembase = null;
+			_techbase = null;
+			_categories = null;
 
+			_inventory = null;
+			_quickinven = null;
+			_chestinven = null;
+			_forgeinven = null;
+			_factoryinven = null;
+			_skillinven = null;
+			_techinven = null;
+			_techdesc = null;
+
+			_tooltip = null;
+			_coodinates = null;
+			_destoryProcess = null;
+
+			_player = null;
 		}
 
 		public void InitPlacement(BuildingPlacement building, ConveyorPlacement conveyor)
@@ -102,6 +125,7 @@ namespace MyCraft
 			if (null == item || null == item.database || item.amount <= 0) return;
 			GameObject prefab = item.database.prefab;
 			if (null == prefab) return;
+			if (null != _choiced_building) return;
 
 			if (prefab.TryGetComponent(out FactoryFramework.Conveyor _))
 			{
@@ -136,7 +160,14 @@ namespace MyCraft
 
 		private void FinishPlaceBuilding()
 		{
-			Debug.Log($"{_choiced_building.name} 완공");
+			if (_choiced_building.TryGetComponent<LogisticComponent>(out LogisticComponent component))
+			{
+				component.SetEnable_2(true);
+				Debug.Log($"{component.name} enable:true");
+			}
+
+
+				Debug.Log($"{_choiced_building.name} 완공");
 			_choiced_building = null;   //재할당을 받기위해 null로 설정한다.
 
 			//각 이벤트 위치어서 개수를 미리 정산해 줍니다.
@@ -147,7 +178,7 @@ namespace MyCraft
 				InvenBase.choiced_item = null;
 				return;
 			}
-			//개수가 남아있다면...건물을 생성해서 들고있는다.
+			//아이템의 수량이 남아 있다면, prefab을 생성해 줍니다.
 			if (null != InvenBase.choiced_item) this.PlaceBuilding(InvenBase.choiced_item);
 		}
 
@@ -290,6 +321,7 @@ namespace MyCraft
 				}
 
 
+				Managers.Game.Player.Save(bw);
 				fs.Close();
 			}
 		}
@@ -366,6 +398,8 @@ namespace MyCraft
 					}
 					Debug.LogError($"{instantiated.name}을 Load할 로직이 준비되어있지 않습니다.");
 				}
+
+				Managers.Game.Player.Load(reader);
 				fs.Close();
 
 				foreach( var conveyor in conveyors)

@@ -8,7 +8,8 @@ namespace MyCraft
 {
     public class Managers : MonoBehaviour
     {
-        static Managers s_instance; // 유일성이 보장된다
+		static object lockObject = new object();
+		static Managers s_instance; // 유일성이 보장된다
         static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
 
         //DataManager _data = new DataManager();
@@ -52,30 +53,36 @@ namespace MyCraft
 
 		private void OnDestroy()
 		{
-            Debug.Log("Manager.Clear()");
-            Clear(true);
+            //Debug.Log("Manager.Clear()");
+            //Clear(true);
 		}
 
 		static void Init()
         {
-            if (s_instance == null)
+		    //static object lockObject = new object();
+			lock (lockObject)   // 동시에 접근되지 않아야 하는 코드 작성
             {
                 GameObject go = GameObject.Find("@Managers");
-                if (go == null)
+                if (null == go)
                 {
                     go = new GameObject { name = "@Managers" };
                     go.AddComponent<Managers>();
                 }
 
-                DontDestroyOnLoad(go);
+                if (null != s_instance)
+                    return;
+
                 s_instance = go.GetComponent<Managers>();
+                DontDestroyOnLoad(go);
+
 
                 s_instance._game.Init();
                 //s_instance._data.Init();
                 s_instance._pool.Init();
                 s_instance._sound.Init();
             }
-        }
+
+		}
 
         public static void Clear(bool destory)
         {

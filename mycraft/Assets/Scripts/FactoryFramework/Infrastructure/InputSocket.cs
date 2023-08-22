@@ -44,7 +44,7 @@ namespace FactoryFramework
             // special handling
             if (input is Splitter || input is Merger || output is Splitter || output is Merger)
                 return;
-            //여기서 문제가발생하면, prefab에 Socket OUT/IN 설정부분을 체크할것
+            //여기서 문제가발생하면, prefab에 Socket OUT/IN 설정부분(Inspector)을 체크할것
             if (input.CanTakeInput(output.OutputType()) && output.CanGiveOutput())
             {
                 // do the transfer

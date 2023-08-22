@@ -75,8 +75,9 @@ namespace MyCraft
             //this.SetActive(false);
             //Managers.Game.bNewGame = true;
             Managers.Game._load_filename = null;
+			Managers.Input.Clear();
 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         }
 

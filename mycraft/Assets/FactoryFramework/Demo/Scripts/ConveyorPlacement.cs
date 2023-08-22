@@ -6,6 +6,7 @@ using FactoryFramework;
 using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 using MyCraft;
+using System.Linq;
 
 public class ConveyorPlacement : IPlacement
 {
@@ -44,6 +45,11 @@ public class ConveyorPlacement : IPlacement
 	}
 	[SerializeField] private State state;
 
+	private void Start()
+	{
+		Managers.Input.MouseAction -= OnMouseEvent;
+		Managers.Input.MouseAction += OnMouseEvent;
+	}
 	private void OnEnable()
 	{
 		// listen to the cancel event to force cancel placement from elsewhere in the code
@@ -81,6 +87,9 @@ public class ConveyorPlacement : IPlacement
 		current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
 		if (TryChangeState(State.Start))
 		{
+			//b.enabled = false;
+			base.SetEnable_1(current, false);
+
 			startSocket = null;
 			endSocket = null;
 		}
@@ -138,13 +147,14 @@ public class ConveyorPlacement : IPlacement
 		Vector3 worldPos = Vector3.zero;
 		Vector3 worldDir = Vector3.forward;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+		RaycastHit[] hits = Physics.RaycastAll(ray, 100).OrderBy(h => h.distance).ToArray();
+		foreach (RaycastHit hit in hits)
 		{
 			// skip objects/colliders in the conveyor we're currently placing
 			//if (hit.transform.root == current.transform) continue;  //여기때문에 conveyor의 parent을 설정하면. 설치가 안되는 현상나타남
 			if (hit.transform.parent == current.transform) continue;
 			// try to find an open socket
-			if (hit.collider.gameObject.TryGetComponent(out Socket socket))
+			if (hit.collider.gameObject.TryGetComponent(out OutputSocket socket))
 			{
 				if (!socket.IsOpen())
 				{
@@ -155,14 +165,25 @@ public class ConveyorPlacement : IPlacement
 				startSocket = socket;
 				break;
 			}
-			
-			if (hit.collider.gameObject.TryGetComponent(out Terrain t))
+
+			if (hit.transform.tag == "Safe-Footing")  //안전발판
+			{
+				worldPos = hit.point + Vector3.up * 0.3f;	//시작높이
+				Vector3 camForward = Camera.main.transform.forward;
+				camForward.y = 0f;
+				camForward.Normalize();
+				worldDir = camForward;
+				break;
+			}
+
+			if (hit.collider.gameObject.TryGetComponent<Terrain>(out Terrain t))
 			{				
 				worldPos = hit.point + Vector3.up;
 				Vector3 camForward = Camera.main.transform.forward;
 				camForward.y = 0f;
 				camForward.Normalize();
 				worldDir = camForward;
+				break;
 			}
 		}
 		// override placement if we found a valid socket
@@ -208,6 +229,7 @@ public class ConveyorPlacement : IPlacement
 		// startSocket != null prevents belt from starting disconnected
 		if (current.ValidMesh) // && startSocket != null
 		{
+			//current.SetMaterials(originalFrameMat, originalBeltMat);
 			current.SetMaterials(greenGhostMat, greenGhostMat);
 			if (Input.GetMouseButtonDown(0))
 			{
@@ -229,7 +251,8 @@ public class ConveyorPlacement : IPlacement
 		//Ray mousedownRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 		//foreach (RaycastHit hit in Physics.RaycastAll(mousedownRay, 100f))
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+		RaycastHit[] hits = Physics.RaycastAll(ray, 100).OrderBy(h => h.distance).ToArray();
+		foreach (RaycastHit hit in hits)
 		{
 			//if (hit.collider.transform.root == current.transform) continue;	//이거때문에 문제가 발생한건 아니지만 혹시나 해서 HandleStartState와 같이 맞춰줌.
 			if (hit.transform.parent == current.transform) continue;
@@ -244,9 +267,26 @@ public class ConveyorPlacement : IPlacement
 				worldPos    = hit.collider.transform.position;
 				worldDir    = hit.collider.transform.forward;
 				endSocket   = socket;
+				break;
+			}
+
+			if (hit.transform.tag == "Safe-Footing")  //안전발판
+			{
+				//worldPos = hit.point;
+				//// stay same level if this is the terrain
+				//worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;
+				worldPos = hit.point + Vector3.up * 0.3f;
+
+				Vector3 camForward = Camera.main.transform.forward;
+				camForward.y = 0f;
+				camForward.Normalize();
+				worldDir = camForward;
+				// reset socket
+				endSocket = null;
 
 				break;
 			}
+
 			if (hit.collider.gameObject.TryGetComponent<Terrain>(out Terrain t))
 			{
 				// handle height offset when holding shift
@@ -337,6 +377,8 @@ public class ConveyorPlacement : IPlacement
 
 		if (Input.GetMouseButtonDown(0) && current.ValidMesh)
 		{
+			////b.enabled = true;
+			//base.SetEnable(current, true);
 
 			// change the sockets!
 			if (startSocket != null)
@@ -370,69 +412,58 @@ public class ConveyorPlacement : IPlacement
 
 	void HandleNoneState()
 	{
-		// right click to delete
-		if (Input.GetMouseButtonDown(1))
-		{
-#if UNITY_EDITOR
-			//UI위를 클릭했을때...무시
-			if (true == EventSystem.current.IsPointerOverGameObject())
-			{
-				GameObject go = EventSystem.current.currentSelectedGameObject;
-				return;
-			}
-			//if (EventSystem.current.IsPointerOverGameObject(-1) == false)
-#elif UNITY_ANDROID // or iOS 
-			if (EventSystem.current.IsPointerOverGameObject(0) == false)
-				return;
-#endif
+		//// right click to delete
+		//if (Input.GetMouseButtonDown(1))
+		//{
+		//	//UI위를 클릭했을때...무시
+		//	if (true == base.IsPointerOverGameObject()) return;
 
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+		//	Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		//	foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+		//	{
+		//		if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
+		//		{
+		//			DestroyBuilding(conveyor.gameObject);
+		//			//Managers.Game.DestoryProcess.SetProgress(this, null);
+		//			//Managers.Game.DestoryProcess.gameObject.SetActive(true);
+		//			return;
+		//		}
+		//	}
+		//}
+	}
+
+	private void OnMouseEvent(Define.MouseEvent evt)
+	{
+		//UI위를 클릭했을때...무시
+		if (true == base.IsPointerOverGameObject()) return;
+
+		switch (evt)
+		{
+			case Define.MouseEvent.R_Press:
 			{
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit = Physics.RaycastAll(ray, 100f).OrderBy(h => h.distance).FirstOrDefault();
+				//foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
+				if (null == hit.collider || null == hit.collider.transform.parent)
+					break;
 				if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
 				{
-					DestroyBuilding(conveyor.gameObject);
-					//Managers.Game.DestoryProcess.SetProgress(this, null);
-					//Managers.Game.DestoryProcess.gameObject.SetActive(true);
+					//DestroyBuilding(conveyor.gameObject);
+					Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject);
+					Managers.Game.DestoryProcess.gameObject.SetActive(true);
 					return;
 				}
-			}
-		}
-//		if (Input.GetMouseButton(1))
-//		{
-//#if UNITY_EDITOR
-//			//UI위를 클릭했을때...무시
-//			if (true == EventSystem.current.IsPointerOverGameObject())
-//			{
-//				GameObject go = EventSystem.current.currentSelectedGameObject;
-//				return;
-//			}
-//			//if (EventSystem.current.IsPointerOverGameObject(-1) == false)
-//#elif UNITY_ANDROID // or iOS 
-//						if (EventSystem.current.IsPointerOverGameObject(0) == false)
-//							return;
-//#endif
+			} break;
 
-//			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-//			foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
-//			{
-//				if (hit.collider.transform.root.TryGetComponent<Conveyor>(out Conveyor conveyor))
-//				{
-//					Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject, 5f);
-//					Managers.Game.DestoryProcess.gameObject.SetActive(true);
-//					//conveyor.Disconnect();
-//					//MyCraft.Managers.Game.AddItem(conveyor._itembase.id, conveyor.Capacity);
-//					//MyCraft.Managers.Resource.Destroy(conveyor.gameObject);
-//					return;
-//				}
-
-//				Managers.Game.DestoryProcess.SetProgress(this, null);
-//				Managers.Game.DestoryProcess.gameObject.SetActive(false);
-//			}
-//		}
-
-		return;
-		
+			case Define.MouseEvent.R_Click:
+			{
+				if (Managers.Game.DestoryProcess.gameObject.activeSelf)
+				{
+					Managers.Game.DestoryProcess.SetProgress(this, null);
+					Managers.Game.DestoryProcess.gameObject.SetActive(false);
+				}
+			} break;
+		}//..switch (evt)
 	}
 
 	public void Update()

@@ -31,6 +31,7 @@ namespace FactoryFramework
 		public bool ValidMesh { get { return _validMesh; } }
 
 		// pool for gameobjects (models) on belts
+		[SerializeField]
 		protected ObjectPool<Transform> beltObjectPool;
 		
 		public InputSocket inputSocket;
@@ -98,7 +99,8 @@ namespace FactoryFramework
 			items?.Clear();
 		}
 
-        public virtual void OnDeleted()
+		//파괴될 때.
+		public virtual void OnDeleted()
 		{
             for (int i = 0; i < items.Count; i++)
             {
@@ -106,7 +108,7 @@ namespace FactoryFramework
                 MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
             }
             items.Clear();
-            this.Disconnect();
+            Disconnect();
             MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity);
         }
 
@@ -116,10 +118,9 @@ namespace FactoryFramework
 				MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
 
 			items.Clear();
-			this.Disconnect();
+			Disconnect();
 			Reset();
 			_path?.CleanUp();
-			Disconnect();
 			OnConveyorDestroyed?.Invoke(this);
 		}
 
@@ -130,9 +131,7 @@ namespace FactoryFramework
 
 			// FIXME maybe don't need to do this every update
 			beltMeshRenderer?.material.SetFloat("_Speed", data.speed);
-
 			_IsWorking = items.Count > 0;
-
 		}
 
 		//private void LateUpdate()
@@ -180,6 +179,17 @@ namespace FactoryFramework
 				defaultCapacity: _capacity);
 
 			//_itemPositionsArray = new NativeArray<float>(capacity, Allocator.Persistent);
+		}
+
+		//설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
+		public override void SetEnable_2(bool enable)
+		{
+			//this.enabled = enable;
+			//MeshCollider는 enable이 true일 때 추가(AddCollider())되므로 여기에서 처리할 필요없다.
+			//this.transform.GetChild(0).GetComponent<MeshCollider>().enabled = enable;
+
+			inputSocket.GetComponent<BoxCollider>().enabled = enable;
+			outputSocket.GetComponent<BoxCollider>().enabled = enable;
 		}
 
 		public void SetItemOnBelt(string itemPath, float position)
@@ -246,10 +256,10 @@ namespace FactoryFramework
 				float pos = item._position;
 				float percent = pos / _path.GetTotalLength();
 				Vector3 worldPos = _path.GetWorldPointFromPathSpace(percent) + _distanceAboveBelt;
+				if (float.IsNaN(worldPos.x) || float.IsNaN(worldPos.y) || float.IsNaN(worldPos.z))
+					continue;	//AABB의 원인
 				Quaternion worldRotation = _path.GetRotationAtPoint(percent);
 				t.SetPositionAndRotation(worldPos, worldRotation);
-
-
 				// update max cumulative position
 				cumulativeMaxPos -= 1f * settings.BELT_SPACING;
 			}
@@ -342,7 +352,12 @@ namespace FactoryFramework
 			frameFilter.gameObject.AddComponent(typeof(MeshCollider));
 			beltFilter.gameObject.AddComponent(typeof(MeshCollider));
 		}
-#endregion
+
+		public override Mesh GetSharedMesh() { return this.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh; }
+		public override Material GetSharedMaterial() { return this.transform.GetChild(1).GetComponent<MeshRenderer>().sharedMaterial; }
+		//public virtual float GetLocalScale() { return this._itembase.scaleOnBelt; }
+
+		#endregion
 
 
 		#region SOCKETS
@@ -526,18 +541,29 @@ namespace FactoryFramework
 				Debug.LogError($"error with {gameObject.name} no items left to grab");
 			}
 
-			//건물을 conveyor에 태우기 위해.
-			if(0 < iob._itembase.prefab.transform.childCount)
+			////건물을 conveyor에 태우기 위해.
+			//if(0 < iob._itembase.prefab.transform.childCount)
+			//{
+			//	newItemModel.GetComponent<MeshFilter>().sharedMesh = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
+			//	newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial;
+			//	newItemModel.localScale = Vector3.one * iob._itembase.scaleOnBelt;
+			//	//newItemModel.Rotate(90f, 0, 0);	//회전이 안되는군.
+			//}
+			if (iob._itembase.prefab.TryGetComponent(out FactoryFramework.LogisticComponent componet))
 			{
-				newItemModel.GetComponent<MeshFilter>().sharedMesh = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
-				newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial;
-				newItemModel.localScale = Vector3.one * iob._itembase.scaleOnBelt;
-				//newItemModel.Rotate(90f, 0, 0);	//회전이 안되는군.
+				newItemModel.GetComponent<MeshFilter>().sharedMesh = componet.GetSharedMesh();
+				newItemModel.GetComponent<MeshRenderer>().sharedMaterial = componet.GetSharedMaterial();
+				newItemModel.localScale = Vector3.one * componet.GetLocalScale();
+
+				//newItemModel.GetComponent<MeshFilter>().sharedMesh = componet.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh;
+				//newItemModel.GetComponent<MeshRenderer>().sharedMaterial = componet.transform.GetChild(1).GetComponent<MeshRenderer>().sharedMaterial;
+				//newItemModel.localScale = Vector3.one * componet.GetLocalScale();
 			}
 			else
 			{
 				newItemModel.GetComponent<MeshFilter>().sharedMesh = iob._itembase.prefab.GetComponent<MeshFilter>().sharedMesh;
 				newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.GetComponent<MeshRenderer>().sharedMaterial;
+				newItemModel.localScale = Vector3.one * iob._itembase.scaleOnBelt;
 			}
 			//if((int)LAYER_TYPE.BELT_COLLIDEABLE == iob.item.prefab.layer)
 			//iob.item.prefab.CompareTag("")
@@ -595,6 +621,8 @@ namespace FactoryFramework
 			this.tmpInputGuid = reader.ReadString();
 			this.tmpOutputGuid = reader.ReadString();
 			//Debug.Log($"LOAD:{this.tmpInputGuid}/{this.tmpOutputGuid}");
+
+			//this.SetEnable(true);
 		}
 		#endregion //..SAVE
 

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 4341362921465468367}
   - component: {fileID: -201011185910039979}
   - component: {fileID: 4843857595213453815}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Solar Panel
   m_TagString: Building
   m_Icon: {fileID: 0}

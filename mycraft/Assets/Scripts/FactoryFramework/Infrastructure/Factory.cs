@@ -26,9 +26,10 @@ namespace FactoryFramework
 		MyCraft.Progress PROGRESS		=> _progresses[0];
 		//MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
 
-		Material outline;
-		Renderer renderers;
-		List<Material> materials = new List<Material>();
+		////outline
+		//Material outline;
+		//Renderer renderers;
+		//List<Material> materials = new List<Material>();
 		int cnt = 0;
 
 		void Start()
@@ -37,7 +38,9 @@ namespace FactoryFramework
 		}
 		public override void Init()
 		{
-			this.outline = new Material(Shader.Find("Draw/OutlineShader"));
+			////outline
+			//this.outline = new Material(Shader.Find("Draw/OutlineShader"));
+			//this.renderers = this.transform.GetComponent<Renderer>();
 
 			if (0 == base._panels.Count)
 			{
@@ -88,26 +91,35 @@ namespace FactoryFramework
 
 			if(0 == (++cnt %2))
 			{
-				Renderer renderer = this.transform.GetChild(0).GetComponent<Renderer>();
-
-				materials.Clear();
-				materials.AddRange(renderer.sharedMaterials);
-				materials.Remove(outline);
-
-				renderer.materials = materials.ToArray();
+				//outline OFF
+				base.OutLine(false);
+				////this.renderers = this.transform.GetComponent<Renderer>();
+				//this.materials.Clear();
+				//this.materials.AddRange(this.renderers.sharedMaterials);
+				//this.materials.Remove(outline);
+				//this.renderers.materials = this.materials.ToArray();
 			}
 			else
 			{
-				renderers = this.transform.GetChild(0).GetComponent<Renderer>();
-
-				materials.Clear();
-				materials.AddRange(renderers.sharedMaterials);
-				materials.Add(outline);
-
-				renderers.materials = materials.ToArray();
+				//outline ON
+				base.OutLine(true);
+				////this.renderers = this.transform.GetComponent<Renderer>();
+				//this.materials.Clear();
+				//this.materials.AddRange(this.renderers.sharedMaterials);
+				//this.materials.Add(outline);
+				//this.renderers.materials = this.materials.ToArray();
 			}
 		}
 
+		////bOnOff: true이면 ON, false이면 OFF
+		//public virtual void OutLine(bool bOnOff)
+		//{
+		//	this.materials.Clear();
+		//	this.materials.AddRange(this.renderers.sharedMaterials);
+		//	if (true == bOnOff)		this.materials.Add(outline);
+		//	else					this.materials.Remove(outline);
+		//	this.renderers.materials = this.materials.ToArray();
+		//}
 
 		//public void ClearInternalStorage()
 		//{
@@ -148,7 +160,7 @@ namespace FactoryFramework
 
 		public override bool AssignRecipe(ItemBase itembase)
 		{
-			if (null == itembase)
+			if (null == itembase || null == itembase.cost)
 			{
 				Debug.LogError("Fail: AssignRecipe is null");
 				return false;
@@ -159,11 +171,13 @@ namespace FactoryFramework
 
 			//등록
 			this._recipe = itembase;
+
 			//input
 			foreach(BuildCostItem cost in this._recipe.cost.items)
 				INPUT.Add(cost.itemid, 0);
 			//output
 			OUTPUT._slots[0]._itemid = this._recipe.id;
+			OUTPUT._slots[0]._amount = 0;
 			return true;
 		}
 

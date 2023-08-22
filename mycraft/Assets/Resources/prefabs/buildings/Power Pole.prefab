@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2440922077185026556}
   - component: {fileID: -3526505257069958460}
   - component: {fileID: 6978485862556255677}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Power Pole
   m_TagString: Building
   m_Icon: {fileID: 0}

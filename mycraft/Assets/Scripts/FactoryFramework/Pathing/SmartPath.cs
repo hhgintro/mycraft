@@ -271,7 +271,7 @@ namespace FactoryFramework
         {
             var (sub, per) = GetSubPath(pathPercent);
 
-            if (sub == null)
+            if (sub == null || float.IsNaN(per))
                 return Quaternion.identity; //bad TODO
 
             return sub.GetRotationAtPoint(per);

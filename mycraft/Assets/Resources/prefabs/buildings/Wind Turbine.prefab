@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: -792405624081315097}
   - component: {fileID: 8584995764755872275}
   - component: {fileID: 6091911592129032689}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Wind Turbine
   m_TagString: Building
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 8430930970472523333}
   - component: {fileID: 2068132982607898924}
   - component: {fileID: 3850023560167541920}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Wind Turbine Fan
   m_TagString: Untagged
   m_Icon: {fileID: 0}

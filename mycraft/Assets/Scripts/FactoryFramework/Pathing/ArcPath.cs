@@ -187,7 +187,7 @@ namespace FactoryFramework
         }
         public Quaternion GetRotationAtPoint(float pathPercent)
         {
-            return Quaternion.LookRotation(GetDirectionAtPoint(pathPercent), GetUpAtPoint(pathPercent));
+			return Quaternion.LookRotation(GetDirectionAtPoint(pathPercent), GetUpAtPoint(pathPercent));
         }
     }
 }

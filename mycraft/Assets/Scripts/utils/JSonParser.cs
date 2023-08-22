@@ -18,7 +18,7 @@ namespace MyCraft
         {
             try
             {
-                //this.json = JsonMapper.ToObject(File.ReadAllText(Application.streamingAssetsPath + "/skills.json"));
+				//this.json = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/skills.json"));
                 this.json = JsonMapper.ToObject(File.ReadAllText(filename));
                 ConstructDatabase();
             }catch(Exception e)
