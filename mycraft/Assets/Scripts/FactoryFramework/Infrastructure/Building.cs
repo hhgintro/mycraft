@@ -1,4 +1,4 @@
-using MyCraft;
+//using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -70,7 +70,7 @@ namespace FactoryFramework
 		{
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
-				List<BuildingSlot> slots = this._panels[p]._slots;
+				List<MyCraft.BuildingSlot> slots = this._panels[p]._slots;
 				if (null == slots) continue;
 
 				for (int i = 0; i < slots.Count; ++i)
@@ -93,7 +93,7 @@ namespace FactoryFramework
 
 		//socket에 의한 위치보정
 		public virtual bool LocationCorrectForSocket(RaycastHit hit, ref Vector3 groundPos, ref Vector3 groundDir) { return false; }
-		public virtual bool AssignRecipe(ItemBase itembase) { return false; }
+		public virtual bool AssignRecipe(MyCraft.ItemBase itembase) { return false; }
 		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }
 		public virtual void OnClicked() { }
 		public virtual void SetInven(MyCraft.InvenBase inven)
@@ -209,6 +209,8 @@ namespace FactoryFramework
 		//bOnOff: true이면 ON, false이면 OFF
 		public virtual void OutLine(bool bOnOff)
 		{
+			if(null == this.renderers) return;
+
 			this.materials.Clear();
 			this.materials.AddRange(this.renderers.sharedMaterials);
 			if (true == bOnOff) this.materials.Add(outline);
@@ -234,12 +236,12 @@ namespace FactoryFramework
 				//writer.Write(this._panels[p]._slot);
 
 				//임시 List<> 에 저장
-				List<BuildingSlot> items = new List<BuildingSlot>();
+				List<MyCraft.BuildingSlot> items = new List<MyCraft.BuildingSlot>();
 				for (int s = 0; s < this._panels[p]._slots.Count; ++s)
 				{
 					if (this._panels[p]._slots[s]._itemid <= 0) continue;
 					if (this._panels[p]._slots[s]._amount <= 0) continue;
-					items.Add(new BuildingSlot(0, s) { _panel = 0, _slot = s, _itemid = this._panels[p]._slots[s]._itemid, _amount = this._panels[p]._slots[s]._amount });
+					items.Add(new MyCraft.BuildingSlot(0, s) { _panel = 0, _slot = s, _itemid = this._panels[p]._slots[s]._itemid, _amount = this._panels[p]._slots[s]._amount });
 				}
 
 				//2. item count

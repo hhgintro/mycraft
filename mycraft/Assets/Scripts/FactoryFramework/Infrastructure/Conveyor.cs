@@ -11,7 +11,7 @@ using Unity.Burst;
 using Unity.Mathematics;
 using Unity.Collections;
 using UnityEngine.Windows;
-using MyCraft;
+//using MyCraft;
 using UnityEngine.UIElements;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -425,7 +425,7 @@ namespace FactoryFramework
 		//    if (items.Count == 0) return false;
 		//    return items[0].position == Length;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			//if (filter != null) Debug.LogWarning("Conveyor Belt Does not Implement Item Filter Output");
 			if (items.Count == 0) return false;
@@ -437,7 +437,7 @@ namespace FactoryFramework
 		//    if (items[0].position < Length) return null;
 		//    return items[0].item;
 		//}
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
 		{
 			if (items.Count == 0) return 0;
 			if (items[0]._position < Length) return 0;
@@ -461,9 +461,9 @@ namespace FactoryFramework
 		//    _capacity += 1;
 		//    return firstItem.item;
 		//}
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
-			if (!CanGiveOutput())
+			if (!CanGiveOutput(cs))
 				Debug.LogError($"Belt is trying to GiveOutput when it is unable to.");
 			//if (filter != null) Debug.LogWarning("Conveyor Belt Does not Implement Item Filter Output");
 

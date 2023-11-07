@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using MyCraft;
+//using MyCraft;
 using UnityEngine.Windows;
 
 namespace FactoryFramework
@@ -27,15 +27,15 @@ namespace FactoryFramework
 		{
 			if (0 == base._panels.Count)
 			{
-				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((FurnaceItemBase)base._itembase)._furnace.inputs));//input
-				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((FurnaceItemBase)base._itembase)._furnace.fuels));//fuel
-				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((FurnaceItemBase)base._itembase)._furnace.outputs));//output
+				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.FurnaceItemBase)base._itembase)._furnace.inputs));//input
+				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuels));//fuel
+				base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.FurnaceItemBase)base._itembase)._furnace.outputs));//output
 			}
 
 			if (0 == base._progresses.Count)
 			{
-				base._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
-				base._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)1, 10f, true));//progress-fuel
+				base._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
+				base._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)1, 10f, true));//progress-fuel
 			}
 			base.Init();
 		}
@@ -54,14 +54,14 @@ namespace FactoryFramework
 
 		public override void OnClicked()
 		{
-			Managers.Game.ForgeInvens.LinkInven(this, base._panels, this._progresses, false);
+			MyCraft.Managers.Game.ForgeInvens.LinkInven(this, base._panels, this._progresses, false);
 			//active
-			Managers.Game.Inventories.gameObject.SetActive(true);
-			Managers.Game.ForgeInvens.gameObject.SetActive(true);
-			Managers.Game.SkillInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
+			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.SkillInvens.gameObject.SetActive(true);
 			//de-active
-			Managers.Game.ChestInvens.gameObject.SetActive(false);
-			Managers.Game.FactoryInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 		}
 
 		public override void SetItem(int panel, int slot, int itemid, int amount)
@@ -85,7 +85,7 @@ namespace FactoryFramework
 
 				case 1:
 					{
-						List<FurnaceFuelItem> fuels = ((FurnaceItemBase)base._itembase)._furnace.fuel;
+						List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 						for (int i = 0; i < fuels.Count; ++i)
 							if (itemid == fuels[i].itemid) return true;    //넣을 수 있다.
 					} break;
@@ -223,7 +223,7 @@ namespace FactoryFramework
 		{
 			//output 설정(소모되는 아이템(intput.Key)에 따라 결정된다.)
 			//재련할 수 있는 아이템이면...recipe을 설정해 줍니다.
-			List<FurnaceInputItem> inputs = ((FurnaceItemBase)base._itembase)._furnace.input;
+			List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
 			for (int i = 0; i < inputs.Count; ++i)
 			{
 				if (INPUT._slots[0]._itemid == inputs[i].itemid)
@@ -250,7 +250,7 @@ namespace FactoryFramework
 		private void ConsumeFuels()
 		{
 			//소모하는 자원에 따라 bunning-time을 설정합니다.
-			List<FurnaceFuelItem> fuels = ((FurnaceItemBase)base._itembase)._furnace.fuel;
+			List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 			for (int i = 0; i < fuels.Count; ++i)
 			{
 				if (FUEL._slots[0]._itemid == fuels[i].itemid)
@@ -295,7 +295,7 @@ namespace FactoryFramework
 		}
 
 		#region GIVE_OUTPUT
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			if (0 == OUTPUT._slots[0]._itemid || OUTPUT._slots[0]._amount <= 0) return false;
 			return true;
@@ -309,12 +309,12 @@ namespace FactoryFramework
 		//    }
 		//    return null;
 		//}
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
 		{
 			return OUTPUT._slots[0]._itemid;
 		}
 
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
 			//아이템 차감
 			int output = OUTPUT._slots[0]._itemid;
@@ -401,7 +401,7 @@ namespace FactoryFramework
 			//투입이 가능한지 체크
 			if (0 == INPUT._slots[0]._itemid)
 			{
-				List<FurnaceInputItem> inputs = ((FurnaceItemBase)base._itembase)._furnace.input;
+				List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
 				for (int i = 0; i < inputs.Count; ++i)
 					if (itemid == inputs[i].itemid) return true;    //투입가능
 				return false;
@@ -420,7 +420,7 @@ namespace FactoryFramework
 			//투입이 가능한지 체크
 			if (0 == FUEL._slots[0]._itemid)
 			{
-				List<FurnaceFuelItem> fuels = ((FurnaceItemBase)base._itembase)._furnace.fuel;
+				List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 				for (int i = 0; i < fuels.Count; ++i)
 					if (itemid == fuels[i].itemid) return true;    //투입가능
 				return false;

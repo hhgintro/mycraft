@@ -43,52 +43,21 @@ namespace MyCraft
             //Debug.Log("Skill item clicked");
             ItemBase itembase = (ItemBase)base.database;
             if(false == this.owner.AssignRecipe(itembase))
-            {
-                //HG_TODO : block에서 생산함 output설정하지 않을 경우에는
-                //          자체스킬로 인벤에 넣어주는 기능
-                //..
-
-                CreateItem();
-                //for (int i = 0; i < skillbase.cost.items.Count; ++i)
-                //{
-                //    SkillCostItem costitem = skillbase.cost.items[i];
-
-
-                //    //인벤 & quick에서 필요한 아이템 존재여부 체크
-
-                //    //필요한 아이템 삭제
-
-                //}
-
-                ////아이템 생성(quick 또는 인벤에 넣어준다.)
-                //for (int i=0; i<skillbase.outputs.Count; ++i)
-                //    GameManager.AddItem(skillbase.outputs[i].itemid, skillbase.outputs[i].amount);
-
-
-            }
-            //if(null != this.owner._block)
-            //{
-
-            //    return;
-            //}
-            //base.owner.Reset();
+                CreateItem(1);   //n배 만큼생성
         }
 
         protected override void OnMouseRButtonDown()
         {
             base.OnMouseRButtonDown();
-
-            for(int i=0; i<5; ++i)
-            {
-                if (false == CreateItem())
-                    break;
-                //Debug.Log("skill create item: " + (i + 1));
-            }
+            CreateItem(5);  //n배 만큼생성
         }
 
-        //cost아이템이 부족하면 false를 리턴합니다.
-        private bool CreateItem()
+		//cost아이템이 부족하면 false를 리턴합니다.
+		//LOOP:수치만큼 생성한다.( = cost.output * LOOP )
+		private bool CreateItem(int LOOP)
         {
+            if(LOOP <= 0) return false;
+
             ItemBase itembase = (ItemBase)base.database;
             //생산시설이 필요한 경우에는 직접 생산할 수 없습니다.
             if (false == itembase.DIY)
@@ -99,13 +68,14 @@ namespace MyCraft
                 return false;
             }
 
+            //재료아이템 존재여부 체크
             for (int i = 0; i < itembase.cost.items.Count; ++i)
             {
                 BuildCostItem costitem = itembase.cost.items[i];
                 //인벤 & quick에서 필요한 아이템 존재여부 체크
                 int amount = Managers.Game.Inventories.GetAmount(costitem.itemid);
                 amount += Managers.Game.QuickInvens.GetAmount(costitem.itemid);
-                if (amount < costitem.amount)
+                if (amount < costitem.amount * LOOP)
                 {
                     //Debug.Log("need more item amount: " + amount + "/" + costitem.amount);
                     return false;
@@ -113,11 +83,12 @@ namespace MyCraft
                 //..
             }
 
+            //재료아이템 삭제
             for (int i = 0; i < itembase.cost.items.Count; ++i)
             {
                 BuildCostItem costitem = itembase.cost.items[i];
                 //필요한 아이템 삭제
-                int amount = costitem.amount;
+                int amount = costitem.amount * LOOP;
                 amount = Managers.Game.Inventories.SubItem(costitem.itemid, amount);
                 if (0 < amount)
                     amount = Managers.Game.QuickInvens.SubItem(costitem.itemid, amount);
@@ -125,8 +96,9 @@ namespace MyCraft
             }
 
             //아이템 생성(quick 또는 인벤에 넣어준다.)
-            Managers.Game.AddItem(itembase.id, itembase.cost.outputs);
-            return true;
+            //Managers.Game.AddItem(itembase.id, itembase.cost.outputs * LOOP);
+            Managers.Game.AddItem(itembase.cost.outputs[0].itemid, itembase.cost.outputs[0].amount * LOOP);
+			return true;
         }
     }
 

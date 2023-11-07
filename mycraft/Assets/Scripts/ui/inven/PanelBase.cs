@@ -40,6 +40,7 @@ namespace MyCraft
 		//slot 개수를 설정합니다.
 		public virtual void SetSlots(int slot)
 		{
+			//this.Clear();
 			this._slot = slot;
 			//for (int i = 0; i < amount; ++i)
 			//    //this._slots.Add(new BlockSlot(panel));
@@ -169,12 +170,6 @@ namespace MyCraft
 			base.SetSlots(slot);
 			for (int i = 0; i < slot; ++i)
 				this.CreateSlot();
-
-			if(3 == base._slots.Count)
-			{
-				int a = 0;
-				a = 0;
-			}
 		}
 
 		public virtual Slot CreateSlot()
@@ -187,9 +182,9 @@ namespace MyCraft
 			Slot s = UnityEngine.Object.Instantiate(go, this._parent).GetComponent<Slot>();
 
 			s._panel    = this._panel;
-			s._slot     = _slots.Count;
+			s._slot     = base._slots.Count;
 			s.owner     = this._inven;
-			_slots.Add(s);
+			base._slots.Add(s);
 			return s;
 		}
 

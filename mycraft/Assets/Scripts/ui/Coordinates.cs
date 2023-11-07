@@ -1,4 +1,4 @@
-using MyCraft;
+//using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +13,7 @@ public class Coordinates : MonoBehaviour
     {
         _text = this.transform.GetChild(0).GetComponent<Text>();
 
-        _coordinate = Managers.Locale.GetLocale("coordinates", "coordinate");
+        _coordinate = MyCraft.Managers.Locale.GetLocale("coordinates", "coordinate");
     }
 
     public void DrawCoordinate(Vector3 point)

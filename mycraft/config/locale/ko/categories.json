@@ -10,7 +10,7 @@
       {"items": [{"itemid":1400},{"itemid":1410},{"itemid":1420}]},
       {"items": [{"itemid":2040}]}
     ],
-    "icon": "logistics"
+    "icon": "Textures/ui/tech/logistics"
   },
 
   {
@@ -20,9 +20,10 @@
     "desc": "스킬 1입니다.",
     "panels": [
       {"items": [{"itemid":1040},{"itemid":1050},{"itemid":1060}]},
-      {"items": [{"itemid":1070}]}
+      {"items": [{"itemid":1070},{"itemid":1080}]},
+      {"items": [{"itemid":1065}]}
     ],
-    "icon": "production"
+    "icon": "Textures/ui/tech/production"
   },
 
   {
@@ -31,11 +32,12 @@
     "title": "중간 생산품",
     "desc": "스킬 2입니다.",
     "panels": [
+      {"items": [{"itemid":101}]},
       {"items": [{"itemid":2010},{"itemid":2011},{"itemid":2012},{"itemid":2013}]},
       {"items": [{"itemid":2020},{"itemid":2021}]},
       {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]}
     ],
-    "icon": "intermediate-products"
+    "icon": "Textures/ui/tech/intermediate-products"
   },
 
   {
@@ -47,7 +49,7 @@
       {"items": [{"itemid":900}]},
       {"items": [{"itemid":2041}]}
     ],
-    "icon": "military"
+    "icon": "Textures/ui/tech/military"
   }
 
 ]

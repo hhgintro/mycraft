@@ -43,7 +43,6 @@ namespace MyCraft
 
 			this.DebugColor     = Color.green;
 		}
-		public override string _iconPath() { return "Textures/ui/"; }
 
 		void LoadLearn(JsonData json)
 		{
@@ -64,7 +63,7 @@ namespace MyCraft
 			if (false == json.Keys.Contains("cost"))
 				return;
 
-			this.cost = new BuildCost(json["cost"]);
+			this.cost = new BuildCost(base.id, json["cost"]);
 		}
 		void LoadState(JsonData json)
 		{
@@ -142,20 +141,51 @@ namespace MyCraft
 		}
 	}//..class Item
 
+	public class BuildCostOutput
+	{
+		public int itemid = 0;
+		public int amount = 0;
+
+		public BuildCostOutput(int id, int cnt)
+		{
+			this.itemid = id;
+			this.amount = cnt;
+		}
+	}
+
 	public class BuildCost
 	{
 		public float time;  //만들때 소요되는 시간
 		public List<BuildCostItem> items = new List<BuildCostItem>();
-		public int outputs;        //만들어지는 생산품의 개수
+		public List<BuildCostOutput> outputs = new List<BuildCostOutput>();	//만들어지는 생산품의 개수
+		//public int outputs;
 
-		public BuildCost(JsonData json)
+		public BuildCost(int itemid, JsonData json)
 		{
 			this.time = float.Parse(json["time"].ToString());
 
 			for (int i = 0; i < json["items"].Count; ++i)
 				this.items.Add(new BuildCostItem(json["items"][i]));
 
-			this.outputs = (int)json["outputs"];
+			LoadOutputs(itemid, json);
+			//outputs = (int)json["outputs"];
+		}
+
+		void LoadOutputs(int itemid, JsonData json)
+		{
+			if (false == json.Keys.Contains("outputs"))
+				return;
+
+			//생산품 개수만 표기한 경우(자신의 itemid를 생산한다.)
+			if (false == json["outputs"].IsArray)
+			{
+				outputs.Add(new BuildCostOutput(itemid, (int)json["outputs"]));
+				return;
+			}
+
+			//생산품을 지정한 경우(배열일때 - 정유공장)
+			for (int i = 0; i < json["outputs"].Count; ++i)
+				outputs.Add(new BuildCostOutput((int)json["outputs"][i]["itemid"], (int)json["outputs"][i]["amount"]));
 		}
 	}
 
@@ -256,15 +286,6 @@ namespace MyCraft
 		}        
 	}
 
-	public class WaterPlantItemBase : ItemBase
-	{
-		public float perSecond; //(단위:s)초당채굴량
 
-		public WaterPlantItemBase(JsonData json) : base(json)
-		{
-			this.perSecond = float.Parse(json["perSecond"].ToString());
-		}
-
-	}
 
 }//..namespace MyCraft

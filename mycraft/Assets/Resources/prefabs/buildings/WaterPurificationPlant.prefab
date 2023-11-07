@@ -9,8 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7307805842137174652}
-  - component: {fileID: 8224716130954592593}
-  - component: {fileID: 1330647238916331293}
+  - component: {fileID: 7238580745534762699}
+  - component: {fileID: 7438533023146189416}
+  - component: {fileID: 6441829356522074146}
+  - component: {fileID: -6476915651193693975}
+  - component: {fileID: 4698860225324831363}
   m_Layer: 0
   m_Name: WaterPurificationPlant
   m_TagString: Untagged
@@ -25,31 +28,159 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 23607234234381543}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 9124387370199691191}
+  - {fileID: 7019814435176029782}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7238580745534762699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23607234234381543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce9799ca33c18048b98f807416aa4d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnBuildingDestroyed:
+    m_PersistentCalls:
+      m_Calls: []
+  inputSockets: []
+  outputSockets:
+  - {fileID: 4423449536139032211}
+  _resourcesPerSecond: 1
+--- !u!65 &7438533023146189416
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23607234234381543}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6.5, y: 3, z: 6}
+  m_Center: {x: 0.5, y: 0.2, z: -0.35}
+--- !u!114 &6441829356522074146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23607234234381543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db863d63dcc3e014fa92fd17b09548a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourcesPath: prefabs/buildings/WaterPurificationPlant
+--- !u!114 &-6476915651193693975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23607234234381543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc615501dd0e548428dbda0b216b4ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 0}
+  basePowerDraw: 0
+  connectionPoint: {x: -1, y: 3, z: 0}
+  useConnectionRadius: 0
+  connectionRadius: 0
+  radiusVisual: {fileID: 0}
+  OnDisconnect:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRemoveConnection:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAddConnection:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4698860225324831363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23607234234381543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c2e5580886343041a5e74b1712b0682, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsUsing: 0
+--- !u!1 &669369531645915688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9124387370199691191}
+  - component: {fileID: 5915072820431531782}
+  - component: {fileID: 1606246966448083007}
+  - component: {fileID: 8548976552848169644}
+  m_Layer: 0
+  m_Name: WaterPurificationPlant
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9124387370199691191
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669369531645915688}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.28, z: -0}
   m_LocalScale: {x: 128, y: 128, z: 128}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1080149726765880841}
-  - {fileID: 7019814435176029782}
-  m_Father: {fileID: 0}
+  - {fileID: 6413819636698050386}
+  m_Father: {fileID: 7307805842137174652}
   m_RootOrder: -1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8224716130954592593
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!33 &5915072820431531782
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23607234234381543}
+  m_GameObject: {fileID: 669369531645915688}
   m_Mesh: {fileID: 5542413560607618145, guid: 0da344f8fef0f1f4eb7651b6509f4be4, type: 3}
---- !u!23 &1330647238916331293
+--- !u!23 &1606246966448083007
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 23607234234381543}
+  m_GameObject: {fileID: 669369531645915688}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -88,7 +219,28 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &5691972419764863365
+--- !u!65 &8548976552848169644
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669369531645915688}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.05353125, y: 0.04675583, z: 0.024971392}
+  m_Center: {x: 0.005340933, y: 0.0027615156, z: 0.002214404}
+--- !u!1 &2611763957058299669
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,9 +248,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1080149726765880841}
-  - component: {fileID: 132604583794280828}
-  - component: {fileID: 9047171768878329516}
+  - component: {fileID: 6413819636698050386}
+  - component: {fileID: 1758675931813561894}
+  - component: {fileID: 7222032873039664648}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -106,36 +258,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1080149726765880841
+--- !u!4 &6413819636698050386
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5691972419764863365}
+  m_GameObject: {fileID: 2611763957058299669}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.0037781405, y: 0.0045987875, z: -0.009998598}
   m_LocalScale: {x: 2.5210676, y: 2.5210676, z: 2.5210676}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7307805842137174652}
+  m_Father: {fileID: 9124387370199691191}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &132604583794280828
+--- !u!33 &1758675931813561894
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5691972419764863365}
+  m_GameObject: {fileID: 2611763957058299669}
   m_Mesh: {fileID: -462981019419857548, guid: 0da344f8fef0f1f4eb7651b6509f4be4, type: 3}
---- !u!23 &9047171768878329516
+--- !u!23 &7222032873039664648
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5691972419764863365}
+  m_GameObject: {fileID: 2611763957058299669}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -189,43 +341,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.0077813533
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.0077813524
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.0077813524
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01731
+      value: -2.7
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00058
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.01012
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.5
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -237,13 +389,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
+      value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 8090556926264317256, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
+      propertyPath: _logisticComponent
+      value: 
+      objectReference: {fileID: 7238580745534762699}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
+--- !u!114 &4423449536139032211 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8090556926264317256, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}
+  m_PrefabInstance: {fileID: 5558657184031663067}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48a51ab4f268c4d4d813d16c8ae09f24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7019814435176029782 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3192829258270702989, guid: 0b316c130e7480a43b8fe5f923b85690, type: 3}

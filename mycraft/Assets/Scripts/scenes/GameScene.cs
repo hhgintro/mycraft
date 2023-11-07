@@ -40,6 +40,8 @@ namespace MyCraft
 			{
 				//FindObjectOfType<SerializeManager>().Load();
 				Managers.Game.Load();
+				Managers.Game.Inventories.AddItem(1080, 10);    //PumpJack
+				Managers.Game.Inventories.AddItem(1065, 10);    //Oil-Refinery
 			}
 			Application.runInBackground = true;
 		}
@@ -109,6 +111,9 @@ namespace MyCraft
 			Managers.Game.Inventories.AddItem(1100, 100);   //belt
 			Managers.Game.Inventories.AddItem(1100, 100);   //belt
 			Managers.Game.Inventories.AddItem(1100, 100);   //belt
+			Managers.Game.Inventories.AddItem(1070, 54);    //WaterPurificationPlant
+			Managers.Game.Inventories.AddItem(1080, 54);    //PumpJack
+			Managers.Game.Inventories.AddItem(1065, 10);    //Oil-Refinery
 
 		}
 

@@ -125,19 +125,16 @@ public class CableManagement : MonoBehaviour
         if (debugControls) Debug.Log($"Select Building {pgc.name}");
         MeshRenderer mr = pgc.GetComponent<MeshRenderer>();
         Material mat = mr.material;
-        if (mat.HasFloat("_Highlight"))
-            mat.SetFloat("_Highlight", 1);
+        if (mat.HasFloat("_Highlight")) mat.SetFloat("_Highlight", 1);
     }
 
     public void VisualDeselectBuilding(PowerGridComponent pgc)
     {
         if (pgc == null) return;
-        if (debugControls) if (pgc == null) return;
         if (debugControls) Debug.Log($"Deselect Building {pgc.name}");
         MeshRenderer mr = pgc.GetComponent<MeshRenderer>();
         Material mat = mr.material;
-        if (mat.HasFloat("_Highlight"))
-            mat.SetFloat("_Highlight", 0);
+        if (mat.HasFloat("_Highlight")) mat.SetFloat("_Highlight", 0);
     }
 
     private void OnGUI()

@@ -23,12 +23,12 @@ namespace MyCraft
 			this.type = json["type"].ToString();
 			this.Title = Managers.Locale.GetLocale("items", string.Format($"{this.id.ToString()}-title"));
 
-			this.icon = Managers.Resource.Load<Sprite>(_iconPath() + json["icon"].ToString());
+			this.icon = Managers.Resource.Load<Sprite>(json["icon"].ToString());
 
 			LoadPrefab(json);
 			LoadScaleOnBelt(json);
 		}
-		public abstract string _iconPath();
+		
 		void LoadPrefab(JsonData json)
 		{
 			if (false == json.Keys.Contains("prefab"))

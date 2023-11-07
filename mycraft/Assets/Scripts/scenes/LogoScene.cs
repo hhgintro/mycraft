@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace MyCraft
 {
@@ -10,7 +11,8 @@ namespace MyCraft
     {
         [SerializeField] float load_delay;
 
-        void Awake()
+
+		void Awake()
         {
             Init();
         }
@@ -31,9 +33,9 @@ namespace MyCraft
             base.Init();
             SceneType = Define.Scene.Logo;
 
-            //load ini
-            Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.dataPath + "/../config/locale/");
-        }
+			//load ini
+			Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.dataPath + "/../config/locale/");
+    	}
 
         public override void Clear()
         {

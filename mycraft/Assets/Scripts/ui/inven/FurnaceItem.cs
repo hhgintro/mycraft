@@ -9,11 +9,9 @@ namespace MyCraft
         public int fuels;       //fuels의 slot 최대개수
         public int outputs;     //outputs의 slot 최대개수
 
-        //public FurnaceInput input;// = new FurnaceInput();
-        //public FurnaceFuel fuel;// = new List<FurnaceFuel>();
-        //재련할 아이템 리스트
+        //재료아이템(output:결과물)
         public List<FurnaceInputItem> input = new List<FurnaceInputItem>();
-        //연료로 사용될 아이템 리스트
+        //연료아이템
         public List<FurnaceFuelItem> fuel = new List<FurnaceFuelItem>();
 
         public FurnaceItem(JsonData json)

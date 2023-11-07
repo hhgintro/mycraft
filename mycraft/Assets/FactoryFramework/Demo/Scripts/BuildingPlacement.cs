@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using FactoryFramework;
-using MyCraft;
+//using MyCraft;
 using UnityEngine.EventSystems;
 using Unity.Burst.CompilerServices;
 
@@ -57,11 +57,11 @@ public class BuildingPlacement : IPlacement
 
 	private void Start()
 	{
-		Managers.Input.KeyAction -= OnKeyDown_BuildingPlacement;
-		Managers.Input.KeyAction += OnKeyDown_BuildingPlacement;
+		MyCraft.Managers.Input.KeyAction -= OnKeyDown_BuildingPlacement;
+		MyCraft.Managers.Input.KeyAction += OnKeyDown_BuildingPlacement;
 
-		Managers.Input.MouseAction -= OnMouseEvent;
-		Managers.Input.MouseAction += OnMouseEvent;
+		MyCraft.Managers.Input.MouseAction -= OnMouseEvent;
+		MyCraft.Managers.Input.MouseAction += OnMouseEvent;
 	}
 	private void OnEnable()
 	{
@@ -166,10 +166,11 @@ public class BuildingPlacement : IPlacement
 		{
 			//자신은...무시
 			if (current == hit.collider.gameObject) continue;
+			if (false == current.TryGetComponent(out Building socket)) continue;
 
 			//============================================
 			//	위치보정(socket에 의한)
-			if(true == current.GetComponent<Building>().LocationCorrectForSocket(hit, ref groundPos, ref groundDir))
+			if (true == current.GetComponent<Building>().LocationCorrectForSocket(hit, ref groundPos, ref groundDir))
 				break;
 			//if (current.transform.tag == "Safe-Footing")
 			//{
@@ -246,7 +247,7 @@ public class BuildingPlacement : IPlacement
 		{
 			TryChangeState(State.None);
 			//손에 들고있는 아이템의 수량이 남아 있다면, prefab을 생성해 줍니다.
-			Managers.Game.PlaceBuilding(InvenBase.choiced_item);
+			MyCraft.Managers.Game.PlaceBuilding(MyCraft.InvenBase.choiced_item);
 			finishPlacementEvent?.Raise();
 		}
 	}
@@ -422,10 +423,10 @@ public class BuildingPlacement : IPlacement
 				{
 					if (hit.collider.TryGetComponent<Terrain>(out Terrain terrain))
 					{
-						if (Managers.Game.DestoryProcess.gameObject.activeSelf)
+						if (MyCraft.Managers.Game.DestoryProcess.gameObject.activeSelf)
 						{
-							Managers.Game.DestoryProcess.SetProgress(this, null);
-							Managers.Game.DestoryProcess.gameObject.SetActive(false);
+							MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
+							MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
 						}
 						break;
 					}
@@ -433,8 +434,8 @@ public class BuildingPlacement : IPlacement
 					if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
 					{
 						//DestroyBuilding(building.gameObject);
-						Managers.Game.DestoryProcess.SetProgress(this, building.gameObject);
-						Managers.Game.DestoryProcess.gameObject.SetActive(true);
+						MyCraft.Managers.Game.DestoryProcess.SetProgress(this, building.gameObject);
+						MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(true);
 						break;
 					}
 
@@ -449,10 +450,10 @@ public class BuildingPlacement : IPlacement
 
 			case Define.MouseEvent.R_Click:
 			{
-				if (Managers.Game.DestoryProcess.gameObject.activeSelf)
+				if (MyCraft.Managers.Game.DestoryProcess.gameObject.activeSelf)
 				{
-					Managers.Game.DestoryProcess.SetProgress(this, null);
-					Managers.Game.DestoryProcess.gameObject.SetActive(false);
+					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
+					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
 				}
 			} break;
 		}//..switch (evt)

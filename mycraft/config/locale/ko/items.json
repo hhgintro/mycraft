@@ -3,14 +3,14 @@
     "id": 0,
     "type": "ItemBase",
     "stackable": 1,
-    "icon": "reset"
+    "icon": "Textures/ui/reset"
   },
 
   {
     "id": 1,
     "type": "ItemBase",
     "stackable": 1,
-    "icon": "clock-icon"
+    "icon": "Textures/ui/clock-icon"
   },
 
   {
@@ -18,7 +18,7 @@
     "type": "ItemBase",
     "state":{"power":21,"defence":12,"vitality":50},
     "stackable": 100,
-    "icon": "raw-wood",
+    "icon": "Textures/ui/raw-wood",
     "prefab": "mineral/_Raw-Wood"
   },
 
@@ -27,7 +27,7 @@
     "type": "ItemBase",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "stone",
+    "icon": "Textures/ui/stone",
     "prefab": "mineral/_Stone"
   },
 
@@ -36,7 +36,7 @@
     "type": "ItemBase",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "coal",
+    "icon": "Textures/ui/coal",
     "prefab": "mineral/Raw Coal"
   },
 
@@ -45,7 +45,7 @@
     "type": "ItemBase",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "iron-ore",
+    "icon": "Textures/ui/iron-ore",
     "prefab": "mineral/Raw Mineral Iron"
   },
 
@@ -54,7 +54,7 @@
     "type": "ItemBase",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "copper-ore",
+    "icon": "Textures/ui/copper-ore",
     "prefab": "mineral/Raw Mineral Copper"
   },
 
@@ -63,8 +63,100 @@
     "type": "ItemBase",
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "crude-oil"
-},
+    "icon": "Textures/ui/crude-oil"
+  },
+
+  {
+    "id": 101,
+    "type": "ItemBase",
+    "learn": true,
+    "DIY": false,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 310,"amount": 2}
+      ],
+      "outputs": [
+        {"itemid": 320,"amount": 1},
+        {"itemid": 330,"amount": 1},
+        {"itemid": 340,"amount": 1}
+      ]
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/basic-oil-processing"
+  },
+
+  {
+    "id": 300,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/water",
+    "prefab": "mineral/Metal Barrels/WaterBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 310,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/crude-oil-barrel",
+    "prefab": "mineral/Metal Barrels/BlackBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 320,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/petroleum-gas",
+    "prefab": "mineral/Metal Barrels/BlueBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 330,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/light-oil",
+    "prefab": "mineral/Metal Barrels/LGreenDirtyBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 340,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/heavy-oil",
+    "prefab": "mineral/Metal Barrels/RedBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 350,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/lubricant",
+    "prefab": "mineral/Metal Barrels/GreenBarrel",
+    "scaleOnBelt": 0.5
+  },
+
+  {
+    "id": 360,
+    "type": "ItemBase",
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/sulfuric-acid",
+    "prefab": "mineral/Metal Barrels/YellowBarrel",
+    "scaleOnBelt": 0.5
+  },
+
 
 
 
@@ -83,7 +175,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "pistol",
+    "icon": "Textures/ui/pistol",
     "prefab": "mineral/_Pistol"
   },
 
@@ -104,7 +196,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "storage_icon",
+    "icon": "Textures/ui/storage_icon",
     "prefab": "buildings/Storage Building",
     "scaleOnBelt": 0.1
   },
@@ -125,7 +217,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "robotic-arm",
+    "icon": "Textures/ui/robotic-arm",
     "prefab": "buildings/_Inserter"
   },
 
@@ -145,7 +237,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "long-handed-inserter",
+    "icon": "Textures/ui/long-handed-inserter",
     "prefab": "buildings/_Inserter 1"
   },
 
@@ -164,7 +256,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "miner_icon",
+    "icon": "Textures/ui/miner_icon",
     "prefab": "buildings/Drill Building"
   },
 
@@ -196,7 +288,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "forge_icon",
+    "icon": "Textures/ui/forge_icon",
     "prefab": "buildings/Forge"
   },
 
@@ -220,13 +312,37 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "gearfactory_icon",
+    "icon": "Textures/ui/gearfactory_icon",
     "prefab": "buildings/Gear Factory"
   },
 
   {
+    "id": 1065,
+    "type": "MachineItemBase",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2030,"amount": 2},
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "assembling": {
+      "inputs": 4,
+      "chips": 4,
+      "outputs": [ 2, 9 ]
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/oil-refinery",
+    "prefab": "buildings/Oil-Refinery"
+  },
+
+  {
     "id": 1070,
-    "type": "WaterPlantItemBase",
+    "type": "DrillItemBase",
     "perSecond": 1,
     "learn": true,
     "cost": {
@@ -239,11 +355,30 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "mineral-water-plant",
-    "prefab": "buildings/WaterPurificationPlant"
+    "icon": "Textures/ui/mineral-water-plant",
+    "prefab": "buildings/WaterPurificationPlant",
+    "scaleOnBelt": 20
   },
 
-
+  {
+    "id": 1080,
+    "type": "DrillItemBase",
+    "perSecond": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/pumpjack",
+    "prefab": "buildings/PumpJack",
+    "scaleOnBelt": 20
+  },
 
 
   {
@@ -261,7 +396,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "Conveyor Icon",
+    "icon": "Textures/ui/Conveyor Icon",
     "prefab": "buildings/Conveyor"
   },
 
@@ -285,7 +420,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "splitter_icon",
+    "icon": "Textures/ui/splitter_icon",
     "prefab": "buildings/Splitter"
   },
 
@@ -304,7 +439,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "merger_icon",
+    "icon": "Textures/ui/merger_icon",
     "prefab": "buildings/Merger"
   },
 
@@ -322,7 +457,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "pipe",
+    "icon": "Textures/ui/pipe",
     "prefab": "buildings/_Pipe"
   },
 
@@ -340,7 +475,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "safe-footing",
+    "icon": "Textures/ui/safe-footing",
     "prefab": "buildings/Iron Floor",
     "scaleOnBelt": 0.4
   },
@@ -359,7 +494,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "ramp-way-dark",
+    "icon": "Textures/ui/ramp-way-dark",
     "prefab": "buildings/Iron Ramp Down",
     "scaleOnBelt": 0.2
   },
@@ -378,7 +513,7 @@
     },
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
-    "icon": "ramp-way-white",
+    "icon": "Textures/ui/ramp-way-white",
     "prefab": "buildings/Iron Ramp Up",
     "scaleOnBelt": 0.2
   },
@@ -400,7 +535,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "iron-plate",
+    "icon": "Textures/ui/iron-plate",
     "prefab": "mineral/Ingot Iron"
   },
 
@@ -417,7 +552,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "iron-gear-wheel",
+    "icon": "Textures/ui/iron-gear-wheel",
     "prefab": "mineral/Iron-Gear-Wheel"
   },
 
@@ -434,7 +569,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "iron-stick",
+    "icon": "Textures/ui/iron-stick",
     "prefab": "mineral/Iron-Stick"
   },
 
@@ -452,7 +587,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "steel-plate",
+    "icon": "Textures/ui/steel-plate",
     "prefab": "mineral/_Steel-Plate"
   },
 
@@ -470,7 +605,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "copper-plate",
+    "icon": "Textures/ui/copper-plate",
     "prefab": "mineral/Ingot Copper"
   },
 
@@ -487,7 +622,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "copper-cable",
+    "icon": "Textures/ui/copper-cable",
     "prefab": "mineral/Copper-Cable"
   },
 
@@ -506,7 +641,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "electronic-circuit",
+    "icon": "Textures/ui/electronic-circuit",
     "prefab": "mineral/Sci-Fi-Chip"
   },
 
@@ -523,7 +658,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "advanced-circuit",
+    "icon": "Textures/ui/advanced-circuit",
     "prefab": "mineral/_Advanced-Circuit"
   },
 
@@ -540,7 +675,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "processing-unit",
+    "icon": "Textures/ui/processing-unit",
     "prefab": "mineral/_Processing-Circuit"
   },
 
@@ -558,7 +693,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
         "stackable": 100,
-    "icon": "stone-brick",
+    "icon": "Textures/ui/stone-brick",
     "prefab": "mineral/_Stone-Brick"
   },
 
@@ -575,7 +710,7 @@
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
     "stackable": 100,
-    "icon": "stone-wall",
+    "icon": "Textures/ui/stone-wall",
     "prefab": "mineral/_Stone-Wall"
   }
 

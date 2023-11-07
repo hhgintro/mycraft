@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using FactoryFramework;
-using MyCraft;
+//using MyCraft;
 using UnityEngine.EventSystems;
 
 public class IPlacement : MonoBehaviour

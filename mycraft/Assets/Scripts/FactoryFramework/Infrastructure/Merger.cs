@@ -80,7 +80,7 @@ namespace FactoryFramework
 		//    }
 		//    return false;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			// check if the connected output is ready to accept more input
 			//if (!CanTakeInput(0)) return false;
@@ -91,7 +91,7 @@ namespace FactoryFramework
 			{
 				IOutput iout = GetInputConnection(i);
 				if (iout == null) continue;
-				if (iout.CanGiveOutput())
+				if (iout.CanGiveOutput(cs))
 					return true;
 			}
 			return false;
@@ -102,7 +102,7 @@ namespace FactoryFramework
 		//    IOutput iout = GetInputConnection(inputIndex);
 		//    return iout?.OutputType() ?? null;
 		//}
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
 		{
 			IOutput iout = GetInputConnection(inputIndex);
 			return iout?.OutputType() ?? 0;
@@ -119,7 +119,7 @@ namespace FactoryFramework
 		//{
 		//    throw new System.NotImplementedException("Splitters and Mergers have Special Handling");
 		//}
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
 			throw new System.NotImplementedException("Splitters and Mergers have Special Handling");
 		}

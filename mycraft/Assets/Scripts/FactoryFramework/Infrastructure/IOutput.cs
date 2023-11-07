@@ -11,9 +11,9 @@ namespace FactoryFramework
         //Item OutputType();
         //Item GiveOutput(Item filter = null);
         //bool CanGiveOutput(Item filter = null);
-        int OutputType();
-        int GiveOutput();
-        bool CanGiveOutput();
+        int OutputType(OutputSocket cs = null);
+        int GiveOutput(OutputSocket cs = null);
+        bool CanGiveOutput(OutputSocket cs = null);
         //..//HG[2023.06.09] Item -> MyCraft.ItemBase
     }
 }

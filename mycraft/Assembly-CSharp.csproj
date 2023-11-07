@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ui\inven\Tooltip.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PumpJack.cs" />
     <Compile Include="Assets\Scripts\ui\inven\ForgeInven.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Driller.cs" />
     <Compile Include="Assets\Scripts\ui\item\BaseComponent.cs" />
@@ -89,7 +90,6 @@
     <Compile Include="Assets\Scripts\managers\LocaleManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IOutput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshGenerator.cs" />
-    <Compile Include="Assets\Scripts\ui\inven\MachineInven.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeManager.cs" />
     <Compile Include="Assets\Scripts\ui\Coordinates.cs" />
     <Compile Include="Assets\Scripts\ui\inven\Slot.cs" />

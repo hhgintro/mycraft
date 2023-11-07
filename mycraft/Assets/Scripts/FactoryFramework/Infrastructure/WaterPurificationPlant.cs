@@ -26,26 +26,23 @@ namespace FactoryFramework
 
 		private void Start()
 		{
-			// use mesh to calculate bounds
-			Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
-			Vector3 center = (m != null) ? m.bounds.center : transform.position;
-			Vector3 size = (m != null) ? m.bounds.extents : Vector3.one;
-			foreach (Collider c in Physics.OverlapBox(transform.TransformPoint(center), size * 1.125f))
-			{
-				if (c.TryGetComponent(out Resource r))
-				{
-					//this.SetOutputResource(r.item);
+			//// use mesh to calculate bounds
+			//Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
+			//Vector3 center = (m != null) ? m.bounds.center : transform.position;
+			//Vector3 size = (m != null) ? m.bounds.extents : Vector3.one;
+			//foreach (Collider c in Physics.OverlapBox(transform.TransformPoint(center), size * 1.125f))
+			//{
+			//	if (c.TryGetComponent(out Resource r))
+			//	{
+			//		//this.SetOutputResource(r.item);
 
-					//채광할 수 있는 광물정보를 등록합니다.
-					if (0 == _outputs.Count) _outputs.Add(r.itemid, 0);
-					break;
-				}
-			}
+			//		//채광할 수 있는 광물정보를 등록합니다.
+			//		if (0 == _outputs.Count) _outputs.Add(r.itemid, 0);
+			//		break;
+			//	}
+			//}
 
-			//this._panels.Add(new MyCraft.BuildingPanel((byte)this._panels.Count, 0));// base._itembase._assembling.inputs));//input
-			//this._panels.Add(new MyCraft.BuildingPanel((byte)this._panels.Count, 1));//output
-			////this._panels.Add(new BlockSlotPanel(this._panels.Count, ((MachineItemBase)base._itembase)._assembling.chips));//chip
-
+			if (0 == _outputs.Count) _outputs.Add(300, 0);
 		}
 
 		public override void ProcessLoop()
@@ -101,7 +98,7 @@ namespace FactoryFramework
 		//    if (filter != null) Debug.LogWarning("Producer Does not Implement Item Filter Output");
 		//    return resource.itemStack.item != null && resource.itemStack.amount > 0;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			if (0 == _outputs.Count) return false;
 			var output = _outputs.ElementAt(0);
@@ -110,7 +107,7 @@ namespace FactoryFramework
 		}
 
 		//public Item OutputType() { return resource.itemStack.item; }
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
 		{
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);
@@ -124,7 +121,7 @@ namespace FactoryFramework
 		//    resource.itemStack.amount -= 1;
 		//    return resource.itemStack.item;
 		//}
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);
@@ -134,6 +131,10 @@ namespace FactoryFramework
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase
 		#endregion //..GIVE_OUTPUT
+
+
+		public override Mesh GetSharedMesh() { return this.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh; }
+		public override Material GetSharedMaterial() { return this.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial; }
 
 		public void OnDrawGizmos()
 		{

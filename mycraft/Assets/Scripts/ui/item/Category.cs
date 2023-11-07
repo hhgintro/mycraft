@@ -30,7 +30,7 @@ namespace MyCraft
 
             LoadSkillPanel(json);
         }
-        public override string _iconPath() { return "Textures/ui/tech/"; }
+
         void LoadSkillPanel(JsonData json)
         {
             if (false == json.Keys.Contains("panels"))

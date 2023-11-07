@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using FactoryFramework;
 using Unity.VisualScripting;
 using UnityEngine.EventSystems;
-using MyCraft;
+//using MyCraft;
 using System.Linq;
 
 public class ConveyorPlacement : IPlacement
@@ -47,8 +47,8 @@ public class ConveyorPlacement : IPlacement
 
 	private void Start()
 	{
-		Managers.Input.MouseAction -= OnMouseEvent;
-		Managers.Input.MouseAction += OnMouseEvent;
+		MyCraft.Managers.Input.MouseAction -= OnMouseEvent;
+		MyCraft.Managers.Input.MouseAction += OnMouseEvent;
 	}
 	private void OnEnable()
 	{
@@ -449,18 +449,18 @@ public class ConveyorPlacement : IPlacement
 				if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
 				{
 					//DestroyBuilding(conveyor.gameObject);
-					Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject);
-					Managers.Game.DestoryProcess.gameObject.SetActive(true);
+					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject);
+					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(true);
 					return;
 				}
 			} break;
 
 			case Define.MouseEvent.R_Click:
 			{
-				if (Managers.Game.DestoryProcess.gameObject.activeSelf)
+				if (MyCraft.Managers.Game.DestoryProcess.gameObject.activeSelf)
 				{
-					Managers.Game.DestoryProcess.SetProgress(this, null);
-					Managers.Game.DestoryProcess.gameObject.SetActive(false);
+					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
+					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
 				}
 			} break;
 		}//..switch (evt)

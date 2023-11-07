@@ -1,4 +1,4 @@
-using MyCraft;
+//using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -15,19 +15,19 @@ namespace FactoryFramework
         public override  void Init()
         {
             if (0 == base._panels.Count)
-                base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((ChestItemBase)base._itembase).Slots));//input
+                base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.ChestItemBase)base._itembase).Slots));//input
         }
 
         public override void OnClicked()
         {
-            Managers.Game.ChestInvens.LinkInven(this, base._panels, /*this._progresses*/null, true);
-            //active
-            Managers.Game.Inventories.gameObject.SetActive(true);
-            Managers.Game.ChestInvens.gameObject.SetActive(true);
-			Managers.Game.SkillInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.ChestInvens.LinkInven(this, base._panels, /*this._progresses*/null, true);
+			//active
+			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
+			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.SkillInvens.gameObject.SetActive(true);
 			//de-active
-			Managers.Game.FactoryInvens.gameObject.SetActive(false);
-			Managers.Game.ForgeInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 		}
 
 
@@ -40,7 +40,7 @@ namespace FactoryFramework
 		//    }
 		//    return false;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
         {
             if (0 == base._panels.Count) return false;
 
@@ -59,7 +59,7 @@ namespace FactoryFramework
         //    }
         //    return null;
         //}
-        public int OutputType()
+        public int OutputType(OutputSocket cs = null)
         {
             if (0 == base._panels.Count) return 0;
 
@@ -87,7 +87,7 @@ namespace FactoryFramework
         //    }
         //    return null;
         //}
-        public int GiveOutput()
+        public int GiveOutput(OutputSocket cs = null)
         {
             if (0 == base._panels.Count) return 0;
 

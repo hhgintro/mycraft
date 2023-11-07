@@ -88,14 +88,14 @@ namespace FactoryFramework
 		//    IOutput iout = GetInputConnection(0);
 		//    return iout?.CanGiveOutput(filter) ?? false;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			// if no conveyors have room, return false
 			//if (!CanTakeInput(filter)) {            
 			//    return false; 
 			//}
 			IOutput iout = GetInputConnection(0);
-			return iout?.CanGiveOutput() ?? false;
+			return iout?.CanGiveOutput(cs) ?? false;
 		}
 		/// <summary>
 		/// Type of item that will be output next to one of the streams
@@ -106,7 +106,7 @@ namespace FactoryFramework
 		//    IOutput iout = GetInputConnection(0);
 		//    return iout?.OutputType() ?? null;
 		//}
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
         {
             IOutput iout = GetInputConnection(0);
             return iout?.OutputType() ?? 0;
@@ -124,7 +124,7 @@ namespace FactoryFramework
         //    //return iout?.GiveOutput(filter) ?? null;
         //    throw new System.NotImplementedException("Splitters and Mergers have Special Handling");
         //}
-        public int GiveOutput()
+        public int GiveOutput(OutputSocket cs = null)
         {
             //IOutput iout = GetInputConnection(0);
             //return iout?.GiveOutput(filter) ?? null;

@@ -68,6 +68,7 @@ namespace MyCraft
 			//GameObject clone = CreateObject(_title, this.transform);
 			GameObject clone = Managers.Resource.Instantiate("Prefabs/ui/Tooltip-Title", this.transform);
 			clone.GetComponentInChildren<Text>().text = string.Format($"<color=#0473f0><b>{text}</b></color>");
+			clone.GetComponentInChildren<Text>().resizeTextForBestFit = true;
 			clone.transform.position = Vector3.zero;
 			this._objs.Add(clone);
 			return clone;

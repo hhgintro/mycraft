@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using MyCraft;
+//using MyCraft;
 using UnityEngine.Windows;
 using System.IO;
 using UnityEngine.UI;
+
 
 namespace FactoryFramework
 {
@@ -13,15 +14,19 @@ namespace FactoryFramework
 	public class Factory : Building, IInput, IOutput
 	{
 		private Dictionary<int/*itemid*/, int/*amount*/> _inputs    = new Dictionary<int, int>();
+		//@@
+		//private Dictionary<int/*itemid*/, int/*amount*/> _outputs	= new Dictionary<int, int>();
 
 		//progress에 의해 만들어 지는 아이템 ID
-		private ItemBase _recipe = null;
+		private MyCraft.ItemBase _recipe = null;
 		//public Recipe[] validRecipes;
 		//public Recipe[] invalidRecipes;
 
 
 		Dictionary<int, int> INPUT		=> this._inputs;
 		MyCraft.BuildingPanel OUTPUT	=> base._panels[0];
+		//@@
+		//Dictionary<int, int> OUTPUTS	=> this._outputs;
 
 		MyCraft.Progress PROGRESS		=> _progresses[0];
 		//MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
@@ -44,14 +49,16 @@ namespace FactoryFramework
 
 			if (0 == base._panels.Count)
 			{
-				//base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count, 0));// base._itembase._assembling.inputs));//input
-				base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count+1, 1));//output
-				base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count+1, ((MachineItemBase)base._itembase)._assembling.chips));//chip
+				////base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count, 0));// base._itembase._assembling.inputs));//input
+				//base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count+1, 1));//output
+				//base._panels.Add(new MyCraft.BuildingPanel(this._panels.Count+1, ((MyCraft.MachineItemBase)base._itembase)._assembling.chips));//chip
+				base._panels.Add(new MyCraft.BuildingPanel(1, 0));//output
+				base._panels.Add(new MyCraft.BuildingPanel(2, ((MyCraft.MachineItemBase)base._itembase)._assembling.chips));//chip
 			}
 
 			if (0 == base._progresses.Count)
 			{
-				this._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
+				this._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
 				//this._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)1, 10, true));//progress-fuel
 			}
 			base.Init();
@@ -69,25 +76,25 @@ namespace FactoryFramework
 		{
 			if(null == this._recipe)
 			{
-				Managers.Game.SkillInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
+				MyCraft.Managers.Game.SkillInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
 				//active
-				Managers.Game.SkillInvens.gameObject.SetActive(true);
+				MyCraft.Managers.Game.SkillInvens.gameObject.SetActive(true);
 				//de-active
-				Managers.Game.Inventories.gameObject.SetActive(false);
-				Managers.Game.ChestInvens.gameObject.SetActive(false);
-				Managers.Game.FactoryInvens.gameObject.SetActive(false);
-				Managers.Game.ForgeInvens.gameObject.SetActive(false);
+				MyCraft.Managers.Game.Inventories.gameObject.SetActive(false);
+				MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
+				MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
+				MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 				return;
 			}
 
-			Managers.Game.FactoryInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
+			MyCraft.Managers.Game.FactoryInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
 			//active
-			Managers.Game.Inventories.gameObject.SetActive(true);
-			Managers.Game.FactoryInvens.gameObject.SetActive(true);
-			Managers.Game.SkillInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
+			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(true);
+			MyCraft.Managers.Game.SkillInvens.gameObject.SetActive(true);
 			//de-active
-			Managers.Game.ChestInvens.gameObject.SetActive(false);
-			Managers.Game.ForgeInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 
 			if(0 == (++cnt %2))
 			{
@@ -152,13 +159,13 @@ namespace FactoryFramework
 
 			//input
 			foreach(int itemid in INPUT.Keys)
-				if (0 < INPUT[itemid]) Managers.Game.AddItem(itemid, INPUT[itemid]);
+				if (0 < INPUT[itemid]) MyCraft.Managers.Game.AddItem(itemid, INPUT[itemid]);
 			INPUT.Clear();
 
 			base.OnReset();
 		}
 
-		public override bool AssignRecipe(ItemBase itembase)
+		public override bool AssignRecipe(MyCraft.ItemBase itembase)
 		{
 			if (null == itembase || null == itembase.cost)
 			{
@@ -173,11 +180,18 @@ namespace FactoryFramework
 			this._recipe = itembase;
 
 			//input
-			foreach(BuildCostItem cost in this._recipe.cost.items)
+			foreach(MyCraft.BuildCostItem cost in this._recipe.cost.items)
 				INPUT.Add(cost.itemid, 0);
 			//output
-			OUTPUT._slots[0]._itemid = this._recipe.id;
-			OUTPUT._slots[0]._amount = 0;
+			//OUTPUT._slots[0]._itemid = this._recipe.id;
+			//OUTPUT._slots[0]._amount = 0;
+			OUTPUT.Clear();
+			OUTPUT.SetSlots(this._recipe.cost.outputs.Count);	//결과물 등록 slot개수
+			for(int i=0; i<this._recipe.cost.outputs.Count; ++i)
+			{
+				OUTPUT._slots[i]._itemid = this._recipe.cost.outputs[i].itemid;
+				OUTPUT._slots[i]._amount = 0;
+			}
 			return true;
 		}
 
@@ -223,13 +237,15 @@ namespace FactoryFramework
 			if (null == this._recipe) return false;
 
 			//check...자원
-			foreach(BuildCostItem cost in this._recipe.cost.items)
+			foreach(var cost in this._recipe.cost.items)
 			{
 				if (false == INPUT.ContainsKey(cost.itemid)) return false;	//미등록된 아이템
 				if (INPUT[cost.itemid] < cost.amount) return false;			//자원이 부족
 			}
 
-			if (OUTPUT.IsFull()) return false;  //output이 가득 찼으면...중단.
+			//output이 가득 찼으면...중단.
+			if (OUTPUT.IsFull()) return false;
+
 			return true;
 			//need a recipe to make!
 		}
@@ -238,7 +254,7 @@ namespace FactoryFramework
 		{
 			//아이템 차감
 			int s = 0;
-			foreach (BuildCostItem cost in this._recipe.cost.items)
+			foreach (MyCraft.BuildCostItem cost in this._recipe.cost.items)
 			{
 				INPUT[cost.itemid] -= cost.amount;
 				//UI
@@ -249,9 +265,15 @@ namespace FactoryFramework
 		private bool CreateOutputProducts()
 		{
 			if (base._panels.Count < 1) return false;
-			OUTPUT._slots[0]._amount += 1;
-			//UI
-			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			//OUTPUT._slots[0]._amount += 1;
+			////UI
+			//this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			for(int i=0; i<OUTPUT._slots.Count; ++i)
+			{
+				OUTPUT._slots[i]._amount += 1;
+				//UI
+				this.SetBlock2Inven(OUTPUT._slots[i]._panel, OUTPUT._slots[i]._slot, OUTPUT._slots[i]._itemid, OUTPUT._slots[i]._amount, false);
+			}
 			return true;
 		}
 
@@ -279,9 +301,11 @@ namespace FactoryFramework
 		}
 
 		#region GIVE_OUTPUT
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
-			if (0 == OUTPUT._slots[0]._itemid || OUTPUT._slots[0]._amount <= 0) return false;
+			if(null == cs) return false;
+			int slot = GetOutputIndexBySocket(cs);
+			if (0 == OUTPUT._slots[slot]._itemid || OUTPUT._slots[slot]._amount <= 0) return false;
 			return true;
 		}
 
@@ -293,22 +317,26 @@ namespace FactoryFramework
 		//    }
 		//    return null;
 		//}
-		public int OutputType()
+		public int OutputType(OutputSocket cs = null)
 		{
-			return OUTPUT._slots[0]._itemid;
+			if (null == cs) return 0;
+			int slot = GetOutputIndexBySocket(cs);
+			return OUTPUT._slots[slot]._itemid;
 		}
 
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
+			if (null == cs) return 0;
+			int slot = GetOutputIndexBySocket(cs);
 			//아이템 차감
-			OUTPUT._slots[0]._amount -= 1;
+			OUTPUT._slots[slot]._amount -= 1;
 			//UI
-			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			this.SetBlock2Inven(OUTPUT._slots[slot]._panel, OUTPUT._slots[slot]._slot, OUTPUT._slots[slot]._itemid, OUTPUT._slots[slot]._amount, false);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
 
-			return OUTPUT._slots[0]._itemid;
+			return OUTPUT._slots[slot]._itemid;
 		}
 		#endregion //..GIVE_OUTPUT
 
@@ -325,7 +353,7 @@ namespace FactoryFramework
 		private bool TakeInputItem(int itemid)
 		{
 			if (false == CanTakeInput(itemid)) return false;
-			if (false == INPUT.ContainsKey(itemid)) return false;
+			//if (false == INPUT.ContainsKey(itemid)) return false;
 
 			int s = 0;
 			foreach (var key in INPUT.Keys)

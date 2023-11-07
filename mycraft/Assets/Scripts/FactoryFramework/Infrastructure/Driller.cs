@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MyCraft;
+//using MyCraft;
 
 
 namespace FactoryFramework
@@ -128,7 +128,7 @@ namespace FactoryFramework
 		//    if (filter != null) Debug.LogWarning("Producer Does not Implement Item Filter Output");
 		//    return resource.itemStack.item != null && resource.itemStack.amount > 0;
 		//}
-		public bool CanGiveOutput()
+		public bool CanGiveOutput(OutputSocket cs = null)
 		{
 			if(0 == _outputs.Count) return false;
 			var output = _outputs.ElementAt(0);
@@ -137,7 +137,7 @@ namespace FactoryFramework
 		}
 
 		//public Item OutputType() { return resource.itemStack.item; }
-		public int OutputType() {
+		public int OutputType(OutputSocket cs = null) {
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);
 			return output.Key;
@@ -150,7 +150,7 @@ namespace FactoryFramework
 		//    resource.itemStack.amount -= 1;
 		//    return resource.itemStack.item;
 		//}
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);

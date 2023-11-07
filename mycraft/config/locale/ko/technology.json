@@ -14,7 +14,7 @@
     },
     "next-tech":[{"techid":2},{"techid":2}],
     "reward":[{"skill":1100},{"skill":1200}],
-    "icon":"automation"
+    "icon":"Textures/ui/tech/automation"
   },
 
   {
@@ -33,7 +33,7 @@
     "pre-tech":[{"techid":1},{"techid":1}],
     "next-tech":[{"techid":3},{"techid":3}],
     "reward":[{"skill":1040},{"skill":1050}],
-    "icon":"electronics"
+    "icon":"Textures/ui/tech/electronics"
   },
 
   {
@@ -51,7 +51,7 @@
     },
     "pre-tech":[{"techid":2},{"techid":2}],
     "reward":[{"skill":2010},{"skill":3000}],
-    "icon":"logistics"
+    "icon":"Textures/ui/tech/logistics"
   }
 
 

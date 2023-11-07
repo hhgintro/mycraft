@@ -23,9 +23,10 @@ namespace MyCraft
                 ConstructDatabase();
             }catch(Exception e)
             {
-                Debug.LogException(e);
-            }
-        }
+				//Debug.LogException($"{filename}: {e}");
+				Debug.LogError($"{filename}: {e}");
+			}
+		}
 
         public void ConstructDatabase()
         {
@@ -55,7 +56,10 @@ namespace MyCraft
 				//this.database.Add((int)this.json[i]["id"], (T)obj);
                 string jsontype = "MyCraft." + this.json[i]["type"].ToString();
 				this.database.Add((int)this.json[i]["id"], (T)Activator.CreateInstance(Type.GetType(jsontype), this.json[i]));
-
+#if UNITY_STANDALONE
+				//디버깅용
+				Debug.Log($"id:{this.json[i]["id"]} loaded");
+#endif//..UNITY_STANDALONE
 			}
 		}
 

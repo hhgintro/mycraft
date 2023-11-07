@@ -36,7 +36,6 @@ namespace MyCraft
             LoadNextTechnology(json);
             LoadReward(json);
         }
-        public override string _iconPath() { return "Textures/ui/tech/"; }
 
         void LoadCost(JsonData json)
         {

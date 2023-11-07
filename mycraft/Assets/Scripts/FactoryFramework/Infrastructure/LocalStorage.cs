@@ -29,9 +29,9 @@ namespace FactoryFramework
 		//}
 
 		#region GIVE_OUTPUT
-		public bool CanGiveOutput() { return itemStack.item != null && itemStack.amount > 0; }
+		public bool CanGiveOutput(OutputSocket cs = null) { return itemStack.item != null && itemStack.amount > 0; }
 		//public Item OutputType() { return itemStack.item; }
-		public int OutputType() { return 0; }
+		public int OutputType(OutputSocket cs = null) { return 0; }
 
 		//HG[2023.06.09] Item -> MyCraft.ItemBase
 		//public Item GiveOutput(Item filter = null)
@@ -41,9 +41,9 @@ namespace FactoryFramework
 		//    itemStack.amount -= 1;
 		//    return itemStack.item;
 		//}
-		public int GiveOutput()
+		public int GiveOutput(OutputSocket cs = null)
 		{
-			Debug.Assert(CanGiveOutput(), "No Output Available");
+			Debug.Assert(CanGiveOutput(cs), "No Output Available");
 
 			itemStack.amount -= 1;
 			return 0;// itemStack.item;
