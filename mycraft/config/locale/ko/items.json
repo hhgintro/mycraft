@@ -158,6 +158,81 @@
   },
 
 
+  
+  {
+    "id": 801,
+    "type": "ItemBase",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/science-pack-1",
+    "prefab": "mineral/potions/GPVFX_POTION A"
+  },
+  {
+    "id": 802,
+    "type": "ItemBase",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/science-pack-2",
+    "prefab": "mineral/potions/GPVFX_POTION C"
+  },
+  {
+    "id": 803,
+    "type": "ItemBase",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/science-pack-3",
+    "prefab": "mineral/potions/GPVFX_POTION B"
+  },
+  {
+    "id": 804,
+    "type": "ItemBase",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/science-pack-4",
+    "prefab": "mineral/potions/GPVFX_POTION E"
+  },
+
+
 
 
   {
@@ -338,6 +413,30 @@
     "stackable": 100,
     "icon": "Textures/ui/oil-refinery",
     "prefab": "buildings/Oil-Refinery"
+  },
+
+  {
+    "id": 1066,
+    "type": "MachineItemBase",
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2030,"amount": 2},
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "assembling": {
+      "inputs": 4,
+      "chips": 4,
+      "outputs": [ 2, 9 ]
+    },
+    "state": {"power": 21,"defence": 12,"vitality": 50},
+    "stackable": 100,
+    "icon": "Textures/ui/lab",
+    "prefab": "buildings/Lab"
   },
 
   {

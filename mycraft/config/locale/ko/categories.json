@@ -21,7 +21,7 @@
     "panels": [
       {"items": [{"itemid":1040},{"itemid":1050},{"itemid":1060}]},
       {"items": [{"itemid":1070},{"itemid":1080}]},
-      {"items": [{"itemid":1065}]}
+      {"items": [{"itemid":1065},{"itemid":1066}]}
     ],
     "icon": "Textures/ui/tech/production"
   },
@@ -35,7 +35,8 @@
       {"items": [{"itemid":101}]},
       {"items": [{"itemid":2010},{"itemid":2011},{"itemid":2012},{"itemid":2013}]},
       {"items": [{"itemid":2020},{"itemid":2021}]},
-      {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]}
+      {"items": [{"itemid":2030},{"itemid":2031},{"itemid":2032}]},
+      {"items": [{"itemid":801},{"itemid":802},{"itemid":803},{"itemid":804}]}
     ],
     "icon": "Textures/ui/tech/intermediate-products"
   },

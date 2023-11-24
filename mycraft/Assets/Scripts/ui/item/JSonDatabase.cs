@@ -3,14 +3,17 @@ using System.IO;
 using UnityEngine;
 using LitJson;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 namespace MyCraft
 {
 	public abstract class JSonDatabase
 	{
+
 		public int id;  //
 		public string type;
 		public string Title;
+		public string Description;
 		public Sprite icon;
 		//public string building; //building prefab의 경로
 		public GameObject prefab; //building prefab
@@ -21,14 +24,16 @@ namespace MyCraft
 		{
 			this.id = (ushort)json["id"];
 			this.type = json["type"].ToString();
-			this.Title = Managers.Locale.GetLocale("items", string.Format($"{this.id.ToString()}-title"));
-
+			this.Title = Managers.Locale.GetLocale(section(), string.Format($"{this.id.ToString()}-title"));
+			this.Description = Managers.Locale.GetLocale(section(), string.Format($"{this.id.ToString()}-desc"));
+			//Debug.Log($"section({section()}), Title({this.Title})");
 			this.icon = Managers.Resource.Load<Sprite>(json["icon"].ToString());
 
 			LoadPrefab(json);
 			LoadScaleOnBelt(json);
 		}
-		
+
+		public virtual string section() { return "(empty)"; }		
 		void LoadPrefab(JsonData json)
 		{
 			if (false == json.Keys.Contains("prefab"))

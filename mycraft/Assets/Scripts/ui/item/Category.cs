@@ -11,7 +11,7 @@ namespace MyCraft
         //public int id;  //
         //public int category;  //
         //public string title;
-        public string desc;
+        //public string Description;
 
         public int panel;   //등록할 panel
         public int DIY;//do it yourself(0이면 생산시설에서만 생성할 수 있습니다)
@@ -24,14 +24,15 @@ namespace MyCraft
         //public Category() { }
         public Category(JsonData json) : base(json)
 		{
-            this.id = (int)json["id"];
-            this.Title = json["title"].ToString();
-            this.desc = json["desc"].ToString();
+            //this.id = (int)json["id"];
+            //this.Title = json["title"].ToString();
+            //this.Description = json["desc"].ToString();
 
             LoadSkillPanel(json);
         }
 
-        void LoadSkillPanel(JsonData json)
+		public override string section() { return "categories"; }
+		void LoadSkillPanel(JsonData json)
         {
             if (false == json.Keys.Contains("panels"))
                 return;
@@ -88,7 +89,7 @@ namespace MyCraft
 
             //comment
             GameObject comment = tooltip.CreateComment();
-            comment.GetComponent<Text>().text = this.desc;
+            comment.GetComponent<Text>().text = this.Description;
 
             //totalcost(미구현)
             //GameObject totalcost = tooltip.CreateTotalCost();

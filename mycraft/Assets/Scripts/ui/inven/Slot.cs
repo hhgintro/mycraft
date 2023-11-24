@@ -8,12 +8,15 @@ using UnityEngine.UI;
 namespace MyCraft
 {
 
-     public class Slot : MonoBehaviour, IPointerDownHandler//, IDropHandler
+     public class Slot : MonoBehaviour
+        , IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler//, IDropHandler
     {
         public InvenBase owner;
         public int _panel;
         public int _slot;
         //public InvenItemData itemData;
+
+        public GameObject _techCancel; //연구중인 Tech 취소버튼.
 
         public ItemData GetItemData()
         {
@@ -23,6 +26,16 @@ namespace MyCraft
             return this.transform.GetChild(1).GetComponent<ItemData>(); //1: slot에 background가 추가되었으므로.
 		}
 
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (null == this._techCancel) return;
+            this._techCancel.SetActive(true);
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (null == this._techCancel) return;
+            this._techCancel.SetActive(false);
+        }
         public void OnPointerDown(PointerEventData eventData)
         {
             if (null == InvenBase.choiced_item)

@@ -58,7 +58,7 @@ namespace MyCraft
 				this.database.Add((int)this.json[i]["id"], (T)Activator.CreateInstance(Type.GetType(jsontype), this.json[i]));
 #if UNITY_STANDALONE
 				//디버깅용
-				Debug.Log($"id:{this.json[i]["id"]} loaded");
+				//Debug.Log($"id:{this.json[i]["id"]} loaded");
 #endif//..UNITY_STANDALONE
 			}
 		}

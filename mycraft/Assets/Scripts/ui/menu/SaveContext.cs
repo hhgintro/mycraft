@@ -29,7 +29,7 @@ namespace MyCraft
             LoadScreenShot(filename);
 		}
 
-        protected virtual void RefreshContext()
+        protected void RefreshContext()
         {
             //기존꺼 삭제
             foreach (var obj in this._contexts) Managers.Resource.Destroy(obj);
@@ -47,8 +47,24 @@ namespace MyCraft
                 this._contexts.Add(clone);
             }
         }
+		public void OnDeleteFile()
+		{
+			if (string.IsNullOrEmpty(this._save_file.text)) return;
+			string filepath = Path.Combine(Managers.Game._save_dir, this._save_file.text);
+			if (false == filepath.Contains(".sav")) filepath += ".sav"; //확장자 추가
+			if (false == File.Exists(filepath))
+			{
+				//Debug.LogError($"load failed({filepath})");
+				return;
+			}
+			File.Delete(filepath);
+			int a = 0;
+			a = 0;
+			this.RefreshContext();
 
-        private void LoadScreenShot(string filename)
+		}
+
+		private void LoadScreenShot(string filename)
         {
 			string filepath = Path.Combine(Managers.Game._save_dir, filename);
 			if(false == filepath.Contains(".sav")) filepath += ".sav";	//확장자 추가

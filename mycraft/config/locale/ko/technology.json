@@ -14,7 +14,7 @@
     },
     "next-tech":[{"techid":2},{"techid":2}],
     "reward":[{"skill":1100},{"skill":1200}],
-    "icon":"Textures/ui/tech/automation"
+    "icon":"Textures/ui/technology/automation"
   },
 
   {
@@ -26,14 +26,14 @@
       "multiple":12,
       "time":2.1,
       "item":[
-        {"itemid": 1100,"amount": 2},
-        {"itemid": 1200,"amount": 2}
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
-    "pre-tech":[{"techid":1},{"techid":1}],
+    "pre-tech":[{"techid":1}],
     "next-tech":[{"techid":3},{"techid":3}],
     "reward":[{"skill":1040},{"skill":1050}],
-    "icon":"Textures/ui/tech/electronics"
+    "icon":"Textures/ui/technology/electronics"
   },
 
   {
@@ -45,13 +45,13 @@
       "multiple":13,
       "time":3.1,
       "item":[
-        {"itemid": 1040,"amount": 2},
-        {"itemid": 1050,"amount": 2}
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
       ]
     },
-    "pre-tech":[{"techid":2},{"techid":2}],
-    "reward":[{"skill":2010},{"skill":3000}],
-    "icon":"Textures/ui/tech/logistics"
+    "pre-tech":[{"techid":1},{"techid":2}],
+    "reward":[{"skill":2010},{"skill":2020}],
+    "icon":"Textures/ui/technology/logistics"
   }
 
 

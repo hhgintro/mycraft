@@ -31,6 +31,7 @@ namespace MyCraft
 		private ChestInven _chestinven;
 		private ForgeInven _forgeinven;
 		private FactoryInven _factoryinven;
+		private LabInven _labinven;
 		private SkillInven _skillinven;
 		private TechInven _techinven;
 		private TechDescription _techdesc;
@@ -53,6 +54,7 @@ namespace MyCraft
 		public ChestInven ChestInvens			{ get { if (null == _chestinven) _chestinven = GameObject.FindObjectOfType(typeof(ChestInven)) as ChestInven; return _chestinven; } }
 		public ForgeInven ForgeInvens			{ get { if (null == _forgeinven) _forgeinven = GameObject.FindObjectOfType(typeof(ForgeInven)) as ForgeInven; return _forgeinven; } }
 		public FactoryInven FactoryInvens		{ get { if (null == _factoryinven) _factoryinven = GameObject.FindObjectOfType(typeof(FactoryInven)) as FactoryInven; return _factoryinven; } }
+		public LabInven LabInvens				{ get { if (null == _labinven) _labinven = GameObject.FindObjectOfType(typeof(LabInven)) as LabInven; return _labinven; } }
 		public SkillInven SkillInvens			{ get { if (null == _skillinven) _skillinven = GameObject.FindObjectOfType(typeof(SkillInven)) as SkillInven; return _skillinven; } }
 		public TechInven TechInvens				{ get { if (null == _techinven) _techinven = GameObject.FindObjectOfType(typeof(TechInven)) as TechInven; return _techinven; } }
 		public TechDescription TechDescs		{ get { if (null == _techdesc) _techdesc = GameObject.FindObjectOfType(typeof(TechDescription)) as TechDescription; return _techdesc; } }

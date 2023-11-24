@@ -42,6 +42,7 @@ namespace MyCraft
 				Managers.Game.Load();
 				Managers.Game.Inventories.AddItem(1080, 10);    //PumpJack
 				Managers.Game.Inventories.AddItem(1065, 10);    //Oil-Refinery
+				Managers.Game.Inventories.AddItem(1066, 10);    //Lab
 			}
 			Application.runInBackground = true;
 		}
@@ -78,6 +79,7 @@ namespace MyCraft
 			Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			Managers.Game.SkillInvens.gameObject.SetActive(false);
+			Managers.Game.LabInvens.gameObject.SetActive(false);
 
 			//GameManager.GetDeleteProgress().gameObject.SetActive(false);
 
@@ -114,6 +116,7 @@ namespace MyCraft
 			Managers.Game.Inventories.AddItem(1070, 54);    //WaterPurificationPlant
 			Managers.Game.Inventories.AddItem(1080, 54);    //PumpJack
 			Managers.Game.Inventories.AddItem(1065, 10);    //Oil-Refinery
+			Managers.Game.Inventories.AddItem(1066, 10);    //Lab
 
 		}
 
@@ -267,6 +270,12 @@ namespace MyCraft
 				Managers.Game.Tooltips.gameObject.SetActive(false);
 				return;
 			}
+			if (Input.GetKeyDown(KeyCode.T))
+			{
+				Managers.Game.TechInvens.gameObject.SetActive(!Managers.Game.TechInvens.gameObject.activeSelf);
+				Managers.Game.TechDescs.gameObject.SetActive(Managers.Game.TechInvens.gameObject.activeSelf);
+				return;
+			}
 
 			if (Input.GetKeyDown(KeyCode.Tab))  //"Tab"
 			{
@@ -299,12 +308,6 @@ namespace MyCraft
 			//    GameManager.GetMouseController().mouse_refresh = true;
 			//    return;
 			//}
-			if (Input.GetKeyDown(KeyCode.T))
-			{
-				//Managers.Game.TechInvens.gameObject.SetActive(!Managers.Game.TechInvens.gameObject.activeSelf);
-				//Managers.Game.TechDescs.gameObject.SetActive(Managers.Game.TechInvens.gameObject.activeSelf);
-				return;
-			}
 		}
 	}
 }

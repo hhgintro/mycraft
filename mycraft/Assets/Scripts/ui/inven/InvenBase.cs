@@ -102,7 +102,7 @@ namespace MyCraft
 			for (p = 0; p < panels.Count; ++p)
 			{
 				//slot
-				this._panels[p+1].SetSlots(panels[p]._slot);
+				this._panels[p+1].SetSlots(panels[p]._slots.Count);
 
 				//item 생성
 				List<BuildingSlot> slots = panels[p]._slots;
@@ -154,7 +154,7 @@ namespace MyCraft
 			for (int p = 0; p < panels.Count; ++p)
 			{
 				//slot
-				this._panels[p].SetSlots(panels[p]._slot);
+				this._panels[p].SetSlots(panels[p]._slots.Count);
 
 				//item 생성
 				List<BuildingSlot> slots = panels[p]._slots;
@@ -190,13 +190,21 @@ namespace MyCraft
 		#endregion //..LINK_INVEN
 
 		#region CreateObject
-		protected virtual ItemData CreateObject(InvenBase owner, Transform parent
-			, int panel, int slot, JSonDatabase database, GameObject itemObj)
+		protected virtual GameObject CreateObject(Transform parent, GameObject itemObj)
 		{
 			//GameObject clone = UnityEngine.Object.Instantiate(itemObj);
 			GameObject clone = Managers.Resource.Instantiate(itemObj, null);
 			clone.transform.SetParent(parent, false); //[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
 			//clone.transform.position = parent.position;   //이거때문에 아이콘이 우측아래에 찍힘.
+			return clone;
+		}
+
+		protected virtual ItemData CreateObject(InvenBase owner, Transform parent
+			, int panel, int slot, JSonDatabase database, GameObject itemObj)
+		{
+			GameObject clone = CreateObject(parent, itemObj);
+			if(null == clone) return null;
+
 			clone.GetComponent<Image>().sprite = database.icon;
 			clone.name = database.Title;
 			//clone.GetComponent<CanvasGroup>().blocksRaycasts = false;//인벤에 생성할때는 true입니다.
@@ -237,10 +245,18 @@ namespace MyCraft
 			ItemData itemData = this.CreateObject(owner, parent, panel, slot, database, Managers.Resource.Load<GameObject>("prefabs/ui/Tech"));
 
 			RectTransform rt = (RectTransform)itemData.transform;
-			rt.sizeDelta = Vector2.one * 64f;
+			rt.sizeDelta = Vector2.one * 128f;
 		}
+        public virtual GameObject CreateTechCancel(Transform parent)
+        {
+            return this.CreateObject(parent, Managers.Resource.Load<GameObject>("prefabs/ui/Tech-Cancel"));
 
-		public virtual void CreateCategory(InvenBase owner, Transform parent
+            //ItemData itemData =
+            //RectTransform rt = (RectTransform)itemData.transform;
+            ////rt.sizeDelta = Vector2.one * 128f;
+        }
+
+        public virtual void CreateCategory(InvenBase owner, Transform parent
 			, int panel, int slot, JSonDatabase database)
 		{
 			SkillGroupData itemData = (SkillGroupData)this.CreateObject(owner, parent, panel, slot, database, Managers.Resource.Load<GameObject>("prefabs/ui/Category"));
@@ -582,7 +598,7 @@ namespace MyCraft
 		public virtual void Save(BinaryWriter bw)
 		{
 			//1. slot amount
-			bw.Write(this._panels[0]._slot);
+			bw.Write(this._panels[0]._slots.Count);
 
 			//임시 List<> 에 저장
 			List<ItemData> items = new List<ItemData>();

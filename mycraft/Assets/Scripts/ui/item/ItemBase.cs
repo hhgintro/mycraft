@@ -10,7 +10,7 @@ namespace MyCraft
 	{
 		//public int itemid;  //
 		//public string Title;
-		public string Description;
+		//public string Description;
 		public bool learn = false;  //true:연구가 되면 스킬창에 노출됩니다.)
 		public bool DIY = true;     //do it yourself(false이면 생산시설에서만 생성할 수 있습니다)
 		public BuildCost cost;      //[자신]이 만들어질때 필요한 아이템
@@ -30,7 +30,7 @@ namespace MyCraft
 			//this.id             = (ushort)json["id"];
 			//this.type           = (BLOCKTYPE)(int)json["type"];
 			//this.Title          = json["title"].ToString();
-			this.Description      = Managers.Locale.GetLocale("items", string.Format($"{this.id.ToString()}-desc"));
+			//this.Description      = Managers.Locale.GetLocale("items", string.Format($"{this.id.ToString()}-desc"));
 
 			//this.DIY            = (int)json["DIY"];
 
@@ -44,6 +44,7 @@ namespace MyCraft
 			this.DebugColor     = Color.green;
 		}
 
+		public override string section() { return "items"; }
 		void LoadLearn(JsonData json)
 		{
 			if (false == json.Keys.Contains("learn"))

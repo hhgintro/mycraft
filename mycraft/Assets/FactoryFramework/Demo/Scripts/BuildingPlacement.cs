@@ -192,7 +192,7 @@ public class BuildingPlacement : IPlacement
 			if (hit.transform.tag == "Safe-Footing")  //안전발판
 			{
 				//안전발판위에 안전발판(current) 설치 위치
-				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 3f;
+				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 4f;
 				//안전발판위에 건물(current) 설치 위치
 				else											groundPos = hit.point;// + Vector3.up * 0.5f;
 				break;
@@ -202,7 +202,7 @@ public class BuildingPlacement : IPlacement
 			if (hit.collider.TryGetComponent<Terrain>(out Terrain terrain))
 			{
 				//Terrain위에 안전발판(current) 설치 위치
-				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 3f;
+				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 2.5f;
 				//Terrain위에 건물(current) 설치 위치
 				else											groundPos = hit.point + Vector3.up;
 			}

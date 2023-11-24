@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -60,6 +61,5 @@ namespace MyCraft
             //next(world)
             this.transform.parent.parent.GetComponent<SystemMenuManager>()?.gameObject.SetActive(true); //(world)SystemMenu창
 		}
-
-    }
+	}
 }

@@ -83,20 +83,18 @@ namespace MyCraft
             {
                 Console.WriteLine(e.Message);
             }
-
         }
 
+        public void SetLocale(string section, Text title)
+        {
+            try { title.text = GetLocale(section, title.text); }
+            catch(Exception e) { Debug.LogError(e.Message); }
+        }
         public string GetLocale(string section, string key)
         {
             if (false == sections.ContainsKey(section))         return key;
             if (false == sections[section].ContainsKey(key))    return key;
             return sections[section][key];
         }
-
-        public void SetLocale(string section, Text title)
-        {
-            try { title.text = GetLocale(section, title.text); } catch(Exception e) { Debug.LogError(e.Message); }
-        }
-
     }
 }

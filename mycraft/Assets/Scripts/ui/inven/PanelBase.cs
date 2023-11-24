@@ -14,7 +14,7 @@ namespace MyCraft
 	public class PanelBase<T>
 	{
 		public int _panel;  //자신의 번호
-		public int _slot { get; private set; } //slot 개수
+		//public int _slot { get; private set; } //slot 개수
 
 		public List<T> _slots = new List<T>();
 
@@ -22,15 +22,15 @@ namespace MyCraft
 		public PanelBase(int panel)
 		{
 			this._panel = panel;
-			//this._amount = amount;
-			//this._progress = progress;
+            //this._amount = amount;
+            //this._progress = progress;
 
-			//for (int i = 0; i < amount; ++i)
-			//    //this._slots.Add(new BlockSlot(panel));
-			//    this._slots.Add(default(T));
+            //for (int i = 0; i < amount; ++i)
+            //    //this._slots.Add(new BlockSlot(panel));
+            //    this._slots.Add(default(T));
 
-			//this.SetAmount(amount);
-		}
+            //this.SetAmount(amount);
+        }
 
 		public virtual void Clear()
 		{
@@ -38,20 +38,14 @@ namespace MyCraft
 		}
 
 		//slot 개수를 설정합니다.
-		public virtual void SetSlots(int slot)
-		{
-			//this.Clear();
-			this._slot = slot;
-			//for (int i = 0; i < amount; ++i)
-			//    //this._slots.Add(new BlockSlot(panel));
-			//    this._slots.Add(default(T));
-		}
+		public virtual void SetSlots(int slot) { }
+		public virtual void Remove(int slot) { }
 
-	}
+    }
 
-	//BlockSlot --> BuildingSlot
-	//BlockSlotPanel --> BuildingPanel
-	public class BuildingPanel : PanelBase<BuildingSlot>
+    //BlockSlot --> BuildingSlot
+    //BlockSlotPanel --> BuildingPanel
+    public class BuildingPanel : PanelBase<BuildingSlot>
 	{
 		public BuildingPanel(int panel, int slot)
 			: base(panel)
@@ -66,7 +60,6 @@ namespace MyCraft
 
 		public override void SetSlots(int slot)
 		{
-			base.SetSlots(slot);
 			for (int i = 0; i < slot; ++i)
 				base._slots.Add(new BuildingSlot(base._panel, i));
 		}
@@ -154,7 +147,6 @@ namespace MyCraft
 		{
 			//this._objPanel = null;
 			//this._panel = 0;
-			this.SetSlots(0);
 			for (int i = 0; i < base._slots.Count; ++i)
 			{
 				ItemData itemData = base._slots[i].GetItemData();
@@ -167,12 +159,22 @@ namespace MyCraft
 
 		public override void SetSlots(int slot)
 		{
-			base.SetSlots(slot);
 			for (int i = 0; i < slot; ++i)
 				this.CreateSlot();
 		}
 
-		public virtual Slot CreateSlot()
+        public override void Remove(int slot)
+        {
+			//삭제
+            Managers.Resource.Destroy(base._slots[slot].gameObject);
+            base._slots.RemoveAt(slot);
+
+			//지워진 자리부터 번호를 재 설정합니다.
+			for (int s = slot; s < base._slots.Count; ++s)
+				base._slots[s]._slot = s;
+        }
+
+        public virtual Slot CreateSlot()
 		{
 			//HG_TODO: [2023.06.15]Pool을 통해 slot을 가져오면, canvas비율때문에 크게 표시되는 현상이 있어서.
 			//  우선은 Resource에서 직접로드로 처리함. 추후 pool을 고려할 것

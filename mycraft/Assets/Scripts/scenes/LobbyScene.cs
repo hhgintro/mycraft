@@ -24,7 +24,7 @@ namespace MyCraft
             JSonParser<TechBase> techbases =  Managers.Game.TechBases;
             JSonParser<Category> categories =  Managers.Game.Categories;
 
-        }
+		}
 
         public override void Clear()
         {
