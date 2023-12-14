@@ -19,11 +19,7 @@ namespace FactoryFramework
 
 		int _recipe = 0;	//생산할 결과물
 
-		void Start()
-		{
-			Init();
-		}
-		public override void Init()
+		public override void InitStart()
 		{
 			if (0 == base._panels.Count)
 			{
@@ -34,10 +30,11 @@ namespace FactoryFramework
 
 			if (0 == base._progresses.Count)
 			{
-				base._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
-				base._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)1, 10f, true));//progress-fuel
+				base._progresses.Add(new MyCraft.Progress(this, MyCraft.PROGRESSID.Item, 1f, false));//progress
+				base._progresses.Add(new MyCraft.Progress(this, MyCraft.PROGRESSID.Fuel, 10f, true));//progress-fuel
 			}
-			base.Init();
+
+			base.InitStart();
 		}
 
 		public override void ProcessLoop()
@@ -62,11 +59,12 @@ namespace FactoryFramework
 			//de-active
 			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 		}
 
-		public override void SetItem(int panel, int slot, int itemid, int amount)
+		public override void SetItem(int panel, int slot, int itemid, int amount, float fillAmount)
 		{
-			base.SetItem(panel, slot, itemid, amount);
+			base.SetItem(panel, slot, itemid, amount, fillAmount);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
@@ -126,9 +124,9 @@ namespace FactoryFramework
 			//같다면...무시
 			if (itemid == this._recipe) return;
 			////다른데...아이템이 남아있으면 무시
-			//if (0 < OUTPUT._slots[0]._amount)
+			//if (0 < OUTPUT._slots[0]._item._amount)
 			//{
-			//	Debug.LogError($"Fail: AssignRecipe(diff itemid:{itemid}/{OUTPUT._slots[0]._itemid})");
+			//	Debug.LogError($"Fail: AssignRecipe(diff itemid:{itemid}/{OUTPUT._slots[0]._item._itemid})");
 			//	return;
 			//}
 			//등록
@@ -137,7 +135,7 @@ namespace FactoryFramework
 
 		public override void OnProgressCompleted(MyCraft.PROGRESSID id)
 		{
-			if (MyCraft.PROGRESSID.Progress == id)
+			if (MyCraft.PROGRESSID.Item == id)
 			{
 				//아이템을 생성해 준다. / 가득 찼는지 체크
 				if (false == CreateOutputProducts())
@@ -148,7 +146,7 @@ namespace FactoryFramework
 				//check...자원
 				for (int s = 0; s < INPUT._slots.Count; ++s)
 				{
-					if (0 == INPUT._slots[s]._itemid || INPUT._slots[s]._amount <= 0)
+					if (0 == INPUT._slots[s]._item._itemid || INPUT._slots[s]._item._amount <= 0)
 					{
 						this._IsWorking = false;
 						return; //자원이 없으면...중단
@@ -164,7 +162,7 @@ namespace FactoryFramework
 			}
 
 			//자원/연료가 없으면 null, 있으면 해당 slot을 리턴합니다.
-			if (0 == FUEL._slots[0]._itemid || FUEL._slots[0]._amount <= 0)
+			if (0 == FUEL._slots[0]._item._itemid || FUEL._slots[0]._item._amount <= 0)
 			{
 				this._IsWorking = false;
 				return;
@@ -193,24 +191,24 @@ namespace FactoryFramework
 		private bool CanStartProduction()
 		{
 			//check fuel
-			if(0 == FUEL._slots[0]._itemid || FUEL._slots[0]._amount <= 0)
+			if(0 == FUEL._slots[0]._item._itemid || FUEL._slots[0]._item._amount <= 0)
 				return false;//연료가 없으면...중단
 
 			//check...자원
 			for (int s = 0; s < INPUT._slots.Count; ++s)
 			{
-				if (0 == INPUT._slots[s]._itemid || INPUT._slots[s]._amount <= 0)
+				if (0 == INPUT._slots[s]._item._itemid || INPUT._slots[s]._item._amount <= 0)
 					return false;//자원이 없으면...중단
 			}
 
 			//새로 생성할 아이템이 output에 등록된 아이템과 같은지 먼저 체크합니다.
-			if (0 < OUTPUT._slots[0]._itemid)
+			if (0 < OUTPUT._slots[0]._item._itemid)
 			{
 				List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
 				for (int i = 0; i < inputs.Count; ++i)
 				{
-					if (INPUT._slots[0]._itemid == inputs[i].itemid)    //투입된 아이템인지 체크
-						if (OUTPUT._slots[0]._itemid != inputs[i].output) return false; //새로 생성할 아이템이 output에 등록된 아이템과 다르다.
+					if (INPUT._slots[0]._item._itemid == inputs[i].itemid)    //투입된 아이템인지 체크
+						if (OUTPUT._slots[0]._item._itemid != inputs[i].output) return false; //새로 생성할 아이템이 output에 등록된 아이템과 다르다.
 				}
 			}
 
@@ -226,10 +224,10 @@ namespace FactoryFramework
 			List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
 			for (int i = 0; i < inputs.Count; ++i)
 			{
-				if (INPUT._slots[0]._itemid == inputs[i].itemid)
+				if (INPUT._slots[0]._item._itemid == inputs[i].itemid)
 				{
 					//output이 다르면... 중지.
-					if (0 != OUTPUT._slots[0]._itemid && OUTPUT._slots[0]._itemid != inputs[i].output)
+					if (0 != OUTPUT._slots[0]._item._itemid && OUTPUT._slots[0]._item._itemid != inputs[i].output)
 						return false;
 
 					AssignRecipe(inputs[i].output);
@@ -239,11 +237,11 @@ namespace FactoryFramework
 			}
 
 			//아이템 차감
-			int input = INPUT._slots[0]._itemid;
-			INPUT._slots[0]._amount -= 1;
-			if(INPUT._slots[0]._amount <= 0) INPUT._slots[0]._itemid = 0;
+			int input = INPUT._slots[0]._item._itemid;
+			INPUT._slots[0]._item._amount -= 1;
+			if(INPUT._slots[0]._item._amount <= 0)	INPUT._slots[0]._item._itemid = 0;
 			//UI
-			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, input, INPUT._slots[0]._amount, true);
+			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, input, INPUT._slots[0]._item._amount, MyCraft.Global.FILLAMOUNT_DEFAULT, true);
 			return true;
 		}
 		//연료 소모
@@ -253,41 +251,41 @@ namespace FactoryFramework
 			List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 			for (int i = 0; i < fuels.Count; ++i)
 			{
-				if (FUEL._slots[0]._itemid == fuels[i].itemid)
+				if (FUEL._slots[0]._item._itemid == fuels[i].itemid)
 				{
 					FUEL_PROGRESS.SetTime(fuels[i].burning_time);
 					break;
 				}
 			}
 			//아이템 차감
-			int fuel = FUEL._slots[0]._itemid;
-			FUEL._slots[0]._amount -= 1;
-			if(FUEL._slots[0]._amount <= 0) FUEL._slots[0]._itemid = 0;
+			int fuel = FUEL._slots[0]._item._itemid;
+			FUEL._slots[0]._item._amount -= 1;
+			if(FUEL._slots[0]._item._amount <= 0) FUEL._slots[0]._item._itemid = 0;
 			//UI
-			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, fuel, FUEL._slots[0]._amount, true);
+			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, fuel, FUEL._slots[0]._item._amount, FUEL._slots[0]._item._fillAmount, true);
 		}
 		//false:가득찼거나, 생성이 불가능할때. true:계속생성가능하다.
 		private bool CreateOutputProducts()
 		{
 			if (base._panels.Count < 3) return false;
-			if (0 != OUTPUT._slots[0]._itemid && this._recipe != OUTPUT._slots[0]._itemid) return false;
+			if (0 != OUTPUT._slots[0]._item._itemid && this._recipe != OUTPUT._slots[0]._item._itemid) return false;
 
-			OUTPUT._slots[0]._itemid = this._recipe;
-			OUTPUT._slots[0]._amount += 1;
+			OUTPUT._slots[0]._item._itemid = this._recipe;
+			OUTPUT._slots[0]._item._amount += 1;
 			//UI
-			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._item._itemid, OUTPUT._slots[0]._item._amount, OUTPUT._slots[0]._item._fillAmount, false);
 
 			//is full
-			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(OUTPUT._slots[0]._itemid);
-			if (itembase.Stackable <= OUTPUT._slots[0]._amount)
+			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(OUTPUT._slots[0]._item._itemid);
+			if (itembase.Stackable <= OUTPUT._slots[0]._item._amount)
 			{
 				Debug.Log("output is full");
 				return false;
 			}
 
-			if(this._recipe != OUTPUT._slots[0]._itemid)
+			if(this._recipe != OUTPUT._slots[0]._item._itemid)
 			{
-				Debug.LogError($"error: recipe({this._recipe}) is different with output({OUTPUT._slots[0]._itemid})");
+				Debug.LogError($"error: recipe({this._recipe}) is different with output({OUTPUT._slots[0]._item._itemid})");
 				return false;
 			}
 
@@ -297,7 +295,7 @@ namespace FactoryFramework
 		#region GIVE_OUTPUT
 		public bool CanGiveOutput(OutputSocket cs = null)
 		{
-			if (0 == OUTPUT._slots[0]._itemid || OUTPUT._slots[0]._amount <= 0) return false;
+			if (0 == OUTPUT._slots[0]._item._itemid || OUTPUT._slots[0]._item._amount <= 0) return false;
 			return true;
 		}
 
@@ -311,17 +309,17 @@ namespace FactoryFramework
 		//}
 		public int OutputType(OutputSocket cs = null)
 		{
-			return OUTPUT._slots[0]._itemid;
+			return OUTPUT._slots[0]._item._itemid;
 		}
 
 		public int GiveOutput(OutputSocket cs = null)
 		{
 			//아이템 차감
-			int output = OUTPUT._slots[0]._itemid;
-			OUTPUT._slots[0]._amount -= 1;
-			if (OUTPUT._slots[0]._amount <= 0) OUTPUT._slots[0]._itemid = 0;
+			int output = OUTPUT._slots[0]._item._itemid;
+			OUTPUT._slots[0]._item._amount -= 1;
+			if (OUTPUT._slots[0]._item._amount <= 0) OUTPUT._slots[0]._item._itemid = 0;
 			//UI
-			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, output, OUTPUT._slots[0]._amount, true);
+			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, output, OUTPUT._slots[0]._item._amount, OUTPUT._slots[0]._item._fillAmount, true);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
@@ -346,36 +344,36 @@ namespace FactoryFramework
 		{
 			if (false == CanTakeInputItem(itemid)) return false;
 
-			if (0 == INPUT._slots[0]._itemid)
+			if (0 == INPUT._slots[0]._item._itemid)
 			{
-				INPUT._slots[0]._itemid = itemid;
-				INPUT._slots[0]._amount = 1;
+				INPUT._slots[0]._item._itemid = itemid;
+				INPUT._slots[0]._item._amount = 1;
 				//UI
-				this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._itemid, INPUT._slots[0]._amount, false);
+				this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._item._itemid, INPUT._slots[0]._item._amount, INPUT._slots[0]._item._fillAmount, false);
 				return true;
 			}
-			if (itemid != INPUT._slots[0]._itemid) return false;
-			INPUT._slots[0]._amount += 1;
+			if (itemid != INPUT._slots[0]._item._itemid) return false;
+			INPUT._slots[0]._item._amount += 1;
 			//UI
-			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._itemid, INPUT._slots[0]._amount, false);
+			this.SetBlock2Inven(INPUT._slots[0]._panel, INPUT._slots[0]._slot, INPUT._slots[0]._item._itemid, INPUT._slots[0]._item._amount, INPUT._slots[0]._item._fillAmount, false);
 			return true;
 		}
 
 		private bool TakeInputFuel(int itemid)
 		{
 			if (false == CanTakeInputFuel(itemid)) return false;
-			if (0 == FUEL._slots[0]._itemid)
+			if (0 == FUEL._slots[0]._item._itemid)
 			{
-				FUEL._slots[0]._itemid = itemid;
-				FUEL._slots[0]._amount = 1;
+				FUEL._slots[0]._item._itemid = itemid;
+				FUEL._slots[0]._item._amount = 1;
 				//UI
-				this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._itemid, FUEL._slots[0]._amount, false);
+				this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._item._itemid, FUEL._slots[0]._item._amount, FUEL._slots[0]._item._fillAmount, false);
 				return true;
 			}
-			if (itemid != FUEL._slots[0]._itemid) return false;
-			FUEL._slots[0]._amount += 1;
+			if (itemid != FUEL._slots[0]._item._itemid) return false;
+			FUEL._slots[0]._item._amount += 1;
 			//UI
-			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._itemid, FUEL._slots[0]._amount, false);
+			this.SetBlock2Inven(FUEL._slots[0]._panel, FUEL._slots[0]._slot, FUEL._slots[0]._item._itemid, FUEL._slots[0]._item._amount, FUEL._slots[0]._item._fillAmount, false);
 			return true;
 
 		}
@@ -398,45 +396,49 @@ namespace FactoryFramework
 		private bool CanTakeInputItem(int itemid)
 		{
 			if (base._panels.Count < 3) return false;
+			List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
+
 			//투입이 가능한지 체크
-			if (0 == INPUT._slots[0]._itemid)
+			if (0 == INPUT._slots[0]._item._itemid)
 			{
-				List<MyCraft.FurnaceInputItem> inputs = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.input;
 				for (int i = 0; i < inputs.Count; ++i)
 					if (itemid == inputs[i].itemid) return true;    //투입가능
 				return false;
 			}
 			//diff itemid
-			if (itemid != INPUT._slots[0]._itemid) return false;
-			//is full
-			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
-			if (itembase.Stackable <= INPUT._slots[0]._amount) return false;
-
-			return true;
+			if (itemid != INPUT._slots[0]._item._itemid) return false;
+			for (int i = 0; i < inputs.Count; ++i)
+			{
+				if (itemid != inputs[i].itemid) continue;
+				if (inputs[i].limit * MyCraft.Common.INPUT_ALLOW_RATE < INPUT._slots[0]._item._amount) return false;      //INPUT은 n배수 까지만
+            }
+            return true;
 		}
 		private bool CanTakeInputFuel(int itemid)
 		{
 			if (base._panels.Count < 3) return false;
+			List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
+
 			//투입이 가능한지 체크
-			if (0 == FUEL._slots[0]._itemid)
+			if (0 == FUEL._slots[0]._item._itemid)
 			{
-				List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 				for (int i = 0; i < fuels.Count; ++i)
 					if (itemid == fuels[i].itemid) return true;    //투입가능
 				return false;
 			}
 			//diff itemid
-			if (itemid != FUEL._slots[0]._itemid) return false;
-			//is full
-			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
-			if (itembase.Stackable <= FUEL._slots[0]._amount) return false;
-
+			if (itemid != FUEL._slots[0]._item._itemid) return false;
+            for (int i = 0; i < fuels.Count; ++i)
+			{
+				if(itemid != fuels[i].itemid) continue;
+				if (fuels[i].limit * MyCraft.Common.INPUT_ALLOW_RATE < FUEL._slots[0]._item._amount) return false;      //INPUT은 n배수 까지만
+            }
 			return true;
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase
 		#endregion //..TAKE_INPUT
 
-		//#region SERIALIZATION_HELPERS
+		#region SERIALIZATION_HELPERS
 		////@@
 		//////HG[2023.06.09] Item -> MyCraft.ItemBase
 		//////private List<SerializedItemStack> SerializeField(Dictionary<Item, int> dict)
@@ -530,7 +532,7 @@ namespace FactoryFramework
 		////..//HG[2023.06.09] Item -> MyCraft.ItemBase
 		//public void DeserializeInputs(SerializedItemStack[] inputs) => base._panels = DeserializeField(inputs.ToList());
 		//public void DeserializeOutputs(SerializedItemStack[] inputs) => base._panels = DeserializeField(inputs.ToList());
-		//#endregion
+		#endregion
 
 	}
 }

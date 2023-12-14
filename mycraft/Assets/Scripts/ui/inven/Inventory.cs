@@ -29,7 +29,7 @@ namespace MyCraft
         //    //panel : only one
 
         //    ////slot amount
-        //    //writer.Write(this._panels[0]._amount);
+        //    //writer.Write(this._panels[0]._item._amount);
 
         //    ////임시 List<> 에 저장
         //    //List<ItemData> items = new List<ItemData>();

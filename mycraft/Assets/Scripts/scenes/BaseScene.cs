@@ -10,7 +10,8 @@ namespace MyCraft
     {
         public Define.Scene SceneType { get; protected set; } = Define.Scene.Unknown;
         protected Object _eventsystem;
-        protected virtual void Init()
+
+		protected virtual void Init()
         {
             _eventsystem = GameObject.FindObjectOfType(typeof(EventSystem));
             if (_eventsystem == null) Managers.Resource.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";

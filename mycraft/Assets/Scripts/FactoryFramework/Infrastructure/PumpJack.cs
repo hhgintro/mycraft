@@ -7,7 +7,8 @@ namespace FactoryFramework
 {
     public class PumpJack : Building, IOutput
     {
-		private Dictionary<int/*itemid*/, int/*amount*/> _outputs = new Dictionary<int, int>();
+		//private Dictionary<int/*itemid*/, int/*amount*/> _outputs = new Dictionary<int, int>();
+		private Dictionary<int/*itemid*/, MyCraft.BuildingItem> _outputs = new Dictionary<int, MyCraft.BuildingItem>();
 		//public List<MyCraft.BuildingPanel> _panels = new List<MyCraft.BuildingPanel>();
 
 
@@ -24,7 +25,7 @@ namespace FactoryFramework
 		//    _t = 0f;
 		//}
 
-		private void Start()
+		public override void InitStart()
 		{
 			//// use mesh to calculate bounds
 			//Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
@@ -42,7 +43,9 @@ namespace FactoryFramework
 			//	}
 			//}
 
-			if (0 == _outputs.Count) _outputs.Add(310, 0);
+			if (0 == _outputs.Count) _outputs.Add(310, new MyCraft.BuildingItem());
+
+			base.InitStart();
 		}
 
 		public override void ProcessLoop()
@@ -76,7 +79,7 @@ namespace FactoryFramework
 			//is full
 			var output = _outputs.ElementAt(0);
 			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(output.Key);
-			if (itembase.Stackable <= _outputs[output.Key])
+			if (itembase.Stackable <= _outputs[output.Key]._amount)
 			{
 				_IsWorking = false;
 				return;
@@ -86,7 +89,7 @@ namespace FactoryFramework
 			_t += Time.deltaTime * PowerEfficiency; // FIXME maybe
 			if (_t > secondsPerResource)
 			{
-				_outputs[output.Key] += 1;
+				_outputs[output.Key]._amount += 1;
 				_t = _t % secondsPerResource;
 			}
 		}
@@ -102,7 +105,7 @@ namespace FactoryFramework
 		{
 			if (0 == _outputs.Count) return false;
 			var output = _outputs.ElementAt(0);
-			if (_outputs[output.Key] <= 0) return false;
+			if (_outputs[output.Key]._amount <= 0) return false;
 			return true;
 		}
 
@@ -125,8 +128,8 @@ namespace FactoryFramework
 		{
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);
-			if (_outputs[output.Key] <= 0) return 0;
-			_outputs[output.Key] -= 1;
+			if (_outputs[output.Key]._amount <= 0) return 0;
+			_outputs[output.Key]._amount -= 1;
 			return output.Key;
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase

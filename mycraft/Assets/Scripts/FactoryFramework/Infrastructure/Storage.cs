@@ -8,14 +8,12 @@ namespace FactoryFramework
 {
     public class Storage : Building, IInput, IOutput
     {
-        void Start()
-        {
-            Init();
-        }
-        public override  void Init()
+        public override  void InitStart()
         {
             if (0 == base._panels.Count)
                 base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.ChestItemBase)base._itembase).Slots));//input
+
+			base.InitStart();
         }
 
         public override void OnClicked()
@@ -28,6 +26,7 @@ namespace FactoryFramework
 			//de-active
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 		}
 
 
@@ -47,7 +46,7 @@ namespace FactoryFramework
             for (int p = 0; p < base._panels.Count; ++p)
             {
                 for (int s = 0; s < base._panels[p]._slots.Count; ++s)
-                    if (0 < base._panels[p]._slots[s]._amount) return true;
+                    if (0 < base._panels[p]._slots[s]._item._amount) return true;
             }
             return false;
         }
@@ -66,7 +65,7 @@ namespace FactoryFramework
             for (int p = 0; p < base._panels.Count; ++p)
             {
                 for (int s = 0; s < base._panels[p]._slots.Count; ++s)
-                    if (0 < base._panels[p]._slots[s]._amount) return base._panels[p]._slots[s]._itemid;
+                    if (0 < base._panels[p]._slots[s]._item._amount) return base._panels[p]._slots[s]._item._itemid;
             }
             return 0;
         }
@@ -96,11 +95,11 @@ namespace FactoryFramework
             {
                 for (int s = 0; s < base._panels[p]._slots.Count; ++s)
                 {
-                    if (0 < base._panels[p]._slots[s]._amount)
+                    if (0 < base._panels[p]._slots[s]._item._amount)
                     {
-                        itemid = base._panels[p]._slots[s]._itemid;
-                        if (--base._panels[p]._slots[s]._amount <= 0) base._panels[p]._slots[s]._itemid = 0;
-                        base.SetBlock2Inven(0, s, base._panels[p]._slots[s]._itemid, base._panels[p]._slots[s]._amount, true);
+                        itemid = base._panels[p]._slots[s]._item._itemid;
+                        if (--base._panels[p]._slots[s]._item._amount <= 0) base._panels[p]._slots[s]._item._itemid = 0;
+                        base.SetBlock2Inven(0, s, base._panels[p]._slots[s]._item._itemid, base._panels[p]._slots[s]._item._amount, base._panels[p]._slots[s]._item._fillAmount, true);
                         return itemid;
                     }
                 }
@@ -132,10 +131,10 @@ namespace FactoryFramework
 			{
 				for (int s = 0; s < base._panels[p]._slots.Count; ++s)
 				{
-					if (0 == base._panels[p]._slots[s]._itemid) return true;    //빈공간
+					if (0 == base._panels[p]._slots[s]._item._itemid) return true;    //빈공간
 
-					if (itemid != base._panels[p]._slots[s]._itemid) continue;       //다른아이템
-					if (base._panels[p]._slots[s]._amount < itembase.Stackable) return true;    //여유가 있군.
+					if (itemid != base._panels[p]._slots[s]._item._itemid) continue;       //다른아이템
+					if (base._panels[p]._slots[s]._item._amount < itembase.Stackable) return true;    //여유가 있군.
 				}
 			}
 			return false;   //공간부족
@@ -169,19 +168,19 @@ namespace FactoryFramework
 			{
 				for (int s = 0; s < base._panels[p]._slots.Count; ++s)
 				{
-					if (0 == base._panels[p]._slots[s]._itemid)     //빈공간
+					if (0 == base._panels[p]._slots[s]._item._itemid)     //빈공간
 					{
-						base._panels[p]._slots[s]._itemid = itemid;
-						base._panels[p]._slots[s]._amount = 1;
-						base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._itemid, base._panels[p]._slots[s]._amount, true);
+						base._panels[p]._slots[s]._item._itemid = itemid;
+						base._panels[p]._slots[s]._item._amount = 1;
+						base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._item._itemid, base._panels[p]._slots[s]._item._amount, base._panels[p]._slots[s]._item._fillAmount, true);
 						return;
 					}
 
-					if (itemid != base._panels[p]._slots[s]._itemid) continue;       //다른아이템
-					if (base._panels[p]._slots[s]._amount < itembase.Stackable) //여유가 있군.
+					if (itemid != base._panels[p]._slots[s]._item._itemid) continue;       //다른아이템
+					if (base._panels[p]._slots[s]._item._amount < itembase.Stackable) //여유가 있군.
 					{
-						base._panels[p]._slots[s]._amount += 1;
-						base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._itemid, base._panels[p]._slots[s]._amount, true);
+						base._panels[p]._slots[s]._item._amount += 1;
+						base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._item._itemid, base._panels[p]._slots[s]._item._amount, base._panels[p]._slots[s]._item._fillAmount, true);
 						return;
 					}
 				}

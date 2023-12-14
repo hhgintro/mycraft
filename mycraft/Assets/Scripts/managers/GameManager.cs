@@ -195,15 +195,16 @@ namespace MyCraft
 		//소유한 아이템 개수
 		public int GetAmount(int itemid)
 		{
-			int amount = 0;
-			if (itemid == InvenBase.choiced_item.database.id)
-				amount += InvenBase.choiced_item.amount;
-			amount += Managers.Game.Inventories.GetAmount(itemid);
+			int amount = Managers.Game.Inventories.GetAmount(itemid);
 			amount += Managers.Game.QuickInvens.GetAmount(itemid);
+			if (null == InvenBase.choiced_item) return amount;
+
+			if(itemid == InvenBase.choiced_item.database.id)
+				amount += InvenBase.choiced_item.amount;
 			return amount;
 		}
 
-		public int AddItem(int itemid, int amount)
+		public int AddItem(int itemid, int amount, float fillAmount)
 		{
 			if (0 == amount) return 0;
 
@@ -215,11 +216,11 @@ namespace MyCraft
 			//HG_TEST: 테스트로 bCreate를 true로 설정합니다.(default:false)
 			//  인벤아이템을 모두 가져왔을때 자리를 완전히 비우지말고 amount만 0 으로 설정 이미지는 "흑백"으로 처리함으로
 			//  이후 회수될때 원자리를 찾아 가면 좋을듯 싶다.
-			amount = Managers.Game.QuickInvens.AddItem(itemid, amount, true);
+			amount = Managers.Game.QuickInvens.AddItem(itemid, amount, ref fillAmount, true);
 			if (amount <= 0) return 0;
 
 			//inventory
-			amount = Managers.Game.Inventories.AddItem(itemid, amount);
+			amount = Managers.Game.Inventories.AddItem(itemid, amount, ref fillAmount);
 			if (amount <= 0) return 0;
 
 			////그래도 남아있으면...생성해준다.
@@ -233,13 +234,14 @@ namespace MyCraft
 		public int AddItem(InvenItemData itemData)
 		{
 			//quick inven
-			int amount = Managers.Game.QuickInvens.AddItem(itemData);
+			float fillAmount = itemData.GetFillAmount();
+			int amount = Managers.Game.QuickInvens.AddItem(itemData, ref fillAmount);
 			if (amount <= 0)
 				return 0;
 			itemData.amount = amount;
 
 			//inventory
-			amount = Managers.Game.Inventories.AddItem(itemData);
+			amount = Managers.Game.Inventories.AddItem(itemData, ref fillAmount);
 			if (amount <= 0)
 				return 0;
 			itemData.amount = amount;
@@ -249,21 +251,24 @@ namespace MyCraft
 
 		public int SubItem(int itemid, int amount)
 		{
-			//quick inven
-			amount = Managers.Game.QuickInvens.SubItem(itemid, amount);
-			if (amount <= 0)
-				return 0;
-
 			//inventory
 			amount = Managers.Game.Inventories.SubItem(itemid, amount);
 			if (amount <= 0)
 				return 0;
 
-			////그래도 남아있으면...생성해준다.
-			//amount = GetQuickInven().AddItem(itemid, amount);
-			//if (amount <= 0)
-			//    return 0;
+			//quick inven
+			amount = Managers.Game.QuickInvens.SubItem(itemid, amount);
+			if (amount <= 0)
+				return 0;
 
+			return amount;
+		}
+
+		//가지고 있는 아이템 개수
+		public int GetItem(int itemid)
+		{
+			int amount = Managers.Game.Inventories.GetAmount(itemid);
+			amount += Managers.Game.QuickInvens.GetAmount(itemid);
 			return amount;
 		}
 

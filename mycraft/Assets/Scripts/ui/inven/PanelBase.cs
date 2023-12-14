@@ -61,7 +61,7 @@ namespace MyCraft
 		public override void SetSlots(int slot)
 		{
 			for (int i = 0; i < slot; ++i)
-				base._slots.Add(new BuildingSlot(base._panel, i));
+				base._slots.Add(new BuildingSlot(base._panel, i, 0, 0, MyCraft.Global.FILLAMOUNT_DEFAULT));
 		}
 
 		//amount : 필요한 개수이상이면 해당slot정보가 리턴됩니다.
@@ -85,17 +85,17 @@ namespace MyCraft
 		{
 			for (int i = 0; i < base._slots.Count; ++i)
 			{
-				if (0 == base._slots[i]._itemid)
+				if (0 == base._slots[i]._item._itemid)
 					return false;   //output에 여유가 있다.
 
 				//다른 아이템
-				if (itemid != base._slots[i]._itemid)
+				if (itemid != base._slots[i]._item._itemid)
 					continue;
 
-				ItemBase itembase = Managers.Game.ItemBases.FetchItemByID(base._slots[i]._itemid);
+				ItemBase itembase = Managers.Game.ItemBases.FetchItemByID(base._slots[i]._item._itemid);
 				if (null == itembase) continue;
 
-				if (base._slots[i]._amount < itembase.Stackable)
+				if (base._slots[i]._item._amount < itembase.Stackable)
 					return false;   //output에 여유가 있다.
 			}
 			return true;//가득 참.
@@ -104,11 +104,11 @@ namespace MyCraft
 		{
 			for (int i = 0; i < base._slots.Count; ++i)
 			{
-				if (0 == base._slots[i]._itemid) return false;
+				if (0 == base._slots[i]._item._itemid) return false;
 
-				MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(base._slots[i]._itemid);
+				MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(base._slots[i]._item._itemid);
 				if (null == itembase) return true;
-				if (itembase.Stackable <= base._slots[0]._amount) return true;
+				if (itembase.Stackable <= base._slots[0]._item._amount) return true;
 			}
 			return false;
 		}

@@ -86,7 +86,7 @@ namespace MyCraft
             }
 
         }
-		public override void LinkInven(Building building, Dictionary<int, int> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public override void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
         {
 			this._building = building;
 		}

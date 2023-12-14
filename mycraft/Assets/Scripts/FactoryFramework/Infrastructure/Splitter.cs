@@ -10,8 +10,6 @@ namespace FactoryFramework
 
 		public override void ProcessLoop()
 		{
-			base.ProcessLoop();
-
 			// *** splitter와 merge는 이전convayer와 다음conveyor를 연결해 준다. ***
 
 			// only continue if we're ready to take input and give output

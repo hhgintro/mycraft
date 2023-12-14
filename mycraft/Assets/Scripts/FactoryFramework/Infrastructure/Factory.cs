@@ -13,7 +13,8 @@ namespace FactoryFramework
 	//Forge
 	public class Factory : Building, IInput, IOutput
 	{
-		private Dictionary<int/*itemid*/, int/*amount*/> _inputs    = new Dictionary<int, int>();
+		//private Dictionary<int/*itemid*/, int/*amount*/> _inputs    = new Dictionary<int, int>();
+		private Dictionary<int/*itemid*/, MyCraft.BuildingItem> _inputs = new Dictionary<int, MyCraft.BuildingItem>();
 		//@@
 		//private Dictionary<int/*itemid*/, int/*amount*/> _outputs	= new Dictionary<int, int>();
 
@@ -23,25 +24,21 @@ namespace FactoryFramework
 		//public Recipe[] invalidRecipes;
 
 
-		Dictionary<int, int> INPUT		=> this._inputs;
-		MyCraft.BuildingPanel OUTPUT	=> base._panels[0];
+		Dictionary<int, MyCraft.BuildingItem> INPUT		=> this._inputs;
+		MyCraft.BuildingPanel OUTPUT					=> base._panels[0];
 		//@@
 		//Dictionary<int, int> OUTPUTS	=> this._outputs;
 
-		MyCraft.Progress PROGRESS		=> _progresses[0];
+		MyCraft.Progress PROGRESS						=> _progresses[0];
 		//MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
 
 		////outline
 		//Material outline;
 		//Renderer renderers;
 		//List<Material> materials = new List<Material>();
-		int cnt = 0;
+		int cnt = 0;	//테스트용
 
-		void Start()
-		{
-			Init();
-		}
-		public override void Init()
+		public override void InitStart()
 		{
 			////outline
 			//this.outline = new Material(Shader.Find("Draw/OutlineShader"));
@@ -58,10 +55,11 @@ namespace FactoryFramework
 
 			if (0 == base._progresses.Count)
 			{
-				this._progresses.Add(new MyCraft.Progress(this, (MyCraft.PROGRESSID)0, 1f, false));//progress
+				this._progresses.Add(new MyCraft.Progress(this, MyCraft.PROGRESSID.Item, 1f, false));//progress
 				//this._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)1, 10, true));//progress-fuel
 			}
-			base.Init();
+
+			base.InitStart();
 		}
 
 		public override void ProcessLoop()
@@ -84,6 +82,7 @@ namespace FactoryFramework
 				MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
 				MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 				MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
+				MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 				return;
 			}
 
@@ -95,8 +94,9 @@ namespace FactoryFramework
 			//de-active
 			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 
-			if(0 == (++cnt %2))
+			if (0 == (++cnt %2))
 			{
 				//outline OFF
 				base.OutLine(false);
@@ -159,14 +159,15 @@ namespace FactoryFramework
 
 			//input
 			foreach(int itemid in INPUT.Keys)
-				if (0 < INPUT[itemid]) MyCraft.Managers.Game.AddItem(itemid, INPUT[itemid]);
+				if (0 < INPUT[itemid]._amount) MyCraft.Managers.Game.AddItem(itemid, INPUT[itemid]._amount, INPUT[itemid]._fillAmount);
 			INPUT.Clear();
 
 			base.OnReset();
 		}
 
-		public override bool AssignRecipe(MyCraft.ItemBase itembase)
+		public override bool AssignRecipe(MyCraft.JSonDatabase jsondata)
 		{
+			MyCraft.ItemBase itembase = (MyCraft.ItemBase)jsondata;
 			if (null == itembase || null == itembase.cost)
 			{
 				Debug.LogError("Fail: AssignRecipe is null");
@@ -181,23 +182,23 @@ namespace FactoryFramework
 
 			//input
 			foreach(MyCraft.BuildCostItem cost in this._recipe.cost.items)
-				INPUT.Add(cost.itemid, 0);
+				INPUT.Add(cost.itemid, new MyCraft.BuildingItem());
 			//output
-			//OUTPUT._slots[0]._itemid = this._recipe.id;
-			//OUTPUT._slots[0]._amount = 0;
+			//OUTPUT._slots[0]._item._itemid = this._recipe.id;
+			//OUTPUT._slots[0]._item._amount = 0;
 			OUTPUT.Clear();
 			OUTPUT.SetSlots(this._recipe.cost.outputs.Count);	//결과물 등록 slot개수
 			for(int i=0; i<this._recipe.cost.outputs.Count; ++i)
 			{
-				OUTPUT._slots[i]._itemid = this._recipe.cost.outputs[i].itemid;
-				OUTPUT._slots[i]._amount = 0;
+				OUTPUT._slots[i]._item._itemid = this._recipe.cost.outputs[i].itemid;
+				OUTPUT._slots[i]._item._amount = 0;
 			}
 			return true;
 		}
 
 		public override void OnProgressCompleted(MyCraft.PROGRESSID id)
 		{
-			if (MyCraft.PROGRESSID.Progress != id) return;
+			if (MyCraft.PROGRESSID.Item != id) return;
 
 			//아이템을 생성해 준다.
 			if (false == CreateOutputProducts())
@@ -219,11 +220,11 @@ namespace FactoryFramework
 			//이미 작동중...
 			if (true == base._IsWorking) return false;
 
-			//재료아이템,연료 충분한지 체크
-			if (false == CanStartProduction()) return false;
-
 			//check pregress
 			if (this._progresses.Count < 1) return false;
+
+			//재료아이템,연료 충분한지 체크
+			if (false == CanStartProduction()) return false;
 
 			//ConsumeFuels();     //연료소모
 			ConsumeInputs();    //재료아이템 소모
@@ -240,7 +241,7 @@ namespace FactoryFramework
 			foreach(var cost in this._recipe.cost.items)
 			{
 				if (false == INPUT.ContainsKey(cost.itemid)) return false;	//미등록된 아이템
-				if (INPUT[cost.itemid] < cost.amount) return false;			//자원이 부족
+				if (INPUT[cost.itemid]._amount < cost.amount) return false;			//자원이 부족
 			}
 
 			//output이 가득 찼으면...중단.
@@ -256,33 +257,35 @@ namespace FactoryFramework
 			int s = 0;
 			foreach (MyCraft.BuildCostItem cost in this._recipe.cost.items)
 			{
-				INPUT[cost.itemid] -= cost.amount;
+				INPUT[cost.itemid]._amount -= cost.amount;
 				//UI
-				this.SetBlock2Inven(0, s, cost.itemid, INPUT[cost.itemid], false);
+				this.SetBlock2Inven(0, s, cost.itemid, INPUT[cost.itemid]._amount, INPUT[cost.itemid]._fillAmount, false);
 				++s;
 			}
 		}
 		private bool CreateOutputProducts()
 		{
 			if (base._panels.Count < 1) return false;
-			//OUTPUT._slots[0]._amount += 1;
+			//OUTPUT._slots[0]._item._amount += 1;
 			////UI
-			//this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._itemid, OUTPUT._slots[0]._amount, false);
+			//this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._item._itemid, OUTPUT._slots[0]._item._amount, false);
 			for(int i=0; i<OUTPUT._slots.Count; ++i)
 			{
-				OUTPUT._slots[i]._amount += 1;
+				OUTPUT._slots[i]._item._amount += 1;
 				//UI
-				this.SetBlock2Inven(OUTPUT._slots[i]._panel, OUTPUT._slots[i]._slot, OUTPUT._slots[i]._itemid, OUTPUT._slots[i]._amount, false);
+				this.SetBlock2Inven(OUTPUT._slots[i]._panel, OUTPUT._slots[i]._slot, OUTPUT._slots[i]._item._itemid, OUTPUT._slots[i]._item._amount, OUTPUT._slots[i]._item._fillAmount, false);
 			}
 			return true;
 		}
 
-		public override void SetItem(int panel, int slot, int itemid, int amount)
+		public override void SetItem(int panel, int slot, int itemid, int amount, float fillAmount)
 		{
+			if (false == INPUT.ContainsKey(itemid))
+				return;
 			//input은 Dictionary 방식으로 처리한다.
-			if (0 == panel)	INPUT[itemid] = amount;
+			if (0 == panel)	INPUT[itemid]._amount = amount;
 			//output은 BuildingPanel 방식 적용
-			else			base.SetItem(panel-1, slot, itemid, amount);
+			else			base.SetItem(panel-1, slot, itemid, amount, fillAmount);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
@@ -305,7 +308,7 @@ namespace FactoryFramework
 		{
 			if(null == cs) return false;
 			int slot = GetOutputIndexBySocket(cs);
-			if (0 == OUTPUT._slots[slot]._itemid || OUTPUT._slots[slot]._amount <= 0) return false;
+			if (0 == OUTPUT._slots[slot]._item._itemid || OUTPUT._slots[slot]._item._amount <= 0) return false;
 			return true;
 		}
 
@@ -321,7 +324,7 @@ namespace FactoryFramework
 		{
 			if (null == cs) return 0;
 			int slot = GetOutputIndexBySocket(cs);
-			return OUTPUT._slots[slot]._itemid;
+			return OUTPUT._slots[slot]._item._itemid;
 		}
 
 		public int GiveOutput(OutputSocket cs = null)
@@ -329,14 +332,14 @@ namespace FactoryFramework
 			if (null == cs) return 0;
 			int slot = GetOutputIndexBySocket(cs);
 			//아이템 차감
-			OUTPUT._slots[slot]._amount -= 1;
+			OUTPUT._slots[slot]._item._amount -= 1;
 			//UI
-			this.SetBlock2Inven(OUTPUT._slots[slot]._panel, OUTPUT._slots[slot]._slot, OUTPUT._slots[slot]._itemid, OUTPUT._slots[slot]._amount, false);
+			this.SetBlock2Inven(OUTPUT._slots[slot]._panel, OUTPUT._slots[slot]._slot, OUTPUT._slots[slot]._item._itemid, OUTPUT._slots[slot]._item._amount, OUTPUT._slots[slot]._item._fillAmount, false);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();
 
-			return OUTPUT._slots[slot]._itemid;
+			return OUTPUT._slots[slot]._item._itemid;
 		}
 		#endregion //..GIVE_OUTPUT
 
@@ -361,9 +364,9 @@ namespace FactoryFramework
 				if (itemid == key) break;
 				++s;
 			}
-			INPUT[itemid] += 1;
+			INPUT[itemid]._amount += 1;
 			//UI
-			this.SetBlock2Inven(0, s, itemid, INPUT[itemid], false);
+			this.SetBlock2Inven(0, s, itemid, INPUT[itemid]._amount, INPUT[itemid]._fillAmount, false);
 			return true;
 		}
 
@@ -374,12 +377,19 @@ namespace FactoryFramework
 
 			//input 투입이 가능한지 체크
 			if(false == INPUT.ContainsKey(itemid)) return false;
+			if(this._recipe.Stackable <= INPUT[itemid]._amount) return false;	//최대량 초과
+
+			foreach(var item in this._recipe.cost.items)
+			{
+				if (item.itemid != itemid) continue;
+				if (item.amount * MyCraft.Common.INPUT_ALLOW_RATE < INPUT[itemid]._amount) return false;		//INPUT은 n배수 까지만
+			}
 			return true;
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase
 		#endregion //..TAKE_INPUT
 
-		//#region SERIALIZATION_HELPERS
+		#region SERIALIZATION_HELPERS
 		////@@
 		//////HG[2023.06.09] Item -> MyCraft.ItemBase
 		//////private List<SerializedItemStack> SerializeField(Dictionary<Item, int> dict)
@@ -473,7 +483,7 @@ namespace FactoryFramework
 		////..//HG[2023.06.09] Item -> MyCraft.ItemBase
 		//public void DeserializeInputs(SerializedItemStack[] inputs) => base._panels = DeserializeField(inputs.ToList());
 		//public void DeserializeOutputs(SerializedItemStack[] inputs) => base._panels = DeserializeField(inputs.ToList());
-		//#endregion
+		#endregion
 
 		#region SAVE
 		public override void Save(BinaryWriter writer)

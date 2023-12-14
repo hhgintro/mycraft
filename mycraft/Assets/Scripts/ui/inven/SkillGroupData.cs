@@ -146,7 +146,7 @@ namespace MyCraft
 
         //겹치고 남은 아이템의 개수를 리턴합니다.
         //this.amount <= 0 일때의 처리는 별도로 진행해 주셔야 됩니다.
-        public override int AddStackCount(int add, bool noti)
+        public override int AddStackCount(int add, float filAmount, bool noti)
         {
             this.amount += add;
 

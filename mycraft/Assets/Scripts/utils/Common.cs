@@ -31,8 +31,8 @@ namespace MyCraft
 
     public enum PROGRESSID : byte
     {
-        Progress,
-        Fuel,
+        Item,   //아이템 소모 progress
+        Fuel,   //연료 소모 progress
     }
 
     public enum LAYER_TYPE : byte
@@ -49,7 +49,15 @@ namespace MyCraft
 
     class Common
     {
-        public static Type GetTypeOf(BLOCKTYPE type)
+        //building의 INPUT에서 받을 수 있는 아이템 개수를 제한한다.
+        public static int INPUT_ALLOW_RATE = 3; //INPUT은 n배수 까지만 받을 수 있다.
+        public static int INPUT_ALLOW_CNT = 3;  //INPUT은 n 까지만 받을 수 있다.
+
+        public static int MAX_TECH_RESEARCH = 5;    //예약가능한 연구는 초대 n개까지.
+
+
+
+		public static Type GetTypeOf(BLOCKTYPE type)
         {
             switch (type)
             {

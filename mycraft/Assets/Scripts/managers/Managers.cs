@@ -53,8 +53,8 @@ namespace MyCraft
 
 		private void OnDestroy()
 		{
-            //Debug.Log("Manager.Clear()");
-            //Clear(true);
+            Debug.Log("Manager.Clear()");
+            //Clear(true);  //에러가 많이 뜬다.
 		}
 
 		static void Init()

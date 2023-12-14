@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace MyCraft
 		public int amount;
 		public int panel;
 		public int slot;
+		//public float fillAmount;
 
 		//private Inventory inven;
 		//private Tooltip tooltip;
@@ -25,18 +27,22 @@ namespace MyCraft
 
 		void Awake()
 		{
-			if(0 < this.transform.childCount)
-				textAmount = this.transform.GetChild(0).GetComponent<Text>();
+			InitAwake();
+
 
 			//inven = GameManager.GetInventory();
 			//tooltip = GameManager.GetTooltip();
 		}
 
-		void OnDisable()
+		void Start()
 		{
-			//Debug.Log("OnDisable");
-			//Managers.Game.Tooltips.Deactivate();
+			InitStart();
 		}
+		//void OnDisable()
+		//{
+		//	//Debug.Log("OnDisable");
+		//	//Managers.Game.Tooltips.Deactivate();
+		//}
 
 		public void OnPointerEnter(PointerEventData eventData)
 		{
@@ -50,85 +56,50 @@ namespace MyCraft
 		}
 		public void OnPointerDown(PointerEventData eventData)
 		{
-			//L button
-			if (Input.GetMouseButtonDown(0)) OnMouseLButtonDown();
-			//R button
-			else if (Input.GetMouseButtonDown(1)) OnMouseRButtonDown();
+			if (Input.GetMouseButtonDown(0))		this.OnMouseLButtonDown();	//L button
+			else if (Input.GetMouseButtonDown(1))	this.OnMouseRButtonDown();	//R button
 		}
+
+		public virtual void InitAwake()
+		{
+			if (0 < this.transform.childCount)
+				textAmount = this.transform.GetChild(0).GetComponent<Text>();
+		}
+		public virtual void InitStart() { }
+
 		protected virtual void OnMouseLButtonDown() { }
 		protected virtual void OnMouseRButtonDown() { }
 
-		////RETURN : 겹치고 남은 아이템 개수를 리턴합니다.
-		//public virtual int CheckOverlapItem(int add)
-		//{
-		//    //cnt가 (+)이면 최대개수 초과를 의미합니다.
-		//    int cnt = this.amount + add - this.itembase.Stackable;
-		//    if(cnt <= 0)
-		//    {
-		//        this.AddStackCount(add, true);
-		//        return 0;
-		//    }
-
-		//    this.amount = this.itembase.Stackable;
-		//    this.AddStackCount(0, true);
-		//    return cnt;//겹치고 남은 개수
-		//}
-
-
-		//bool CheckOverlapPickup(InvenItemData target, InvenItemData additem)
-		//{
-		//    //들고 있는것이 없으니 pickup가능
-		//    if (null == target)
-		//        return true;
-
-		//    //잡을 아이템이 없으면 pickup 불가능
-		//    if (0 == additem.itembase.id)
-		//        return false;
-
-		//    //다른 아이템(ID)을 들고 있으면 pickup 불가능
-		//    if (target.itembase.id != additem.itembase.id)
-		//        return false;
-
-		//    //HG_TODO : stack count 를 초과해서는 더이상 pickup 불가능
-		//    if (target.itembase.Stackable <= target.amount)
-		//        return false;
-
-		//    return true;//pickup 가능
-		//}
-
-		//public InvenItemData PickupAll(Transform parent, bool noti)
-		//{
-		//    this.transform.SetParent(this.transform.parent.parent.parent.parent.parent);
-		//    GetComponent<CanvasGroup>().blocksRaycasts = false;
-		//    //UI
-		//    if (true == noti)//block으로 전달합니다.
-		//        this.SetInven2Block(this.panel, this.slot, this.itembase.id, 0);//모두 집어들었기때문에 인벤은 amount=0 입니다.
-		//    return this;
-		//}
 
 		//겹치고 남은 아이템의 개수를 리턴합니다.
 		//this.amount <= 0 일때의 처리는 별도로 진행해 주셔야 됩니다.
-		public virtual int AddStackCount(int add, bool noti) { return 0; }
+		public virtual int AddStackCount(int add, float fillAmount, bool noti) { return 0; }
+		//추가하고 남은 개수를 리턴한다.
+		public virtual int _AddStackCount(int add, ref float fillAmount, bool noti) { return 0; }
+		//빼고 모자른 개수를 리턴한다.
+		public virtual int _SubStackCount(int add, bool noti) { return 0; }
 
-		//public int SetStackCount(int val, bool noti)
+
+		#region SAVE
+		//public virtual void Save(BinaryWriter bw)
 		//{
-		//    this.amount = val;
-		//    //Debug.Log("inven slot amount: " + this.amount);
-		//    if (0 <= this.amount)
-		//        this.textAmount.text = this.amount.ToString();
-		//    //UI
-		//    if(true == noti)//block으로 전달합니다.
-		//        this.SetInven2Block(this.panel, this.slot, this.itembase.id, this.amount);
-		//    return this.amount;
+		//	bw.Write(this.slot);    //slot
+		//	bw.Write(this.database.id); //item id
+		//	bw.Write(this.amount);  //amount
 		//}
 
-		////ChestInven에서 변경된 아이템정보를 ChestScript에 반영합니다.
-		//public void SetInven2Block(int panel, int slot, int id, int amount)
+		//public virtual void Load(BinaryReader reader)
 		//{
-		//    if (null == this.owner)
-		//        return;
-		//    this.owner.SetInven2Block(panel, slot, id, amount);
+		//	int panel			= 0;
+		//	int slot			= reader.ReadInt32();
+		//	int id				= reader.ReadInt32();
+		//	int amount			= reader.ReadInt32();
+		//	float fillAmount	= MyCraft.Global.FILLAMOUNT_DEFAULT;    //reader.ReadSingle();
+		//	//Debug.Log("slot[" + slot + "], id[" + id + "], amount[" + amount + "]");
+
+		//	SetItem(panel, slot, id, amount, fillAmount, false);
 		//}
+		#endregion //..SAVE
 	}
 
 }

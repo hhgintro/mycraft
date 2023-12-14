@@ -254,8 +254,8 @@ namespace FactoryFramework
 			//		{
 			//			for (int s = 0; s < storage._panels[p]._slots.Count; ++s)
 			//			{
-			//				if (storage._panels[p]._slots[s]._itemid <= 0) continue;
-			//				if (storage._panels[p]._slots[s]._amount <= 0) continue;
+			//				if (storage._panels[p]._slots[s]._item._itemid <= 0) continue;
+			//				if (storage._panels[p]._slots[s]._item._amount <= 0) continue;
 			//				++amount;
 			//			}
 			//		}
@@ -265,9 +265,9 @@ namespace FactoryFramework
 			//		{
 			//			for (int s = 0; s < storage._panels[p]._slots.Count; ++s)
 			//			{
-			//				if (storage._panels[p]._slots[s]._itemid <= 0) continue;
-			//				if (storage._panels[p]._slots[s]._amount <= 0) continue;
-			//				data.slots[i++] = new SerializedItemStack() { panel = p, slot = s, itemid = storage._panels[p]._slots[s]._itemid, amount = storage._panels[p]._slots[s]._amount };
+			//				if (storage._panels[p]._slots[s]._item._itemid <= 0) continue;
+			//				if (storage._panels[p]._slots[s]._item._amount <= 0) continue;
+			//				data.slots[i++] = new SerializedItemStack() { panel = p, slot = s, itemid = storage._panels[p]._slots[s]._item._itemid, amount = storage._panels[p]._slots[s]._item._amount };
 			//			}
 			//		}
 
@@ -463,9 +463,9 @@ namespace FactoryFramework
 			{
 				if (sRef.TryGetComponent(out Storage storageBuilding))
 				{
-					storageBuilding.Init();
+					storageBuilding.InitStart();
 					for(int i=0; i<slots.Length; ++ i)
-						storageBuilding.SetItem(slots[i].panel, slots[i].slot, slots[i].itemid, slots[i].amount);
+						storageBuilding.SetItem(slots[i].panel, slots[i].slot, slots[i].itemid, slots[i].amount, MyCraft.Global.FILLAMOUNT_DEFAULT);
 
 					//storageBuilding.storage = new ItemStack[storage.Length];
 					//for (int i =0; i < storage.Length; i++)

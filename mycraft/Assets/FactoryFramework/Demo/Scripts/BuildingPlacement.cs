@@ -188,6 +188,12 @@ public class BuildingPlacement : IPlacement
 			//}
 			//============================================
 
+			if (hit.transform.tag == "Splitter")  //분배기 / 병합기
+			{
+				if (current.transform.tag == "Splitter") groundPos = hit.transform.position + Vector3.up * 1.6f;
+				break;
+			}
+
 			//Debug.Log($"tag:{hit.transform.tag}");
 			if (hit.transform.tag == "Safe-Footing")  //안전발판
 			{
@@ -361,7 +367,7 @@ public class BuildingPlacement : IPlacement
 				}
 
 				//지급
-				MyCraft.InvenBase.choiced_item.AddStackCount(-1, false);
+				MyCraft.InvenBase.choiced_item._SubStackCount(1, false);
 				current = null;
 				return true;
 

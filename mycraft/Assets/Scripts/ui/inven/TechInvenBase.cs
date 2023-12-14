@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FactoryFramework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -161,17 +162,17 @@ namespace MyCraft
             Slot slot = panel.CreateSlot();
             base.CreateTechData(this, slot.transform, panel._panel, slot._slot, techbase);
 
-            //color
-            //연구완료했으면...green
-            if (true == techbase.learned) slot.GetComponent<Image>().color = Color.green;
+			//color
+			//연구완료했으면...green
+            if (true == techbase.Learned) slot.GetComponent<Image>().color = Color.green;
             //prev 모두 연구 완료했으면 yellow, 그외는 red
             else
             {
                 bool all_learned = true;   //prev모두 연구완료했는가?
                 foreach (var prev in techbase.prev_techs)
                 {
-                    TechBase itemPrev = Managers.Game.TechBases.FetchItemByID(prev);
-                    if (false == itemPrev.learned)
+                    TechBase techPrev = Managers.Game.TechBases.FetchItemByID(prev);
+                    if (false == techPrev.Learned)
                     {
                         all_learned = false;
                         break;
@@ -190,8 +191,49 @@ namespace MyCraft
 			}
         }
 
+		//연구완료
+		public virtual void OnResearchCompleted(Slot slot, TechBase techbase)
+		{
+			ItemData itemdata = slot.GetItemData();
+			if (null == itemdata) return;
 
-        public virtual void Save(BinaryWriter writer)
+			//one-self
+			if (itemdata.database == techbase)
+			{
+				slot.GetComponent<Image>().color = Color.green;
+				return;
+			}
+
+			if (this.IsNextTech(itemdata, techbase))
+			{
+				if (this.IsAllLearnedPreTech((TechBase)itemdata.database))
+					slot.GetComponent<Image>().color = Color.yellow;
+			}
+		}
+
+		//techbase 의 next_tech 여부를 확인한다.
+		//(next_tech: techbase를 선행 연구해야 next_tech 연구가 가능하다)
+		bool IsNextTech(ItemData itemdata, TechBase techbase)
+		{
+			for (int i = 0; i < techbase.next_techs.Count; ++i)
+			{
+				if (itemdata.database.id == techbase.next_techs[i])
+					return true;
+			}
+			return false;
+		}
+		//techbase의 pre-tech가 모두 연구가 완료된 상태이면( red --> yellow )
+		bool IsAllLearnedPreTech(TechBase techbase)
+		{
+			for (int i = 0; i < techbase.prev_techs.Count; ++i)
+			{
+				TechBase techPrev = Managers.Game.TechBases.FetchItemByID(techbase.prev_techs[i]);
+				if (false == techPrev.Learned) return false;
+			}
+			return true;
+		}
+
+		public virtual void Save(BinaryWriter writer)
 		{
 			////slot amount
 			//writer.Write(this.slotAmount);

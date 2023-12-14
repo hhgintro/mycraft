@@ -47,7 +47,7 @@ namespace MyCraft
 			Managers.Game.Inventories.gameObject.SetActive(false);
 		}
 
-		public override void LinkInven(Building building, Dictionary<int, int> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public override void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
 			base.LinkInven(building, inputs, panels, progresses, destroy);
 			this.AddReset(base._panels[0]);

@@ -26,16 +26,16 @@ namespace FactoryFramework
 		}
 
 		protected PowerGridComponent _powerGridComponent;
-		protected float PowerEfficiency 
-		{ get 
-			{ 
+		protected float PowerEfficiency
+		{ get
+			{
 				if (this._powerGridComponent?.basePowerDraw > 0)
 				{
 					return (_powerGridComponent?.grid?.Efficiency) ?? 0f;
 
 				} else
-				return 1f;
-			} 
+					return 1f;
+			}
 		}
 
 		//public int _itemid;   //ItemBase.id
@@ -45,8 +45,12 @@ namespace FactoryFramework
 
 		private void Awake()
 		{
-			_powerGridComponent ??= GetComponent<PowerGridComponent>();
-			_sRef ??= GetComponent<SerializationReference>();
+			this.InitAwake();
+		}
+
+		private void Start()
+		{
+			this.InitStart();
 		}
 
 		private void OnValidate()
@@ -55,7 +59,24 @@ namespace FactoryFramework
 			_sRef ??= GetComponent<SerializationReference>();
 		}
 
+		private void Update()
+		{
+			//if(true == _IsWorking)
+			this.ProcessLoop();
+		}
+
+		private void OnDestroy()
+		{
+			this._Destroy();
+		}
+		public virtual void InitAwake()
+		{
+			_powerGridComponent ??= GetComponent<PowerGridComponent>();
+			_sRef ??= GetComponent<SerializationReference>();
+		}
+		public virtual void InitStart() { }
 		public virtual void ProcessLoop() { }
+		public virtual void _Destroy() { }
 
 		public virtual void SetEnable_2(bool enable) { }   //설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
 

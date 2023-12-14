@@ -59,7 +59,7 @@ namespace MyCraft
 			//ESC
 			if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if(true == warning.gameObject.activeSelf)
+                if(warning && true == warning.gameObject.activeSelf)
                     Application.Quit();
             }
 		}

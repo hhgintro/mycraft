@@ -25,24 +25,25 @@ namespace FactoryFramework
 		Renderer renderers;
 		List<Material> materials = new List<Material>();
 
-		public virtual void Init()
+		public override void InitStart()
 		{
 			base._IsWorking = false;
-
 			for (int i = 0; i < this._progresses.Count; ++i)
 				this._progresses[i].InitProgress();
 
 			//outline
 			this.outline = new Material(Shader.Find("Draw/OutlineShader"));
 			this.renderers = this.transform.GetComponent<Renderer>();
+			
+			base.InitStart();
 		}
 
-		private void Update()
-		{
-			//_IsWorking = false;
-			this.ProcessLoop();
-		}
-		private void OnDestroy()
+		//private void Update()
+		//{
+		//	//_IsWorking = false;
+		//	base.ProcessLoop();
+		//}
+		public override void _Destroy()
 		{
 			OnBuildingDestroyed?.Invoke(this);
 		}
@@ -58,7 +59,7 @@ namespace FactoryFramework
 
 			OnDisconnect();
 			OnReset();
-			MyCraft.Managers.Game.AddItem(base._itembase.id, 1);
+			MyCraft.Managers.Game.AddItem(base._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
 		}
 		public virtual void OnDisconnect()
 		{
@@ -75,7 +76,7 @@ namespace FactoryFramework
 
 				for (int i = 0; i < slots.Count; ++i)
 				{
-					MyCraft.Managers.Game.AddItem(slots[i]._itemid, slots[i]._amount);
+					MyCraft.Managers.Game.AddItem(slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount);
 					slots[i].Clear();   //아이템제거
 				}
 			}
@@ -93,8 +94,9 @@ namespace FactoryFramework
 
 		//socket에 의한 위치보정
 		public virtual bool LocationCorrectForSocket(RaycastHit hit, ref Vector3 groundPos, ref Vector3 groundDir) { return false; }
-		public virtual bool AssignRecipe(MyCraft.ItemBase itembase) { return false; }
-		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }
+		public virtual bool AssignRecipe(MyCraft.JSonDatabase jsondata) { return false; }
+		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }  //progress 완료를 통보합니다.
+		public virtual void OnProgressReaching(MyCraft.PROGRESSID id) { }   //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
 		public virtual void OnClicked() { }
 		public virtual void SetInven(MyCraft.InvenBase inven)
 		{
@@ -106,19 +108,19 @@ namespace FactoryFramework
 
 		//Block에서 변경된 내용을 Inven에 반영합니다.
 		// destroy : amount가 0이면 파괴
-		public virtual void SetBlock2Inven(int panel, int slot, int itemid, int amount, bool destroy)
+		public virtual void SetBlock2Inven(int panel, int slot, int itemid, int amount, float fillAmount, bool destroy)
 		{
 			if (null == this._inven)
 				return;
-			this._inven.SetItem(panel, slot, itemid, amount, destroy);
+			this._inven.SetItem(panel, slot, itemid, amount, fillAmount, destroy);
 		}
-		public virtual void SetItem(int panel, int slot, int itemid, int amount)
+		public virtual void SetItem(int panel, int slot, int itemid, int amount, float fillAmount)
 		{
 			if (this._panels[panel]._slots.Count <= slot)
 				return;
 
 			//HG[2023.07.13]forge의 input에 "구리광석"을 "철광석으로 대체할 때를 위해 주석처리함.
-			//if ( (0 != _panels[panel]._slots[slot]._itemid) && (_panels[panel]._slots[slot]._itemid != itemid) )
+			//if ( (0 != _panels[panel]._slots[slot]._item._itemid) && (_panels[panel]._slots[slot]._item._itemid != itemid) )
 			//{
 			//	Debug.LogError("error: block different item id");
 			//	//return;	//HG[2023.07.13]forge의 input에 "구리광석"을 "철광석으로 대체할 때를 위해 주석처리함.
@@ -127,14 +129,15 @@ namespace FactoryFramework
 
 			if (amount <= 0)
 			{
-				this._panels[panel]._slots[slot]._itemid = 0;
-				this._panels[panel]._slots[slot]._amount = 0;
+				this._panels[panel]._slots[slot]._item._itemid = 0;
+				this._panels[panel]._slots[slot]._item._amount = 0;
 				//Debug.Log("block slot" + slot + ": " + base._panels[panel]._slots[slot].amount);
 				return;
 			}
 
-			this._panels[panel]._slots[slot]._itemid = itemid;
-			this._panels[panel]._slots[slot]._amount = amount;
+			this._panels[panel]._slots[slot]._item._itemid		= itemid;
+			this._panels[panel]._slots[slot]._item._amount		= amount;
+			this._panels[panel]._slots[slot]._item._fillAmount	= fillAmount;
 			//Debug.Log("block slot" + slot + ": " + base._panels[panel]._slots[slot].amount);
 		}
 		//block에 id인 아이템을 넣을 수 있는지 체크
@@ -239,9 +242,9 @@ namespace FactoryFramework
 				List<MyCraft.BuildingSlot> items = new List<MyCraft.BuildingSlot>();
 				for (int s = 0; s < this._panels[p]._slots.Count; ++s)
 				{
-					if (this._panels[p]._slots[s]._itemid <= 0) continue;
-					if (this._panels[p]._slots[s]._amount <= 0) continue;
-					items.Add(new MyCraft.BuildingSlot(0, s) { _panel = 0, _slot = s, _itemid = this._panels[p]._slots[s]._itemid, _amount = this._panels[p]._slots[s]._amount });
+					if (this._panels[p]._slots[s]._item._itemid <= 0) continue;
+					if (this._panels[p]._slots[s]._item._amount <= 0) continue;
+					items.Add(new MyCraft.BuildingSlot(0, s, this._panels[p]._slots[s]._item._itemid, this._panels[p]._slots[s]._item._amount, this._panels[p]._slots[s]._item._fillAmount));
 				}
 
 				//2. item count
@@ -250,8 +253,8 @@ namespace FactoryFramework
 				for (int i = 0; i < items.Count; ++i)
 				{
 					writer.Write(items[i]._slot);   //slot
-					writer.Write(items[i]._itemid); //item id
-					writer.Write(items[i]._amount); //amount
+					writer.Write(items[i]._item._itemid); //item id
+					writer.Write(items[i]._item._amount); //amount
 				}
 			}
         }
@@ -264,7 +267,7 @@ namespace FactoryFramework
 			//rotation
 			this.transform.rotation = MyCraft.Common.ReadQuaternion(reader);
 
-			this.Init();
+			this.InitStart();
 
 
 			//panel count
@@ -282,12 +285,13 @@ namespace FactoryFramework
 				//3. item info
 				for (int i = 0; i < itemcount; ++i)
 				{
-					int slot = reader.ReadInt32();
-					int id = reader.ReadInt32();
-					int amount = reader.ReadInt32();
+					int slot			= reader.ReadInt32();
+					int id				= reader.ReadInt32();
+					int amount			= reader.ReadInt32();
+					float fillAmount	= MyCraft.Global.FILLAMOUNT_DEFAULT;
 					//Debug.Log("slot[" + slot + "], id[" + id + "], amount[" + amount + "]");
 
-					SetItem(p, slot, id, amount);
+					SetItem(p, slot, id, amount, fillAmount);
 				}
 			}
 

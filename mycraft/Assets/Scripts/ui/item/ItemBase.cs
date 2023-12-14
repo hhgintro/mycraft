@@ -13,6 +13,7 @@ namespace MyCraft
 		//public string Description;
 		public bool learn = false;  //true:연구가 되면 스킬창에 노출됩니다.)
 		public bool DIY = true;     //do it yourself(false이면 생산시설에서만 생성할 수 있습니다)
+		public bool progress = false;	//
 		public BuildCost cost;      //[자신]이 만들어질때 필요한 아이템
 		//public List<BuildCostItem> outputs = new List<BuildCostItem>();
 
@@ -36,6 +37,7 @@ namespace MyCraft
 
 			LoadLearn(json);
 			LoadDIY(json);
+			LoadProgress(json);
 			LoadItemCost(json);
 			LoadState(json);
 
@@ -58,6 +60,13 @@ namespace MyCraft
 				return;
 
 			this.DIY = (bool)json["DIY"];
+		}
+		void LoadProgress(JsonData json)
+		{
+			if (false == json.Keys.Contains("progress"))
+				return;
+
+			this.progress = (bool)json["progress"];
 		}
 		void LoadItemCost(JsonData json)
 		{
@@ -172,6 +181,7 @@ namespace MyCraft
 			//outputs = (int)json["outputs"];
 		}
 
+		//Lab: input을 array로 미리 정의해 두면 어떨까요? 고려할 것
 		void LoadOutputs(int itemid, JsonData json)
 		{
 			if (false == json.Keys.Contains("outputs"))
@@ -184,7 +194,7 @@ namespace MyCraft
 				return;
 			}
 
-			//생산품을 지정한 경우(배열일때 - 정유공장)
+			//생산품을 지정한 경우(배열일때 - 정유공장:basic-oil-processing)
 			for (int i = 0; i < json["outputs"].Count; ++i)
 				outputs.Add(new BuildCostOutput((int)json["outputs"][i]["itemid"], (int)json["outputs"][i]["amount"]));
 		}

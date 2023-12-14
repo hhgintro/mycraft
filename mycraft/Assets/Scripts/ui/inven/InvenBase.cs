@@ -76,7 +76,7 @@ namespace MyCraft
 
 		#region LINK_INVEN
 		// destroy : amount가 0이면 파괴
-		public virtual void LinkInven(Building building, Dictionary<int, int> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public virtual void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
 			//HG_TEST: 테스트를 위해서 같은 개체일 경우에도 다시 생성시킵니다.(버그 확인후에는 원상복귀합니다)
 			//같은 개체일 경우에는 생성을 진행하지 않는다.
@@ -96,7 +96,8 @@ namespace MyCraft
 			//input
 			int p = 0; int s = 0;
 			this._panels[p].SetSlots(inputs.Count);
-			foreach (int itemid in inputs.Keys) this.SetItem(p, s++, itemid, inputs[itemid], destroy);
+			foreach (int itemid in inputs.Keys)
+				this.SetItem(p, s++, itemid, inputs[itemid]._amount, inputs[itemid]._fillAmount, destroy);
 
 			//panel 정보( output )
 			for (p = 0; p < panels.Count; ++p)
@@ -108,9 +109,9 @@ namespace MyCraft
 				List<BuildingSlot> slots = panels[p]._slots;
 				for (int i = 0; i < slots.Count; ++i)
 				{
-					if (slots[i]._itemid <= 0) continue;
-					if (slots[i]._amount <= 0) continue;//@@
-					this.SetItem(p+1, i, slots[i]._itemid, slots[i]._amount, destroy);
+					if (slots[i]._item._itemid <= 0) continue;
+					if (slots[i]._item._amount <= 0) continue;//@@
+					this.SetItem(p+1, i, slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount, destroy);
 				}
 			}
 
@@ -160,9 +161,9 @@ namespace MyCraft
 				List<BuildingSlot> slots = panels[p]._slots;
 				for (int i = 0; i < slots.Count; ++i)
 				{
-					if (slots[i]._itemid <= 0) continue;
-					if (slots[i]._amount <= 0) continue;//@@
-					this.SetItem(p, i, slots[i]._itemid, slots[i]._amount, destroy);
+					if (slots[i]._item._itemid <= 0) continue;
+					if (slots[i]._item._amount <= 0) continue;//@@
+					this.SetItem(p, i, slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount, destroy);
 				}
 			}
 
@@ -175,17 +176,16 @@ namespace MyCraft
 		}
 
 		//ChestInven에서 변경된 아이템정보를 ChestScript에 반영합니다.
-		public virtual void SetInven2Block(int panel, int slot, int id, int amount)
+		public virtual void SetInven2Block(int panel, int slot, int itemid, int amount, float fillAmount)
 		{
-			if (null == this._building)
-				return;
-			this._building.SetItem(panel, slot, id, amount);
+			if (null == this._building) return;
+			this._building.SetItem(panel, slot, itemid, amount, fillAmount);
 		}
 
 		public virtual void SetProgress(int id, float fillAmount)
 		{
-			if (id < this._progress.Count)
-				this._progress[id].fillAmount = fillAmount;
+			if (this._progress.Count <= id) return;
+			this._progress[id].fillAmount = fillAmount;
 		}
 		#endregion //..LINK_INVEN
 
@@ -214,17 +214,18 @@ namespace MyCraft
 			itemData.database   = database;
 			itemData.panel      = panel;
 			itemData.slot       = slot;
+			
+			itemData.InitStart();
 			return itemData;
 		}
 
 		public virtual ItemData CreateItemData(InvenBase owner, Transform parent
-			, int panel, int slot, JSonDatabase database, ref int amount
+			, int panel, int slot, JSonDatabase database, ref int amount, ref float fillAmount
 			, bool noti)
 		{
 			ItemData itemData = this.CreateObject(owner, parent, panel, slot, database, Managers.Resource.Load<GameObject>("prefabs/ui/Item"));
 			//겹치고 남은 아이템 개수
-			amount = itemData.AddStackCount(amount, noti);
-
+			amount = itemData._AddStackCount(amount, ref fillAmount, noti);
 			return itemData;
 		}
 
@@ -310,7 +311,7 @@ namespace MyCraft
 
 		//Block에서 변경된 내용을 Inven에 반영합니다.
 		// destroy : amount가 0이면 파괴
-		public void SetItem(int panel, int slot, int itemid, int amount, bool destroy)
+		public void SetItem(int panel, int slot, int itemid, int amount, float fillAmount, bool destroy)
 		{
 			Slot s = this.GetInvenSlot(panel, slot);
 			if (null == s) return;
@@ -331,16 +332,12 @@ namespace MyCraft
 					}
 					color.a = 0.3f;
 				}
-				itemData.SetStackCount(amount, false);
+				itemData.SetStackCount(amount, fillAmount, false);
                 itemData.GetComponent<Image>().color = color;
                 return;
             }
 
-			if(amount <= 0)
-			{
-
-				return;
-			}
+			if(amount <= 0) return;
 
 			//생성
 			//database
@@ -351,27 +348,27 @@ namespace MyCraft
 				return;
 			}
 
-			this.CreateItemData(this, s.transform, panel, slot, itemToAdd, ref amount, false);
+			this.CreateItemData(this, s.transform, panel, slot, itemToAdd, ref amount, ref fillAmount, false);
 		}
 
 		//InvenItemData가 없이,
 		//id로 아이템을 추가하고가 할때 사용합니다.
 		//InvenItemData를 이동하거나, 인벤에 넣어줄때는 Additem(InvenItemData itemData)를 사용하세요.
 		//bCreate: false이면 자리가 있어도 생성하지 않는다.(true이면 빈자리에 생성해 준다.)
-		public virtual int AddItem(int id, int itemcount, bool bCreate = true)
+		public virtual int AddItem(int id, int itemcount, ref float fillAmount, bool bCreate = true)
 		{
 			//들고 있는 아이템이면...
 			if (null != InvenBase.choiced_item)
 			{
 				if (InvenBase.choiced_item.database.id == id)
 				{
-					itemcount = InvenBase.choiced_item.AddStackCount(itemcount, true);
+					itemcount = InvenBase.choiced_item._AddStackCount(itemcount, ref fillAmount, true);
 					if (itemcount <= 0) return 0;
 				}
 			}
 
 			//겹치기
-			itemcount = this.OnOverlapItem(id, itemcount);
+			itemcount = this.OnOverlapItem(id, itemcount, ref fillAmount);
 			//더이상 추가할 것이 없다.
 			if (itemcount <= 0) return 0;
 			//빈자리가 있더라도, 생성하지는 않는다.
@@ -386,16 +383,16 @@ namespace MyCraft
 			}
 
 			//겹치지 못하고 남은 것이 있다면...생성해서 넣어줍니다.
-			itemcount = this.OnCreateItemData(itemToAdd, itemcount);
+			itemcount = this.OnCreateItemData(itemToAdd, itemcount, ref fillAmount);
 			return itemcount;
 		}
 
 		//InvenItemData를 인벤에 넣어줄때 사용합니다.
 		//InvenItemData 없이, id로 아이템을 추가하고자 할때에는 AddItem(int id, int itemcount)를 사용하세요.
-		public virtual int AddItem(InvenItemData itemData)
+		public virtual int AddItem(InvenItemData itemData, ref float fillAmount)
 		{
 			//겹치기
-			itemData.amount = this.OnOverlapItem(itemData.database.id, itemData.amount);
+			itemData.amount = this.OnOverlapItem(itemData.database.id, itemData.amount, ref fillAmount);
 			//더이상 추가할 것이 없다.
 			if (itemData.amount <= 0)
 			{
@@ -413,7 +410,7 @@ namespace MyCraft
 					if (1 < slots[i].transform.childCount)  //1: slot에 background가 추가되었으므로.
 						continue;
 
-					slots[i].AddItem(itemData);
+					slots[i].AddItem(itemData, ref fillAmount);
 					return 0;   //남은 개수
 				}
 			}
@@ -440,7 +437,7 @@ namespace MyCraft
 					if (amount < itemData.amount)
 					{
 						itemData.amount -= amount;
-						itemData.SetStackCount(itemData.amount, true);
+						itemData.SetStackCount(itemData.amount, MyCraft.Global.FILLAMOUNT_DEFAULT, true);
 						return 0;
 					}
 
@@ -456,7 +453,7 @@ namespace MyCraft
 
 		//겹치기
 		//RETURN : 겹치고 남은 개수를 리턴합니다.
-		protected virtual int OnOverlapItem(int id, int itemcount)
+		protected virtual int OnOverlapItem(int itemid, int itemcount, ref float fillAmount)
 		{
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
@@ -465,10 +462,10 @@ namespace MyCraft
 				{
 					InvenItemData itemData = (InvenItemData)slots[i].GetItemData();
 					if (null == itemData) continue;
-					if (itemData.database.id != id) continue;
+					if (itemData.database.id != itemid) continue;
 
 					//겹치고 남은 개수를 리턴합니다.
-					itemcount = itemData.CheckOverlapItem(itemcount);
+					itemcount = itemData._AddStackCount(itemcount, ref fillAmount, true);
 					//InvenItemData.AddStackCount(0);
 
 					//남은 개수가 없다.
@@ -480,7 +477,7 @@ namespace MyCraft
 			return itemcount;
 		}
 
-		protected virtual int OnCreateItemData(ItemBase itemToAdd, int itemcount)
+		protected virtual int OnCreateItemData(ItemBase itemToAdd, int itemcount, ref float fillAmount)
 		{
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
@@ -492,7 +489,7 @@ namespace MyCraft
 						continue;
 
 					//this.items[i] = itemToAdd;
-					this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, ref itemcount, true);
+					this.CreateItemData(this, slots[i].transform, p, i, itemToAdd, ref itemcount, ref fillAmount, true);
 
 					//더이상 추가할 것이 없다.
 					if (itemcount <= 0)
@@ -601,10 +598,10 @@ namespace MyCraft
 			bw.Write(this._panels[0]._slots.Count);
 
 			//임시 List<> 에 저장
-			List<ItemData> items = new List<ItemData>();
+			List<InvenItemData> items = new List<InvenItemData>();
 			for (int i = 0; i < this._panels[0]._slots.Count; ++i)
 			{
-				ItemData itemData = this._panels[0]._slots[i].GetItemData();
+				InvenItemData itemData = (InvenItemData)this._panels[0]._slots[i].GetItemData();
 				if (null == itemData) continue;
 				items.Add(itemData);
 			}
@@ -614,9 +611,10 @@ namespace MyCraft
 			//3. item info
 			for (int i = 0; i < items.Count; ++i)
 			{
-				bw.Write(items[i].slot);    //slot
+				bw.Write(items[i].slot);		//slot
 				bw.Write(items[i].database.id); //item id
-				bw.Write(items[i].amount);  //amount
+				bw.Write(items[i].amount);		//amount
+				bw.Write(items[i]._fillAmount); //fillAmount
 			}
 		}
 
@@ -633,13 +631,14 @@ namespace MyCraft
 			//3. item info
 			for (int i = 0; i < itemcount; ++i)
 			{
-				int panel	= 0;
-				int slot	= reader.ReadInt32();
-				int id		= reader.ReadInt32();
-				int amount	= reader.ReadInt32();
+				int panel			= 0;
+				int slot			= reader.ReadInt32();
+				int id				= reader.ReadInt32();
+				int amount			= reader.ReadInt32();
+				float fillAmount	= reader.ReadSingle();
 				//Debug.Log("slot[" + slot + "], id[" + id + "], amount[" + amount + "]");
 
-				SetItem(panel, slot, id, amount, false);
+				SetItem(panel, slot, id, amount, fillAmount, false);
 			}
 		}
 		#endregion //..SAVE

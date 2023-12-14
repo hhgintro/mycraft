@@ -54,11 +54,12 @@ namespace MyCraft
 
         public void PutdownChoicedItem()
         {
-			this.AddItem(InvenBase.choiced_item);
+            float fillAmount = InvenBase.choiced_item.GetFillAmount();
+			this.AddItem(InvenBase.choiced_item, ref fillAmount);
 			InvenBase.choiced_item = null;
 			Managers.Game.DestoryBuilding();    //들고있는 건물을 내려놓는다.
 		}
-		public void AddItem(ItemData itemData)
+		public void AddItem(ItemData itemData, ref float fillAmount)
         {
             itemData.GetComponent<Image>().enabled = true;
             itemData.panel = this._panel;
@@ -71,15 +72,16 @@ namespace MyCraft
             //InvenItemData = null;
 
             //UI
-            this.SetInven2Block(this._panel, _slot, itemData.database.id, itemData.amount);
-        }
+            this.SetInven2Block(this._panel, _slot, itemData.database.id, itemData.amount, fillAmount);
+            fillAmount = MyCraft.Global.FILLAMOUNT_DEFAULT; //리셋
+		}
 
         //ChestInven에서 변경된 아이템정보를 ChestScript에 반영합니다.
-        public void SetInven2Block(int panel, int slot, int id, int amount)
+        public void SetInven2Block(int panel, int slot, int id, int amount, float fillAmount)
         {
             if (null == this.owner)
                 return;
-            this.owner.SetInven2Block(panel, slot, id, amount);
+            this.owner.SetInven2Block(panel, slot, id, amount, fillAmount);
         }
 
     }

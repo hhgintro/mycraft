@@ -82,9 +82,9 @@ namespace MyCraft
 			//cost-slot
 			this._panelCost = new InvenPanel(0, 0, this, this.transform.Find("Cost/Slot Panel"));
 			//cost-item
-			this.AddTime(this._panelCost, 1, techbase._cost.time);
-			for (int i = 0; i < techbase._cost.items.Count; ++i)
-				this.AddItem(this._panelCost, techbase._cost.items[i].itemid, techbase._cost.items[i].amount);
+			this.AddTime(this._panelCost, 1, techbase.cost.time);
+			for (int i = 0; i < techbase.cost.items.Count; ++i)
+				this.AddItem(this._panelCost, techbase.cost.items[i].itemid, techbase.cost.items[i].amount);
 			//multiple
 			Slot multiple = UnityEngine.Object.Instantiate(this._inventoryMultiple).GetComponent<Slot>();
 			this._panelCost._slots.Add(multiple);
@@ -92,7 +92,7 @@ namespace MyCraft
 			//multiple.panel = this._panelCost._slots.Count - 1;
 			multiple.owner = this;
 			multiple.transform.SetParent(this.transform.Find("Cost/Slot Panel").gameObject.transform, false);//[HG2017.05.19]false : Cause Grid layout not scale with screen resolution
-			multiple.GetComponent<Text>().text = " x " + techbase._cost.mulitple.ToString();
+			multiple.GetComponent<Text>().text = " x " + techbase.cost.mulitple.ToString();
 			//pre-tech
 			if(0 < techbase.prev_techs.Count)
 			{
@@ -145,11 +145,11 @@ namespace MyCraft
 
 			//겹치지 못하고 남은 것이 있다면...생성해서 넣어줍니다.
 			Slot slot = panel.CreateSlot();
-			itemcount = this.OnCreateItemData(panel, itemToAdd, itemcount);
+			itemcount = this.OnCreateItemData(panel, itemToAdd, itemcount, MyCraft.Global.FILLAMOUNT_DEFAULT);
 			return itemcount;
 		}
 
-		protected virtual int OnCreateItemData(InvenPanel panel, JSonDatabase itemToAdd, int itemcount)
+		protected virtual int OnCreateItemData(InvenPanel panel, JSonDatabase itemToAdd, int itemcount, float fillAmount)
 		{
 			List<Slot> slots = panel._slots;
 			for (int i = 0; i < slots.Count; ++i)
@@ -159,7 +159,7 @@ namespace MyCraft
 					continue;
 
 				//this.items[i] = itemToAdd;
-				this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, ref itemcount, true);
+				this.CreateItemData(this, slots[i].transform, panel._panel, i, itemToAdd, ref itemcount, ref fillAmount, true);
 
 				//더이상 추가할 것이 없다.
 				if (itemcount <= 0)
@@ -170,17 +170,17 @@ namespace MyCraft
  
 		public void OnResearchClicked()
 		{
-			if(true == _techbase.learned)
+			if(true == _techbase.Learned)
 			{
 				Debug.Log(_techbase.id + "이미 연구 완료했습니다.");
 				return;
 			}
 			foreach (var prev in _techbase.prev_techs)
 			{
-				TechBase itemPrev = Managers.Game.TechBases.FetchItemByID(prev);
-				if (false == itemPrev.learned)
+				TechBase techPrev = Managers.Game.TechBases.FetchItemByID(prev);
+				if (false == techPrev.Learned)
 				{
-					Debug.Log($"이전 연구({itemPrev.Title})가 완료되지 않았습니다.");
+					Debug.Log($"이전 연구({techPrev.Title})가 완료되지 않았습니다.");
 					return;
 				}
 			}
@@ -213,8 +213,8 @@ namespace MyCraft
 				bool all_learned = true;   //prev모두 연구완료했는가?
 				foreach (var prev in techbase.prev_techs)
 				{
-					TechBase itemPrev = Managers.Game.TechBases.FetchItemByID(prev);
-					if (false == itemPrev.learned)
+					TechBase techPrev = Managers.Game.TechBases.FetchItemByID(prev);
+					if (false == techPrev.Learned)
 					{
 						//Debug.Log($"이전 연구({itemPrev.Title})가 완료되지 않았습니다.");
 						all_learned = false;
@@ -234,6 +234,23 @@ namespace MyCraft
 			Managers.Game.TechInvens.OnResearchCompleted(_techbase.id, nexts);
 		}
 
-		public override bool AssignRecipe(ItemBase itembase) { return true; }
+		public void OnResearchCompleted(TechBase techbase)
+		{
+			////같은지 여부를 체크하는 이유는, 다시 선택하면 갱신이 되기때문이다.
+			////아무동작도 하지 않았을 때만 갱신하면 되므로 아래를 체크합니다.
+			//if (this._techbase != techbase) return;
+
+			//title-slot
+			foreach(var slot in this._panelTitle._slots)	OnResearchCompleted(slot, techbase);
+
+			//prev-tech
+			if (null != this._panelPreTech)
+				foreach (var slot in this._panelPreTech._slots) OnResearchCompleted(slot, techbase);
+            //next-tech
+			if (null != this._panelNextTech)
+				foreach(var slot in this._panelNextTech._slots)	OnResearchCompleted(slot, techbase);
+        }
+
+        public override bool AssignRecipe(ItemBase itembase) { return true; }
 	}//..class TechDescription
 }//..namespace MyCraft

@@ -10,7 +10,8 @@ namespace FactoryFramework
 	//Drill
 	public class Driller : Building, IOutput
 	{
-		private Dictionary<int/*itemid*/, int/*amount*/> _outputs = new Dictionary<int, int>();
+		//private Dictionary<int/*itemid*/, int/*amount*/> _outputs = new Dictionary<int, int>();
+		private Dictionary<int/*itemid*/, MyCraft.BuildingItem> _outputs = new Dictionary<int, MyCraft.BuildingItem>();
 		//public List<MyCraft.BuildingPanel> _panels = new List<MyCraft.BuildingPanel>();
 
 
@@ -26,7 +27,7 @@ namespace FactoryFramework
 		//    resource.itemStack.item = item;
 		//    _t = 0f;
 		//}
-		public void Start()
+		public override void InitStart()
 		{
 			// use mesh to calculate bounds
 			Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
@@ -41,10 +42,12 @@ namespace FactoryFramework
 
 					//채광할 수 있는 광물정보를 등록합니다.
 					if (0 < _outputs.Count) _outputs.Clear();
-					_outputs.Add(r.itemid, 0);
+					_outputs.Add(r.itemid, new MyCraft.BuildingItem());
 					break;
 				}
 			}
+
+			base.InitStart();
 		}
 		public override void SetEnable_2(bool enable)
 		{
@@ -64,7 +67,7 @@ namespace FactoryFramework
 
 					//채광할 수 있는 광물정보를 등록합니다.
 					if (0 < _outputs.Count) _outputs.Clear();
-					_outputs.Add(r.itemid, 0);
+					_outputs.Add(r.itemid, new MyCraft.BuildingItem());
 					break;
 				}
 			}
@@ -106,7 +109,7 @@ namespace FactoryFramework
 			//is full
 			var output = _outputs.ElementAt(0);
 			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(output.Key);
-			if (itembase.Stackable <= _outputs[output.Key])
+			if (itembase.Stackable <= _outputs[output.Key]._amount)
 			{
 				_IsWorking = false;
 				return;
@@ -116,7 +119,7 @@ namespace FactoryFramework
 			_t += Time.deltaTime * PowerEfficiency; // FIXME maybe
 			if (_t > secondsPerResource)
 			{
-				_outputs[output.Key] += 1;
+				_outputs[output.Key]._amount += 1;
 				_t = _t % secondsPerResource;
 			}
 		}
@@ -132,7 +135,7 @@ namespace FactoryFramework
 		{
 			if(0 == _outputs.Count) return false;
 			var output = _outputs.ElementAt(0);
-			if (_outputs[output.Key] <= 0) return false;
+			if (_outputs[output.Key]._amount <= 0) return false;
 			return true;
 		}
 
@@ -154,8 +157,8 @@ namespace FactoryFramework
 		{
 			if (0 == _outputs.Count) return 0;
 			var output = _outputs.ElementAt(0);
-			if (_outputs[output.Key] <= 0) return 0;
-			_outputs[output.Key] -= 1;
+			if (_outputs[output.Key]._amount <= 0) return 0;
+			_outputs[output.Key]._amount -= 1;
 			return output.Key;
 		}
 		//..//HG[2023.06.09] Item -> MyCraft.ItemBase

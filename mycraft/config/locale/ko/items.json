@@ -162,8 +162,8 @@
   {
     "id": 801,
     "type": "ItemBase",
-    "speed": 1,
     "learn": true,
+    "progress": true,
     "cost": {
       "time": 2.1,
       "items": [
@@ -177,11 +177,12 @@
     "icon": "Textures/ui/science-pack-1",
     "prefab": "mineral/potions/GPVFX_POTION A"
   },
+
   {
     "id": 802,
     "type": "ItemBase",
-    "speed": 1,
     "learn": true,
+    "progress": true,
     "cost": {
       "time": 2.1,
       "items": [
@@ -195,11 +196,12 @@
     "icon": "Textures/ui/science-pack-2",
     "prefab": "mineral/potions/GPVFX_POTION C"
   },
+
   {
     "id": 803,
     "type": "ItemBase",
-    "speed": 1,
     "learn": true,
+    "progress": true,
     "cost": {
       "time": 2.1,
       "items": [
@@ -213,11 +215,12 @@
     "icon": "Textures/ui/science-pack-3",
     "prefab": "mineral/potions/GPVFX_POTION B"
   },
+
   {
     "id": 804,
     "type": "ItemBase",
-    "speed": 1,
     "learn": true,
+    "progress": true,
     "cost": {
       "time": 2.1,
       "items": [
@@ -429,7 +432,7 @@
       "outputs": 1
     },
     "assembling": {
-      "inputs": 4,
+      "inputs": [ 801, 802, 803, 804 ],
       "chips": 4,
       "outputs": [ 2, 9 ]
     },
@@ -563,7 +566,6 @@
   {
     "id": 1400,
     "type": "FloorItemBase",
-    "speed": 1,
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -582,7 +584,6 @@
   {
     "id": 1410,
     "type": "FloorItemBase",
-    "speed": 1,
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -601,7 +602,6 @@
   {
     "id": 1420,
     "type": "FloorItemBase",
-    "speed": 1,
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -791,7 +791,7 @@
       "outputs": 2
     },
     "state": {"power": 21,"defence": 12,"vitality": 50},
-        "stackable": 100,
+    "stackable": 100,
     "icon": "Textures/ui/stone-brick",
     "prefab": "mineral/_Stone-Brick"
   },

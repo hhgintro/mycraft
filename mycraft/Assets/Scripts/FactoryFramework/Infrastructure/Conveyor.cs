@@ -69,7 +69,7 @@ namespace FactoryFramework
 		// events
 		public UnityEvent<Conveyor> OnConveyorDestroyed;
 
-		private void Start()
+		public override void InitStart()
 		{
 			_powerGridComponent ??= GetComponent<PowerGridComponent>();
 
@@ -104,15 +104,15 @@ namespace FactoryFramework
 		{
             for (int i = 0; i < items.Count; i++)
             {
-                MyCraft.Managers.Game.AddItem(this.items[i]._itembase.id, 1);
+                MyCraft.Managers.Game.AddItem(this.items[i]._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
                 MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
             }
             items.Clear();
             Disconnect();
-            MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity);
+            MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity, MyCraft.Global.FILLAMOUNT_DEFAULT);
         }
 
-        private void OnDestroy()
+		public override void _Destroy()
 		{
 			for (int i = 0; i < items.Count; i++)
 				MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
@@ -125,14 +125,14 @@ namespace FactoryFramework
 		}
 
 
-		private void Update()
-		{
-			ProcessLoop();
+		//private void Update()
+		//{
+		//	ProcessLoop();
 
-			// FIXME maybe don't need to do this every update
-			beltMeshRenderer?.material.SetFloat("_Speed", data.speed);
-			_IsWorking = items.Count > 0;
-		}
+		//	// FIXME maybe don't need to do this every update
+		//	beltMeshRenderer?.material.SetFloat("_Speed", data.speed);
+		//	_IsWorking = items.Count > 0;
+		//}
 
 		//private void LateUpdate()
 		//{
@@ -151,6 +151,10 @@ namespace FactoryFramework
 			MoveItems();
 			// FIXME because IPath is not a struct
 			//MoveItemsJob(); // this will be the Jobs/Burst way to do things
+
+			// FIXME maybe don't need to do this every update
+			beltMeshRenderer?.material.SetFloat("_Speed", data.speed);
+			_IsWorking = items.Count > 0;
 		}
 
 		public void CalculateCapacity(int capacity=-1)

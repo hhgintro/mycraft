@@ -12,7 +12,7 @@ namespace MyCraft
 		//public string Title;
 		//public string Description;
 
-		public TechnologyCost _cost;    //소모비용
+		public TechnologyCost cost;    //소모비용
 
 		public List<int> prev_techs = new List<int>();
 		public List<int> next_techs = new List<int>();
@@ -20,16 +20,18 @@ namespace MyCraft
 
 		public string icon;
 
-		public bool learned { get { return (this.multiple == this._cost.mulitple); } }    //연구를 완료했나?
-		public int multiple;	//현재진행도(회수)
+        public bool Learned { get { return (1.0f <= this._fillAmount); } }    //연구를 완료했나?
+        public float _fillAmount { get; set; }	//Tech 연구률(0~1.0)
 
-		////2d 이미지용
-		//public Sprite Sprite;
-		////3d 모델용
-		//public GameObject prefab;
+        //public float _fillAmount;	//현재진행도
 
-		//public TechBase() { }
-		public TechBase(JsonData json) : base(json)
+        ////2d 이미지용
+        //public Sprite Sprite;
+        ////3d 모델용
+        //public GameObject prefab;
+
+        //public TechBase() { }
+        public TechBase(JsonData json) : base(json)
 		{
 			//this.id = (ushort)json["id"];
 			//this.Title = json["title"].ToString();
@@ -48,7 +50,7 @@ namespace MyCraft
 			if (false == json.Keys.Contains("cost"))
 				return;
 
-			this._cost = new TechnologyCost(json["cost"]);
+			this.cost = new TechnologyCost(json["cost"]);
 		}
 
 		void LoadPrevTechnology(JsonData json)
@@ -60,11 +62,12 @@ namespace MyCraft
 			{
 				int techid = (int)json["pre-tech"][i]["techid"];
 				this.prev_techs.Add(techid);
-				////next(자신의 id를 부여한다.)
+
+				//////next(자신의 id를 부여한다.)
+				//Debug.Log($"tech({techid}) next add({this.id})");
 				//TechBase itemPrev = Managers.Game.TechBases.FetchItemByID(techid);
-				//itemPrev.Title = id.ToString();
+				////itemPrev.Title = id.ToString();
 				//itemPrev.next_techs.Add(this.id);
-				////Debug.Log($"tech({techid}) next add({this.id})");
 			}
 		}
 

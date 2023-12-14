@@ -397,7 +397,13 @@ public class ConveyorPlacement : IPlacement
 			current.AddCollider();
 
 			//지급
-			MyCraft.InvenBase.choiced_item.AddStackCount(-current.Capacity, false);
+			int amount = MyCraft.InvenBase.choiced_item._SubStackCount(current.Capacity, false);
+			if(0 < amount)	//HG_TODO: 남은 개수는 인벤에서 빼준다.
+			{
+				//Managers.Game.SubItem(InvenBase.choiced_item);
+
+			}
+
 
 			// stop placing conveyor
 			current = null;

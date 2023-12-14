@@ -10,7 +10,8 @@ namespace MyCraft
     public class SkillItemData : ItemData
     {
         string cantnot_make_by_hand;
-        void Start()
+ 
+		public override void InitStart()
         {
             cantnot_make_by_hand = Managers.Locale.GetLocale("skill-item-data", "cantnot_make_by_hand");
         }
@@ -73,12 +74,12 @@ namespace MyCraft
             {
                 BuildCostItem costitem = itembase.cost.items[i];
                 //인벤 & quick에서 필요한 아이템 존재여부 체크
-                int amount = Managers.Game.Inventories.GetAmount(costitem.itemid);
-                amount += Managers.Game.QuickInvens.GetAmount(costitem.itemid);
+                int amount = Managers.Game.GetAmount(costitem.itemid);
                 if (amount < costitem.amount * LOOP)
                 {
-                    //Debug.Log("need more item amount: " + amount + "/" + costitem.amount);
-                    return false;
+                    //남은 재료아이템으로 만들수 있는 최대값
+                    LOOP = Math.Min(LOOP, (amount / costitem.amount));
+                    if (0 == LOOP) return false;
                 }
                 //..
             }
@@ -89,15 +90,12 @@ namespace MyCraft
                 BuildCostItem costitem = itembase.cost.items[i];
                 //필요한 아이템 삭제
                 int amount = costitem.amount * LOOP;
-                amount = Managers.Game.Inventories.SubItem(costitem.itemid, amount);
-                if (0 < amount)
-                    amount = Managers.Game.QuickInvens.SubItem(costitem.itemid, amount);
-                //..
+                Managers.Game.SubItem(costitem.itemid, amount);
             }
 
             //아이템 생성(quick 또는 인벤에 넣어준다.)
             //Managers.Game.AddItem(itembase.id, itembase.cost.outputs * LOOP);
-            Managers.Game.AddItem(itembase.cost.outputs[0].itemid, itembase.cost.outputs[0].amount * LOOP);
+            Managers.Game.AddItem(itembase.cost.outputs[0].itemid, itembase.cost.outputs[0].amount * LOOP, MyCraft.Global.FILLAMOUNT_DEFAULT);
 			return true;
         }
     }

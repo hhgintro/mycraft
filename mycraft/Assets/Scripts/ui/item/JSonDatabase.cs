@@ -22,7 +22,7 @@ namespace MyCraft
 		//public JSonDatabase() { }
 		public JSonDatabase(JsonData json)
 		{
-			this.id = (ushort)json["id"];
+			this.id = (int)json["id"];
 			this.type = json["type"].ToString();
 			this.Title = Managers.Locale.GetLocale(section(), string.Format($"{this.id.ToString()}-title"));
 			this.Description = Managers.Locale.GetLocale(section(), string.Format($"{this.id.ToString()}-desc"));
@@ -69,6 +69,7 @@ namespace MyCraft
 			if (false == json.Keys.Contains("scaleOnBelt"))
 				return;
 			this.scaleOnBelt = float.Parse(json["scaleOnBelt"].ToString());
+			//this.scaleOnBelt = (float)json["scaleOnBelt"];	//이렇게 바꿀수 있나?? 테스트 못해서 주석처리함.
 		}
 
 		public virtual void EnterTooltip(Tooltip tooltip)
