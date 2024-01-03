@@ -38,7 +38,7 @@ namespace MyCraft
 		public override bool CheckPickupGoods() { return true; }
 		public override void OnReset()
 		{
-			base._building.OnReset();
+			base._building.OnReset(true);
 			this.Clear();
 			//active
 			Managers.Game.SkillInvens.gameObject.SetActive(true);

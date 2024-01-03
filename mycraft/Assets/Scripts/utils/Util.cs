@@ -51,5 +51,12 @@ public class Util
         return null;
     }
 
+	// return : -180 ~ 180 degree (for unity)
+	public static float GetAngle(Vector3 vStart, Vector3 vEnd)
+	{
+		Vector3 v = vEnd - vStart;
+
+		return Mathf.Atan2(v.y, v.x) * Mathf.Rad2Deg;
+	}
 
 }

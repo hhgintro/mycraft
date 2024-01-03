@@ -34,7 +34,7 @@ namespace FactoryFramework
 		//Renderer renderers;
 		//List<Material> materials = new List<Material>();
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			////outline
 			//this.outline = new Material(Shader.Find("Draw/OutlineShader"));
@@ -61,7 +61,7 @@ namespace FactoryFramework
 				//this._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)1, 10, true));//progress-fuel
 			}
 
-			base.InitStart();
+			base.fnStart();
 		}
 
 		public override void ProcessLoop()
@@ -175,11 +175,11 @@ namespace FactoryFramework
 		//	}
 		//	ConsumeInputs();    //재료아이템 소모
 		//}
-		public override void OnProgressReaching(MyCraft.PROGRESSID id)
-		{
-			if (MyCraft.PROGRESSID.Item != id) return;
 
-		}
+		//public override void OnProgressReaching(MyCraft.PROGRESSID id)
+		//{
+		//	if (MyCraft.PROGRESSID.Item != id) return;
+		//}
 
 
 		bool StartAssembling(float deltaTime)

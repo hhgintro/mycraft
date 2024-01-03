@@ -1,4 +1,5 @@
 //using MyCraft;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ namespace FactoryFramework
 {
 	public class Building : LogisticComponent
 	{
-		public UnityEvent<Building> OnBuildingDestroyed;
+		//public UnityEvent<Building> OnBuildingDestroyed;
 
 		public InputSocket[] inputSockets;
 		public OutputSocket[] outputSockets;
@@ -25,17 +26,17 @@ namespace FactoryFramework
 		Renderer renderers;
 		List<Material> materials = new List<Material>();
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			base._IsWorking = false;
-			for (int i = 0; i < this._progresses.Count; ++i)
-				this._progresses[i].InitProgress();
+			//for (int i = 0; i < this._progresses.Count; ++i)
+			//	this._progresses[i].InitProgress();	//구지 초기화할 필요가 있을까? 우선 주석처리
 
 			//outline
 			this.outline = new Material(Shader.Find("Draw/OutlineShader"));
 			this.renderers = this.transform.GetComponent<Renderer>();
 			
-			base.InitStart();
+			base.fnStart();
 		}
 
 		//private void Update()
@@ -43,13 +44,13 @@ namespace FactoryFramework
 		//	//_IsWorking = false;
 		//	base.ProcessLoop();
 		//}
-		public override void _Destroy()
-		{
-			OnBuildingDestroyed?.Invoke(this);
-		}
+		//public override void fnDestroy()
+		//{
+		//	//OnBuildingDestroyed?.Invoke(this);
+		//}
 
-		//파괴될 때.
-		public virtual void OnDeleted()
+        //DestroyProcess에 의해 철거될때 호출(bReturn:true이면 인벤으로 회수)
+        public override void OnDeleted(bool bReturn)
 		{
 			if (null != this._inven)
 			{
@@ -57,17 +58,19 @@ namespace FactoryFramework
 				this._inven.gameObject.SetActive(false);
 			}
 
-			OnDisconnect();
-			OnReset();
-			MyCraft.Managers.Game.AddItem(base._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
+			base.GUID = Guid.Empty; //GUID중복:save파일과 Mem에 동일할 GUID가 존재한다.
+            OnDisconnect();
+			OnReset(bReturn);
+			//conveyor(자신) 회수
+			if (bReturn) MyCraft.Managers.Game.AddItem(base._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
 		}
 		public virtual void OnDisconnect()
 		{
 			foreach(var inputSocket in this.inputSockets) inputSocket.Disconnect();
 			foreach(var outputSocket in this.outputSockets) outputSocket.Disconnect();
 		}
-		//machine의 output=null설정할 때.
-		public virtual void OnReset()
+        //machine의 output=null설정할 때.(bReturn:true이면 인벤으로 회수)
+        public virtual void OnReset(bool bReturn)
 		{
 			for (int p = 0; p < this._panels.Count; ++p)
 			{
@@ -76,7 +79,7 @@ namespace FactoryFramework
 
 				for (int i = 0; i < slots.Count; ++i)
 				{
-					MyCraft.Managers.Game.AddItem(slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount);
+					if(bReturn) MyCraft.Managers.Game.AddItem(slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount);
 					slots[i].Clear();   //아이템제거
 				}
 			}
@@ -96,7 +99,7 @@ namespace FactoryFramework
 		public virtual bool LocationCorrectForSocket(RaycastHit hit, ref Vector3 groundPos, ref Vector3 groundDir) { return false; }
 		public virtual bool AssignRecipe(MyCraft.JSonDatabase jsondata) { return false; }
 		public virtual void OnProgressCompleted(MyCraft.PROGRESSID id) { }  //progress 완료를 통보합니다.
-		public virtual void OnProgressReaching(MyCraft.PROGRESSID id) { }   //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
+		//public virtual void OnProgressReaching(MyCraft.PROGRESSID id) { }   //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
 		public virtual void OnClicked() { }
 		public virtual void SetInven(MyCraft.InvenBase inven)
 		{
@@ -267,7 +270,7 @@ namespace FactoryFramework
 			//rotation
 			this.transform.rotation = MyCraft.Common.ReadQuaternion(reader);
 
-			this.InitStart();
+			this.fnStart();
 
 
 			//panel count

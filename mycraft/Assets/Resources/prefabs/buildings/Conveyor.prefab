@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 518602494}
   - component: {fileID: 518602493}
   - component: {fileID: 518602492}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 551673705}
   - component: {fileID: 551673704}
   - component: {fileID: 551673703}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Belt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 3578600828944956484}
   - component: {fileID: 351652654905855661}
   - component: {fileID: 8738391509147117912}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: Conveyor
   m_TagString: Building
   m_Icon: {fileID: 0}

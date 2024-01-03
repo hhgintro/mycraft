@@ -23,6 +23,8 @@ TagManager:
   - Player
   - Building
   - Monster
+  - Floor
+  - Conveyor
   - 
   - 
   - 
@@ -41,9 +43,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - CenterGrid
   m_SortingLayers:
   - name: Default
     uniqueID: 0

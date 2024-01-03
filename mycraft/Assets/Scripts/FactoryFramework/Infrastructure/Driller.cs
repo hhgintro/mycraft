@@ -27,7 +27,7 @@ namespace FactoryFramework
 		//    resource.itemStack.item = item;
 		//    _t = 0f;
 		//}
-		public override void InitStart()
+		public override void fnStart()
 		{
 			// use mesh to calculate bounds
 			Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
@@ -47,7 +47,7 @@ namespace FactoryFramework
 				}
 			}
 
-			base.InitStart();
+			base.fnStart();
 		}
 		public override void SetEnable_2(bool enable)
 		{

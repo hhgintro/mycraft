@@ -12,16 +12,17 @@ namespace MyCraft
 		Vector3 offset = new Vector3(50f, -16f, 0); //인벤아이템을 잡았을때 마우스와 이격거리
 		public GameObject _cheat_text;
 
-		void Awake()
-		{
-			Init();
-		}
 
-		void Start()
+       protected override void fnAwake()
+        {
+            base.fnAwake();
+            SceneType = Define.Scene.World;
+        }
+
+        protected override void fnStart()
 		{
-			Managers.Input.KeyAction -= OnKeyDown_GameScene;
+            Managers.Input.KeyAction -= OnKeyDown_GameScene;
 			Managers.Input.KeyAction += OnKeyDown_GameScene;
-			//Managers.Input.KeyActionList();
 
 			ShowInitUIs();      //초기 UI
 
@@ -50,28 +51,22 @@ namespace MyCraft
 			Application.runInBackground = true;
 		}
 
-		void LoadGame()
+        protected override void fnUpdate()
+        {
+            if (InvenBase.choiced_item)
+                InvenBase.choiced_item.transform.position = Input.mousePosition + offset;
+
+            //OnKeyDown();
+        }
+
+        public override void Clear()
+        {
+            Debug.Log("Game Scene Clear!");
+        }
+
+        void LoadGame()
 		{
 			Managers.Game.Load();
-		}
-
-		private void Update()
-		{
-			if (InvenBase.choiced_item)
-				InvenBase.choiced_item.transform.position = Input.mousePosition + offset;
-
-			//OnKeyDown();
-		}
-
-		protected override void Init()
-		{
-			base.Init();
-			SceneType = Define.Scene.Game;
-		}
-
-		public override void Clear()
-		{
-			Debug.Log("Logo Scene Clear!");
 		}
 
 		private void ShowInitUIs()
@@ -133,7 +128,7 @@ namespace MyCraft
 			fillAmount = 0.4f;
 			Managers.Game.Inventories.AddItem(801, 100, ref fillAmount);    //potion 1
 
-			Debug.Log($"fillAmount:{fillAmount}");
+			//Debug.Log($"fillAmount:{fillAmount}");
 		}
 
 		//초기 지급아이템(퀵슬롯)
@@ -209,27 +204,27 @@ namespace MyCraft
 
 			//inven
 			bool deactive = false;
-			if (Managers.Game.Inventories.gameObject.activeSelf)	{ Managers.Game.Inventories.gameObject.SetActive(false); deactive=true; }
-			if (Managers.Game.ChestInvens.gameObject.activeSelf)    { Managers.Game.ChestInvens.gameObject.SetActive(false); deactive=true; }
-			if (Managers.Game.FactoryInvens.gameObject.activeSelf)  { Managers.Game.FactoryInvens.gameObject.SetActive(false); deactive=true; }
-			if (Managers.Game.ForgeInvens.gameObject.activeSelf)    { Managers.Game.ForgeInvens.gameObject.SetActive(false); deactive=true; }
-			if (Managers.Game.LabInvens.gameObject.activeSelf)		{ Managers.Game.LabInvens.gameObject.SetActive(false); deactive = true; }
-			if (Managers.Game.SkillInvens.gameObject.activeSelf)    { Managers.Game.SkillInvens.gameObject.SetActive(false); deactive = true; }
-			if (Managers.Game.TechInvens.gameObject.activeSelf)		{ Managers.Game.TechInvens.gameObject.SetActive(false); deactive = true; }
-			if (Managers.Game.TechDescs.gameObject.activeSelf)		{ Managers.Game.TechDescs.gameObject.SetActive(false); deactive = true; }
+			if (Managers.Game.Inventories.gameObject.activeSelf)	{ Managers.Game.Inventories.gameObject.SetActive(false);	deactive=true; }
+			if (Managers.Game.ChestInvens.gameObject.activeSelf)    { Managers.Game.ChestInvens.gameObject.SetActive(false);	deactive=true; }
+			if (Managers.Game.FactoryInvens.gameObject.activeSelf)  { Managers.Game.FactoryInvens.gameObject.SetActive(false);	deactive=true; }
+			if (Managers.Game.ForgeInvens.gameObject.activeSelf)    { Managers.Game.ForgeInvens.gameObject.SetActive(false);	deactive=true; }
+			if (Managers.Game.LabInvens.gameObject.activeSelf)		{ Managers.Game.LabInvens.gameObject.SetActive(false);		deactive = true; }
+			if (Managers.Game.SkillInvens.gameObject.activeSelf)    { Managers.Game.SkillInvens.gameObject.SetActive(false);	deactive = true; }
+			if (Managers.Game.TechInvens.gameObject.activeSelf)		{ Managers.Game.TechInvens.gameObject.SetActive(false);		deactive = true; }
+			if (Managers.Game.TechDescs.gameObject.activeSelf)		{ Managers.Game.TechDescs.gameObject.SetActive(false);		deactive = true; }
 
+			Managers.Game.Tooltips.gameObject.SetActive(false);
 			//OPEN system menu
 			if (false == deactive) Managers.Game.SystemMenu.gameObject.SetActive(true);
 		}
 
-		bool OnKeyDownNum()
+        bool OnKeyDownNum()
 		{
 			for (int i = 0; i < 10; ++i)
 			{
-				if (Input.GetKeyDown(i + KeyCode.Alpha1))
+				if (Input.GetKeyDown(i + KeyCode.Alpha0))
 				{
-					//InvenItemData itemData = GameManager.GetQuickInven().slots[i].GetItemData();
-					Slot s = Managers.Game.QuickInvens.GetInvenSlot(0, i);
+					Slot s = Managers.Game.QuickInvens.GetInvenSlot(0, (0==i)?9:i-1);
 					InvenItemData itemData = (InvenItemData)s.GetItemData();
 					if (null == itemData)
 					{

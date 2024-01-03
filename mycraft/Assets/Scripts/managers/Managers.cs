@@ -9,9 +9,10 @@ namespace MyCraft
     public class Managers : MonoBehaviour
     {
 		static object lockObject = new object();
-		static Managers s_instance; // 유일성이 보장된다
+		static Managers s_instance = null; // 유일성이 보장된다
         static Managers Instance { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
 
+        CenterGridManager _centerGrid = new CenterGridManager();
         //DataManager _data = new DataManager();
         GameManager _game = new GameManager();
         InputManager _input = new InputManager();
@@ -23,7 +24,7 @@ namespace MyCraft
         //UIManager _ui = new UIManager();
 
 
-
+        public static CenterGridManager CenterGrid {  get { return Instance._centerGrid; } }
         //public static DataManager Data { get { return Instance._data; } }
         public static GameManager Game { get { return Instance._game; } }
         public static InputManager Input { get { return Instance._input; } }
@@ -42,8 +43,6 @@ namespace MyCraft
         void Start()
         {
             Init();
-
-
         }
 
         void Update()
@@ -53,7 +52,7 @@ namespace MyCraft
 
 		private void OnDestroy()
 		{
-            Debug.Log("Manager.Clear()");
+            Debug.Log("Manager.OnDestroy()");
             //Clear(true);  //에러가 많이 뜬다.
 		}
 
@@ -72,20 +71,22 @@ namespace MyCraft
                 if (null != s_instance)
                     return;
 
+                //Debug.Log($"Managers 인스턴스 생성");
                 s_instance = go.GetComponent<Managers>();
+                //Debug.Log("s_instance 생성");
                 DontDestroyOnLoad(go);
 
-
-                s_instance._game.Init();
+                //s_instance._centerGrid.Init();
+                //s_instance._game.Init();
                 //s_instance._data.Init();
                 s_instance._pool.Init();
                 s_instance._sound.Init();
             }
-
 		}
 
         public static void Clear(bool destory)
         {
+            //CenterGrid.Clear();
             Game.Clear();
             Input.Clear();
             Sound.Clear();
@@ -93,5 +94,10 @@ namespace MyCraft
             //UI.Clear();
             if(true == destory) Pool.Clear(); //불러오기를 위해서 삭제하지 않는다.
         }
-    }
+
+		private void OnApplicationQuit()
+		{
+            Pool.Clear();
+		}
+	}
 }//..namespace MyCraft

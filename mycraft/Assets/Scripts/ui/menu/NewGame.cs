@@ -21,7 +21,8 @@ namespace MyCraft
         {
             //Managers.Game.bNewGame = true;
             Managers.Game._load_filename = null;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Managers.Scene.LoadScene(Define.Scene.World);
         }
 
         public void OnBack()

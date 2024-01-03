@@ -15,10 +15,17 @@ public class InputManager
 
     public void OnUpdate()
     {
-		if (KeyAction != null && Input.anyKeyDown)
-				KeyAction.Invoke();
+		if (KeyAction != null)
+        {
+            ////only keyboard, not mouse
+            //if(Input.anyKeyDown
+            //    && !Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !Input.GetMouseButton(2))
+            //    KeyAction.Invoke();
+            if (Input.anyKeyDown)   //keyboard, mouse
+                KeyAction.Invoke();
+        }
 
-        if (MouseAction != null)
+		if (MouseAction != null)
         {
             if (Input.GetMouseButton(0))        //left
             {

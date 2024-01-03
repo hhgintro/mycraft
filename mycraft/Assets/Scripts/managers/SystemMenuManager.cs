@@ -78,7 +78,6 @@ namespace MyCraft
 			Managers.Input.Clear();
 
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
         }
 
         public void OnLoad()

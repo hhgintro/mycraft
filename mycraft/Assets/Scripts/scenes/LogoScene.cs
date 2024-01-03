@@ -13,15 +13,19 @@ namespace MyCraft
 		[SerializeField] Text warning;  //경고문구(경로는 영문으로)
 
 
-		void Awake()
+        protected override void fnAwake()
         {
-            Init();
-			warning.gameObject.SetActive(false);    //hide
+            base.fnAwake();
+            SceneType = Define.Scene.Logo;
+            warning.gameObject.SetActive(false);    //hide
+
+            //load ini
+            Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.dataPath + "/../config/locale/");
 		}
 
-        void Start()
+        protected override void fnStart()
         {
-			MyCraft.Managers.Input.KeyAction -= OnKeyDown_LogoScene;
+            MyCraft.Managers.Input.KeyAction -= OnKeyDown_LogoScene;
 			MyCraft.Managers.Input.KeyAction += OnKeyDown_LogoScene;
 			
             //"(empty)"이면 진행을 못하도록 막는다.
@@ -33,25 +37,16 @@ namespace MyCraft
             StartCoroutine(LoadNextScene1());
         }
 
-        IEnumerator LoadNextScene1()
-        {
-            yield return new WaitForSeconds(load_delay);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-        }
-
-
-        protected override void Init()
-        {
-            base.Init();
-            SceneType = Define.Scene.Logo;
-
-			//load ini
-			Managers.Locale.Init(Application.dataPath + "/../config/config.ini", Application.dataPath + "/../config/locale/");
-    	}
-
         public override void Clear()
         {
             Debug.Log("Logo Scene Clear!");
+        }
+
+        IEnumerator LoadNextScene1()
+        {
+            yield return new WaitForSeconds(load_delay);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Managers.Scene.LoadScene(Define.Scene.Lobby);
         }
 
 		void OnKeyDown_LogoScene()

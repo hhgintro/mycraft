@@ -23,22 +23,16 @@ namespace MyCraft
 
 		bool isTest = false;
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			//필요한 경우만 progress를 노출한다.
 			if (null == _progressFill && 1 < this.transform.childCount)
 			{
 				_progressFill = this.transform.GetChild(1).gameObject;
 				ItemBase itembase = (ItemBase)this.database;
-				if (itembase.progress)
-				{
-					SetFillAmount(MyCraft.Global.FILLAMOUNT_DEFAULT);
-					_progressFill?.SetActive(true);
-				}
-				else
-				{
-					_progressFill?.SetActive(false);
-				}
+				if (itembase.progress)	_progressFill?.SetActive(true);
+				else					_progressFill?.SetActive(false);
+				SetFillAmount(MyCraft.Global.FILLAMOUNT_DEFAULT);
 			}
 		}
 
@@ -233,6 +227,7 @@ namespace MyCraft
 			if (add <= 0) return 0;
 			if (((ItemBase)this.database).Stackable <= this.amount) return add;  //가득참
 
+			//fillAmount: 소모된 물약을 합치는 처리과정임. 기존아이템 아이템이 -1되는 현상있었는데. 모든 아이템을 FILLAMOUNT_DEFAULT 로 설정하고 해결됨
 			//아이템 소진률의 합이 "MyCraft.Global.FILLAMOUNT_DEFAULT" 보다 작으면...( 1(0.4) + 1(0.4) = 1(0.8) 이 됩니다.)
 			float fillTotal = this.GetFillAmount() + fillAmount;
 			//디폴드값 미만은 그값그대로(개수만 -1), 디폴드보다 크면 디폴트값을 뺀값(1.4 -> 0.4)

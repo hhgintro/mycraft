@@ -45,12 +45,12 @@ namespace FactoryFramework
 
 		private void Awake()
 		{
-			this.InitAwake();
+			this.fnAwake();
 		}
 
 		private void Start()
 		{
-			this.InitStart();
+			this.fnStart();
 		}
 
 		private void OnValidate()
@@ -67,16 +67,17 @@ namespace FactoryFramework
 
 		private void OnDestroy()
 		{
-			this._Destroy();
+			this.fnDestroy();
 		}
-		public virtual void InitAwake()
+		public virtual void fnAwake()
 		{
 			_powerGridComponent ??= GetComponent<PowerGridComponent>();
 			_sRef ??= GetComponent<SerializationReference>();
 		}
-		public virtual void InitStart() { }
+		public virtual void fnStart() { }
 		public virtual void ProcessLoop() { }
-		public virtual void _Destroy() { }
+		public virtual void fnDestroy() { }
+		public virtual void OnDeleted(bool bReturn) { }		//DestroyProcess에 의해 철거될때 호출(bReturn:true이면 인벤으로 회수)
 
 		public virtual void SetEnable_2(bool enable) { }   //설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
 
@@ -89,7 +90,7 @@ namespace FactoryFramework
 		{
 			writer.Write(this._sRef.resourcesPath);
 			writer.Write(this._itembase.id);
-			writer.Write(this._sRef.GUID.ToString());
+			writer.Write(this.GUID.ToString());
 			//Debug.Log($"SAVE:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
 		}
 		public virtual void Load(BinaryReader reader)
@@ -100,9 +101,10 @@ namespace FactoryFramework
 
 			_itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
 			//Debug.Log($"LOAD:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
-			this._sRef.GUID = Guid.Parse(guid);
-		}
-		#endregion //..SAVE
+			//this._sRef.GUID = Guid.Parse(guid);
+			this.GUID = Guid.Parse(guid);
+        }
+        #endregion //..SAVE
 
-	}
+    }
 }

@@ -19,7 +19,7 @@ namespace FactoryFramework
 
 		int _recipe = 0;	//생산할 결과물
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			if (0 == base._panels.Count)
 			{
@@ -34,7 +34,7 @@ namespace FactoryFramework
 				base._progresses.Add(new MyCraft.Progress(this, MyCraft.PROGRESSID.Fuel, 10f, true));//progress-fuel
 			}
 
-			base.InitStart();
+			base.fnStart();
 		}
 
 		public override void ProcessLoop()
@@ -181,7 +181,7 @@ namespace FactoryFramework
 			//check pregress
 			if (this._progresses.Count < 2) return false;
 
-			ConsumeFuels();     //연료소모
+			ConsumeFuels();     //연료소모 - (여기는주석처리)연료progress완료될때 한개씩 뺀다.
 			ConsumeInputs();    //재료아이템 소모
 
 			base._IsWorking = true;
@@ -191,8 +191,11 @@ namespace FactoryFramework
 		private bool CanStartProduction()
 		{
 			//check fuel
-			if(0 == FUEL._slots[0]._item._itemid || FUEL._slots[0]._item._amount <= 0)
-				return false;//연료가 없으면...중단
+			if (FUEL_PROGRESS.IsEmpty())   //남은 연료가 없을때
+			{
+				if (0 == FUEL._slots[0]._item._itemid || FUEL._slots[0]._item._amount <= 0)
+					return false;//연료가 없으면...중단
+			}
 
 			//check...자원
 			for (int s = 0; s < INPUT._slots.Count; ++s)
@@ -231,7 +234,7 @@ namespace FactoryFramework
 						return false;
 
 					AssignRecipe(inputs[i].output);
-					PROGRESS.SetTime(inputs[i].build_time);
+					PROGRESS.SetFillUp(inputs[i].build_time);   //가득채움
 					break;
 				}
 			}
@@ -247,13 +250,16 @@ namespace FactoryFramework
 		//연료 소모
 		private void ConsumeFuels()
 		{
+			//남은 연료가 있다면...무시
+			if (false == FUEL_PROGRESS.IsEmpty()) return;
+
 			//소모하는 자원에 따라 bunning-time을 설정합니다.
 			List<MyCraft.FurnaceFuelItem> fuels = ((MyCraft.FurnaceItemBase)base._itembase)._furnace.fuel;
 			for (int i = 0; i < fuels.Count; ++i)
 			{
 				if (FUEL._slots[0]._item._itemid == fuels[i].itemid)
 				{
-					FUEL_PROGRESS.SetTime(fuels[i].burning_time);
+					FUEL_PROGRESS.SetFillUp(fuels[i].burning_time); //가득채움
 					break;
 				}
 			}

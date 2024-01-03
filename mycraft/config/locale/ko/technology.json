@@ -12,7 +12,7 @@
       ]
     },
     "next-tech":[{"techid":3}],
-    "reward":[{"skill":1100},{"skill":1200}],
+    "reward":[{"itemid":1100},{"itemid":1200}],
     "icon":"Textures/ui/technology/automation"
   },
 
@@ -30,7 +30,7 @@
       ]
     },
     "next-tech":[{"techid":4}],
-    "reward":[{"skill":1040},{"skill":1050}],
+    "reward":[{"itemid":1040},{"itemid":1050}],
     "icon":"Textures/ui/technology/electronics"
   },
 
@@ -49,7 +49,7 @@
     },
     "pre-tech":[{"techid":1}],
     "next-tech":[{"techid":4}],
-    "reward":[{"skill":2010},{"skill":2020}],
+    "reward":[{"itemid":2010},{"itemid":2020}],
     "icon":"Textures/ui/technology/logistics"
   },
 
@@ -68,7 +68,7 @@
       ]
     },
     "pre-tech":[{"techid":2},{"techid":3}],
-    "reward":[{"skill":2010},{"skill":2020}],
+    "reward":[{"itemid":2010},{"itemid":2020}],
     "icon":"Textures/ui/technology/steel-processing"
   }
 

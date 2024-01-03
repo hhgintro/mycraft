@@ -11,9 +11,10 @@ namespace MyCraft
 
         public void LoadScene(Define.Scene type)
         {
-            Managers.Clear(false);
+            //Managers.Clear(false);
 
-            SceneManager.LoadScene(GetSceneName(type));
+            //SceneManager.LoadScene(GetSceneName(type));
+            SceneManager.LoadScene((int)type-1);
         }
 
         string GetSceneName(Define.Scene type)

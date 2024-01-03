@@ -88,7 +88,7 @@ namespace MyCraft
 			for (int i = 0; i < json["reward"].Count; ++i)
 			{
 				//this.rewards.Add((int)json["reward"][i]["skill"]);
-				int reward = (int)json["reward"][i]["skill"];
+				int reward = (int)json["reward"][i]["itemid"];
 				this.rewards.Add(reward);
 				//Debug.Log("tech reward: " + reward);
 			}

@@ -215,7 +215,7 @@ namespace MyCraft
 			itemData.panel      = panel;
 			itemData.slot       = slot;
 			
-			itemData.InitStart();
+			itemData.fnStart();
 			return itemData;
 		}
 

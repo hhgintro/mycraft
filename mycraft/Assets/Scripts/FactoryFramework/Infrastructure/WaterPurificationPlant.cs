@@ -25,7 +25,7 @@ namespace FactoryFramework
 		//    _t = 0f;
 		//}
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			//// use mesh to calculate bounds
 			//Mesh m = this.transform.GetChild(0).GetComponent<MeshFilter>()?.mesh;
@@ -45,7 +45,7 @@ namespace FactoryFramework
 
 			if (0 == _outputs.Count) _outputs.Add(300, new MyCraft.BuildingItem());
 
-			base.InitStart();
+			base.fnStart();
 		}
 
 		public override void ProcessLoop()

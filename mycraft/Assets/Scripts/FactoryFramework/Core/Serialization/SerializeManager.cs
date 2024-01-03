@@ -463,7 +463,7 @@ namespace FactoryFramework
 			{
 				if (sRef.TryGetComponent(out Storage storageBuilding))
 				{
-					storageBuilding.InitStart();
+					storageBuilding.fnStart();
 					for(int i=0; i<slots.Length; ++ i)
 						storageBuilding.SetItem(slots[i].panel, slots[i].slot, slots[i].itemid, slots[i].amount, MyCraft.Global.FILLAMOUNT_DEFAULT);
 

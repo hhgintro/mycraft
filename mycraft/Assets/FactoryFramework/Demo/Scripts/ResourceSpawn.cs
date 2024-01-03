@@ -34,6 +34,10 @@ public class ResourceSpawn : Resource
         Quaternion oldRot = transform.rotation;
         transform.rotation = Quaternion.identity;
         transform.position = Vector3.zero;
+
+
+        //MyCraft.JSonParser<MyCraft.ItemBase> _itembase = new MyCraft.JSonParser<MyCraft.ItemBase>(System.IO.Path.Combine(Application.dataPath, "../config/locale", MyCraft.Managers.Locale._locale.ToString(), "items.json"));
+
         // create meshes
         foreach(Vector2 point in Points)
         {

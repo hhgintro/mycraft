@@ -9,27 +9,50 @@ namespace MyCraft
 {
     public class SaveContext : MonoBehaviour
     {
-        public Transform _save_file_content;    //저장파일을 정렬할 위치
+        public RectTransform _save_file_content;    //저장파일을 정렬할 위치
 
         private Text _save_file;    //선택한 저장파일의 파일명
         private Image _save_image;  //선택된 저장파일의 이미지
         private List<GameObject> _contexts = new List<GameObject>();    //_save_file_content에 등록된 개체정보
 
-        protected void Init()
-        {
+		void Awake()
+		{
             this._save_file = this.transform.Find("Load File/Load File Info/Title/Text").GetComponent<Text>();
             this._save_image = this.transform.Find("Load File/Load File Info/ScreenCapture").GetComponent<Image>();
             this._save_file.text = "";
 		}
+        private void OnEnable()
+        {
+			//refresh save files
+			this.RefreshContext();
+		}
 
-        protected virtual void OnSelectSaveFile(string filename)
+		void Start()
+		{
+            fnStart();
+		}
+
+        protected virtual void fnStart() { }
+		protected virtual void OnSelectSaveFile(string filename)
         {
             //Debug.Log($"select:{filename}");
             this._save_file.text = filename;
             LoadScreenShot(filename);
 		}
 
-        protected void RefreshContext()
+		public void OnBack()
+		{
+			//prev
+			this.gameObject.SetActive(false);
+
+			//HG_TODO:[통합방법모색] lobby에 호출될 때와 world에서 호출될 때. 각각 다른값을 호출하고 있다,
+			//next(lobby)
+			this.transform.parent.GetComponent<Menu>()?._playmenu.SetActive(true);
+			//next(world)
+			this.transform.parent.parent.GetComponent<SystemMenuManager>()?.gameObject.SetActive(true);
+		}
+
+		protected void RefreshContext()
         {
             //기존꺼 삭제
             foreach (var obj in this._contexts) Managers.Resource.Destroy(obj);
@@ -42,10 +65,14 @@ namespace MyCraft
                 GameObject clone = Managers.Resource.Instantiate("Prefabs/ui/Save-Filename", this.transform);
                 clone.name = file;
                 clone.transform.GetChild(0).GetComponent<Text>().text = file;
-                clone.transform.parent = this._save_file_content;
+                //clone.transform.parent = this._save_file_content;
+                clone.transform.SetParent(this._save_file_content);
                 clone.GetComponent<Button>().onClick.AddListener(() => OnSelectSaveFile(file));
                 this._contexts.Add(clone);
             }
+            //마지막 저장된 파일을 선택한다.
+            if(0 < this._contexts.Count)
+                OnSelectSaveFile(this._contexts[this._contexts.Count - 1].name);
         }
 		public void OnDeleteFile()
 		{

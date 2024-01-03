@@ -36,7 +36,7 @@ namespace MyCraft
         //    //tooltip = GameManager.GetTooltip();
         //}
 
-        public override void InitStart()
+        public override void fnStart()
 		{
 			//_fillAmount = 0.0f;
             //필요한 경우만 progress를 노출한다.

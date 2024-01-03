@@ -104,10 +104,10 @@ namespace FactoryFramework
             NativeMeshGroup inputMesh = new NativeMeshGroup(model.startCap.GetMesh(), model.midSegment.GetMesh(), model.endCap.GetMesh());
             NativeMesh outputMesh = new NativeMesh(inputMesh.GetTotalVerts(segments), inputMesh.GetTotalTris(segments));
 
-            JobHandle jobHandle = ((IPathMeshGenerator)path).RunMeshGenJob(ref inputMesh, ref outputMesh, ref settings);
+			JobHandle jobHandle = ((IPathMeshGenerator)path).RunMeshGenJob(ref inputMesh, ref outputMesh, ref settings);
             jobHandle.Complete();
 
-            Mesh m = new Mesh();
+			Mesh m = new Mesh();
             m.vertices = outputMesh.verts.ToArray();
             m.normals = outputMesh.normals.ToArray();
             m.uv = outputMesh.uvs.ToArray();
@@ -302,6 +302,11 @@ namespace FactoryFramework
             public float scaleFactor;   // Overall scale factor applied to generated mesh
             public int segments;        // Number of segments to use when generating 
             public bool beltUvs;        // Remap uvs for belts
+
+            //public void Log(string msg)
+            //{
+            //    Debug.Log($"{msg}:len({len}),seg({perSegment}),uv({uvperpath}),scale({scaleFactor}),segs({segments}),belt({beltUvs})");
+            //}
         }
 
 

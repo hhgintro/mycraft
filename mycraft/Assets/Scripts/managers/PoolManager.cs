@@ -45,7 +45,9 @@ namespace MyCraft
                 if (poolable == null)
                     return;
 
-                poolable.transform.parent = Root;
+                //poolable.old_parent = Root; //돌아올때를 위해서(name으로 검사하므로 필요없어짐)
+                //poolable.transform.parent = Root;
+                poolable.transform.SetParent(Root);
                 poolable.gameObject.SetActive(false);
                 poolable.IsUsing = false;
 
@@ -70,7 +72,7 @@ namespace MyCraft
                 //if(parent.TryGetComponent<RectTransform>(out RectTransform _))
                 //    poolable.transform.SetParent(parent);
                 //else
-                poolable.transform.parent = parent;
+                poolable.transform.SetParent(parent);
 				poolable.IsUsing = true;
 
                 return poolable;

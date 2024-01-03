@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 namespace MyCraft
 {
-
      public class Slot : MonoBehaviour
         , IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler//, IDropHandler
     {
@@ -54,6 +53,7 @@ namespace MyCraft
 
         public void PutdownChoicedItem()
         {
+			if (null == InvenBase.choiced_item) return;
             float fillAmount = InvenBase.choiced_item.GetFillAmount();
 			this.AddItem(InvenBase.choiced_item, ref fillAmount);
 			InvenBase.choiced_item = null;

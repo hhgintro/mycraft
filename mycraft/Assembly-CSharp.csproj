@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\Bin\Debug\</OutputPath>
-    <DefineConstants>UNITY_2022_2_5;UNITY_2022_2;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_INITIALIZES_MEMORY_MANAGER_EXPLICITLY;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;UNITY_POST_PROCESSING_STACK_V2;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
+    <DefineConstants>UNITY_2022_2_5;UNITY_2022_2;UNITY_2022;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_2020_1_OR_NEWER;UNITY_2020_2_OR_NEWER;UNITY_2020_3_OR_NEWER;UNITY_2021_1_OR_NEWER;UNITY_2021_2_OR_NEWER;UNITY_2021_3_OR_NEWER;UNITY_2022_1_OR_NEWER;UNITY_2022_2_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_VIRTUALTEXTURING;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_EDITOR_GAME_SERVICES;ENABLE_UNITY_GAME_SERVICES_ANALYTICS_SUPPORT;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_GENERATE_NATIVE_PLUGINS_FOR_ASSEMBLIES_API;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;ENABLE_MANAGED_UNITYTLS;INCLUDE_DYNAMIC_GI;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;ENABLE_ACCELERATOR_CLIENT_DEBUGGING;ENABLE_NAVIGATION_PACKAGE_DEBUG_VISUALIZATION;ENABLE_NAVIGATION_HEIGHTMESH_RUNTIME_SUPPORT;ENABLE_NAVIGATION_UI_REQUIRES_PACKAGE;PLATFORM_STANDALONE;TEXTCORE_1_0_OR_NEWER;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_NVIDIA;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;PLATFORM_UPDATES_TIME_OUTSIDE_OF_PLAYER_LOOP;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;PLATFORM_INITIALIZES_MEMORY_MANAGER_EXPLICITLY;ENABLE_MONO;NET_STANDARD_2_0;NET_STANDARD;NET_STANDARD_2_1;NETSTANDARD;NETSTANDARD2_1;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_INPUT_SYSTEM;ENABLE_LEGACY_INPUT_MANAGER;TEXTCORE_FONT_ENGINE_1_5_OR_NEWER;CROSS_PLATFORM_INPUT;UNITY_POST_PROCESSING_STACK_V2;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -59,15 +59,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\ui\inven\Tooltip.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Helpers\RandomParticlePoint.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PumpJack.cs" />
     <Compile Include="Assets\Scripts\ui\inven\ForgeInven.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Player\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Driller.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\ui\item\BaseComponent.cs" />
     <Compile Include="Assets\Scripts\ui\item\BuildingItem.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IInput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\WaterPurificationPlant.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\ConveyorLogisticsUtils.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\MouseHoverBuildingTooltip.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\CenterGrid.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshDebug.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\MeshSlicer.cs" />
     <Compile Include="Assets\01.Script\Scene\LobbyController.cs" />
@@ -83,10 +87,12 @@
     <Compile Include="Assets\StarterAssets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\ui\inven\FurnaceItem.cs" />
     <Compile Include="Assets\Scripts\ui\inven\PanelBase.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Managers\ScoreManager.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchManager.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\BuildingPlacement.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Socket.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Forge.cs" />
+    <Compile Include="Assets\Scripts\managers\CenterGridManager.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechnologyCost.cs" />
     <Compile Include="Assets\Scripts\managers\LocaleManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IOutput.cs" />
@@ -109,6 +115,8 @@
     <Compile Include="Assets\Scripts\managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\TEST_PATHS.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\PathFactory.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Camera\CameraFollow.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\PlatformSpecific\StandaloneInput.cs" />
     <Compile Include="Assets\Scripts\managers\Managers.cs" />
     <Compile Include="Assets\Scripts\utils\Common.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\SolarPower.cs" />
@@ -116,8 +124,10 @@
     <Compile Include="Assets\Scripts\ui\UI_EventHandler.cs" />
     <Compile Include="Assets\Scripts\managers\SceneManagerEx.cs" />
     <Compile Include="Assets\Scripts\ui\inven\SkillItemData.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Audio\MixLevels.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\LocalStorage.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Storage.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Enemy\EnemyHealth.cs" />
     <Compile Include="Assets\01.Script\Scene\LoadingSceneManager.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\ConveyorPlacement.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechBase.cs" />
@@ -132,6 +142,7 @@
     <Compile Include="Assets\Scripts\utils\Define.cs" />
     <Compile Include="Assets\Scripts\ui\inven\ResetItemData.cs" />
     <Compile Include="Assets\Scripts\ui\inven\Inventory.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Helpers\RandomAnimationPoint.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\SegmentPath.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechInven.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Events\VoidEventChannel_SO.cs" />
@@ -143,11 +154,13 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Merger.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Conveyor.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\IPlacement.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Managers\GameOverManager.cs" />
     <Compile Include="Assets\Scripts\managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\utils\Global.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerGridComponent.cs" />
     <Compile Include="Assets\Resources\Art\Metal Barrels\Orbit.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechDescription.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Enemy\EnemyMovement.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\GentlePulse.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Scene.cs" />
     <Compile Include="Assets\Scripts\ui\inven\ChestInven.cs" />
@@ -159,6 +172,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\CableRendererManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\IPathTester.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\CableManagement.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\VirtualInput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\InputSocket.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\TestGlobalPowerGrid.cs" />
     <Compile Include="Assets\01.Script\ExcelLoader\ExcelLoader.cs" />
@@ -172,8 +186,10 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\CableRenderer.cs" />
     <Compile Include="Assets\Scripts\utils\JSonParser.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\GlobalLogisticsSettings.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Player\PlayerShooting.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeableScriptableObject.cs" />
     <Compile Include="Assets\Scripts\ui\inven\BuildingSlot.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Enemy\EnemyAttack.cs" />
     <Compile Include="Assets\Scripts\managers\Poolable.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Data\Recipe.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchInfo.cs" />
@@ -184,6 +200,7 @@
     <Compile Include="Assets\Scripts\ui\item\Category.cs" />
     <Compile Include="Assets\Scripts\managers\PoolManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\RampUp.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\PlatformSpecific\MobileInput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializationReference.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\ui\item\JSonDatabase.cs" />
@@ -191,6 +208,7 @@
     <Compile Include="Assets\Scripts\managers\UIManager.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\IPath.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\MobileControlRig.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\LogisticComponent.cs" />
     <Compile Include="Assets\Scripts\managers\SystemMenuManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\OutputSocket.cs" />
@@ -199,14 +217,19 @@
     <Compile Include="Assets\Scripts\scenes\LobbyScene.cs" />
     <Compile Include="Assets\Scripts\ui\inven\TechCancel.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\SmartPath.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Player\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\RecipeFinder.cs" />
     <Compile Include="Assets\Scripts\ui\inven\InvenBase.cs" />
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scripts\managers\DataManager.cs" />
     <Compile Include="Assets\Scripts\scenes\BaseScene.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\FootingSocket.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Helpers\VolumeHandler.cs" />
+    <Compile Include="Assets\Scripts\SurvivalShooter\Managers\PauseManager.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\Joystick.cs" />
     <Compile Include="Assets\Scripts\ui\item\InvenItemData.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\CubicBezierPath.cs" />
+    <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\CrossPlatformInputManager.cs" />
     <Compile Include="Assets\Scripts\ui\popup\UI_Button.cs" />
     <Compile Include="Assets\Scripts\ui\Scene\UI_Inven.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\ThirdPersonController.cs" />

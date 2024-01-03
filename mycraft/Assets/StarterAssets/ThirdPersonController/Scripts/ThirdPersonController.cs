@@ -133,9 +133,10 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
-		}
+            //Debug.Log("*** Awake Player ***");
+        }
 
-		private void Start()
+        private void Start()
 		{
 			_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 			_cinemachineTargetPitch = 30;   //카메라 각도(카메라거리:PlayerFollowCamaer->Body->Camera Distance)
@@ -154,16 +155,18 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
-		}
+            //Debug.Log("*** Start Player ***");
+        }
 
-		private void Update()
+        private void Update()
 		{
 			_hasAnimator = TryGetComponent(out _animator);
 
 			JumpAndGravity();
 			GroundedCheck();
 
-			if (_tickMove < Environment.TickCount)
+			//캐릭터위치가 초기값으로 설정되는 현상 - load이후 일정시간 이후에 Move()를 호출하기 위해
+			if (_delayMove < Environment.TickCount)
 			{
 				Move();
 				if(0.0f != _targetYaw || 0.0f != _targetPitch)
@@ -415,14 +418,14 @@ namespace StarterAssets
 			writer.Write(_cinemachineTargetYaw);
 			writer.Write(_cinemachineTargetPitch);
 		}
-		int TICK = 200;
 		//캐릭터위치가 초기값으로 설정되는 현상 - load이후 일정시간 이후에 Move()를 호출하기 위해
-		int _tickMove = 0;
+		int _delayMove = 0;
+		int TICK = 200;
 		private float _targetYaw = 0.0f;
 		private float _targetPitch = 0.0f;
 		public void Load(BinaryReader reader)
 		{
-			_tickMove = Environment.TickCount + TICK;   //n(ms) delay
+			_delayMove = Environment.TickCount + TICK;   //n(ms) delay
 			//position
 			this.transform.position = MyCraft.Common.ReadVector3(reader);
 			//rotation
@@ -430,6 +433,7 @@ namespace StarterAssets
 			//cinemachine
 			_targetYaw = reader.ReadSingle();
 			_targetPitch = reader.ReadSingle();
+			Debug.Log("*** Load Player ***");
 		}
 		#endregion //..SAVE
 	}

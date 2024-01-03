@@ -10,11 +10,6 @@ using System.Linq;
 
 public class ConveyorPlacement : IPlacement
 {
-	[Header("Placement Events")]
-	public VoidEventChannel_SO startPlacementEvent;
-	public VoidEventChannel_SO finishPlacementEvent;
-	public VoidEventChannel_SO cancelPlacementEvent;
-
 	[Header("Conveyor Setup")]
 	public Conveyor conveyorPrefab;
 	private Conveyor current;
@@ -34,78 +29,103 @@ public class ConveyorPlacement : IPlacement
 	public Material greenGhostMat;
 	public Material redGhostMat;
 
-	[Header("Controls")]
-	public KeyCode cancelKey = KeyCode.Escape;
 
-	private enum State
-	{
-		None,
-		Start,
-		End
-	}
-	[SerializeField] private State state;
+	//protected override void fnStart()
+	//{
+	//}
 
-	private void Start()
+	//OnDestroyì—ì„œ í˜¸ì¶œëœë‹¤.
+	//ConveyorPlacementì—ì„œ Pool_Conveyorë¥¼ ë¨¼ì € ì •ë¦¬í•˜ê³ (beltì˜ ì•„ì´í…œì„ ë‚ ë¦¬ê¸° ìœ„í•´)
+	//BuildingPlacementì—ì„œ ë‚˜ë¨¸ì§€ Pool_xxxì„ ì •ë¦¬í•˜ê²Œ ë©ë‹ˆë‹¤.
+	protected override void OnfnDestroy()
 	{
-		MyCraft.Managers.Input.MouseAction -= OnMouseEvent;
-		MyCraft.Managers.Input.MouseAction += OnMouseEvent;
-	}
-	private void OnEnable()
-	{
-		// listen to the cancel event to force cancel placement from elsewhere in the code
-		cancelPlacementEvent.OnEvent += ForceCancel;
-	}
-	private void OnDisable()
-	{
-		// stop listening
-		cancelPlacementEvent.OnEvent -= ForceCancel;
+		Debug.Log("ConveyorPlacement ì¢…ë£Œë¥¼ ì§„í–‰í•©ë‹ˆë‹¤.");
+		//Debug.Log($"-  {this.name}");
+		Transform go = this.transform.Find("Pool_Conveyor");
+		if(null != go)
+		{
+			//Debug.Log($"+  {go.name}");
+
+			//ë’¤ì—ì„œ ë¶€í„° ì‚­ì œí•´ì•¼í•¨.
+			for (int i = go.childCount - 1; i >= 0; --i)
+			{
+				//Debug.Log($"++  {go.GetChild(i).name}");
+				Conveyor conveyor = go.GetChild(i).GetComponent<Conveyor>();
+				if (null == conveyor) continue;
+				
+				conveyor.OnDeleted(false); //false:ë°¸íŠ¸ìœ„ ì•„ì´í…œì„ ì¸ë²¤ìœ¼ë¡œ íšŒìˆ˜í•˜ì§€ ì•Šê³  ë‚ ë¦°ë‹¤.
+				MyCraft.Managers.Resource.Destroy(conveyor.gameObject);
+			}
+		}
 	}
 
-	public void ForceCancel()
+	//buildingPlaceì˜ ForceCancel()ì™€ í¡ì‚¬(conveyorì—ì„œ centerGridì„ ì ìš©í• ë•Œ buildingPlaceì™€ í†µí•©ì„ ê³ ë ¤í•  ê²ƒ)
+	public override void ForceCancel()
 	{
 		if (current != null)
-		{
 			MyCraft.Managers.Resource.Destroy(current.gameObject);
-		}
 		current = null;
-		this.state = State.None;
+		startSocket = null;
+		endSocket = null;
+		base.state = State.None;
 	}
+
+	//public override void DestroyBuilding(GameObject target)
+	//{
+	//	if (false == target.TryGetComponent<Conveyor>(out Conveyor conveyor))
+	//		return;
+
+	//	Debug.Log($"{conveyor.name} ì² ê±°");
+	//	conveyor.OnDeleted(true);
+	//	MyCraft.Managers.Resource.Destroy(conveyor.gameObject);
+	//}
+
+	protected override void OnKeyDown()
+	{
+		if (Input.GetKeyDown(base.cancelKey))
+			cancelPlacementEvent?.Raise();
+	}
+
+	//protected override void OnMouseEvent(Define.MouseEvent evt)
+	//{
+	//	//UIìœ„ë¥¼ í´ë¦­í–ˆì„ë•Œ...ë¬´ì‹œ
+	//	if (true == base.IsPointerOverGameObject()) return;
+
+	//	switch (evt)
+	//	{
+	//		case Define.MouseEvent.R_Press:
+	//			{
+	//				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	//				RaycastHit hit = Physics.RaycastAll(ray, MyCraft.Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).FirstOrDefault();
+	//				//foreach (RaycastHit hit in Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE))
+	//				if (null == hit.collider || null == hit.collider.transform.parent)
+	//					break;
+	//				if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
+	//				{
+	//					//DestroyBuilding(conveyor.gameObject);
+	//					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject);
+	//					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(true);
+	//					return;
+	//				}
+	//			}
+	//			break;
+
+	//		case Define.MouseEvent.R_Click:
+	//			{
+	//				if (MyCraft.Managers.Game.DestoryProcess.gameObject.activeSelf)
+	//				{
+	//					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
+	//					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
+	//				}
+	//			}
+	//			break;
+	//	}//..switch (evt)
+	//}
 
 	private bool TryChangeState(State desiredState)
 	{
-		state = desiredState;
+		base.state = desiredState;
 		return true;
-	}
-
-	public GameObject StartPlacingConveyor(GameObject prefab) {
-		//cancel any placement currently happening
-		cancelPlacementEvent?.Raise();
-		// instantiate a belt to place
-		//current = Instantiate(conveyorPrefab);
-		//current = MyCraft.Managers.Resource.Instantiate(conveyorPrefab.gameObject).GetComponent<Conveyor>();    //HG[2023.06.01]Å×½ºÆ®ÇÊ¿ä
-		current = MyCraft.Managers.Resource.Instantiate(prefab).GetComponent<Conveyor>();    //HG[2023.06.01]Å×½ºÆ®ÇÊ¿ä
-		current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
-		if (TryChangeState(State.Start))
-		{
-			//b.enabled = false;
-			base.SetEnable_1(current, false);
-
-			startSocket = null;
-			endSocket = null;
-		}
-		// trigger event
-		startPlacementEvent?.Raise();
-		return current.gameObject;
-	}
-
-	public override void DestroyBuilding(GameObject target)
-	{
-		if (false == target.TryGetComponent<Conveyor>(out Conveyor conveyor))
-			return;
-		
-		Debug.Log($"{conveyor.name} Ã¶°Å");
-		conveyor.OnDeleted();
-		MyCraft.Managers.Resource.Destroy(conveyor.gameObject);
 	}
 
 	private bool ValidLocation()
@@ -114,7 +134,9 @@ public class ConveyorPlacement : IPlacement
 		
 			foreach (Collider c in Physics.OverlapSphere(startPos, 1f))
 			{
-				if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+				//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+				if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
+					&& c.gameObject != current.gameObject)
 				{
 					// colliding something!
 					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
@@ -125,7 +147,9 @@ public class ConveyorPlacement : IPlacement
 			}
 			foreach (Collider c in Physics.OverlapSphere(endPos, 1f))
 			{
-				if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+				//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+				if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
+					&& c.gameObject != current.gameObject)
 				{
 					// colliding something!
 					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
@@ -139,19 +163,48 @@ public class ConveyorPlacement : IPlacement
 		return true;
 	}
 
-	//conveyor ½ÃÀÛÀ§Ä¡¸¦ Ã£°í ÀÖÀ»¶§
-	void HandleStartState()
+	public GameObject StartPlacingConveyor(GameObject prefab)
+	{
+		//cancel any placement currently happening
+		cancelPlacementEvent?.Raise();
+		// instantiate a belt to place
+		//current = Instantiate(conveyorPrefab);
+		//current = MyCraft.Managers.Resource.Instantiate(conveyorPrefab.gameObject).GetComponent<Conveyor>();    //HG[2023.06.01]í…ŒìŠ¤íŠ¸í•„ìš”
+		current = MyCraft.Managers.Resource.Instantiate(prefab).GetComponent<Conveyor>();    //HG[2023.06.01]í…ŒìŠ¤íŠ¸í•„ìš”
+		current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
+		if (TryChangeState(State.Start))
+		{
+			//b.enabled = false;
+			base.SetEnable_1(current, false);
+
+			//ì¬ì‹œì‘í• ë•Œ ë“¤ê³  ìˆë˜ ì•„ì´í…œë“¤ ë‚ ë¦°ë‹¤.(false:íšŒìˆ˜ì•ˆí•¨)
+			//current.OnDeleted(false); //<--ì—¬ê¸°ì„œ ì²˜ë¦¬í•  ê²ƒì´ ì•„ë‹ˆë¼. BuildingPlacementì™€ ConveyorPlacementë¥¼ í†µí•©í›„ì— Destroyí• ë•Œ ì´ˆê¸°í™” í•˜ë„ë¡ í•©ë‹ˆë‹¤.
+
+			startSocket = null;
+			endSocket = null;
+		}
+		// trigger event
+		startPlacementEvent?.Raise();
+		return current.gameObject;
+	}
+
+	//void HandleIdleState()
+	//{
+	//}
+
+	//conveyor ì‹œì‘ìœ„ì¹˜ë¥¼ ì°¾ê³  ìˆì„ë•Œ
+	protected override void HandleStartState()
 	{
 		Debug.Assert(current != null, "Not currently placing a conveyor.");
 		startSocket = null;
 		Vector3 worldPos = Vector3.zero;
 		Vector3 worldDir = Vector3.forward;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit[] hits = Physics.RaycastAll(ray, 100).OrderBy(h => h.distance).ToArray();
+		RaycastHit[] hits = Physics.RaycastAll(ray, MyCraft.Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).ToArray();
 		foreach (RaycastHit hit in hits)
 		{
 			// skip objects/colliders in the conveyor we're currently placing
-			//if (hit.transform.root == current.transform) continue;  //¿©±â¶§¹®¿¡ conveyorÀÇ parentÀ» ¼³Á¤ÇÏ¸é. ¼³Ä¡°¡ ¾ÈµÇ´Â Çö»ó³ªÅ¸³²
+			//if (hit.transform.root == current.transform) continue;  //ì—¬ê¸°ë•Œë¬¸ì— conveyorì˜ parentì„ ì„¤ì •í•˜ë©´. ì„¤ì¹˜ê°€ ì•ˆë˜ëŠ” í˜„ìƒë‚˜íƒ€ë‚¨
 			if (hit.transform.parent == current.transform) continue;
 			// try to find an open socket
 			if (hit.collider.gameObject.TryGetComponent(out OutputSocket socket))
@@ -166,9 +219,9 @@ public class ConveyorPlacement : IPlacement
 				break;
 			}
 
-			if (hit.transform.tag == "Safe-Footing")  //¾ÈÀü¹ßÆÇ
+			if (hit.transform.tag == "Safe-Footing")  //ì•ˆì „ë°œíŒ
 			{
-				worldPos = hit.point + Vector3.up * 0.3f;	//½ÃÀÛ³ôÀÌ
+				worldPos = hit.point + Vector3.up * 0.3f;	//ì‹œì‘ë†’ì´
 				Vector3 camForward = Camera.main.transform.forward;
 				camForward.y = 0f;
 				camForward.Normalize();
@@ -241,20 +294,20 @@ public class ConveyorPlacement : IPlacement
 
 		
 	}
-	//conveyor ³¡ºÎºĞ ÁöÁ¤ÇÒ ¶§
-	void HandleEndState()
+	//conveyor ëë¶€ë¶„ ì§€ì •í•  ë•Œ
+	protected override void HandleEndState()
 	{
 		Debug.Assert(current != null, "Not currently placing a conveyor.");
 		Vector3 worldPos = Vector3.zero;
 		Vector3 worldDir = Vector3.forward;
 
-		//Ray mousedownRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-		//foreach (RaycastHit hit in Physics.RaycastAll(mousedownRay, 100f))
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit[] hits = Physics.RaycastAll(ray, 100).OrderBy(h => h.distance).ToArray();
+        //Ray mousedownRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //foreach (RaycastHit hit in Physics.RaycastAll(mousedownRay, Common.MAX_RAY_DISTANCE))
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit[] hits = Physics.RaycastAll(ray, MyCraft.Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).ToArray();
 		foreach (RaycastHit hit in hits)
 		{
-			//if (hit.collider.transform.root == current.transform) continue;	//ÀÌ°Å¶§¹®¿¡ ¹®Á¦°¡ ¹ß»ıÇÑ°Ç ¾Æ´ÏÁö¸¸ È¤½Ã³ª ÇØ¼­ HandleStartState¿Í °°ÀÌ ¸ÂÃçÁÜ.
+			//if (hit.collider.transform.root == current.transform) continue;	//ì´ê±°ë•Œë¬¸ì— ë¬¸ì œê°€ ë°œìƒí•œê±´ ì•„ë‹ˆì§€ë§Œ í˜¹ì‹œë‚˜ í•´ì„œ HandleStartStateì™€ ê°™ì´ ë§ì¶°ì¤Œ.
 			if (hit.transform.parent == current.transform) continue;
 			// want to specifically connect to a conveyor socket, not a belt bridge
 			if (hit.collider.gameObject.TryGetComponent<InputSocket>(out InputSocket socket))
@@ -262,7 +315,7 @@ public class ConveyorPlacement : IPlacement
 				if (!socket.IsOpen())
 				{
 					// Socket already Occupied
-					break;
+					continue;
 				}
 				worldPos    = hit.collider.transform.position;
 				worldDir    = hit.collider.transform.forward;
@@ -270,7 +323,7 @@ public class ConveyorPlacement : IPlacement
 				break;
 			}
 
-			if (hit.transform.tag == "Safe-Footing")  //¾ÈÀü¹ßÆÇ
+			if (hit.transform.tag == "Safe-Footing")  //ì•ˆì „ë°œíŒ
 			{
 				//worldPos = hit.point;
 				//// stay same level if this is the terrain
@@ -344,22 +397,16 @@ public class ConveyorPlacement : IPlacement
 		//THIS IS NOT A GREAT WAY TO DO THIS - CONSIDER USING LAYERMASKS
 		//if (startSocket == null)
 		//    collidersToIgnore.AddRange(FindObjectsOfType<TerrainCollider>());
-		if (startSocket != null)
-			collidersToIgnore.AddRange(startSocket.GetComponentsInChildren<Collider>());
-		if (endSocket != null)
-			collidersToIgnore.AddRange(endSocket.GetComponentsInChildren<Collider>());
+		if (startSocket) collidersToIgnore.AddRange(startSocket.GetComponentsInChildren<Collider>());
+		if (endSocket) collidersToIgnore.AddRange(endSocket.GetComponentsInChildren<Collider>());
 		// add self
 		OutputSocket outputSocket = current.GetComponentInChildren<OutputSocket>();
-		if (outputSocket != null)
-			collidersToIgnore.Add(outputSocket.GetComponent<Collider>());
+		if (outputSocket) collidersToIgnore.Add(outputSocket.GetComponent<Collider>());
 		InputSocket inputSocket = current.GetComponentInChildren<InputSocket>();
-		if (inputSocket != null)
-			collidersToIgnore.Add(inputSocket.GetComponent<Collider>());
+		if (inputSocket) collidersToIgnore.Add(inputSocket.GetComponent<Collider>());
 		// add connected sockets
-		if (startSocket)
-			collidersToIgnore.Add(startSocket.GetComponent<Collider>());
-		if (endSocket)
-			collidersToIgnore.Add(endSocket.GetComponent<Collider>());
+		if (startSocket) collidersToIgnore.Add(startSocket.GetComponent<Collider>());
+		if (endSocket) collidersToIgnore.Add(endSocket.GetComponent<Collider>());
 
 		current.UpdateMesh(
 			startskip: 1, //startSocket != null ? 1 : 0, 
@@ -396,9 +443,9 @@ public class ConveyorPlacement : IPlacement
 			current.SetMaterials(originalFrameMat, originalBeltMat);
 			current.AddCollider();
 
-			//Áö±Ş
+			//ì§€ê¸‰
 			int amount = MyCraft.InvenBase.choiced_item._SubStackCount(current.Capacity, false);
-			if(0 < amount)	//HG_TODO: ³²Àº °³¼ö´Â ÀÎº¥¿¡¼­ »©ÁØ´Ù.
+			if(0 < amount)	//HG_TODO: ë‚¨ì€ ê°œìˆ˜ëŠ” ì¸ë²¤ì—ì„œ ë¹¼ì¤€ë‹¤.
 			{
 				//Managers.Game.SubItem(InvenBase.choiced_item);
 
@@ -415,86 +462,4 @@ public class ConveyorPlacement : IPlacement
 			//finishPlacementEvent?.Raise(current.Capacity);
 		}
 	}
-
-	void HandleNoneState()
-	{
-		//// right click to delete
-		//if (Input.GetMouseButtonDown(1))
-		//{
-		//	//UIÀ§¸¦ Å¬¸¯ÇßÀ»¶§...¹«½Ã
-		//	if (true == base.IsPointerOverGameObject()) return;
-
-		//	Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		//	foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
-		//	{
-		//		if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
-		//		{
-		//			DestroyBuilding(conveyor.gameObject);
-		//			//Managers.Game.DestoryProcess.SetProgress(this, null);
-		//			//Managers.Game.DestoryProcess.gameObject.SetActive(true);
-		//			return;
-		//		}
-		//	}
-		//}
-	}
-
-	private void OnMouseEvent(Define.MouseEvent evt)
-	{
-		//UIÀ§¸¦ Å¬¸¯ÇßÀ»¶§...¹«½Ã
-		if (true == base.IsPointerOverGameObject()) return;
-
-		switch (evt)
-		{
-			case Define.MouseEvent.R_Press:
-			{
-				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-				RaycastHit hit = Physics.RaycastAll(ray, 100f).OrderBy(h => h.distance).FirstOrDefault();
-				//foreach (RaycastHit hit in Physics.RaycastAll(ray, 100f))
-				if (null == hit.collider || null == hit.collider.transform.parent)
-					break;
-				if (hit.collider.transform.parent.TryGetComponent<Conveyor>(out Conveyor conveyor))
-				{
-					//DestroyBuilding(conveyor.gameObject);
-					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, conveyor.gameObject);
-					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(true);
-					return;
-				}
-			} break;
-
-			case Define.MouseEvent.R_Click:
-			{
-				if (MyCraft.Managers.Game.DestoryProcess.gameObject.activeSelf)
-				{
-					MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
-					MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
-				}
-			} break;
-		}//..switch (evt)
-	}
-
-	public void Update()
-	{
-		if (Input.GetKeyDown(cancelKey))
-		{
-			if (current != null)
-				MyCraft.Managers.Resource.Destroy(current.gameObject);
-			current = null;
-			startSocket = null;
-			endSocket = null;
-			state = State.None;
-		}
-		switch (state)
-		{
-			case State.None:
-				HandleNoneState();
-				break;
-			case State.Start:
-				HandleStartState(); //conveyor ½ÃÀÛÀ§Ä¡¸¦ Ã£°í ÀÖÀ»¶§
-				break;
-			case State.End:
-				HandleEndState();   //conveyor ³¡ºÎºĞ ÁöÁ¤ÇÒ ¶§
-				break;
-		}
-	}
-
 }

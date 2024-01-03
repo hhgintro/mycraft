@@ -11,12 +11,32 @@ namespace MyCraft
         public Define.Scene SceneType { get; protected set; } = Define.Scene.Unknown;
         protected Object _eventsystem;
 
-		protected virtual void Init()
+        void Awake()
+        {
+            fnAwake();
+        }
+        void Start()
+        {
+            fnStart();
+        }
+        void Update()
+        {
+            fnUpdate();
+        }
+
+        //private void OnDisable()
+        //{
+        //    fnDisable();
+        //}
+
+        protected virtual void fnAwake()
         {
             _eventsystem = GameObject.FindObjectOfType(typeof(EventSystem));
             if (_eventsystem == null) Managers.Resource.Instantiate("Prefabs/UI/EventSystem").name = "@EventSystem";
         }
-
+        protected virtual void fnStart() { }
+        protected virtual void fnUpdate() { }
+        //protected virtual void fnDisable() { }
         public virtual void Clear()
         {
             if (null != _eventsystem)

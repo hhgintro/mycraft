@@ -8,12 +8,12 @@ namespace FactoryFramework
 {
     public class Storage : Building, IInput, IOutput
     {
-        public override  void InitStart()
+        public override  void fnStart()
         {
             if (0 == base._panels.Count)
                 base._panels.Add(new MyCraft.BuildingPanel(base._panels.Count, ((MyCraft.ChestItemBase)base._itembase).Slots));//input
 
-			base.InitStart();
+			base.fnStart();
         }
 
         public override void OnClicked()
@@ -163,20 +163,16 @@ namespace FactoryFramework
 		{
 			if (0 == base._panels.Count) return;
 
+			//덮어쓰기 먼저하고, 빈공간에 넣어준다.
+			//여유공간
 			MyCraft.ItemBase itembase = MyCraft.Managers.Game.ItemBases.FetchItemByID(itemid);
 			for (int p = 0; p < base._panels.Count; ++p)
 			{
 				for (int s = 0; s < base._panels[p]._slots.Count; ++s)
 				{
-					if (0 == base._panels[p]._slots[s]._item._itemid)     //빈공간
-					{
-						base._panels[p]._slots[s]._item._itemid = itemid;
-						base._panels[p]._slots[s]._item._amount = 1;
-						base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._item._itemid, base._panels[p]._slots[s]._item._amount, base._panels[p]._slots[s]._item._fillAmount, true);
-						return;
-					}
+					if (itemid != base._panels[p]._slots[s]._item._itemid)
+						continue;       //(비었거나)다른아이템
 
-					if (itemid != base._panels[p]._slots[s]._item._itemid) continue;       //다른아이템
 					if (base._panels[p]._slots[s]._item._amount < itembase.Stackable) //여유가 있군.
 					{
 						base._panels[p]._slots[s]._item._amount += 1;
@@ -185,22 +181,37 @@ namespace FactoryFramework
 					}
 				}
 			}
+			//빈공간
+			for (int p = 0; p < base._panels.Count; ++p)
+			{
+				for (int s = 0; s < base._panels[p]._slots.Count; ++s)
+				{
+					if (0 != base._panels[p]._slots[s]._item._itemid)
+						continue;       //다른아이템
+
+					//빈공간
+					base._panels[p]._slots[s]._item._itemid = itemid;
+					base._panels[p]._slots[s]._item._amount = 1;
+					base.SetBlock2Inven(p, s, base._panels[p]._slots[s]._item._itemid, base._panels[p]._slots[s]._item._amount, base._panels[p]._slots[s]._item._fillAmount, true);
+					return;
+				}
+			}
 		}
-        #endregion //..TAKE_INPUT
+		#endregion //..TAKE_INPUT
 
-        //#region SAVE
-        //public override void Save(BinaryWriter writer)
-        //{
-        //    base.Save(writer);
+		//#region SAVE
+		//public override void Save(BinaryWriter writer)
+		//{
+		//    base.Save(writer);
 
-        //}
-        //public override void Load(BinaryReader reader)
-        //{
-        //    base.Load(reader);
+		//}
+		//public override void Load(BinaryReader reader)
+		//{
+		//    base.Load(reader);
 
-        //}
-        //#endregion //..SAVE
+		//}
+		//#endregion //..SAVE
 
 
-    }
+	}
 }

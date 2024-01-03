@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 6441829356522074146}
   - component: {fileID: -6476915651193693975}
   - component: {fileID: 4698860225324831363}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WaterPurificationPlant
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

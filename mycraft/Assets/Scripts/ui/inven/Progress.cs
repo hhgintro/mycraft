@@ -18,8 +18,8 @@ namespace MyCraft
 		public float _fillAmount;   //Image.fillAmount
 		bool _bReverse	= false;	//false이면 차고, true이면 줄어듭니다.
 		float _time		= 1f;       //(단위:s)
-		int _maxMultiple	= 1;		//최대 반복회수
-		int _curMultiple	= 0;		//현재 반복회수
+		//int _maxMultiple	= 1;		//최대 반복회수
+		//int _curMultiple	= 0;		//현재 반복회수
 
 		//true이면 Progress가 활성화(자원/연료를 소모한) 상태
 		//자원 또는 연료를 소모하면 progress가 끝까지 진행할때 까지 활성으로 판단합니다.
@@ -37,29 +37,50 @@ namespace MyCraft
 			//this._bBunning = false;
 			//this._bRunning = false;
 
-			this.InitProgress();
+			this.Init();
+		}
+
+		//progress를 초기상태로 설정한다.(시작상태아니다. 완료된 상태이다)
+		//	시작상태로 설정은 SetFillUp() 함수를 사용한다.
+		void Init()
+		{
+			//float rate = this._curMultiple / this._maxMultiple;
+			//if (true == this._bReverse) this._fillAmount = 1f - rate;
+			//else                        this._fillAmount = rate;
+			if (true == this._bReverse)	this._fillAmount = 0f;
+			else						this._fillAmount = 1f;
+		}
+
+		//재료/연료를 모두 소진(끝까지 갔으면)하면 true를 리턴한다.
+		public bool IsEmpty()
+		{
+			if (true == this._bReverse)
+			{
+				if (0f < this._fillAmount)	return false;
+				return true;
+			}
+			if (this._fillAmount < 1f)	return false;
+			return true;
 		}
 
 		public void SetInven(InvenBase inven) { this._inven = inven; }
-		public void SetTime(float time)
+		public void SetFillUp(float time)	//가득채움
 		{
-			this._time = time;
-			if (this._time < 0.01f) this._time = 0.01f;
-		}
-		public void SetMultiple(int cur, int multiple)
-		{
-			this._maxMultiple = multiple;
-			this._curMultiple = cur;
-			this.InitProgress();
-		}
+			//재료/연료를 조금이라도 남아있다면...재설정하지 않는다.
+			if(false == IsEmpty()) return;
 
-		//progress를 초기상태로 설정한다.
-		public void InitProgress()
-		{
-			float rate = this._curMultiple / this._maxMultiple;
-			if (true == this._bReverse) this._fillAmount = 1f - rate;
-			else                        this._fillAmount = rate;
+			if (0.5f < time)	this._time = time;
+
+			//가득채움
+			if (true == this._bReverse)	this._fillAmount = 1f;
+			else						this._fillAmount = 0f;
 		}
+		//public void SetMultiple(int cur, int multiple)
+		//{
+		//	this._maxMultiple = multiple;
+		//	this._curMultiple = cur;
+		//	this.InitProgress();
+		//}
 
 		public void Update()
 		{
@@ -73,38 +94,38 @@ namespace MyCraft
 			this._fillAmount -= Time.deltaTime / _time;
 			if (this._fillAmount <= 0f)
 			{
-				this._fillAmount = 1f;
+				//this._fillAmount = 1f;	//(여기서 채우지 않고)아이템 소모할때 다시 채워준다.
 				this._owner?.OnProgressCompleted(this._id);  //progress 완료를 통보합니다.
 				return;
 			}
 
-			if (this._maxMultiple <= 1) return;
-			float rateNext = (this._curMultiple + 1) / this._maxMultiple;
-			if (this._fillAmount <= rateNext)
-			{
-				this._curMultiple += 1;
-				this._fillAmount = rateNext;
-				this._owner?.OnProgressReaching(this._id);  //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
-			}
+			//if (this._maxMultiple <= 1) return;
+			//float rateNext = (this._curMultiple + 1) / this._maxMultiple;
+			//if (this._fillAmount <= rateNext)
+			//{
+			//	this._curMultiple += 1;
+			//	this._fillAmount = rateNext;
+			//	this._owner?.OnProgressReaching(this._id);  //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
+			//}
 		}
 		void ForwardUpdate()
 		{
 			this._fillAmount += Time.deltaTime / _time;
 			if (1f <= this._fillAmount)
 			{
-				this._fillAmount = 0f;
+				//this._fillAmount = 0f;	//(여기서 채우지 않고)아이템 소모할때 다시 채워준다.
 				this._owner?.OnProgressCompleted(this._id);  //progress 완료를 통보합니다.
 				return;
 			}
 
-			if (this._maxMultiple <= 1) return;
-			float rateNext = (this._curMultiple + 1) / this._maxMultiple;
-			if (rateNext <= this._fillAmount)
-			{
-				this._curMultiple += 1;
-				this._fillAmount = rateNext;
-				this._owner?.OnProgressReaching(this._id);  //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
-			}
+			//if (this._maxMultiple <= 1) return;
+			//float rateNext = (this._curMultiple + 1) / this._maxMultiple;
+			//if (rateNext <= this._fillAmount)
+			//{
+			//	this._curMultiple += 1;
+			//	this._fillAmount = rateNext;
+			//	this._owner?.OnProgressReaching(this._id);  //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
+			//}
 		}
 	}
 }

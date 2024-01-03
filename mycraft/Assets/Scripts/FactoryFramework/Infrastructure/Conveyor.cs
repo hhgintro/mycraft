@@ -13,6 +13,8 @@ using Unity.Collections;
 using UnityEngine.Windows;
 //using MyCraft;
 using UnityEngine.UIElements;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -67,9 +69,9 @@ namespace FactoryFramework
 		private TransformAccessArray _transformsArray;
 
 		// events
-		public UnityEvent<Conveyor> OnConveyorDestroyed;
+		//public UnityEvent<Conveyor> OnConveyorDestroyed;
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			_powerGridComponent ??= GetComponent<PowerGridComponent>();
 
@@ -81,6 +83,7 @@ namespace FactoryFramework
 
 		public void Reset()
 		{
+			Debug.Log("Conveyor RESET을 (종료시에)호출합니다.");
 			frameFilter.sharedMesh?.Clear();
 			beltFilter.sharedMesh?.Clear();
 
@@ -94,35 +97,35 @@ namespace FactoryFramework
 				DestroyImmediate(frameFilter.sharedMesh);
 				DestroyImmediate(beltFilter.sharedMesh);
 			}
-
-			beltObjectPool?.Clear();
-			items?.Clear();
 		}
 
-		//파괴될 때.
-		public virtual void OnDeleted()
+		//파괴될 때.(bReturn:true이면 인벤으로 회수, 게임재시작할때에는 false이어야 합니다.)
+		public override void OnDeleted(bool bReturn)
 		{
-            for (int i = 0; i < items.Count; i++)
-            {
-                MyCraft.Managers.Game.AddItem(this.items[i]._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
-                MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
-            }
-            items.Clear();
-            Disconnect();
-            MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity, MyCraft.Global.FILLAMOUNT_DEFAULT);
-        }
-
-		public override void _Destroy()
-		{
-			for (int i = 0; i < items.Count; i++)
-				MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
-
-			items.Clear();
+			base.GUID = Guid.Empty; //GUID중복:save파일과 Mem에 동일할 GUID가 존재한다.
 			Disconnect();
-			Reset();
-			_path?.CleanUp();
-			OnConveyorDestroyed?.Invoke(this);
+			//Load할때 Reset()을 호출하지 않는다.(frameFilter/beltFilter에서 오류확인됨)
+			//if(false == bReturn) Reset();	//Destroy에서 호출될때에 실행한다.
+			//_path?.CleanUp();		//Load할떄 중복으로 처리되어 문제가 있는거 같다.
+
+			//ItemOnBelt 회수
+			for (int i = 0; i < items.Count; i++)
+			{
+				if (bReturn) MyCraft.Managers.Game.AddItem(this.items[i]._itembase.id, 1, MyCraft.Global.FILLAMOUNT_DEFAULT);
+				MyCraft.Managers.Resource.Destroy(items[i]._model.gameObject);
+			}
+			items.Clear();
+			beltObjectPool?.Clear();
+
+			//conveyor(자신) 회수
+			if (bReturn) MyCraft.Managers.Game.AddItem(base._itembase.id, this.Capacity, MyCraft.Global.FILLAMOUNT_DEFAULT);
+			//OnConveyorDestroyed?.Invoke(this);
 		}
+
+		//public override void fnDestroy()
+		//{
+		//	OnDeleted(false);
+		//}
 
 
 		//private void Update()
@@ -308,12 +311,13 @@ namespace FactoryFramework
 				_validMesh = false;
 			}
 			int length = Mathf.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
-			//Debug.Log($"Length is {length}"); // development debug
+			//Debug.Log($"Conveyor Length is {length}"); // development debug
 
 			bool collision = PathFactory.CollisionAlongPath(_path, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip: startskip, endskip: endskip); //only collide belt collideable layer
 			if (collision)
 			{
-				if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to collision");
+				//충돌인지를 위해 _validMesh 설정은 그대로 두고, 오류메시지는 노출할 필요없다.
+				//if (settings.SHOW_DEBUG_LOGS) Debug.LogError("Invalid Conveyor due to collision");
 				_validMesh = false;   //HG_TEST:(주석처리하면) 모든 collider의 충돌을 무시한다.
 			}
 
@@ -322,9 +326,12 @@ namespace FactoryFramework
 
 			if (Application.isEditor && Application.isPlaying)
 			{
-				Destroy(frameFilter.sharedMesh);
-				Destroy(beltFilter.sharedMesh);
-			} else
+				//Destroy(frameFilter.sharedMesh);
+				//Destroy(beltFilter.sharedMesh);
+				DestroyImmediate(frameFilter.sharedMesh, true);
+				DestroyImmediate(beltFilter.sharedMesh, true);
+			}
+			else
 			{
 				DestroyImmediate(frameFilter.sharedMesh);
 				DestroyImmediate(beltFilter.sharedMesh);
@@ -353,8 +360,34 @@ namespace FactoryFramework
 		}
 		public void AddCollider()
 		{
+			//Debug.Log($"문제가있는 {this.GUID}/{data.start}/{data.startDir}/{data.end}/{data.endDir}/{data.speed}/{data.inputSocketIndex}/{data.outputSocketIndex}");
+			//frameFilter.gameObject.AddComponent<MeshCollider>();
+			//beltFilter.gameObject.AddComponent<MeshCollider>();
+
+			var frame = frameFilter.gameObject.GetComponent<MeshCollider>();
+			if (frame)
+			{
+				Debug.Log("frame collider 삭제후 재생성");
+				//다시불러오기시에 frame의 MeshCollider의 Mesh가 깨져서 지우고 다시생성하고 있다.
+				//HG_TODO: 다시 세팅해줄수 있는지 체크할 것
+				Destroy(frame);
+			}
 			frameFilter.gameObject.AddComponent(typeof(MeshCollider));
+			var belt = beltFilter.gameObject.GetComponent<MeshCollider>();
+			if (belt)
+			{
+				Debug.Log("belt collider 삭제후 재생성");
+                //다시불러오기시에 belt의 MeshCollider의 Mesh가 깨져서 지우고 다시생성하고 있다.
+                //HG_TODO: 다시 세팅해줄수 있는지 체크할 것
+                Destroy(belt);
+			}
 			beltFilter.gameObject.AddComponent(typeof(MeshCollider));
+
+			//if (null == frameFilter.gameObject.GetComponent<MeshCollider>())
+			//	frameFilter.gameObject.AddComponent(typeof(MeshCollider));
+			//if (null == beltFilter.gameObject.GetComponent<MeshCollider>())
+			//	beltFilter.gameObject.AddComponent(typeof(MeshCollider));
+
 		}
 
 		public override Mesh GetSharedMesh() { return this.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh; }
@@ -433,6 +466,7 @@ namespace FactoryFramework
 		{
 			//if (filter != null) Debug.LogWarning("Conveyor Belt Does not Implement Item Filter Output");
 			if (items.Count == 0) return false;
+			//Debug.Log($"{Length}:{items[0]._position == Length}:({items[0]._position}/{Length})");
 			return items[0]._position == Length;
 		}
 		//public Item OutputType()
@@ -606,8 +640,18 @@ namespace FactoryFramework
 
 			this.inputSocket = this.GetComponentInChildren<InputSocket>();
 			this.outputSocket = this.GetComponentInChildren<OutputSocket>();
+
+			//Debug.Log($" + before: {this.GUID}");	//테스트용:에러가발생할때 체크(before,after)
+
+			//if(Guid.Parse("3ee88e14-db2d-4a59-baa3-e055a9a89cb8") == this.GUID)
+			//{
+			//	int a = 0;
+			//	a = 0;
+			//}
+
 			// draw
 			this.UpdateMesh(true);
+			//this.UpdateMesh();
 			this.AddCollider();
 
 			//items
@@ -624,16 +668,17 @@ namespace FactoryFramework
 			//this.OutputSocketGuid = reader.ReadString();
 			this.tmpInputGuid = reader.ReadString();
 			this.tmpOutputGuid = reader.ReadString();
-			//Debug.Log($"LOAD:{this.tmpInputGuid}/{this.tmpOutputGuid}");
+            //Debug.Log($"LOAD:{this.tmpInputGuid}/{this.tmpOutputGuid}");
+            //this.SetEnable(true);
 
-			//this.SetEnable(true);
-		}
-		#endregion //..SAVE
+            //Debug.Log($" +++ after: {this.GUID}");	//테스트용:에러가발생할때 체크(before,after)
+        }
+        #endregion //..SAVE
 
 
 #if UNITY_EDITOR
 
-		private void OnDrawGizmos()
+        private void OnDrawGizmos()
 		{
 			// doesnt matter item type
 			if (!CanGiveOutput() && CanTakeInput(0))

@@ -38,7 +38,7 @@ namespace FactoryFramework
 		//List<Material> materials = new List<Material>();
 		int cnt = 0;	//테스트용
 
-		public override void InitStart()
+		public override void fnStart()
 		{
 			////outline
 			//this.outline = new Material(Shader.Find("Draw/OutlineShader"));
@@ -59,7 +59,7 @@ namespace FactoryFramework
 				//this._progresses.Add(new Progress(this, (MyCraft.PROGRESSID)1, 10, true));//progress-fuel
 			}
 
-			base.InitStart();
+			base.fnStart();
 		}
 
 		public override void ProcessLoop()
@@ -152,17 +152,20 @@ namespace FactoryFramework
 		//    _outputs.Clear();
 		//}
 
-		//machine의 output=null설정
-		public override void OnReset()
+		//machine의 output=null설정(bReturn:true이면 인벤으로 회수)
+		public override void OnReset(bool bReturn)
 		{
 			this._recipe = null;
 
 			//input
-			foreach(int itemid in INPUT.Keys)
-				if (0 < INPUT[itemid]._amount) MyCraft.Managers.Game.AddItem(itemid, INPUT[itemid]._amount, INPUT[itemid]._fillAmount);
+			if (bReturn)
+			{
+				foreach (int itemid in INPUT.Keys)
+					if (0 < INPUT[itemid]._amount) MyCraft.Managers.Game.AddItem(itemid, INPUT[itemid]._amount, INPUT[itemid]._fillAmount);
+			}
 			INPUT.Clear();
 
-			base.OnReset();
+			base.OnReset(bReturn);
 		}
 
 		public override bool AssignRecipe(MyCraft.JSonDatabase jsondata)
@@ -253,6 +256,8 @@ namespace FactoryFramework
 		//재료 소모
 		private void ConsumeInputs()
 		{
+			PROGRESS.SetFillUp(0);   //가득채움
+
 			//아이템 차감
 			int s = 0;
 			foreach (MyCraft.BuildCostItem cost in this._recipe.cost.items)
@@ -269,6 +274,13 @@ namespace FactoryFramework
 			//OUTPUT._slots[0]._item._amount += 1;
 			////UI
 			//this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._item._itemid, OUTPUT._slots[0]._item._amount, false);
+
+			if(this._recipe.id != OUTPUT._slots[0]._item._itemid)
+			{
+				//OUTPUT에서 아이템을 수동으로 빼면, slot의 아이템값이 사라지는 거 같다.
+				Debug.LogError($"등록된 recip({this._recipe.id})과 OUTPUT({OUTPUT._slots[0]._item._itemid})이 서로다른 값입니다.");
+				OUTPUT._slots[0]._item._itemid = this._recipe.id;
+			}
 			for(int i=0; i<OUTPUT._slots.Count; ++i)
 			{
 				OUTPUT._slots[i]._item._amount += 1;
@@ -280,12 +292,13 @@ namespace FactoryFramework
 
 		public override void SetItem(int panel, int slot, int itemid, int amount, float fillAmount)
 		{
-			if (false == INPUT.ContainsKey(itemid))
-				return;
 			//input은 Dictionary 방식으로 처리한다.
-			if (0 == panel)	INPUT[itemid]._amount = amount;
+			if (0 == panel)
+			{
+				if (INPUT.ContainsKey(itemid)) INPUT[itemid]._amount = amount;
+			}
 			//output은 BuildingPanel 방식 적용
-			else			base.SetItem(panel-1, slot, itemid, amount, fillAmount);
+			else base.SetItem(panel - 1, slot, itemid, amount, fillAmount);
 
 			//아이템이 등록되면 시작 여부를 판단합니다.
 			this.StartAssembling();

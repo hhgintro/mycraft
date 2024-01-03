@@ -27,7 +27,7 @@ namespace MyCraft
 
 		void Awake()
 		{
-			InitAwake();
+			fnAwake();
 
 
 			//inven = GameManager.GetInventory();
@@ -36,7 +36,7 @@ namespace MyCraft
 
 		void Start()
 		{
-			InitStart();
+			fnStart();
 		}
 		//void OnDisable()
 		//{
@@ -60,12 +60,12 @@ namespace MyCraft
 			else if (Input.GetMouseButtonDown(1))	this.OnMouseRButtonDown();	//R button
 		}
 
-		public virtual void InitAwake()
+		public virtual void fnAwake()
 		{
 			if (0 < this.transform.childCount)
 				textAmount = this.transform.GetChild(0).GetComponent<Text>();
 		}
-		public virtual void InitStart() { }
+		public virtual void fnStart() { }
 
 		protected virtual void OnMouseLButtonDown() { }
 		protected virtual void OnMouseRButtonDown() { }

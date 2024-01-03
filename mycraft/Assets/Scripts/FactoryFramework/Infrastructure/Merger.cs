@@ -13,9 +13,9 @@ namespace FactoryFramework
 			// *** splitter와 merge는 이전convayer와 다음conveyor를 연결해 준다. ***
 
 			// only continue if we're ready to take input from one of the outputs and the output is ready to recieve
-			if (!CanGiveOutput()) return;
+			if (false == CanGiveOutput()) return;
 
-			if (!GoToNextAvilable()) return;
+			if (false == GoToNextAvilable()) return;
 
 			IOutput iout = GetInputConnection(inputIndex);
 			IInput iin = GetOutputConnection(0);
@@ -44,13 +44,23 @@ namespace FactoryFramework
             {
                 // loop through until we find the inputSockets ready for output
                 inputIndex = (inputIndex + 1) % inputSockets.Length;
+				//Debug.Log($"({inputIndex}) socket");
 
-                IOutput iout = GetInputConnection(inputIndex);
-                if (iout == null) continue;
-                // if this iout is ready to give output then we are done
-                if (iout.CanGiveOutput())
-                    return true;
-            }
+				IOutput iout = GetInputConnection(inputIndex);
+				if (iout == null)
+				{
+					//Debug.Log($"({inputIndex}) socket is null");
+					return false;
+				}
+				// if this iout is ready to give output then we are done
+				if (iout.CanGiveOutput())
+				{
+					//Debug.Log($"({inputIndex}) socket is OK");
+					return true;
+				}
+				//Debug.Log($"({inputIndex}) socket not Ready");
+			}
+			//Debug.Log($"All socket is fail");
 			return false;
         }
 

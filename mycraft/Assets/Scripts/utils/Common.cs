@@ -55,6 +55,9 @@ namespace MyCraft
 
         public static int MAX_TECH_RESEARCH = 5;    //예약가능한 연구는 초대 n개까지.
 
+        public static float MAX_RAY_DISTANCE = 100f;  //raycast 최대길이
+		public static float BUILDING_ROTATION_MOUSE_ANGLE = 15f;    //건물완공할때 마우스 방향설정 회전각도
+        public static float BUILDING_ROTATION_KEYDOWN_ANGLE = 45f;  //건물위치설정할때 "r"눌렀을때 회전하는 각도.
 
 
 		public static Type GetTypeOf(BLOCKTYPE type)

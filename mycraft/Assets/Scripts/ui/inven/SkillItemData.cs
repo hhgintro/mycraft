@@ -11,7 +11,7 @@ namespace MyCraft
     {
         string cantnot_make_by_hand;
  
-		public override void InitStart()
+		public override void fnStart()
         {
             cantnot_make_by_hand = Managers.Locale.GetLocale("skill-item-data", "cantnot_make_by_hand");
         }

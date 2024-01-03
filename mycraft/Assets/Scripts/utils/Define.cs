@@ -9,7 +9,7 @@ public class Define
         Unknown,
         Logo,
         Lobby,
-        Game,
+        World,
     }
 
     public enum Sound
