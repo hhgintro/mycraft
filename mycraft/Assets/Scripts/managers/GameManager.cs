@@ -31,6 +31,7 @@ namespace MyCraft
 		private Inventory _inventory;
 		private QuickInven _quickinven;
 		private ChestInven _chestinven;
+		private TurretInven _turretinven;
 		private ForgeInven _forgeinven;
 		private FactoryInven _factoryinven;
 		private LabInven _labinven;
@@ -53,6 +54,7 @@ namespace MyCraft
 
 		public Inventory Inventories			{ get { if (null == _inventory)		_inventory = GameObject.FindObjectOfType(typeof(Inventory)) as Inventory; return _inventory; } }
 		public QuickInven QuickInvens			{ get { if (null == _quickinven)	_quickinven = GameObject.FindObjectOfType(typeof(QuickInven)) as QuickInven; return _quickinven; } }
+		public TurretInven TurretInvens			{ get { if (null == _turretinven)	_turretinven = GameObject.FindObjectOfType(typeof(TurretInven)) as TurretInven; return _turretinven; } }
 		public ChestInven ChestInvens			{ get { if (null == _chestinven)	_chestinven = GameObject.FindObjectOfType(typeof(ChestInven)) as ChestInven; return _chestinven; } }
 		public ForgeInven ForgeInvens			{ get { if (null == _forgeinven)	_forgeinven = GameObject.FindObjectOfType(typeof(ForgeInven)) as ForgeInven; return _forgeinven; } }
 		public FactoryInven FactoryInvens		{ get { if (null == _factoryinven)	_factoryinven = GameObject.FindObjectOfType(typeof(FactoryInven)) as FactoryInven; return _factoryinven; } }

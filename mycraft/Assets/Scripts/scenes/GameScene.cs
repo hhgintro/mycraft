@@ -84,6 +84,7 @@ namespace MyCraft
 			Managers.Game.LabInvens.gameObject.SetActive(false);
 			Managers.Game.TechInvens.gameObject.SetActive(false);
 			Managers.Game.TechDescs.gameObject.SetActive(false);
+			Managers.Game.TurretInvens.gameObject.SetActive(false);
 
 			//GameManager.GetDeleteProgress().gameObject.SetActive(false);
 
@@ -212,6 +213,7 @@ namespace MyCraft
 			if (Managers.Game.SkillInvens.gameObject.activeSelf)    { Managers.Game.SkillInvens.gameObject.SetActive(false);	deactive = true; }
 			if (Managers.Game.TechInvens.gameObject.activeSelf)		{ Managers.Game.TechInvens.gameObject.SetActive(false);		deactive = true; }
 			if (Managers.Game.TechDescs.gameObject.activeSelf)		{ Managers.Game.TechDescs.gameObject.SetActive(false);		deactive = true; }
+			if (Managers.Game.TurretInvens.gameObject.activeSelf)	{ Managers.Game.TurretInvens.gameObject.SetActive(false);	deactive = true; }
 
 			Managers.Game.Tooltips.gameObject.SetActive(false);
 			//OPEN system menu
@@ -282,6 +284,7 @@ namespace MyCraft
 				Managers.Game.FactoryInvens.gameObject.SetActive(false);
 				Managers.Game.ForgeInvens.gameObject.SetActive(false);
 				Managers.Game.SkillInvens.gameObject.SetActive(false);
+				Managers.Game.TurretInvens.gameObject.SetActive(false);
 
 				Managers.Game.Tooltips.gameObject.SetActive(false);
 				return;

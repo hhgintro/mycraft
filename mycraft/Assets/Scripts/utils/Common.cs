@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-
 namespace MyCraft
 {
     public enum BLOCKTYPE : ushort
@@ -59,6 +58,7 @@ namespace MyCraft
 		public static float BUILDING_ROTATION_MOUSE_ANGLE = 15f;    //건물완공할때 마우스 방향설정 회전각도
         public static float BUILDING_ROTATION_KEYDOWN_ANGLE = 45f;  //건물위치설정할때 "r"눌렀을때 회전하는 각도.
 
+        public static bool bMonsterRegen = true;    //"P"가 눌릴 떄, 몹리젠을 on/off조절합니다.
 
 		public static Type GetTypeOf(BLOCKTYPE type)
         {

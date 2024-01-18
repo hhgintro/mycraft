@@ -1,36 +1,47 @@
-﻿using UnityEngine;
+﻿using MyCraft;
+using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace CompleteProject
 {
-    public class EnemyManager : MonoBehaviour
-    {
-        public PlayerHealth playerHealth;       // Reference to the player's heatlh.
-        public GameObject enemy;                // The enemy prefab to be spawned.
-        public float spawnTime = 3f;            // How long between each spawn.
-        public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
+	public class EnemyManager : MonoBehaviour
+	{
+		public PlayerHealth playerHealth;       // Reference to the player's heatlh.
+		public GameObject enemy;                // The enemy prefab to be spawned.
+		public float spawnTime = 3f;            // How long between each spawn.
+		public Transform[] spawnPoints;         // An array of the spawn points this enemy can spawn from.
 
 
-        void Start ()
-        {
-            // Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
-            InvokeRepeating ("Spawn", spawnTime, spawnTime);
-        }
+		void Start ()
+		{
+			// Call the Spawn function after a delay of the spawnTime and then continue to call after the same amount of time.
+			InvokeRepeating ("Spawn", spawnTime, spawnTime);
+		}
 
+		private void Update()
+		{
+			//"P"가 눌릴 떄, 몹리젠을 on/off조절합니다.
+			if(Input.GetKeyDown(KeyCode.P))
+				Common.bMonsterRegen = !Common.bMonsterRegen;
+		}
 
-        void Spawn ()
-        {
-            // If the player has no health left...
-            if(playerHealth.currentHealth <= 0f)
-            {
-                // ... exit the function.
-                return;
-            }
+		void Spawn ()
+		{
+			// If the player has no health left...
+			if(playerHealth.currentHealth <= 0f)
+			{
+				// ... exit the function.
+				return;
+			}
 
-            // Find a random index between zero and one less than the number of spawn points.
-            int spawnPointIndex = Random.Range (0, spawnPoints.Length);
+			if (false == Common.bMonsterRegen)	//몹을 생성하지 않는다.
+				return;
 
-            // Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
-            Instantiate (enemy, spawnPoints[spawnPointIndex].position, spawnPoints[spawnPointIndex].rotation);
-        }
-    }
+			// Find a random index between zero and one less than the number of spawn points.
+			int spawnPointIndex = Random.Range (0, spawnPoints.Length);
+
+			// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
+			Instantiate (enemy, spawnPoints[spawnPointIndex].position, spawnPoints[spawnPointIndex].rotation);
+		}
+	}
 }

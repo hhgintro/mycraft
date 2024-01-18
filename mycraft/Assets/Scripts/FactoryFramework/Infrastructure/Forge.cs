@@ -60,6 +60,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
 		}
 
 		public override void SetItem(int panel, int slot, int itemid, int amount, float fillAmount)
@@ -445,7 +446,6 @@ namespace FactoryFramework
 		#endregion //..TAKE_INPUT
 
 		#region SERIALIZATION_HELPERS
-		////@@
 		//////HG[2023.06.09] Item -> MyCraft.ItemBase
 		//////private List<SerializedItemStack> SerializeField(Dictionary<Item, int> dict)
 		//////{

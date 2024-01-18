@@ -596,7 +596,7 @@ namespace FactoryFramework
 
         public void CleanUp()
         {
-            subPaths.Dispose();
+            if(0 < subPaths.Length) subPaths.Dispose();
             subPathCount = 0;
         }
 

@@ -14,7 +14,6 @@ using UnityEngine.Windows;
 //using MyCraft;
 using UnityEngine.UIElements;
 
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -77,8 +76,8 @@ namespace FactoryFramework
 
 			beltMeshRenderer = beltFilter.gameObject.GetComponent<MeshRenderer>();
 
-			_path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
-			CalculateCapacity();
+			//_path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
+			//CalculateCapacity();
 		}
 
 		public void Reset()
@@ -167,10 +166,11 @@ namespace FactoryFramework
 			// capcity is a simple calculation that depends on belt length and belt_spacing
 			//capacity = (_capacity == -1) ? Mathf.Max(1,Mathf.FloorToInt(Length / settings.BELT_SPACING)) : _capacity;
 			_capacity = (capacity == -1) ? Mathf.FloorToInt(Length/settings.BELT_SPACING)+1 : capacity;
+            //Debug.LogError($"capacity({Length}/{_capacity}/{GUID})");//@@
 
-			// create a pool of gameobjects with rendering capabilities
-			// pool => CreateFunc, DestroyFunc, GetFunc, ReleaseFunc, capacity
-			beltObjectPool?.Clear();
+            // create a pool of gameobjects with rendering capabilities
+            // pool => CreateFunc, DestroyFunc, GetFunc, ReleaseFunc, capacity
+            beltObjectPool?.Clear();
 			beltObjectPool = new ObjectPool<Transform>(
 				createFunc:() => { 
 					GameObject item = new GameObject();
@@ -207,7 +207,8 @@ namespace FactoryFramework
 		{
 			if (_capacity <= 0)
 			{
-				Debug.LogError("Tring to place new item on a belt at full capacity");
+				Debug.LogError($"Tring to place new item on a belt at full capacity({_capacity}/{GUID})");//@@
+				return;//HG_TEST:밸트위에 초가해서 생성되는 아이템을 막는다.
 			}
 			//HG[2023.06.09] Item -> MyCraft.ItemBase
 			//Item item = Resources.Load<Item>(itemPath);
@@ -218,7 +219,8 @@ namespace FactoryFramework
 				_position = position
 			};
 
-			Transform newItemModel = beltObjectPool.Get();
+#if ITEM_MESH_ON_BELT	//(not using)Deserialize에서 호출
+            Transform newItemModel = beltObjectPool.Get();
 			if (newItemModel == null)
 			{
 				Debug.LogError($"error with {gameObject.name} no items left to grab");
@@ -238,11 +240,14 @@ namespace FactoryFramework
 				newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.GetComponent<MeshRenderer>().sharedMaterial;
 			}
 			iob._model = newItemModel;
-			items.Add(iob);
+#else
+#endif //..ITEM_MESH_ON_BELT
+            items.Add(iob);
 			_capacity -= 1;			
-		}
+			//Debug.LogError($"--- capacity({_capacity}/{GUID})");//@@
+        }
 
-		public void MoveItems()
+        public void MoveItems()
 		{
 			// this can be done with Jobs
 			float cumulativeMaxPos = Length;
@@ -301,19 +306,19 @@ namespace FactoryFramework
 		#region MESH_AND_VISUALS
 		public void UpdateMesh(bool finalize = false, Collider[] ignored = null, int startskip = 0, int endskip = 0)
 		{
-			_validMesh = true;
-			_path?.CleanUp();
-			_path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
+            _validMesh = true;
+            _path?.CleanUp();
+            _path = PathFactory.GeneratePathOfType(data.start, data.startDir, data.end, data.endDir, settings.PATHTYPE);
 
-			if (!_path.IsValid)
+            if (!_path.IsValid)
 			{
 				if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to path");
 				_validMesh = false;
 			}
-			int length = Mathf.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
+            int length = Math.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
 			//Debug.Log($"Conveyor Length is {length}"); // development debug
 
-			bool collision = PathFactory.CollisionAlongPath(_path, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip: startskip, endskip: endskip); //only collide belt collideable layer
+			bool collision = PathFactory.CollisionAlongPath(_path, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip, endskip); //only collide belt collideable layer
 			if (collision)
 			{
 				//충돌인지를 위해 _validMesh 설정은 그대로 두고, 오류메시지는 노출할 필요없다.
@@ -390,9 +395,36 @@ namespace FactoryFramework
 
 		}
 
-		public override Mesh GetSharedMesh() { return this.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh; }
+#if ITEM_MESH_ON_BELT	//override GetSharedMesh()
+        public override Mesh GetSharedMesh()
+		{
+			//Vector3 dir = Vector3.right;
+			//data.start = Vector3.zero - dir * 0.5f;
+			//data.startDir = dir;
+			//data.end = data.start + dir * 0.5f;
+			//data.endDir = data.startDir;
+
+			////ignore colliders from start and end points
+			//List<Collider> collidersToIgnore = new List<Collider>();
+			////// add colliders associated with the connected start socket
+			////if (startSocket != null)
+			////{
+			////	collidersToIgnore.AddRange(startSocket.transform.root.GetComponentsInChildren<Collider>());
+			////	collidersToIgnore.Remove(startSocket.transform.root.GetComponent<Collider>());
+			////}
+			////else
+			////{
+			////	collidersToIgnore.Add(Terrain.activeTerrain.GetComponent<TerrainCollider>());
+			////}
+			////if (collidersToIgnore.Count > 0)
+			//this.UpdateMesh(ignored: collidersToIgnore.ToArray(), startskip: 1, endskip: 1);
+
+			return this.transform.GetChild(1).GetComponent<MeshFilter>().sharedMesh;
+		}
 		public override Material GetSharedMaterial() { return this.transform.GetChild(1).GetComponent<MeshRenderer>().sharedMaterial; }
 		//public virtual float GetLocalScale() { return this._itembase.scaleOnBelt; }
+#else
+#endif //..ITEM_MESH_ON_BELT
 
 		#endregion
 
@@ -579,15 +611,17 @@ namespace FactoryFramework
 				Debug.LogError($"error with {gameObject.name} no items left to grab");
 			}
 
-			////건물을 conveyor에 태우기 위해.
-			//if(0 < iob._itembase.prefab.transform.childCount)
-			//{
-			//	newItemModel.GetComponent<MeshFilter>().sharedMesh = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
-			//	newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial;
-			//	newItemModel.localScale = Vector3.one * iob._itembase.scaleOnBelt;
-			//	//newItemModel.Rotate(90f, 0, 0);	//회전이 안되는군.
-			//}
-			if (iob._itembase.prefab.TryGetComponent(out FactoryFramework.LogisticComponent componet))
+
+#if ITEM_MESH_ON_BELT	//TakeInput
+            ////건물을 conveyor에 태우기 위해.
+            //if(0 < iob._itembase.prefab.transform.childCount)
+            //{
+            //	newItemModel.GetComponent<MeshFilter>().sharedMesh = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh;
+            //	newItemModel.GetComponent<MeshRenderer>().sharedMaterial = iob._itembase.prefab.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial;
+            //	newItemModel.localScale = Vector3.one * iob._itembase.scaleOnBelt;
+            //	//newItemModel.Rotate(90f, 0, 0);	//회전이 안되는군.
+            //}
+            if (iob._itembase.prefab.TryGetComponent(out FactoryFramework.LogisticComponent componet))
 			{
 				newItemModel.GetComponent<MeshFilter>().sharedMesh = componet.GetSharedMesh();
 				newItemModel.GetComponent<MeshRenderer>().sharedMaterial = componet.GetSharedMaterial();
@@ -606,13 +640,15 @@ namespace FactoryFramework
 			//if((int)LAYER_TYPE.BELT_COLLIDEABLE == iob.item.prefab.layer)
 			//iob.item.prefab.CompareTag("")
 			iob._model = newItemModel;
+#else
+#endif //..ITEM_MESH_ON_BELT
 			items.Add(iob);
 			_capacity -= 1;
 			return;
 		}
-		#endregion //..TAKE_INPUT
+#endregion //..TAKE_INPUT
 
-		#region SAVE
+        #region SAVE
 		public override void Save(BinaryWriter writer)
 		{
 			base.Save(writer);
@@ -627,6 +663,7 @@ namespace FactoryFramework
 				writer.Write(items[i]._position);
 				//Debug.Log($"SAVE:{i}-{items.Count}/{items[i]._itembase.id}/{items[i]._position}");
 			}
+			//Debug.LogError($"+++ SAVE:capacity({_capacity}),items({items.Count}),{GUID}");//@@
 
 			writer.Write(this.InputSocketGuid??"");
 			writer.Write(this.OutputSocketGuid??"");
@@ -635,42 +672,39 @@ namespace FactoryFramework
 		public override void Load(BinaryReader reader)
 		{
 			base.Load(reader);
+            data.Load(reader);
 
-			data.Load(reader);
-
-			this.inputSocket = this.GetComponentInChildren<InputSocket>();
+            this.inputSocket = this.GetComponentInChildren<InputSocket>();
 			this.outputSocket = this.GetComponentInChildren<OutputSocket>();
+            //Debug.Log($" + before: {this.GUID}");	//테스트용:에러가발생할때 체크(before,after)
+            //if(Guid.Parse("3ee88e14-db2d-4a59-baa3-e055a9a89cb8") == this.GUID)
+            //{
+            //	int a = 0;
+            //	a = 0;
+            //}
 
-			//Debug.Log($" + before: {this.GUID}");	//테스트용:에러가발생할때 체크(before,after)
+            // draw
+            this.UpdateMesh(true);
+            this.AddCollider();
 
-			//if(Guid.Parse("3ee88e14-db2d-4a59-baa3-e055a9a89cb8") == this.GUID)
-			//{
-			//	int a = 0;
-			//	a = 0;
-			//}
-
-			// draw
-			this.UpdateMesh(true);
-			//this.UpdateMesh();
-			this.AddCollider();
-
-			//items
-			int itemcount = reader.ReadInt32();
-			for(int i=0; i < itemcount; ++i)
+            //items
+            int itemcount = reader.ReadInt32();
+            //Debug.LogError($"+++ LOAD:capacity({_capacity}),items({itemcount}),{GUID}");//@@
+            for (int i = 0; i < itemcount; ++i)
 			{
 				int itemid = reader.ReadInt32();
 				float position = reader.ReadSingle();
-				//Debug.Log($"LOAD:{i}-{itemcount}/{itemid}/{position}");
+				////Debug.Log($"LOAD:{i}-{itemcount}/{itemid}/{position}");
+				//HGK_TEST: 디버깅중
 				SetItemOnBelt(itemid, position);
 			}
 
-			//this.InputSocketGuid = reader.ReadString();
-			//this.OutputSocketGuid = reader.ReadString();
-			this.tmpInputGuid = reader.ReadString();
+            //this.InputSocketGuid = reader.ReadString();
+            //this.OutputSocketGuid = reader.ReadString();
+            this.tmpInputGuid = reader.ReadString();
 			this.tmpOutputGuid = reader.ReadString();
             //Debug.Log($"LOAD:{this.tmpInputGuid}/{this.tmpOutputGuid}");
             //this.SetEnable(true);
-
             //Debug.Log($" +++ after: {this.GUID}");	//테스트용:에러가발생할때 체크(before,after)
         }
         #endregion //..SAVE
@@ -751,7 +785,7 @@ namespace FactoryFramework
 		//public OutputSocket outputSocket;
 		public int outputSocketIndex;
 
-		#region SAVE
+        #region SAVE
 		public void Save(BinaryWriter writer)
 		{
 			MyCraft.Common.WriteVector3(writer, start);
@@ -777,7 +811,7 @@ namespace FactoryFramework
 			outputSocketIndex	= reader.ReadInt32();
 			//Debug.Log($"LOAD(conveyor):{speed}/{inputSocketIndex}/{outputSocketIndex}");
 		}
-		#endregion //..SAVE
+        #endregion //..SAVE
 
 	}
 }

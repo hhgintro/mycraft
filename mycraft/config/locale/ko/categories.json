@@ -48,6 +48,7 @@
     "desc": "스킬 3입니다.",
     "panels": [
       {"items": [{"itemid":900}]},
+      {"items": [{"itemid":910},{"itemid":911},{"itemid":912}]},
       {"items": [{"itemid":2041}]}
     ],
     "icon": "Textures/ui/tech/military"

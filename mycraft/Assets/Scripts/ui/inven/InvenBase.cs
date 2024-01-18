@@ -53,26 +53,6 @@ namespace MyCraft
 			return this._panels[panel]._slots[slot];
 		}
 
-		public virtual bool Resize()
-		{
-			//last panel,slot
-			int p = this._panels.Count - 1;
-			int s = this._panels[p]._slots.Count - 1;
-			RectTransform slot = this._panels[p]._slots[s].GetComponent<RectTransform>();
-
-
-			//GridLayoutGroup grid = this.GetComponent<GridLayoutGroup>();
-			//grid.padding.left;
-			RectTransform inven = (RectTransform)this.transform;
-			Debug.Log($"Resizing inven rect:({inven.rect} / {inven.sizeDelta}");
-			//this.GetComponent<RectTransform>().sizeDelta = new Vector2(332,350);
-			this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
-			
-			//정확한 크기를 어떻게 알수 있을까?(아래코드로 길이는 늘어난다)
-			//inven.sizeDelta = new Vector2(inven.sizeDelta.x, 64f);
-
-			return true;
-		}
 
 		#region LINK_INVEN
 		// destroy : amount가 0이면 파괴
@@ -110,7 +90,7 @@ namespace MyCraft
 				for (int i = 0; i < slots.Count; ++i)
 				{
 					if (slots[i]._item._itemid <= 0) continue;
-					if (slots[i]._item._amount <= 0) continue;//@@
+					if (slots[i]._item._amount <= 0) continue;
 					this.SetItem(p+1, i, slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount, destroy);
 				}
 			}
@@ -162,7 +142,7 @@ namespace MyCraft
 				for (int i = 0; i < slots.Count; ++i)
 				{
 					if (slots[i]._item._itemid <= 0) continue;
-					if (slots[i]._item._amount <= 0) continue;//@@
+					if (slots[i]._item._amount <= 0) continue;
 					this.SetItem(p, i, slots[i]._item._itemid, slots[i]._item._amount, slots[i]._item._fillAmount, destroy);
 				}
 			}

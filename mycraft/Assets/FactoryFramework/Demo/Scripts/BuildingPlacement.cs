@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using Unity.Burst.CompilerServices;
 using MyCraft;
 using System;
+using UnityEngine.InputSystem.HID;
 
 public class BuildingPlacement : IPlacement
 {
@@ -42,7 +43,7 @@ public class BuildingPlacement : IPlacement
 
     protected override void fnStart()
 	{
-		Managers.CenterGrid.Init(this.transform);
+        Managers.CenterGrid.Init(this.transform);
 	}
 
 	//OnDestroy에서 호출된다.
@@ -54,6 +55,8 @@ public class BuildingPlacement : IPlacement
 		//Debug.Log($"-  {this.name}");
 		foreach (Transform go in this.transform)
 		{
+			if (go.name == "Pool_Conveyor") continue;
+
 			//Debug.Log($"+  {go.name}");
 
 			//뒤에서 부터 삭제해야함.
@@ -275,11 +278,6 @@ public class BuildingPlacement : IPlacement
 					current = null;
 					Managers.CenterGrid.Stop();
 					return true;
-
-					// trigger event
-					finishPlacementEvent?.Raise();
-					return true;
-
 				}
 				break;
 		}//..switch(desiredState)
@@ -367,10 +365,59 @@ public class BuildingPlacement : IPlacement
 	//private void HandleIdleState()
 	//{}
 
-	float y = 0;
+	private void DrawCenterGrid(bool bDraw, ref Vector3 groundPos)
+	{
+		if (false == bDraw) return;
+
+		//건물에만 적용(안전발판,계단은 제외)
+		if (LayerMask.NameToLayer("Building") == current.layer)
+			Managers.CenterGrid.Place(current, ref groundPos);
+	}
+
+	private bool IsSplitter(RaycastHit hit, ref bool bDrawCenterGrid, ref Vector3 groundPos)
+	{
+		if (hit.transform.tag != "Splitter")  //분배기 / 병합기
+			return false;
+
+		if (current.transform.tag == "Splitter")
+		{
+			groundPos = hit.transform.position + Vector3.up * 1.6f;
+			bDrawCenterGrid = false;
+		}
+		Managers.CenterGrid.Stop();
+		return true;
+	}
+
+	private bool IsSafeFooting(RaycastHit hit, ref Vector3 groundPos)
+	{
+		if (hit.transform.tag != "Safe-Footing")  //안전발판
+			return false;
+
+		//안전발판위에 안전발판(current) 설치 위치
+		if (current.transform.tag == "Safe-Footing") groundPos = hit.point + Vector3.up * 4f;
+		//안전발판위에 건물(current) 설치 위치
+		else groundPos = hit.point + Vector3.up * 0.15f;
+		Managers.CenterGrid.Stop();
+		return true;
+	}
+
+	private bool IsTerrain(RaycastHit hit, ref Vector3 groundPos)
+	{
+		if (false == hit.collider.TryGetComponent<Terrain>(out Terrain terrain))
+			return false;
+
+		//Terrain위에 안전발판(current) 설치 위치
+		if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 2.5f;
+		//Terrain위에 건물(current) 설치 위치
+		else											groundPos = hit.point + Vector3.up;
+		return true;
+	}
+
 	//건물이 위치할 곳을 찾고 있을때
 	protected override void HandleStartState()
 	{
+		bool bDrawCenterGrid = true; //center-grid를 그릴지 말지???
+
 		// move building with mouse pos
 		Vector3 groundPos = Vector3.zero;
 		Vector3 groundDir = currentRotation * Vector3.forward;
@@ -381,49 +428,31 @@ public class BuildingPlacement : IPlacement
 		foreach (RaycastHit hit in hits)
 		{
 			//자신은...무시
+			//Debug.Log($"tag:{hit.transform.tag}");
 			if (current == hit.collider.gameObject) continue;
 			if (false == current.TryGetComponent(out Building building)) continue;
 
 			//============================================
 			//	위치보정(socket에 의한)
-			if (true == building.LocationCorrectForSocket(hit, ref groundPos, ref groundDir))
+			if (building.LocationCorrectForSocket(hit, ref groundPos, ref groundDir))
 				break;
 
-
-			//============================================================================
-			// *** 분배기 / 병합기 / 안전발판 / Terrain은 centerGrid의 영향을 받지 않는다. *** //
-
-			//Debug.Log($"tag:{hit.transform.tag}");
-			if (hit.transform.tag == "Splitter")  //분배기 / 병합기
-			{
-				if (current.transform.tag == "Splitter")		groundPos = hit.transform.position + Vector3.up * 1.6f;
-				Managers.CenterGrid.Stop();
+			//분배기 / 병합기
+			if (IsSplitter(hit, ref bDrawCenterGrid, ref groundPos))
 				break;
-			}
 
-			if (hit.transform.tag == "Safe-Footing")  //안전발판
-			{
-				//안전발판위에 안전발판(current) 설치 위치
-				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 4f;
-				//안전발판위에 건물(current) 설치 위치
-				else											groundPos = hit.point;// + Vector3.up * 0.5f;
-				Managers.CenterGrid.Stop();
+			//안전발판
+			if (IsSafeFooting(hit, ref groundPos))
 				break;
-			}
 
 			// this will only place buildings on terrain. feel free to change this!
-			if (hit.collider.TryGetComponent<Terrain>(out Terrain terrain))
-			{
-				//Terrain위에 안전발판(current) 설치 위치
-				if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 2.5f;
-				//Terrain위에 건물(current) 설치 위치
-				else											groundPos = hit.point + Vector3.up;
-			}
-
-			//건물에만 적용(안전발판,계단은 제외)
-			if(LayerMask.NameToLayer("Building") == current.layer)
-				Managers.CenterGrid.Place(current, ref groundPos);
+			if (IsTerrain(hit, ref groundPos))
+				break;
 		}
+
+		//건물에만 적용(안전발판,계단은 제외)
+		DrawCenterGrid(bDrawCenterGrid, ref groundPos);
+
 
 		//Debug.Log($"{current.name}:({groundPos})");
 		current.transform.position = groundPos;
@@ -439,6 +468,7 @@ public class BuildingPlacement : IPlacement
 				mouseDownPos = groundPos;
 		}
 	}
+
 	//건물의 방향을 결정할때
 	protected override void HandleEndState()
 	{

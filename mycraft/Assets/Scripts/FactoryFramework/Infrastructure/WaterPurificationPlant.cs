@@ -132,12 +132,15 @@ namespace FactoryFramework
 			_outputs[output.Key]._amount -= 1;
 			return output.Key;
 		}
-		//..//HG[2023.06.09] Item -> MyCraft.ItemBase
-		#endregion //..GIVE_OUTPUT
+        //..//HG[2023.06.09] Item -> MyCraft.ItemBase
+        #endregion //..GIVE_OUTPUT
 
 
-		public override Mesh GetSharedMesh() { return this.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh; }
+#if ITEM_MESH_ON_BELT	//override GetSharedMesh()
+        public override Mesh GetSharedMesh() { return this.transform.GetChild(0).GetComponent<MeshFilter>().sharedMesh; }
 		public override Material GetSharedMaterial() { return this.transform.GetChild(0).GetComponent<MeshRenderer>().sharedMaterial; }
+#else
+#endif //..ITEM_MESH_ON_BELT
 
 		public void OnDrawGizmos()
 		{

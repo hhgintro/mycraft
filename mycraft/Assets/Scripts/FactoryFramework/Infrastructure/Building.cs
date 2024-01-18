@@ -29,6 +29,8 @@ namespace FactoryFramework
 		public override void fnStart()
 		{
 			base._IsWorking = false;
+			this.materials.Clear();
+
 			//for (int i = 0; i < this._progresses.Count; ++i)
 			//	this._progresses[i].InitProgress();	//구지 초기화할 필요가 있을까? 우선 주석처리
 
@@ -57,6 +59,8 @@ namespace FactoryFramework
 				this._inven.Clear();
 				this._inven.gameObject.SetActive(false);
 			}
+
+			this.OutLine(false);	//outline 꺼준다.
 
 			base.GUID = Guid.Empty; //GUID중복:save파일과 Mem에 동일할 GUID가 존재한다.
             OnDisconnect();

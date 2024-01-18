@@ -192,6 +192,32 @@ public class ConveyorPlacement : IPlacement
 	//{
 	//}
 
+	private bool IsSafeFooting(RaycastHit hit, ref Vector3 worldPos, ref Vector3 worldDir)
+	{
+		if (hit.transform.tag != "Safe-Footing")  //안전발판
+			return false;
+
+		worldPos = hit.point + Vector3.up * 0.3f;   //시작높이
+		Vector3 camForward = Camera.main.transform.forward;
+		camForward.y = 0f;
+		camForward.Normalize();
+		worldDir = camForward;
+		return true;
+	}
+
+	private bool IsTerrain(RaycastHit hit, ref Vector3 worldPos, ref Vector3 worldDir)
+	{
+		if (false == hit.collider.gameObject.TryGetComponent<Terrain>(out Terrain t))
+			return false;
+
+		worldPos = hit.point + Vector3.up;
+		Vector3 camForward = Camera.main.transform.forward;
+		camForward.y = 0f;
+		camForward.Normalize();
+		worldDir = camForward;
+		return true;
+	}
+
 	//conveyor 시작위치를 찾고 있을때
 	protected override void HandleStartState()
 	{
@@ -219,25 +245,12 @@ public class ConveyorPlacement : IPlacement
 				break;
 			}
 
-			if (hit.transform.tag == "Safe-Footing")  //안전발판
-			{
-				worldPos = hit.point + Vector3.up * 0.3f;	//시작높이
-				Vector3 camForward = Camera.main.transform.forward;
-				camForward.y = 0f;
-				camForward.Normalize();
-				worldDir = camForward;
+			//안전발판
+			if (IsSafeFooting(hit, ref worldPos, ref worldDir))
 				break;
-			}
 
-			if (hit.collider.gameObject.TryGetComponent<Terrain>(out Terrain t))
-			{				
-				worldPos = hit.point + Vector3.up;
-				Vector3 camForward = Camera.main.transform.forward;
-				camForward.y = 0f;
-				camForward.Normalize();
-				worldDir = camForward;
+			if (IsTerrain(hit, ref worldPos, ref worldDir))
 				break;
-			}
 		}
 		// override placement if we found a valid socket
 		if (startSocket)
@@ -336,7 +349,6 @@ public class ConveyorPlacement : IPlacement
 				worldDir = camForward;
 				// reset socket
 				endSocket = null;
-
 				break;
 			}
 
@@ -347,31 +359,25 @@ public class ConveyorPlacement : IPlacement
 				{
 					// find the intersection of the camera mouse ray plane and the endPos->Vector.Up line
 					Vector3 planeNormal = Camera.main.transform.up;
-
 					Vector3 lineStart  = flatEndPos;
 					Vector3 lineVector = Vector3.up;
 
 					float dotNumerator   = Vector3.Dot((hit.point - lineStart), planeNormal);
 					float dotDenominator = Vector3.Dot(lineVector, planeNormal);
-
-					if (dotDenominator != 0.0f)
+					if (dotDenominator == 0.0f)
+						worldPos = flatEndPos;
+					else
 					{
 						var length = dotNumerator / dotDenominator;
 						Vector3 vec = Vector3.up * length;
 						worldPos = lineStart + vec;
-;                    } else
-					{
-						worldPos = flatEndPos;
-					}
-
+;                   }
 					worldPos.y = Mathf.Max(Terrain.activeTerrain.SampleHeight(worldPos), worldPos.y);
 				} else
 				{
 					worldPos = hit.point;
 					// stay same level if this is the terrain
-
-					worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;
-					
+					worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight + 1;	//+1: 땅에 뭍혀서
 				}
 
 				Vector3 camForward = Camera.main.transform.forward;

@@ -247,7 +247,7 @@
       "time": 2.1,
       "items": [
         {"itemid": 2010,"amount": 2},
-        {"itemid": 1100,"amount": 2}
+        {"itemid": 2011,"amount": 2}
       ],
       "outputs": 1
     },
@@ -257,9 +257,69 @@
     "prefab": "mineral/_Pistol"
   },
 
+  {
+    "id": 910,
+    "type": "TurretItemBase",
+    "slots": 3,
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/FattyMissileGSingle",
+    "prefab": "buildings/FattyTurret/FattyMissileGSingle",
+    "scaleOnBelt": 0.1
+  },
 
+  {
+    "id": 911,
+    "type": "TurretItemBase",
+    "slots": 3,
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/FattyMissileG",
+    "prefab": "buildings/FattyTurret/FattyMissileG",
+    "scaleOnBelt": 0.1
+  },
 
-
+  {
+    "id": 912,
+    "type": "TurretItemBase",
+    "slots": 3,
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 2.1,
+      "items": [
+        {"itemid": 2010,"amount": 2},
+        {"itemid": 2011,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/FattyCatapultG",
+    "prefab": "buildings/FattyTurret/FattyCatapultG",
+    "scaleOnBelt": 0.1
+  },
+  
   {
     "id": 1000,
     "type": "ChestItemBase",
@@ -459,7 +519,7 @@
     "stackable": 100,
     "icon": "Textures/ui/mineral-water-plant",
     "prefab": "buildings/WaterPurificationPlant",
-    "scaleOnBelt": 20
+    "scaleOnBelt": 0.5
   },
 
   {
@@ -479,7 +539,7 @@
     "stackable": 100,
     "icon": "Textures/ui/pumpjack",
     "prefab": "buildings/PumpJack",
-    "scaleOnBelt": 20
+    "scaleOnBelt": 0.5
   },
 
 
@@ -499,7 +559,8 @@
     "state": {"power": 1,"defence": 2,"vitality": 10},
     "stackable": 100,
     "icon": "Textures/ui/Conveyor Icon",
-    "prefab": "buildings/Conveyor"
+    "prefab": "buildings/Conveyor",
+    "scaleOnBelt": 0.6
   },
 
 

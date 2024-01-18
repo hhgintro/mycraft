@@ -4,7 +4,7 @@ using System.Collections;
 namespace CompleteProject
 {
 	public class EnemyMovement : MonoBehaviour
-    {
+	{
 		Transform player;               // Reference to the player's position.
 		PlayerHealth playerHealth;      // Reference to the player's health.
 		EnemyHealth enemyHealth;        // Reference to this enemy's health.
@@ -23,17 +23,22 @@ namespace CompleteProject
 
 		void Update ()
 		{
-			// If the enemy and the player have health left...
-			if(enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
+			//// If the enemy and the player have health left...
+			//if(enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
+			//{
+			//	// ... set the destination of the nav mesh agent to the player.
+			//	nav.SetDestination (player.position);
+			//}
+			//// Otherwise...
+			//else
+			//{
+			//	// ... disable the nav mesh agent.
+			//	nav.enabled = false;
+			//}
+			if (2 < Vector3.Magnitude(this.transform.position - player.position))
 			{
-				// ... set the destination of the nav mesh agent to the player.
-				nav.SetDestination (player.position);
-			}
-			// Otherwise...
-			else
-			{
-				// ... disable the nav mesh agent.
-				nav.enabled = false;
+				transform.LookAt(player.position);
+				transform.Translate(Vector3.forward * 3 * Time.deltaTime);
 			}
 		}
 	}

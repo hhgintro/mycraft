@@ -23,59 +23,117 @@ namespace MyCraft
 
         public override bool CheckPickupGoods() { return true; }
 
-        //public override void Save(BinaryWriter writer)
-        //{
+		private void Update()
+		{
+			float height = 100;
+			if(Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				//Debug.Log("확대");
+				Resize(0);
 
-        //    //panel : only one
+				RectTransform inven = (RectTransform)this.transform;
+				//inven.sizeDelta = new Vector2(inven.sizeDelta.x, inven.sizeDelta.y + height * Time.deltaTime);
+				//this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
+			}
+			//if (Input.GetKey(KeyCode.UpArrow))
+			//{
+			//	RectTransform inven = (RectTransform)this.transform;
+			//	inven.sizeDelta = new Vector2(inven.sizeDelta.x, inven.sizeDelta.y + height * Time.deltaTime);
+			//	this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
+			//}
+			//if (Input.GetKey(KeyCode.DownArrow))
+			//{
+			//	RectTransform inven = (RectTransform)this.transform;
+			//	inven.sizeDelta = new Vector2(inven.sizeDelta.x, inven.sizeDelta.y - height * Time.deltaTime);
+			//	this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
+			//}
+			//if (Input.GetKeyDown(KeyCode.DownArrow))
+			//{
+			//	RectTransform inven = (RectTransform)this.transform;
+			//	Debug.Log($"inven:{inven.rect}");
 
-        //    ////slot amount
-        //    //writer.Write(this._panels[0]._item._amount);
+			//	GridLayoutGroup panelGrid = this.transform.Find("slot-panel").GetComponent<GridLayoutGroup>();
+			//	RectTransform panel = panelGrid.GetComponent<RectTransform>();
+			//	Debug.Log($"panel:{panel.rect}");
+			//}
+		}
 
-        //    ////�ӽ� List<> �� ����
-        //    //List<ItemData> items = new List<ItemData>();
-        //    //for (int i = 0; i < this._panels[0]._slots.Count; ++i)
-        //    //{
-        //    //    ItemData itemData = this._panels[0]._slots[i].GetItemData();
-        //    //    if (null == itemData) continue;
-        //    //    items.Add(itemData);
-        //    //}
+		public bool Resize(int p)
+		{
+			if (this._panels.Count <= p) return false;
+			if(this._panels[p]._slots.Count <=0) return false;
 
-        //    ////item count
-        //    //writer.Write(items.Count);
-        //    ////item info
-        //    //for (int i = 0; i < items.Count; ++i)
-        //    //{
-        //    //    writer.Write(items[i].slot);    //slot
-        //    //    writer.Write(items[i].database.id); //item id
-        //    //    writer.Write(items[i].amount);  //amount
-        //    //}
-        //    base.Save(writer);
-        //}
+			RectTransform inven = (RectTransform)this.transform;
 
-        //public override void Load(BinaryReader reader)
-        //{
-        //    //panel : only one
+			GridLayoutGroup panelGrid = this.transform.Find("slot-panel").GetComponent<GridLayoutGroup>();
+			//row개수
+			int rows = panelGrid.transform.childCount / panelGrid.constraintCount + 1;
+			//
+			float height = panelGrid.padding.top// + panelGrid.padding.bottom
+				+ panelGrid.spacing.y + panelGrid.cellSize.y * rows;
+				//"slot-panel"위치가 title 조금아래에 위치함.
+				//+ panelGrid.GetComponent<RectTransform>().rect.top - inven.rect.top;
+			Debug.Log($"height:{inven.sizeDelta.y}=>{height}");
 
-        //    ////slot amount
-        //    //int slotAmount = reader.ReadInt32();
-        //    //this._panels[0].SetAmount(slotAmount);
-        //    ////Debug.Log("slot = " + slotAmount);
+			//변경
+			inven.sizeDelta = new Vector2(inven.sizeDelta.x, height);
+			this.GetComponent<RectTransform>().sizeDelta = inven.sizeDelta;
+			return true;
+		}
 
-        //    ////item count
-        //    //int itemcount = reader.ReadInt32();
-        //    ////Debug.Log("itemcount = " + itemcount);
-        //    ////item info
-        //    //for (int i = 0; i < itemcount; ++i)
-        //    //{
-        //    //    int panel = 0;
-        //    //    int slot = reader.ReadInt32();
-        //    //    int id = reader.ReadInt32();
-        //    //    int amount = reader.ReadInt32();
-        //    //    //Debug.Log("slot[" + slot + "], id[" + id + "], amount[" + amount + "]");
+		//public override void Save(BinaryWriter writer)
+		//{
 
-        //    //    SetItem(panel, slot, id, amount);
-        //    //}
-        //    base.Load(reader);
-        //}
-    }
+			//    //panel : only one
+
+			//    ////slot amount
+			//    //writer.Write(this._panels[0]._item._amount);
+
+			//    ////임시 List<> 에 저장
+			//    //List<ItemData> items = new List<ItemData>();
+			//    //for (int i = 0; i < this._panels[0]._slots.Count; ++i)
+			//    //{
+			//    //    ItemData itemData = this._panels[0]._slots[i].GetItemData();
+			//    //    if (null == itemData) continue;
+			//    //    items.Add(itemData);
+			//    //}
+
+			//    ////item count
+			//    //writer.Write(items.Count);
+			//    ////item info
+			//    //for (int i = 0; i < items.Count; ++i)
+			//    //{
+			//    //    writer.Write(items[i].slot);    //slot
+			//    //    writer.Write(items[i].database.id); //item id
+			//    //    writer.Write(items[i].amount);  //amount
+			//    //}
+			//    base.Save(writer);
+			//}
+
+			//public override void Load(BinaryReader reader)
+			//{
+			//    //panel : only one
+
+			//    ////slot amount
+			//    //int slotAmount = reader.ReadInt32();
+			//    //this._panels[0].SetAmount(slotAmount);
+			//    ////Debug.Log("slot = " + slotAmount);
+
+			//    ////item count
+			//    //int itemcount = reader.ReadInt32();
+			//    ////Debug.Log("itemcount = " + itemcount);
+			//    ////item info
+			//    //for (int i = 0; i < itemcount; ++i)
+			//    //{
+			//    //    int panel = 0;
+			//    //    int slot = reader.ReadInt32();
+			//    //    int id = reader.ReadInt32();
+			//    //    int amount = reader.ReadInt32();
+			//    //    //Debug.Log("slot[" + slot + "], id[" + id + "], amount[" + amount + "]");
+
+			//    //    SetItem(panel, slot, id, amount);
+			//    //}
+			//    base.Load(reader);
+			//}
+	}
 }//..namespace MyCraft

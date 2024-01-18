@@ -27,6 +27,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
 		}
 
 

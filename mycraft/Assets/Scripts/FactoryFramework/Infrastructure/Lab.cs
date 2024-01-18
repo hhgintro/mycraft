@@ -12,7 +12,6 @@ namespace FactoryFramework
 	{
 		//private Dictionary<int/*itemid*/, int/*amount*/> _inputs    = new Dictionary<int, int>();
 		private Dictionary<int/*itemid*/, MyCraft.BuildingItem> _inputs = new Dictionary<int, MyCraft.BuildingItem>();
-		//@@
 		//private Dictionary<int/*itemid*/, int/*amount*/> _outputs	= new Dictionary<int, int>();
 
 		//progress에 의해 만들어 지는 아이템 ID
@@ -23,7 +22,6 @@ namespace FactoryFramework
 
 		Dictionary<int, MyCraft.BuildingItem> INPUT		=> this._inputs;
 		MyCraft.BuildingPanel OUTPUT					=> base._panels[0];
-		//@@
 		//Dictionary<int, int> OUTPUTS	=> this._outputs;
 
 		MyCraft.Progress PROGRESS						=> _progresses[0];
@@ -89,6 +87,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.ChestInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
+			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
 		}
 
 		////bOnOff: true이면 ON, false이면 OFF
@@ -380,7 +379,6 @@ namespace FactoryFramework
 		#endregion //..TAKE_INPUT
 
 		#region SERIALIZATION_HELPERS
-		////@@
 		//////HG[2023.06.09] Item -> MyCraft.ItemBase
 		//////private List<SerializedItemStack> SerializeField(Dictionary<Item, int> dict)
 		//////{

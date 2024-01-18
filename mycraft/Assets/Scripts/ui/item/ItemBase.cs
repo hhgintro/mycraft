@@ -256,6 +256,16 @@ namespace MyCraft
 		}
 	}
 
+	public class TurretItemBase : ItemBase
+	{
+		public int Slots;   //slot개수
+
+		public TurretItemBase(JsonData json) : base(json)
+		{
+			this.Slots = (int)json["slots"];
+		}
+	}
+
 	public class ChestItemBase : ItemBase
 	{
 		public int Slots;   //slot개수
