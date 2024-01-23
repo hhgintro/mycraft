@@ -17,6 +17,13 @@ namespace MyCraft
 
         public GameObject _techCancel; //연구중인 Tech 취소버튼.
 
+        ItemBase _recipe;
+
+        public void Clear()
+        {
+            this._recipe = null;
+            this.transform.GetChild(0).gameObject.SetActive(false);
+        }
         public ItemData GetItemData()
         {
             if (this.transform.childCount <= 1) //1: slot에 background가 추가되었으므로.
@@ -27,13 +34,19 @@ namespace MyCraft
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (null == this._techCancel) return;
-            this._techCancel.SetActive(true);
+            //if (null == this._techCancel) return;
+            //this._techCancel.SetActive(true);
+            if (null != this._techCancel)   this._techCancel.SetActive(true);
+
+            if(null != _recipe) Managers.Game.Tooltips.Activate((this._recipe));
         }
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (null == this._techCancel) return;
-            this._techCancel.SetActive(false);
+            //if (null == this._techCancel) return;
+            //this._techCancel.SetActive(false);
+            if (null != this._techCancel)   this._techCancel?.SetActive(false);
+     
+            Managers.Game.Tooltips.Deactivate();
         }
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -82,6 +95,16 @@ namespace MyCraft
             if (null == this.owner)
                 return;
             this.owner.SetInven2Block(panel, slot, id, amount, fillAmount);
+        }
+
+        public void SetRecipe(ItemBase recipe)
+        {
+            if(null == recipe) return;
+
+            this._recipe = recipe;
+            //ItemBase input = Managers.Game.ItemBases.FetchItemByID(itemid);
+            this.transform.GetChild(0).GetComponent<Image>().sprite = recipe.icon;
+            this.transform.GetChild(0).gameObject.SetActive(true);
         }
 
     }

@@ -78,7 +78,7 @@ namespace FactoryFramework
 
 		public override void OnClicked()
 		{
-			MyCraft.Managers.Game.LabInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
+			MyCraft.Managers.Game.LabInvens.LinkInven(this, null, INPUT, base._panels, this._progresses, false);
 			//active
 			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(true);

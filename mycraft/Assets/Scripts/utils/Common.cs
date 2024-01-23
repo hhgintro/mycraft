@@ -58,7 +58,7 @@ namespace MyCraft
 		public static float BUILDING_ROTATION_MOUSE_ANGLE = 15f;    //건물완공할때 마우스 방향설정 회전각도
         public static float BUILDING_ROTATION_KEYDOWN_ANGLE = 45f;  //건물위치설정할때 "r"눌렀을때 회전하는 각도.
 
-        public static bool bMonsterRegen = true;    //"P"가 눌릴 떄, 몹리젠을 on/off조절합니다.
+        public static bool bMonsterRegen = false;    //"P"가 눌릴 떄, 몹리젠을 on/off조절합니다.
 
 		public static Type GetTypeOf(BLOCKTYPE type)
         {
@@ -138,6 +138,15 @@ namespace MyCraft
 				filePaths[i] = Path.GetFileNameWithoutExtension(fileInfoList[i].Name);
 			return filePaths;
 		}
+
+        //건물간 위치를 일정간격을 두기 위한 처리
+        public static Vector3 Floor(Vector3 pos)
+        {
+            float x = Mathf.Floor(pos.x + 0.5f);
+            float y = Mathf.Floor(pos.y + 0.5f);
+            float z = Mathf.Floor(pos.z + 0.5f);
+            return new Vector3(x, y, z);
+        }
 	}//..class Common
 
 }//..namespace MyCraft

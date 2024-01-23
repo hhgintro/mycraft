@@ -11,11 +11,11 @@ namespace MyCraft
         InvenPanel RESEARCH     => base._panels[0];   //연구예약 panel
         InvenPanel VIEW         => base._panels[1];   //연구목록 panel
 
-        //public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
+		//public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
 
-        void Awake()
-        {
-            base.Init();
+		protected override void fnAwake()
+		{
+			base.fnAwake();
 
             base._panels.Add(new InvenPanel(base._panels.Count, 0, this, this.transform.Find("Slot Panel")));
             base._panels.Add(new InvenPanel(base._panels.Count, 0, this, this.transform.Find("Viewport/Slot Panel")));
@@ -23,9 +23,9 @@ namespace MyCraft
             //base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
         }
 
-        void Start()
-        {
-            foreach (var tech in Managers.Game.TechBases.database)
+		protected override void fnStart()
+		{
+			foreach (var tech in Managers.Game.TechBases.database)
                 this.AddTech(VIEW, tech.Key);
 
             //locale

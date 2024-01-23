@@ -140,6 +140,7 @@ namespace StarterAssets
 		{
 			_cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 			_cinemachineTargetPitch = 30;   //카메라 각도(카메라거리:PlayerFollowCamaer->Body->Camera Distance)
+			//카메라 흔들흔들(PlayerFollowCamaer->Body->Noise):Basic Multi Channel Perlin,Handheld_normal_mild,(0,0,1),Amplitude(0.5),Frequency(0.3)
 
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();

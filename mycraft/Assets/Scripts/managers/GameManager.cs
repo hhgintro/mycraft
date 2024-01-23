@@ -48,9 +48,9 @@ namespace MyCraft
 
 		//public SystemMenuManager SystemMenu	{ get { if (null == _systemmenu)	_systemmenu = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager; return _systemmenu; } }
 		public GameObject SystemMenu			{ get { if (null == _systemmenu)	_systemmenu = GameObject.Find("Canvas").transform.GetChild(4).gameObject; return _systemmenu; } }
-		public JSonParser<ItemBase> ItemBases	{ get { if (null == _itembase)		_itembase = new JSonParser<ItemBase>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "items.json")); return _itembase; } }
-		public JSonParser<TechBase> TechBases	{ get { if (null == _techbase)		_techbase = new JSonParser<TechBase>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "technology.json")); return _techbase; } }
-		public JSonParser<Category> Categories	{ get { if (null == _categories)	_categories = new JSonParser<Category>(Path.Combine(Application.dataPath, "../config/locale", Managers.Locale._locale.ToString(), "categories.json")); return _categories; } }
+		public JSonParser<ItemBase> ItemBases	{ get { if (null == _itembase)		_itembase = new JSonParser<ItemBase>(Path.Combine(Application.dataPath, "../config/json/items.json")); return _itembase; } }
+		public JSonParser<TechBase> TechBases	{ get { if (null == _techbase)		_techbase = new JSonParser<TechBase>(Path.Combine(Application.dataPath, "../config/json/technology.json")); return _techbase; } }
+		public JSonParser<Category> Categories	{ get { if (null == _categories)	_categories = new JSonParser<Category>(Path.Combine(Application.dataPath, "../config/json/categories.json")); return _categories; } }
 
 		public Inventory Inventories			{ get { if (null == _inventory)		_inventory = GameObject.FindObjectOfType(typeof(Inventory)) as Inventory; return _inventory; } }
 		public QuickInven QuickInvens			{ get { if (null == _quickinven)	_quickinven = GameObject.FindObjectOfType(typeof(QuickInven)) as QuickInven; return _quickinven; } }
@@ -138,11 +138,11 @@ namespace MyCraft
 				_choiced_building = _conveyorPlacement.StartPlacingConveyor(prefab);
 				_choiced_building.GetComponent<FactoryFramework.Conveyor>()._itembase = (ItemBase)item.database;
 			}
-			else if (prefab.TryGetComponent(out FactoryFramework.Driller _))
-			{
-				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, true);
-				_choiced_building.GetComponent<FactoryFramework.Driller>()._itembase = (ItemBase)item.database;
-			}
+			//else if (prefab.TryGetComponent(out FactoryFramework.Driller _))
+			//{
+			//	_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, true);
+			//	_choiced_building.GetComponent<FactoryFramework.Driller>()._itembase = (ItemBase)item.database;
+			//}
 			else if (prefab.TryGetComponent(out FactoryFramework.LogisticComponent _))
 			{
 				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, false);
@@ -389,7 +389,11 @@ namespace MyCraft
 					if (instantiated.TryGetComponent<Conveyor>(out Conveyor conveyor))
 					{
 						conveyor.Load(reader);
-						conveyors.Add(conveyor);
+
+						//재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+						_conveyorPlacement.SetEnable_1(conveyor, true);
+
+                        conveyors.Add(conveyor);
 						//conveyor랑 연결될 buildings GUID
 						lookup.Add(conveyor.GUID, conveyor);
 						continue;
@@ -400,6 +404,9 @@ namespace MyCraft
 					{
 						building._itembase = prefab.GetComponent<LogisticComponent>()._itembase;
 						building.Load(reader);
+
+                        //재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+                        _buildingPlacement.SetEnable_1(building, true);
 
                         //Debug.Log($"lookup:({lookup.Count})[{building.name}:{building.GUID}]");
                         //conveyor랑 연결될 buildings GUID

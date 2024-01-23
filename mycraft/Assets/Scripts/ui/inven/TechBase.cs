@@ -18,7 +18,7 @@ namespace MyCraft
 		public List<int> next_techs = new List<int>();
 		public List<int> rewards = new List<int>();
 
-		public string icon;
+		//public string icon;
 
         public bool Learned { get { return (1.0f <= this._fillAmount); } }    //연구를 완료했나?
         public float _fillAmount { get; set; }	//Tech 연구률(0~1.0)

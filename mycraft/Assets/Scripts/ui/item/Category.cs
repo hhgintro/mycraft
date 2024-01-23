@@ -18,7 +18,7 @@ namespace MyCraft
         //public int itemid;
 
         public List<SkillPanel> panels;
-        public string icon;
+        //public string icon;
 
 
         //public Category() { }

@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.Mathematics;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -43,14 +45,22 @@ namespace FactoryFramework
 		public bool _IsWorking { get; protected set; }
 
 
+		//original materials
+		//토대의 경우, 자신의 material정보를 가지고 있지 않으면,
+		// (재사용시)DemoProps의 material로 덮어씌워진다.
+		List<Material> _originalMaterials = new List<Material>();
+
 		private void Awake()
 		{
-			this.fnAwake();
+			_powerGridComponent ??= GetComponent<PowerGridComponent>();
+			_sRef ??= GetComponent<SerializationReference>();
+			
+			fnAwake();
 		}
 
 		private void Start()
 		{
-			this.fnStart();
+			fnStart();
 		}
 
 		private void OnValidate()
@@ -62,27 +72,57 @@ namespace FactoryFramework
 		private void Update()
 		{
 			//if(true == _IsWorking)
-			this.ProcessLoop();
+			ProcessLoop();
 		}
 
 		private void OnDestroy()
 		{
-			this.fnDestroy();
+			fnDestroy();
 		}
-		public virtual void fnAwake()
-		{
-			_powerGridComponent ??= GetComponent<PowerGridComponent>();
-			_sRef ??= GetComponent<SerializationReference>();
-		}
+		public virtual void fnAwake() { }
 		public virtual void fnStart() { }
 		public virtual void ProcessLoop() { }
 		public virtual void fnDestroy() { }
-		public virtual void OnDeleted(bool bReturn) { }		//DestroyProcess�� ���� ö�ŵɶ� ȣ��(bReturn:true�̸� �κ����� ȸ��)
+		public virtual void OnDeleted(bool bReturn) { }		//DestroyProcess에 의해 철거될때 호출(bReturn:true이면 인벤으로 회수)
 
-		public virtual void SetEnable_2(bool enable) { }   //��ġ������ collider�� disable ���ѵд�.(ī�޶� �Դٰ��� ����)
+		public virtual void SetEnable_2(bool enable) { }   //설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
 
-#if ITEM_MESH_ON_BELT	//virtual GetSharedMesh()
-        public virtual Mesh GetSharedMesh() {  return this._itembase.prefab.GetComponent<MeshFilter>().sharedMesh; }
+		public void Init()
+		{
+			// conveyor는 ItemOnBelt때문에 적용할 수 없습니다.
+			// building에서마 호출되어야 합니다.
+
+			//자신의 original materials
+			_originalMaterials.Clear();
+			foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+				_originalMaterials.Add(mr.sharedMaterial);
+		}
+
+		public virtual void SetMaterials(Material frameMat, Material beltMat = null)
+		{
+			if (null != frameMat)
+			{
+				//green or red
+				foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+				{
+					//(conveyor 등등.)연결 socket의 이름을 고정("Indicator")하여, material이 바뀌는 것을 막는다.
+					if (mr.name == "Indicator") continue;
+					mr.sharedMaterial = frameMat;
+				}
+				return;
+			}
+
+			if (0 < _originalMaterials.Count)
+			{
+				//자신의 material로...
+				int index = 0;
+				foreach (MeshRenderer mr in GetComponentsInChildren<MeshRenderer>())
+					mr.sharedMaterial = _originalMaterials[index++];
+			}
+		}
+
+#if ITEM_MESH_ON_BELT  //virtual GetSharedMesh()                            
+		public virtual Mesh GetSharedMesh() {  return this._itembase.prefab.GetComponent<MeshFilter>().sharedMesh; }
 		public virtual Material GetSharedMaterial() { return this._itembase.prefab.GetComponent<MeshRenderer>().sharedMaterial; }
 #else
 #endif //..ITEM_MESH_ON_BELT
@@ -106,8 +146,8 @@ namespace FactoryFramework
 			//Debug.Log($"LOAD:{this._sRef.resourcesPath}/{this._itembase.id}/{this._sRef.GUID.ToString()}");
 			//this._sRef.GUID = Guid.Parse(guid);
 			this.GUID = Guid.Parse(guid);
-        }
-        #endregion //..SAVE
+		}
+		#endregion //..SAVE
 
-    }
+	}
 }

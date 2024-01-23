@@ -147,12 +147,14 @@ namespace MyCraft
 		{
 			//this._objPanel = null;
 			//this._panel = 0;
-			for (int i = 0; i < base._slots.Count; ++i)
+			for (int s = 0; s < base._slots.Count; ++s)
 			{
-				ItemData itemData = base._slots[i].GetItemData();
+				ItemData itemData = base._slots[s].GetItemData();
 				if (null != itemData)
 					Managers.Resource.Destroy(itemData.gameObject);
-				Managers.Resource.Destroy(base._slots[i].gameObject);
+
+				base._slots[s].Clear();
+				Managers.Resource.Destroy(base._slots[s].gameObject);
 			}
 			base.Clear();
 		}

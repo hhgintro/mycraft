@@ -33,11 +33,11 @@ namespace MyCraft
 			this.transform.parent.parent.GetComponent<SystemMenuManager>()?.gameObject.SetActive(true); //SystemMenu창
 		}
 
-		protected override void OnSelectSaveFile(string filename)
+		protected override void OnSelectSaveFile(GameObject go)
 		{
-			base.OnSelectSaveFile(filename);
+			base.OnSelectSaveFile(go);
 
-			this._new_name.text = filename;
+			this._new_name.text = go.name;
 		}
 
 		public void OnSaveGame()

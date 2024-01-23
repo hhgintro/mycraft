@@ -14,11 +14,13 @@ namespace MyCraft
 
         private InvenPanel _group;
 
-        private void Start()
+        protected override void fnAwake()
         {
-            //base.Awake();
-            base.Init();
+			base.fnAwake();
+        }
 
+		protected override void fnStart()
+		{
             Transform skill_group = this.transform.Find("Categories");
             Transform parent = this.transform.Find("Skills");
             
@@ -86,12 +88,12 @@ namespace MyCraft
             }
 
         }
-		public override void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public override void LinkInven(Building building, JSonDatabase recipe, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
         {
 			this._building = building;
 		}
 
-		public override void LinkInven(Building building, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public override void LinkInven(Building building, JSonDatabase recipe, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
 			//base.LinkInven(block, slotAmount, slots);
 			this._building = building;

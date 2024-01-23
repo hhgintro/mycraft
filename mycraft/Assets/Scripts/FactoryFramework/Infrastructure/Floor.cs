@@ -25,11 +25,11 @@ namespace FactoryFramework
 					return false; //자신의 socket이면 무시
 				if (target.IsOpen())
 				{
-					//groundPos = target._logisticComponent.transform.position
-					//	+ target.transform.forward * this.transform.localScale.z;
-					groundPos = target.transform.position
-						+ (this.transform.position - this.transform.GetChild(0).position);
-					groundDir = target.transform.forward;
+					//높이를 맞워주고
+					Vector3 tmpTarget = target.transform.position;
+					tmpTarget.y = target._logisticComponent.transform.position.y;
+					groundPos = tmpTarget + (tmpTarget - target._logisticComponent.transform.position);
+					groundDir = target._logisticComponent.transform.forward;	//인접한 개체와 방향을 같이한다.
 					return true;
 				}
 			}

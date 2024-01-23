@@ -23,11 +23,10 @@ namespace MyCraft
 			Managers.Locale.SetLocale("load-game", this.transform.Find("Back/Text").GetComponent<Text>());
 		}
 
-		protected override void OnSelectSaveFile(string filename)
+		protected override void OnSelectSaveFile(GameObject go)
 		{
-			base.OnSelectSaveFile(filename);
- 
-			Managers.Game._load_filename = filename;
+			base.OnSelectSaveFile(go); 
+			Managers.Game._load_filename = go.name;
 		}
 
 		public void OnLoadGame()

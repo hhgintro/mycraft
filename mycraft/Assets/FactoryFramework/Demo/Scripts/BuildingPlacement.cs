@@ -3,31 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using FactoryFramework;
-//using MyCraft;
-using UnityEngine.EventSystems;
-using Unity.Burst.CompilerServices;
 using MyCraft;
-using System;
-using UnityEngine.InputSystem.HID;
 
 public class BuildingPlacement : IPlacement
 {
 	//[Header("Building Prefabs")]
 	private GameObject current; //설치하기전 잡고있는 building.
-	//건물위치설정할때 "r"눌렀을때 회전하는 각도.
-	private Quaternion currentRotation = Quaternion.identity;
-
-	//#if UNITY_STANDALONE
-	//	private static int index=0;//debug용 
-	//#endif//..UNITY_STANDALONE
 
 	[Header("Visual Feedback Building Materials")]
 	public Material originalMaterial;
-	public Material greenPlacementMaterial;
-	public Material redPlacementMaterial;
+	public Material greenGhostMat;
+	public Material redGhostMat;
 
 	// list of valid materials so we don't change any other materials
-	private Material[] validMaterials { get { return new Material[3] { originalMaterial, greenPlacementMaterial, redPlacementMaterial }; } }
+	//private Material[] validMaterials { get { return new Material[3] { originalMaterial, greenPlacementMaterial, redPlacementMaterial }; } }
 
 
 	//drill의 경우 아래 자원(철광석,돌,구리광석)이 있어야 설치가 가능합니다.
@@ -41,9 +30,9 @@ public class BuildingPlacement : IPlacement
 	// we'll want to trigger connect whenever we place a new thing nearby
 	private List<PowerGridComponent> aoePowerConnections = new List<PowerGridComponent>();
 
-    protected override void fnStart()
+	protected override void fnStart()
 	{
-        Managers.CenterGrid.Init(this.transform);
+		Managers.CenterGrid.Init(this.transform);
 	}
 
 	//OnDestroy에서 호출된다.
@@ -76,15 +65,24 @@ public class BuildingPlacement : IPlacement
 	{
 		Debug.Log("ForceCancel");
 		if (current != null)
+		{
+			////재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+			////  우선 취소할때 설정해 준다.
+			////  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
+			////ChangeMatrerial(originalMaterial);
+			//current.GetComponent<LogisticComponent>().SetMaterials(originalMaterial);
+			//current.GetComponent<LogisticComponent>().SetEnable_2(true);
+
 			MyCraft.Managers.Resource.Destroy(current.gameObject);
+		}
 
 		current = null;
 		Managers.CenterGrid.Stop();
 		base.state = State.None;
 
-        //foreach(var item in rook.Keys)
-        //    Debug.Log($"GUID:[{item}]");
-    }
+		//foreach(var item in rook.Keys)
+		//    Debug.Log($"GUID:[{item}]");
+	}
 
 	//DestroyProcess에 의해 철거될때 호출
 	public override void DestroyBuilding(GameObject target)
@@ -106,12 +104,8 @@ public class BuildingPlacement : IPlacement
 			cancelPlacementEvent?.Raise();
 			return;
 		}
-		if(Input.GetKeyDown(KeyCode.R))
-		{
-			float angle = Common.BUILDING_ROTATION_KEYDOWN_ANGLE;	//회전각도(45도-시계방향)
-			if (Input.GetKey(KeyCode.LeftShift)) angle *= -1;//반시계방향
-			currentRotation = Quaternion.Euler(Vector3.up * angle) * currentRotation;
-		}
+
+		base.OnKeyDown();
 	}
 
 	protected override void OnMouseEvent(Define.MouseEvent evt)
@@ -127,13 +121,21 @@ public class BuildingPlacement : IPlacement
 					RaycastHit hit = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).FirstOrDefault();
 					//foreach (RaycastHit hit in Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE))
 					if (null == hit.collider) break;
+
+					if (hit.collider.gameObject.TryGetComponent<Socket>(out Socket socket))
+					{
+						if (socket._logisticComponent.TryGetComponent<Building>(out Building building1))
+						{
+							building1.OnClicked();
+							break;
+						}
+					}
 					if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
 					{
 						//Debug.Log($"클릭:{building.name}");
 						building.OnClicked();
 					}
-				}
-				break;
+				} break;
 
 			case Define.MouseEvent.R_Press:
 				{
@@ -148,8 +150,7 @@ public class BuildingPlacement : IPlacement
 						{
 							MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
 							MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
-						}
-						break;
+						} break;
 					}
 					////powerGrid
 					//if (hit.collider.TryGetComponent(out PowerGridComponent pgc))
@@ -173,8 +174,7 @@ public class BuildingPlacement : IPlacement
 						MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(true);
 						break;
 					}
-				}
-				break;
+				} break;
 
 			case Define.MouseEvent.R_Click:
 				{
@@ -183,22 +183,78 @@ public class BuildingPlacement : IPlacement
 						MyCraft.Managers.Game.DestoryProcess.SetProgress(this, null);
 						MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
 					}
-				}
-				break;
+				} break;
+
+			case Define.MouseEvent.Move:
+				{
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).FirstOrDefault();
+                    //foreach (RaycastHit hit in Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE))
+                    if (null == hit.collider) break;
+
+                    if (hit.collider.gameObject.TryGetComponent<Socket>(out Socket socket))
+					{
+						OutLine(socket._logisticComponent.gameObject);
+						break;
+                    }
+                    if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
+                    {
+                        OutLine(hit.collider.gameObject);
+                        break;
+                    }
+					OutLine(null);
+                }
+                break;
 		}//..switch (evt)
 	}
 
-	private void ChangeMatrerial(Material mat)
+	public override void SetEnable_1(LogisticComponent logistic, bool enable)
 	{
-		foreach (MeshRenderer mr in current?.GetComponentsInChildren<MeshRenderer>())
-		{
-			// dont change materials that shouldn't be changed!
-			if (validMaterials.Contains(mr.sharedMaterial))
-				mr.sharedMaterial = mat;
-		}
+		//재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+		//  우선 취소할때 설정해 준다.
+		//  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
+		////ChangeMatrerial(originalMaterial);
+		logistic.SetMaterials(null);// originalMaterial);        
+		base.SetEnable_1(logistic, enable);
 	}
 
-	public void ResetAOEPowerConnectins()
+	Building _outlineBuilding;
+	void OutLine(GameObject go, bool bOnOff = false)
+	{
+		if (null == go)
+		{
+			_outlineBuilding?.OutLine(false);   //old
+			_outlineBuilding = null;
+			return;
+		}
+
+		if (false == go.TryGetComponent<Building>(out Building building))
+        {
+            _outlineBuilding?.OutLine(false);   //old
+            _outlineBuilding = null;
+            return;
+        }
+
+        if (_outlineBuilding == building) return;
+        //old
+        _outlineBuilding?.OutLine(false);   //old
+		//new
+		building.OutLine(true);
+		_outlineBuilding = building;
+    }
+
+    //SetMaterials()로 대체합니다.
+    //private void ChangeMatrerial(Material mat)
+    //{
+    //	foreach (MeshRenderer mr in current?.GetComponentsInChildren<MeshRenderer>())
+    //	{
+    //		// dont change materials that shouldn't be changed!
+    //		if (validMaterials.Contains(mr.sharedMaterial))
+    //			mr.sharedMaterial = mat;
+    //	}
+    //}
+
+    public void ResetAOEPowerConnectins()
 	{
 		// must be performed on load
 		aoePowerConnections = new List<PowerGridComponent>();
@@ -255,7 +311,8 @@ public class BuildingPlacement : IPlacement
 
 					// finish placing building and enable it
 					base.state = desiredState;
-					ChangeMatrerial(originalMaterial);
+					//ChangeMatrerial(originalMaterial);
+					current.GetComponent<LogisticComponent>().SetMaterials(null);// originalMaterial);
 					if (current.TryGetComponent(out Building b))
 					{
 						////b.enabled = true;
@@ -294,10 +351,10 @@ public class BuildingPlacement : IPlacement
 			Vector3 extents = new Vector3(current.transform.localScale.x * col.size.x
 				, current.transform.localScale.y * col.size.y
 				, current.transform.localScale.z * col.size.z);
-            //foreach (Collider c in Physics.OverlapBox(col.transform.TransformPoint(col.center), col.size / 2f, col.transform.rotation))
-            foreach (Collider c in Physics.OverlapBox(col.transform.TransformPoint(col.center), extents / 2f, col.transform.rotation))
-            {
-                if (c.gameObject == current.gameObject) continue;
+			//foreach (Collider c in Physics.OverlapBox(col.transform.TransformPoint(col.center), col.size / 2f, col.transform.rotation))
+			foreach (Collider c in Physics.OverlapBox(col.transform.TransformPoint(col.center), extents / 2f, col.transform.rotation))
+			{
+				if (c.gameObject == current.gameObject) continue;
 				//Debug.Log($"collider: {c.tag}");
 				//if (c.CompareTag("Building"))
 				if(c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
@@ -306,7 +363,8 @@ public class BuildingPlacement : IPlacement
 					// colliding something!
 					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
 						Debug.LogWarning($"Invalid placement: {current.gameObject.name} collides with {c.gameObject.name}");
-					ChangeMatrerial(redPlacementMaterial);
+					//ChangeMatrerial(redPlacementMaterial);
+					current.GetComponent<LogisticComponent>().SetMaterials(redGhostMat);
 					return false;
 				}
 				// check for resources
@@ -318,11 +376,13 @@ public class BuildingPlacement : IPlacement
 			{
 				if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
 					Debug.LogWarning($"Invalid placement: {current.gameObject.name} requries placement near Resource Deposit");
-				ChangeMatrerial(redPlacementMaterial);
+				//ChangeMatrerial(redPlacementMaterial);
+				current.GetComponent<LogisticComponent>().SetMaterials(redGhostMat);
 				return false;
 			}
 		}
-		ChangeMatrerial(greenPlacementMaterial);
+		//ChangeMatrerial(greenPlacementMaterial);
+		current.GetComponent<LogisticComponent>().SetMaterials(greenGhostMat);
 		return true;
 	}
 
@@ -349,8 +409,8 @@ public class BuildingPlacement : IPlacement
 		// don't let building "work" until placement is finished
 		if (current.TryGetComponent(out Building b))
 		{
-            //b.enabled = false;
-            base.SetEnable_1(b, false);
+			//b.enabled = false;
+			this.SetEnable_1(b, false);
 		}
 		if (current.TryGetComponent(out PowerGridComponent pgc))
 		{
@@ -358,7 +418,8 @@ public class BuildingPlacement : IPlacement
 		}
 
 		// init material to ghost
-		ChangeMatrerial(greenPlacementMaterial);
+		//ChangeMatrerial(greenPlacementMaterial);
+		current.GetComponent<LogisticComponent>().SetMaterials(greenGhostMat);
 		return current;
 	}
 
@@ -394,10 +455,10 @@ public class BuildingPlacement : IPlacement
 			return false;
 
 		//안전발판위에 안전발판(current) 설치 위치
-		if (current.transform.tag == "Safe-Footing") groundPos = hit.point + Vector3.up * 4f;
+		if (current.transform.tag == "Safe-Footing")	groundPos = MyCraft.Common.Floor(hit.point + Vector3.up * 4f);	//건물위치간격보간
 		//안전발판위에 건물(current) 설치 위치
-		else groundPos = hit.point + Vector3.up * 0.15f;
-		Managers.CenterGrid.Stop();
+		else											groundPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.15f);	//건물위치간격보간
+        Managers.CenterGrid.Stop();
 		return true;
 	}
 
@@ -407,9 +468,9 @@ public class BuildingPlacement : IPlacement
 			return false;
 
 		//Terrain위에 안전발판(current) 설치 위치
-		if (current.transform.tag == "Safe-Footing")	groundPos = hit.point + Vector3.up * 2.5f;
+		if (current.transform.tag == "Safe-Footing")	groundPos = MyCraft.Common.Floor(hit.point + Vector3.up * 2.5f);	//건물위치간격보간
 		//Terrain위에 건물(current) 설치 위치
-		else											groundPos = hit.point + Vector3.up;
+		else											groundPos = MyCraft.Common.Floor(hit.point + Vector3.up);	//건물위치간격보간
 		return true;
 	}
 
@@ -507,8 +568,8 @@ public class BuildingPlacement : IPlacement
 		if (Input.GetMouseButtonUp(0))
 		{
 			TryChangeState(State.None);
-			//손에 들고있는 아이템의 수량이 남아 있다면, prefab을 생성해 줍니다.
-			MyCraft.Managers.Game.PlaceBuilding(MyCraft.InvenBase.choiced_item);
+			////손에 들고있는 아이템의 수량이 남아 있다면, prefab을 생성해 줍니다.
+			//MyCraft.Managers.Game.PlaceBuilding(MyCraft.InvenBase.choiced_item);
 			finishPlacementEvent?.Raise();
 		}
 	}

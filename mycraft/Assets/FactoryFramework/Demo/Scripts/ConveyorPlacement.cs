@@ -30,10 +30,6 @@ public class ConveyorPlacement : IPlacement
 	public Material redGhostMat;
 
 
-	//protected override void fnStart()
-	//{
-	//}
-
 	//OnDestroy에서 호출된다.
 	//ConveyorPlacement에서 Pool_Conveyor를 먼저 정리하고(belt의 아이템을 날리기 위해)
 	//BuildingPlacement에서 나머지 Pool_xxx을 정리하게 됩니다.
@@ -63,7 +59,15 @@ public class ConveyorPlacement : IPlacement
 	public override void ForceCancel()
 	{
 		if (current != null)
+		{
+			////재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+			////  우선 취소할때 설정해 준다.
+			////  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
+			//current.SetMaterials(originalFrameMat, originalBeltMat);
+			//current.SetEnable_2(true);
+
 			MyCraft.Managers.Resource.Destroy(current.gameObject);
+		}
 		current = null;
 		startSocket = null;
 		endSocket = null;
@@ -83,7 +87,11 @@ public class ConveyorPlacement : IPlacement
 	protected override void OnKeyDown()
 	{
 		if (Input.GetKeyDown(base.cancelKey))
+		{
 			cancelPlacementEvent?.Raise();
+			return;
+		}
+		//base.OnKeyDown();	//BuildingPlacement와 중복으로 2번호출되어진다.
 	}
 
 	//protected override void OnMouseEvent(Define.MouseEvent evt)
@@ -121,6 +129,15 @@ public class ConveyorPlacement : IPlacement
 	//			break;
 	//	}//..switch (evt)
 	//}
+
+	public override void SetEnable_1(LogisticComponent logistic, bool enable)
+	{
+		//재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+		//  우선 취소할때 설정해 준다.
+		//  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
+		logistic.SetMaterials(originalFrameMat, originalBeltMat);	//@@3
+		base.SetEnable_1(logistic, enable);
+	}
 
 	private bool TryChangeState(State desiredState)
 	{
@@ -197,11 +214,12 @@ public class ConveyorPlacement : IPlacement
 		if (hit.transform.tag != "Safe-Footing")  //안전발판
 			return false;
 
-		worldPos = hit.point + Vector3.up * 0.3f;   //시작높이
-		Vector3 camForward = Camera.main.transform.forward;
-		camForward.y = 0f;
-		camForward.Normalize();
-		worldDir = camForward;
+		worldPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.3f);   //시작높이	//건물위치간격보간
+		//Vector3 camForward = Camera.main.transform.forward;
+		//camForward.y = 0f;
+		//camForward.Normalize();
+		//worldDir = camForward;
+		worldDir = currentRotation * Vector3.forward;
 		return true;
 	}
 
@@ -210,11 +228,12 @@ public class ConveyorPlacement : IPlacement
 		if (false == hit.collider.gameObject.TryGetComponent<Terrain>(out Terrain t))
 			return false;
 
-		worldPos = hit.point + Vector3.up;
-		Vector3 camForward = Camera.main.transform.forward;
-		camForward.y = 0f;
-		camForward.Normalize();
-		worldDir = camForward;
+		worldPos = MyCraft.Common.Floor(hit.point + Vector3.up);	//건물위치간격보간
+		//Vector3 camForward = Camera.main.transform.forward;
+		//camForward.y = 0f;
+		//camForward.Normalize();
+		//worldDir = camForward;
+		worldDir = currentRotation * Vector3.forward;
 		return true;
 	}
 
@@ -225,6 +244,7 @@ public class ConveyorPlacement : IPlacement
 		startSocket = null;
 		Vector3 worldPos = Vector3.zero;
 		Vector3 worldDir = Vector3.forward;
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit[] hits = Physics.RaycastAll(ray, MyCraft.Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).ToArray();
 		foreach (RaycastHit hit in hits)
@@ -239,18 +259,14 @@ public class ConveyorPlacement : IPlacement
 				{
 					// Socket already Occupied
 					continue;
-				}
-				
+				}				
 				startSocket = socket;
 				break;
 			}
 
 			//안전발판
-			if (IsSafeFooting(hit, ref worldPos, ref worldDir))
-				break;
-
-			if (IsTerrain(hit, ref worldPos, ref worldDir))
-				break;
+			if (IsSafeFooting(hit, ref worldPos, ref worldDir)) break;
+			if (IsTerrain(hit, ref worldPos, ref worldDir))		break;
 		}
 		// override placement if we found a valid socket
 		if (startSocket)
@@ -266,14 +282,8 @@ public class ConveyorPlacement : IPlacement
 		current.data.end        = worldPos + worldDir;
 		current.data.endDir     = worldDir;
 		// get the relative height
-		if (startSocket == null)
-		{
-			startHeight = 0f; // Terrain.activeTerrain.SampleHeight(worldPos);
-		}
-		else
-		{
-			startHeight = startSocket.transform.position.y - Terrain.activeTerrain.SampleHeight(worldPos);
-		}
+		if (startSocket == null)	startHeight = 0f; // Terrain.activeTerrain.SampleHeight(worldPos);
+		else						startHeight = startSocket.transform.position.y - Terrain.activeTerrain.SampleHeight(worldPos);
 
 		//ignore colliders from start and end points
 		List<Collider> collidersToIgnore = new List<Collider>();
@@ -282,7 +292,8 @@ public class ConveyorPlacement : IPlacement
 		{
 			collidersToIgnore.AddRange(startSocket.transform.root.GetComponentsInChildren<Collider>());
 			collidersToIgnore.Remove(startSocket.transform.root.GetComponent<Collider>());
-		} else
+		}
+		else
 		{
 			collidersToIgnore.Add(Terrain.activeTerrain.GetComponent<TerrainCollider>());
 		}
@@ -297,15 +308,12 @@ public class ConveyorPlacement : IPlacement
 		{
 			//current.SetMaterials(originalFrameMat, originalBeltMat);
 			current.SetMaterials(greenGhostMat, greenGhostMat);
-			if (Input.GetMouseButtonDown(0))
-			{
-				TryChangeState(State.End);
-			}
+			if (Input.GetMouseButtonDown(0)) TryChangeState(State.End);
 		}
-		else 
+		else
+		{
 			current.SetMaterials(redGhostMat, redGhostMat);
-
-		
+		}		
 	}
 	//conveyor 끝부분 지정할 때
 	protected override void HandleEndState()
@@ -314,9 +322,9 @@ public class ConveyorPlacement : IPlacement
 		Vector3 worldPos = Vector3.zero;
 		Vector3 worldDir = Vector3.forward;
 
-        //Ray mousedownRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //foreach (RaycastHit hit in Physics.RaycastAll(mousedownRay, Common.MAX_RAY_DISTANCE))
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		//Ray mousedownRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		//foreach (RaycastHit hit in Physics.RaycastAll(mousedownRay, Common.MAX_RAY_DISTANCE))
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit[] hits = Physics.RaycastAll(ray, MyCraft.Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).ToArray();
 		foreach (RaycastHit hit in hits)
 		{
@@ -336,17 +344,19 @@ public class ConveyorPlacement : IPlacement
 				break;
 			}
 
-			if (hit.transform.tag == "Safe-Footing")  //안전발판
+			if (hit.transform.tag == "Safe-Footing")  //안전발판(위)
 			{
 				//worldPos = hit.point;
 				//// stay same level if this is the terrain
 				//worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;
-				worldPos = hit.point + Vector3.up * 0.3f;
+				worldPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.3f);	//건물위치간격보간
 
-				Vector3 camForward = Camera.main.transform.forward;
-				camForward.y = 0f;
-				camForward.Normalize();
-				worldDir = camForward;
+				//Vector3 camForward = Camera.main.transform.forward;
+				//camForward.y = 0f;
+				//camForward.Normalize();
+				//worldDir = camForward;
+				worldDir = currentRotation * Vector3.forward;
+
 				// reset socket
 				endSocket = null;
 				break;
@@ -377,19 +387,16 @@ public class ConveyorPlacement : IPlacement
 				{
 					worldPos = hit.point;
 					// stay same level if this is the terrain
-					worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight + 1;	//+1: 땅에 뭍혀서
+					worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;// + 1;	//+1: 땅에 뭍혀서
 				}
 
-				Vector3 camForward = Camera.main.transform.forward;
-				camForward.y = 0f;
-				camForward.Normalize();
-				worldDir = camForward;
+				worldPos = MyCraft.Common.Floor(worldPos);	//건물위치간격보간
+				worldDir = currentRotation * Vector3.forward;
 				// reset socket
 				endSocket = null;
-
-			}
-			
+			}			
 		}
+
 		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			flatEndPos = endPos;
@@ -420,15 +427,18 @@ public class ConveyorPlacement : IPlacement
 			ignored: collidersToIgnore.Count > 0 ? collidersToIgnore.ToArray() : null
 		);
 
-		if (current.ValidMesh)
-			current.SetMaterials(greenGhostMat, greenGhostMat);
-		else
-			current.SetMaterials(redGhostMat, redGhostMat);
+		//아이템개수가 부족하다.
+		bool ValidMesh = current.ValidMesh;
+		if (MyCraft.InvenBase.choiced_item.amount <= current.CalculateCapacity_1())
+			ValidMesh = false;
+
+		if (ValidMesh)	current.SetMaterials(greenGhostMat, greenGhostMat);
+		else			current.SetMaterials(redGhostMat, redGhostMat);
 
 		//coordinate
 		//MyCraft.Managers.Game.Coordinates.DrawCoordinate(worldPos);
 
-		if (Input.GetMouseButtonDown(0) && current.ValidMesh)
+		if (Input.GetMouseButtonDown(0) && ValidMesh)
 		{
 			////b.enabled = true;
 			//base.SetEnable(current, true);
@@ -446,7 +456,7 @@ public class ConveyorPlacement : IPlacement
 			}
 			// finalize the conveyor
 			current.UpdateMesh(true);
-			current.SetMaterials(originalFrameMat, originalBeltMat);
+			current.SetMaterials(originalFrameMat, originalBeltMat);	//@@3
 			current.AddCollider();
 
 			//지급

@@ -26,8 +26,15 @@ namespace FactoryFramework
 		Renderer renderers;
 		List<Material> materials = new List<Material>();
 
-		public override void fnStart()
+
+        public override void fnAwake()
 		{
+            // conveyor는 ItemOnBelt때문에 적용할 수 없습니다.
+            // building에서마 호출되어야 합니다.
+            base.Init();
+		}
+		public override void fnStart()
+        {
 			base._IsWorking = false;
 			this.materials.Clear();
 

@@ -13,6 +13,8 @@ using Unity.Collections;
 using UnityEngine.Windows;
 //using MyCraft;
 using UnityEngine.UIElements;
+using static UnityEditor.Experimental.GraphView.Port;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -158,16 +160,19 @@ namespace FactoryFramework
 			beltMeshRenderer?.material.SetFloat("_Speed", data.speed);
 			_IsWorking = items.Count > 0;
 		}
-
+		//pool을 만들지 않고 길이만 구하기 위해...
+		public int CalculateCapacity_1()
+		{
+			// capcity is a simple calculation that depends on belt length and belt_spacing
+			return Mathf.FloorToInt(Length / settings.BELT_SPACING) + 1;
+		}
 		public void CalculateCapacity(int capacity=-1)
 		{
 			// this function also serves as a sort of Init()
 
-			// capcity is a simple calculation that depends on belt length and belt_spacing
-			//capacity = (_capacity == -1) ? Mathf.Max(1,Mathf.FloorToInt(Length / settings.BELT_SPACING)) : _capacity;
-			_capacity = (capacity == -1) ? Mathf.FloorToInt(Length/settings.BELT_SPACING)+1 : capacity;
-            //Debug.LogError($"capacity({Length}/{_capacity}/{GUID})");//@@
-
+			_capacity = (capacity == -1) ? CalculateCapacity_1() : capacity;
+			//Debug.LogError($"capacity({Length}/{_capacity}/{GUID})");//@@1
+			
             // create a pool of gameobjects with rendering capabilities
             // pool => CreateFunc, DestroyFunc, GetFunc, ReleaseFunc, capacity
             beltObjectPool?.Clear();
@@ -207,7 +212,7 @@ namespace FactoryFramework
 		{
 			if (_capacity <= 0)
 			{
-				Debug.LogError($"Tring to place new item on a belt at full capacity({_capacity}/{GUID})");//@@
+				Debug.LogError($"Tring to place new item on a belt at full capacity({_capacity}/{GUID})");//@@1
 				return;//HG_TEST:밸트위에 초가해서 생성되는 아이템을 막는다.
 			}
 			//HG[2023.06.09] Item -> MyCraft.ItemBase
@@ -244,7 +249,7 @@ namespace FactoryFramework
 #endif //..ITEM_MESH_ON_BELT
             items.Add(iob);
 			_capacity -= 1;			
-			//Debug.LogError($"--- capacity({_capacity}/{GUID})");//@@
+			//Debug.LogError($"--- capacity({_capacity}/{GUID})");//@@1
         }
 
         public void MoveItems()
@@ -258,11 +263,9 @@ namespace FactoryFramework
 				position += data.speed * Time.deltaTime;
 				position = math.clamp(position, 0f, cumulativeMaxPos);
 
-
 				ItemOnBelt item = items[x];
 				item._position = position;
 				items[x] = item;
-
 
 				Transform t = item._model;
 				float pos = item._position;
@@ -315,7 +318,8 @@ namespace FactoryFramework
 				if (settings.SHOW_DEBUG_LOGS) Debug.Log("Invalid Conveyor due to path");
 				_validMesh = false;
 			}
-            int length = Math.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT));
+			//0.05f: _path의 길이가 0.9999로 찍히는 경우에 대한 보정값
+            int length = Math.Max(1,(int)(_path.GetTotalLength() * settings.BELT_SEGMENTS_PER_UNIT + 0.05f));
 			//Debug.Log($"Conveyor Length is {length}"); // development debug
 
 			bool collision = PathFactory.CollisionAlongPath(_path, 0.5f, ConveyorLogisticsUtils.settings.BELT_SCALE/2f, ~0, ignored, startskip, endskip); //only collide belt collideable layer
@@ -358,8 +362,10 @@ namespace FactoryFramework
 				CalculateCapacity();
 		}
 
-		public void SetMaterials(Material frameMat, Material beltMat)
+		public override void SetMaterials(Material frameMat, Material beltMat = null)
 		{
+			//conveyor는 ItemOnBelt때문에 base.SetMaterials()를 사용할 수 없습니다.
+
 			frameFilter.gameObject.GetComponent<MeshRenderer>().material = frameMat;
 			beltFilter.gameObject.GetComponent<MeshRenderer>().material = beltMat;
 		}
@@ -663,7 +669,7 @@ namespace FactoryFramework
 				writer.Write(items[i]._position);
 				//Debug.Log($"SAVE:{i}-{items.Count}/{items[i]._itembase.id}/{items[i]._position}");
 			}
-			//Debug.LogError($"+++ SAVE:capacity({_capacity}),items({items.Count}),{GUID}");//@@
+			//Debug.LogError($"+++ SAVE:capacity({_capacity}),items({items.Count}),{GUID}");//@@1
 
 			writer.Write(this.InputSocketGuid??"");
 			writer.Write(this.OutputSocketGuid??"");
@@ -689,7 +695,7 @@ namespace FactoryFramework
 
             //items
             int itemcount = reader.ReadInt32();
-            //Debug.LogError($"+++ LOAD:capacity({_capacity}),items({itemcount}),{GUID}");//@@
+            //Debug.LogError($"+++ LOAD:capacity({_capacity}),items({itemcount}),{GUID}");//@@1
             for (int i = 0; i < itemcount; ++i)
 			{
 				int itemid = reader.ReadInt32();

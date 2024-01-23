@@ -30,7 +30,7 @@ public class StageManager : MonoBehaviour {
     [System.NonSerialized]
     public string bundlename = "stage_guitar2";
     [System.NonSerialized]
-    public string audio = "기타2";            //AudioClip 이름
+    public string _audio = "기타2";            //AudioClip 이름
     [System.NonSerialized]
     public string track = "Guitar2_Track";    //Track 이름
     #endregion
@@ -45,22 +45,22 @@ public class StageManager : MonoBehaviour {
         DontDestroyOnLoad(this);
     }
 
-    //// Use this for initialization
-    //void Start()
-    //{
-    //    audio = "기타2";
-    //    track = "Guitar2_Track";
-    //}
+	//// Use this for initialization
+	//void Start()
+	//{
+	//    _audio = "기타2";
+	//    track = "Guitar2_Track";
+	//}
 
-    //// Update is called once per frame
-    //void Update () {
+	//// Update is called once per frame
+	//void Update () {
 
-    //   }
+	//   }
 
-    //public void Log()
-    //{
-    //    Debug.Log("called StageManager by " + SceneManager.GetActiveScene().name);
-    //}
+	//public void Log()
+	//{
+	//    Debug.Log("called StageManager by " + SceneManager.GetActiveScene().name);
+	//}
 
 
 }

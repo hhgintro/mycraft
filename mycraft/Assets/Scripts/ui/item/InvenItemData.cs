@@ -136,7 +136,8 @@ namespace MyCraft
 			//if (this.amount <= 1)   pickCnt = this.amount;
 			//else                    pickCnt = (int)(this.amount * 0.5f);    //절반을 가져온다.
 			pickCnt = (int)(this.amount * 0.5f + 0.5f);    //절반을 가져온다.
-			this._SetStackCount(InvenBase.choiced_item._AddStackCount(pickCnt, ref fillAmount, true), fillAmount, true);//남은거는 더해준다.
+			this._SetStackCount(this.amount - pickCnt, fillAmount, true);
+			InvenBase.choiced_item._AddStackCount(pickCnt, ref fillAmount, true);
 			//남은 것이 없다면...삭제
 			if (this.amount <= 0) Managers.Resource.Destroy(this.gameObject);
 		}
@@ -292,14 +293,14 @@ namespace MyCraft
 			this.owner.SetInven2Block(panel, slot, itemid, amount, fillAmount);
 		}
 
-		public float GetFillAmount()
+		public override float GetFillAmount()
 		{
-			if (null == _progressFill) return MyCraft.Global.FILLAMOUNT_DEFAULT;
+			if (null == _progressFill) return base.GetFillAmount();
 			return _fillAmount;
 		}
-		public float SetFillAmount(float fillAmount)
+		public override float SetFillAmount(float fillAmount)
 		{
-			if (null == _progressFill) return MyCraft.Global.FILLAMOUNT_DEFAULT;
+			if (null == _progressFill) return base.SetFillAmount(fillAmount);
 			_fillAmount = fillAmount;
 			_progressFill.transform.GetChild(0).GetComponent<Image>().fillAmount = _fillAmount;
 			return fillAmount;

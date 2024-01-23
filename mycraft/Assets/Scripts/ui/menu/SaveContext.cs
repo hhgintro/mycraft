@@ -33,11 +33,11 @@ namespace MyCraft
 		}
 
         protected virtual void fnStart() { }
-		protected virtual void OnSelectSaveFile(string filename)
+		protected virtual void OnSelectSaveFile(GameObject go)
         {
             //Debug.Log($"select:{filename}");
-            this._save_file.text = filename;
-            LoadScreenShot(filename);
+            this._save_file.text = go.name;
+            LoadScreenShot(go.name);
 		}
 
 		public void OnBack()
@@ -57,7 +57,7 @@ namespace MyCraft
             //기존꺼 삭제
             foreach (var obj in this._contexts) Managers.Resource.Destroy(obj);
             this._contexts.Clear();
-            //재 등록
+            //재 등록(파일목록을 수정일자순으로 가져오는 코드)
             string[] savefiles = Common.GetFilesInFolderWithExtensionOrderByCreationTime(Managers.Game._save_dir, "sav");
             foreach (string file in savefiles)
             {
@@ -67,12 +67,17 @@ namespace MyCraft
                 clone.transform.GetChild(0).GetComponent<Text>().text = file;
                 //clone.transform.parent = this._save_file_content;
                 clone.transform.SetParent(this._save_file_content);
-                clone.GetComponent<Button>().onClick.AddListener(() => OnSelectSaveFile(file));
+                clone.GetComponent<Button>().onClick.AddListener(() => OnSelectSaveFile(clone));
                 this._contexts.Add(clone);
             }
+
             //마지막 저장된 파일을 선택한다.
-            if(0 < this._contexts.Count)
-                OnSelectSaveFile(this._contexts[this._contexts.Count - 1].name);
+            if (0 < this._contexts.Count)
+            {
+                GameObject go = this._contexts[this._contexts.Count - 1];
+                go.GetComponent<Button>().Select();//선택된 상태
+                OnSelectSaveFile(go);
+            }
         }
 		public void OnDeleteFile()
 		{
@@ -85,10 +90,7 @@ namespace MyCraft
 				return;
 			}
 			File.Delete(filepath);
-			int a = 0;
-			a = 0;
 			this.RefreshContext();
-
 		}
 
 		private void LoadScreenShot(string filename)

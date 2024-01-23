@@ -13,19 +13,19 @@ namespace MyCraft
         protected GameObject keyPanel;  //단축번호를 표기한다.
         public List<GameObject> keys = new List<GameObject>();
 
-        void Awake()
-        {
-            base._panels.Add(new InvenPanel((byte)base._panels.Count, 0, this
+		protected override void fnAwake()
+		{
+			base._panels.Add(new InvenPanel((byte)base._panels.Count, 0, this
                 , this.transform.Find("slot-panel")));
 
             this.keyPanel = this.transform.Find("key-panel").gameObject;
             //this.keyPanel.GetComponent<Image>().raycastTarget = false;  //퀵슬롯 아이템을 줍거나 넣을수 없었다.
         }
 
-        void Start()
-        {
-            //frame이 끝나야 slot의 위치를 알수 있어서 coroutine을 사용합니다.
-            StartCoroutine(CheckSlotPosition());
+		protected override void fnStart()
+		{
+			//frame이 끝나야 slot의 위치를 알수 있어서 coroutine을 사용합니다.
+			StartCoroutine(CheckSlotPosition());
         }
 
         IEnumerator CheckSlotPosition()

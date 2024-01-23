@@ -1,0 +1,70 @@
+﻿[
+  {
+    "type": "TechBase",
+    "id":1,
+    "cost":{
+      "multiple":11,
+      "time":10,
+      "item":[
+        {"itemid": 801,"amount": 2}
+      ]
+    },
+    "next-tech":[{"techid":3}],
+    "reward":[{"itemid":1100},{"itemid":1200}],
+    "icon":"Textures/ui/technology/automation"
+  },
+
+  {
+    "type": "TechBase",
+    "id":2,
+    "cost":{
+      "multiple":12,
+      "time":10,
+      "item":[
+        {"itemid": 801,"amount": 2},
+        {"itemid": 802,"amount": 2}
+      ]
+    },
+    "next-tech":[{"techid":4}],
+    "reward":[{"itemid":1040},{"itemid":1050}],
+    "icon":"Textures/ui/technology/electronics"
+  },
+
+  {
+    "type": "TechBase",
+    "id":3,
+    "cost":{
+      "multiple":13,
+      "time":10,
+      "item":[
+        {"itemid": 801,"amount": 2},
+        {"itemid": 802,"amount": 2}
+      ]
+    },
+    "pre-tech":[{"techid":1}],
+    "next-tech":[{"techid":4}],
+    "reward":[{"itemid":2010},{"itemid":2020}],
+    "icon":"Textures/ui/technology/logistics"
+  },
+
+  {
+    "type": "TechBase",
+    "id":4,
+    "cost":{
+      "multiple":13,
+      "time":10,
+      "item":[
+        {"itemid": 801,"amount": 2},
+        {"itemid": 802,"amount": 2},
+        {"itemid": 803,"amount": 2}
+      ]
+    },
+    "pre-tech":[{"techid":2},{"techid":3}],
+    "reward":[{"itemid":2010},{"itemid":2020}],
+    "icon":"Textures/ui/technology/steel-processing"
+  }
+
+
+
+
+]

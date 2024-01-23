@@ -13,7 +13,7 @@ namespace MyCraft
 	{
 		//public InvenItemData choiced_item = null;    //인벤에서 선택된 개체
 
-		void Awake()
+		protected override void fnAwake()
 		{
 			//HG_TODO: 추후 아래 object들을 생성하도록 합니다.
 			base._progress.Add(this.transform.Find("Progress/bar").GetComponent<Image>());
@@ -28,8 +28,8 @@ namespace MyCraft
 				, this.transform.Find("Chip-Panel")));
 		}
 
-        void Start()
-        {
+		protected override void fnStart()
+		{
 			//locale
 			//title text
 			Managers.Locale.SetLocale("inven", this.transform.GetChild(0).GetComponent<Text>());
@@ -47,40 +47,57 @@ namespace MyCraft
 			Managers.Game.Inventories.gameObject.SetActive(false);
 		}
 
-		public override void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		public override void LinkInven(Building building, JSonDatabase recipe, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
-			base.LinkInven(building, inputs, panels, progresses, destroy);
-			this.AddReset(base._panels[0]);
+			base.LinkInven(building, recipe, inputs, panels, progresses, destroy);
+            SetRecipe(building);	//recipe
+            this.AddReset(base._panels[0]);
 		}
 		// destroy : amount가 0이면 파괴
-		public override void LinkInven(Building building, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
-		{
-			base.LinkInven(building, panels, progresses, destroy);
+		//public override void LinkInven(Building building, JSonDatabase recipe, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		//{
+		//	base.LinkInven(building, recipe, panels, progresses, destroy);
+  //          SetRecipe(building._itembase);  //recipe
+  //          this.AddReset(base._panels[0]);
+		//}
 
-			//this.AddReset(base._panels[0]);
-			this.AddReset(base._panels[0]);
-		}
-			//protected override void Clear()
-			//{
-			//    base.Clear();
-			//}
+        void SetRecipe(Building building)
+        {
+			if (null == building || null == building._itembase) return;
+            MachineItemBase itembase = (MachineItemBase)building._itembase;
 
-			//public override void LinkInven(BlockScript block, int slotAmount, List<List<BlockSlot>> slots)
-			//{
-			//    base.LinkInven(block, slotAmount, slots);
-			//}
+            //input
+            if (this._panels[0]._slots.Count == itembase._assembling.inputs.Count)
+            {
+                for (int s = 0; s < this._panels[0]._slots.Count; ++s)
+                {
+                    ItemBase input = Managers.Game.ItemBases.FetchItemByID(itembase._assembling.inputs[s]);
+                    this._panels[0]._slots[s].SetRecipe(input);
+                }
+            }
+        }
+
+        //protected override void Clear()
+        //{
+        //    base.Clear();
+        //}
+
+        //public override void LinkInven(BlockScript block, int slotAmount, List<List<BlockSlot>> slots)
+        //{
+        //    base.LinkInven(block, slotAmount, slots);
+        //}
 
 
-			//public override void Save(BinaryWriter writer)
-			//{
-			//    base.Save(writer);
-			//}
+        //public override void Save(BinaryWriter writer)
+        //{
+        //    base.Save(writer);
+        //}
 
-			//public override void Load(BinaryReader reader)
-			//{
-			//    base.Load(reader);
-			//}
+        //public override void Load(BinaryReader reader)
+        //{
+        //    base.Load(reader);
+        //}
 
 
-		}//..class Inventory
-	}//..namespace MyCraft
+    }//..class Inventory
+}//..namespace MyCraft

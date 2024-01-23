@@ -72,7 +72,7 @@ namespace FactoryFramework
 		{
 			if(null == this._recipe)
 			{
-				MyCraft.Managers.Game.SkillInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
+				MyCraft.Managers.Game.SkillInvens.LinkInven(this, _recipe, INPUT, base._panels, this._progresses, false);
 				//active
 				MyCraft.Managers.Game.SkillInvens.gameObject.SetActive(true);
 				//de-active
@@ -85,7 +85,7 @@ namespace FactoryFramework
 				return;
 			}
 
-			MyCraft.Managers.Game.FactoryInvens.LinkInven(this, INPUT, base._panels, this._progresses, false);
+			MyCraft.Managers.Game.FactoryInvens.LinkInven(this, this._recipe, INPUT, base._panels, this._progresses, false);
 			//active
 			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(true);
@@ -95,38 +95,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
-
-			if (0 == (++cnt %2))
-			{
-				//outline OFF
-				base.OutLine(false);
-				////this.renderers = this.transform.GetComponent<Renderer>();
-				//this.materials.Clear();
-				//this.materials.AddRange(this.renderers.sharedMaterials);
-				//this.materials.Remove(outline);
-				//this.renderers.materials = this.materials.ToArray();
-			}
-			else
-			{
-				//outline ON
-				base.OutLine(true);
-				////this.renderers = this.transform.GetComponent<Renderer>();
-				//this.materials.Clear();
-				//this.materials.AddRange(this.renderers.sharedMaterials);
-				//this.materials.Add(outline);
-				//this.renderers.materials = this.materials.ToArray();
-			}
 		}
-
-		////bOnOff: true이면 ON, false이면 OFF
-		//public virtual void OutLine(bool bOnOff)
-		//{
-		//	this.materials.Clear();
-		//	this.materials.AddRange(this.renderers.sharedMaterials);
-		//	if (true == bOnOff)		this.materials.Add(outline);
-		//	else					this.materials.Remove(outline);
-		//	this.renderers.materials = this.materials.ToArray();
-		//}
 
 		//public void ClearInternalStorage()
 		//{
@@ -278,7 +247,7 @@ namespace FactoryFramework
 			if(this._recipe.id != OUTPUT._slots[0]._item._itemid)
 			{
 				//OUTPUT에서 아이템을 수동으로 빼면, slot의 아이템값이 사라지는 거 같다.
-				Debug.LogError($"등록된 recip({this._recipe.id})과 OUTPUT({OUTPUT._slots[0]._item._itemid})이 서로다른 값입니다.");
+				//Debug.LogError($"등록된 recip({this._recipe.id})과 OUTPUT({OUTPUT._slots[0]._item._itemid})이 서로다른 값입니다.");
 				OUTPUT._slots[0]._item._itemid = this._recipe.id;
 			}
 			for(int i=0; i<OUTPUT._slots.Count; ++i)

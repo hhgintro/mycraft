@@ -188,7 +188,7 @@ public class StageController : MonoBehaviour {
     public void LoadStage1()
     {
         StageManager.Instance.bundlename = "stage_guitar2";
-        StageManager.Instance.audio = "기타2";
+        StageManager.Instance._audio = "기타2";
         StageManager.Instance.track = "Guitar2_Track";
 
         //UI
@@ -203,7 +203,7 @@ public class StageController : MonoBehaviour {
     public void LoadStage2()
     {
         StageManager.Instance.bundlename = "stage_guitar2_smooth";
-        StageManager.Instance.audio = "어쿠스틱";
+        StageManager.Instance._audio = "어쿠스틱";
         StageManager.Instance.track = "PianoTrack";
 
         //UI

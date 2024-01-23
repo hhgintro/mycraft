@@ -40,7 +40,7 @@ namespace MyCraft
 		//public static Color Slot_Yellow = new Color((float)0xfd / 0xff, (float)0xe1 / 0xff, (float)0x00 / 0xff, (float)0xff / 0xff);
 		//public static Color Slot_Red = new Color((float)0xff / 0xff, (float)0x42 / 0xff, (float)0x42 / 0xff, (float)0xff / 0xff);
 
-		protected void Init()
+		protected override void fnAwake()
 		{
 			//this._panels.Add(new InvenSlotPanel(0, this.slotAmount, this
 			//    , this.transform.FindChild("Slot Panel").gameObject
@@ -233,7 +233,7 @@ namespace MyCraft
 			return true;
 		}
 
-		public virtual void Save(BinaryWriter writer)
+		public override void Save(BinaryWriter writer)
 		{
 			////slot amount
 			//writer.Write(this.slotAmount);
@@ -259,7 +259,7 @@ namespace MyCraft
 
 		}
 
-		public virtual void Load(BinaryReader reader)
+		public override void Load(BinaryReader reader)
 		{
 			////slot amount
 			//int slotAmount = reader.ReadInt32();

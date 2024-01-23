@@ -24,11 +24,22 @@ public class IPlacement : MonoBehaviour
 	}
 	protected State state;
 
+	//건물위치설정할때 "r"눌렀을때 회전하는 각도.
+	protected static Quaternion currentRotation = Quaternion.identity;
+
 	protected virtual void fnStart() { }
 	protected virtual void OnfnDestroy() { }
 	public virtual void ForceCancel() { }
 	public virtual void DestroyBuilding(GameObject target) { }
-	protected virtual void OnKeyDown() { }
+	protected virtual void OnKeyDown()
+	{
+		if (Input.GetKeyDown(KeyCode.R))
+		{
+			float angle = MyCraft.Common.BUILDING_ROTATION_KEYDOWN_ANGLE;   //회전각도(45도-시계방향)
+			if (Input.GetKey(KeyCode.LeftShift)) angle *= -1;//반시계방향
+			currentRotation = Quaternion.Euler(Vector3.up * angle) * currentRotation;
+		}
+	}
 	protected virtual void OnMouseEvent(Define.MouseEvent evt) { }
 
 	//건물이 위치할 곳을 찾고 있을때

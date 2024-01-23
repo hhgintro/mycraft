@@ -19,9 +19,9 @@ namespace MyCraft
 		//public GameObject inventoryItem;
 		public GameObject _inventoryMultiple;
 
-		void Awake()
+		protected override void fnAwake()
 		{
-			base.Init();
+			base.fnAwake();
 
 			//this.database = GetComponent<ItemDatabase>();
 			//this.inventoryPanel = GameObject.Find("Item_Canvas/Inventory/Inventory Panel").gameObject;
@@ -30,7 +30,7 @@ namespace MyCraft
 			//base.canvas_ui = this.transform.GetComponent<CanvasGroup>();
 		}
 
-		void Start()
+		protected override void fnStart()
 		{
 
 			foreach (var tech in Managers.Game.TechBases.database)

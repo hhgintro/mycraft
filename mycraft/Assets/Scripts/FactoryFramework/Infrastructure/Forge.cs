@@ -17,7 +17,7 @@ namespace FactoryFramework
 		MyCraft.Progress PROGRESS       => _progresses[0];
 		MyCraft.Progress FUEL_PROGRESS  => _progresses[1];
 
-		int _recipe = 0;	//생산할 결과물
+		MyCraft.ItemBase _recipe = null;	//생산할 결과물
 
 		public override void fnStart()
 		{
@@ -51,7 +51,7 @@ namespace FactoryFramework
 
 		public override void OnClicked()
 		{
-			MyCraft.Managers.Game.ForgeInvens.LinkInven(this, base._panels, this._progresses, false);
+			MyCraft.Managers.Game.ForgeInvens.LinkInven(this, this._recipe, base._panels, this._progresses, false);
 			//active
 			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(true);
@@ -115,15 +115,16 @@ namespace FactoryFramework
 		//    foreach(int itemid in _outputs.Keys) MyCraft.Managers.Game.AddItem(itemid, _outputs[itemid]);
 		//    _outputs.Clear();
 		//}
-		private void AssignRecipe(int itemid)
+		public override bool AssignRecipe(MyCraft.JSonDatabase jsondata)
 		{
-			if (0 == itemid)
+			MyCraft.ItemBase itembase = (MyCraft.ItemBase)jsondata;
+			if (null == itembase)
 			{
-				Debug.LogError($"Fail: AssignRecipe(itemid:{itemid})");
-				return;
+				Debug.LogError("Fail: AssignRecipe is null");
+				return false;
 			}
 			//같다면...무시
-			if (itemid == this._recipe) return;
+			if (itembase == this._recipe) return false;
 			////다른데...아이템이 남아있으면 무시
 			//if (0 < OUTPUT._slots[0]._item._amount)
 			//{
@@ -131,10 +132,11 @@ namespace FactoryFramework
 			//	return;
 			//}
 			//등록
-			this._recipe = itemid;
-		}
+			this._recipe = itembase;
+			return true;
+        }
 
-		public override void OnProgressCompleted(MyCraft.PROGRESSID id)
+        public override void OnProgressCompleted(MyCraft.PROGRESSID id)
 		{
 			if (MyCraft.PROGRESSID.Item == id)
 			{
@@ -234,8 +236,9 @@ namespace FactoryFramework
 					if (0 != OUTPUT._slots[0]._item._itemid && OUTPUT._slots[0]._item._itemid != inputs[i].output)
 						return false;
 
-					AssignRecipe(inputs[i].output);
-					PROGRESS.SetFillUp(inputs[i].build_time);   //가득채움
+                    AssignRecipe(MyCraft.Managers.Game.ItemBases.FetchItemByID(inputs[i].output));
+
+                    PROGRESS.SetFillUp(inputs[i].build_time);   //가득채움
 					break;
 				}
 			}
@@ -275,9 +278,9 @@ namespace FactoryFramework
 		private bool CreateOutputProducts()
 		{
 			if (base._panels.Count < 3) return false;
-			if (0 != OUTPUT._slots[0]._item._itemid && this._recipe != OUTPUT._slots[0]._item._itemid) return false;
+			if (0 != OUTPUT._slots[0]._item._itemid && this._recipe.id != OUTPUT._slots[0]._item._itemid) return false;
 
-			OUTPUT._slots[0]._item._itemid = this._recipe;
+			OUTPUT._slots[0]._item._itemid = this._recipe.id;
 			OUTPUT._slots[0]._item._amount += 1;
 			//UI
 			this.SetBlock2Inven(OUTPUT._slots[0]._panel, OUTPUT._slots[0]._slot, OUTPUT._slots[0]._item._itemid, OUTPUT._slots[0]._item._amount, OUTPUT._slots[0]._item._fillAmount, false);
@@ -290,7 +293,7 @@ namespace FactoryFramework
 				return false;
 			}
 
-			if(this._recipe != OUTPUT._slots[0]._item._itemid)
+			if(this._recipe.id != OUTPUT._slots[0]._item._itemid)
 			{
 				Debug.LogError($"error: recipe({this._recipe}) is different with output({OUTPUT._slots[0]._item._itemid})");
 				return false;

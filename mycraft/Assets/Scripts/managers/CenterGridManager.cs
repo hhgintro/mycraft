@@ -70,8 +70,7 @@ namespace MyCraft
 			}
 
 			//center-grid위에 마우스가 위치하면 current를 위에 올려 놓는다.
-			pos = Projection(pos);
-
+			pos = MyCraft.Common.Floor(Projection(pos));	//건물위치간격보간
 		}
 		public void Stop()
 		{

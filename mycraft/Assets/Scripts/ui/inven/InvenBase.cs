@@ -1,10 +1,12 @@
 using FactoryFramework;
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 namespace MyCraft
 {
@@ -33,6 +35,25 @@ namespace MyCraft
 		protected Building _building;
 		public static InvenItemData choiced_item = null;     //인벤에서 선택된 개체
 
+		void Awake()
+		{
+			fnAwake();
+		}
+
+		void Start()
+		{
+			fnStart();
+		}
+
+		void OnDisable()
+		{
+			DeactiveIcon();
+		}
+
+		protected virtual void fnAwake() { }
+		protected virtual void fnStart() { }
+
+
 		public virtual bool CheckPutdownGoods(int panel, int slot, int itemid)
 		{
 			if (null == this._building) return true;
@@ -53,10 +74,40 @@ namespace MyCraft
 			return this._panels[panel]._slots[slot];
 		}
 
+		//클릭한 아이템을 이동시킨다.(half가 true이면 반만 보낸다.)
+		public virtual int MoveItemData(InvenBase targetInven, bool half, int itemid, int panel, int slot)
+		{
+			if (null == targetInven) return 0;
 
-		#region LINK_INVEN
-		// destroy : amount가 0이면 파괴
-		public virtual void LinkInven(Building building, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+            ItemData itemData = this._panels[panel]._slots[slot].GetItemData();
+            if (null == itemData) return 0;
+            if (itemid != itemData.database.id) return 0;
+			//이동할 아이템 개수
+            int pickCnt = itemData.amount;
+            if (half) pickCnt = (int)(itemData.amount * 0.5f + 0.5f);    //절반을 가져온다.
+
+            //move
+            float fillAmount = itemData.GetFillAmount();
+            int amount = targetInven.AddItem(itemid, pickCnt, ref fillAmount);
+			SetItem(panel, slot, itemid, itemData.amount - (pickCnt - amount), fillAmount, true);
+			return amount;
+        }
+        //클릭한 아이템과 동일한 아이템 모두를 이동시킨다.(half가 true이면 반만 보낸다.)
+        public virtual void MoveSameItemData(InvenBase targetInven, bool half, int itemid, int panel)
+		{
+			if (null == targetInven) return;
+            
+			for (int s = 0; s < this._panels[panel]._slots.Count; ++s)
+            {
+				int amount = MoveItemData(targetInven, half, itemid, panel, s);
+                if (0 < amount) return; //꽉 찼다.
+            }
+        }
+
+
+        #region LINK_INVEN
+        // destroy : amount가 0이면 파괴(Factory,Lab)
+        public virtual void LinkInven(Building building, JSonDatabase recipe, Dictionary<int/*itemid*/, BuildingItem> inputs, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
 			//HG_TEST: 테스트를 위해서 같은 개체일 경우에도 다시 생성시킵니다.(버그 확인후에는 원상복귀합니다)
 			//같은 개체일 경우에는 생성을 진행하지 않는다.
@@ -73,9 +124,11 @@ namespace MyCraft
 			this.Clear();
 
 
-			//input
-			int p = 0; int s = 0;
+            int p = 0; int s = 0;
 			this._panels[p].SetSlots(inputs.Count);
+            
+
+            //input
 			foreach (int itemid in inputs.Keys)
 				this.SetItem(p, s++, itemid, inputs[itemid]._amount, inputs[itemid]._fillAmount, destroy);
 
@@ -103,8 +156,8 @@ namespace MyCraft
 			}
 		}
 
-		// destroy : amount가 0이면 파괴
-		public virtual void LinkInven(Building building, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
+		// destroy : amount가 0이면 파괴(Forge,Storage,Turret)
+		public virtual void LinkInven(Building building, JSonDatabase recipe, List<BuildingPanel> panels, List<Progress> progresses, bool destroy)
 		{
 			//HG_TEST: 테스트를 위해서 같은 개체일 경우에도 다시 생성시킵니다.(버그 확인후에는 원상복귀합니다)
 			//같은 개체일 경우에는 생성을 진행하지 않는다.
@@ -167,10 +220,10 @@ namespace MyCraft
 			if (this._progress.Count <= id) return;
 			this._progress[id].fillAmount = fillAmount;
 		}
-		#endregion //..LINK_INVEN
+       #endregion //..LINK_INVEN
 
-		#region CreateObject
-		protected virtual GameObject CreateObject(Transform parent, GameObject itemObj)
+        #region CreateObject
+        protected virtual GameObject CreateObject(Transform parent, GameObject itemObj)
 		{
 			//GameObject clone = UnityEngine.Object.Instantiate(itemObj);
 			GameObject clone = Managers.Resource.Instantiate(itemObj, null);
@@ -228,16 +281,16 @@ namespace MyCraft
 			RectTransform rt = (RectTransform)itemData.transform;
 			rt.sizeDelta = Vector2.one * 128f;
 		}
-        public virtual GameObject CreateTechCancel(Transform parent)
-        {
-            return this.CreateObject(parent, Managers.Resource.Load<GameObject>("prefabs/ui/Tech-Cancel"));
+		public virtual GameObject CreateTechCancel(Transform parent)
+		{
+			return this.CreateObject(parent, Managers.Resource.Load<GameObject>("prefabs/ui/Tech-Cancel"));
 
-            //ItemData itemData =
-            //RectTransform rt = (RectTransform)itemData.transform;
-            ////rt.sizeDelta = Vector2.one * 128f;
-        }
+			//ItemData itemData =
+			//RectTransform rt = (RectTransform)itemData.transform;
+			////rt.sizeDelta = Vector2.one * 128f;
+		}
 
-        public virtual void CreateCategory(InvenBase owner, Transform parent
+		public virtual void CreateCategory(InvenBase owner, Transform parent
 			, int panel, int slot, JSonDatabase database)
 		{
 			SkillGroupData itemData = (SkillGroupData)this.CreateObject(owner, parent, panel, slot, database, Managers.Resource.Load<GameObject>("prefabs/ui/Category"));
@@ -302,7 +355,7 @@ namespace MyCraft
 				Color color = itemData.GetComponent<Image>().color;
 				color.a = 1.0f;
 
-                if (amount <= 0)
+				if (amount <= 0)
 				{
 					//이미지를 남길경우에 대한 처리필요
 					if (true == destroy)
@@ -313,9 +366,9 @@ namespace MyCraft
 					color.a = 0.3f;
 				}
 				itemData.SetStackCount(amount, fillAmount, false);
-                itemData.GetComponent<Image>().color = color;
-                return;
-            }
+				itemData.GetComponent<Image>().color = color;
+				return;
+			}
 
 			if(amount <= 0) return;
 
