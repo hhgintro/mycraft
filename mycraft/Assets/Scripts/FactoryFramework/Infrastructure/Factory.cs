@@ -65,12 +65,15 @@ namespace FactoryFramework
 			if (false == base._IsWorking) return;
 
 			for (int i = 0; i < this._progresses.Count; ++i)
-				this._progresses[i].Update();
+				this._progresses[i].Update((0==i)?base.PowerEfficiency:1);  //(0==i):처음(생산품)에만 적용합니다.
 		}
 
-		public override void OnClicked()
-		{
-			if(null == this._recipe)
+        public override bool OnClicked(Building holding)
+        {
+			//전기줄을 연결합니다.
+			if(true == base.OnClicked(holding)) return true;
+
+            if (null == this._recipe)
 			{
 				MyCraft.Managers.Game.SkillInvens.LinkInven(this, _recipe, INPUT, base._panels, this._progresses, false);
 				//active
@@ -82,7 +85,7 @@ namespace FactoryFramework
 				MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 				MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 				MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
-				return;
+				return true;
 			}
 
 			MyCraft.Managers.Game.FactoryInvens.LinkInven(this, this._recipe, INPUT, base._panels, this._progresses, false);
@@ -95,6 +98,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
+			return true;
 		}
 
 		//public void ClearInternalStorage()

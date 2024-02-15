@@ -95,6 +95,12 @@ public class IPlacement : MonoBehaviour
 		}
 	}
 
+	protected virtual bool TryChangeState(State desiredState)
+	{
+		this.state = desiredState;
+		return true;
+	}
+
 	//설치전에는 collider를 disable 시켜둔다.(카메라 왔다갔다 현상)
 	public virtual void SetEnable_1(LogisticComponent logistic, bool enable)
 	{

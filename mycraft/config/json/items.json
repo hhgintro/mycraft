@@ -626,7 +626,7 @@
 
   {
     "id": 1400,
-    "type": "FloorItemBase",
+    "type": "FootingItemBase",
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -644,7 +644,7 @@
  
   {
     "id": 1410,
-    "type": "FloorItemBase",
+    "type": "FootingItemBase",
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -662,7 +662,7 @@
 
   {
     "id": 1420,
-    "type": "FloorItemBase",
+    "type": "FootingItemBase",
     "learn": true,
     "cost": {
       "time": 0.5,
@@ -678,8 +678,96 @@
     "scaleOnBelt": 0.2
   },
 
+  {
+    "id": 1501,
+    "type": "PowerPoleItemBase",
+    "learn": true,
+    "cost": {
+      "time": 0.5,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/power_pole_icon",
+    "prefab": "buildings/Power Pole",
+    "scaleOnBelt": 1
+  },
 
+  {
+    "id": 1502,
+    "type": "PowerPoleItemBase",
+    "learn": true,
+    "cost": {
+      "time": 0.5,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/power_tower_icon",
+    "prefab": "buildings/Power Tower",
+    "scaleOnBelt": 1
+  },
 
+ {
+    "id": 1521,
+    "type": "SolarPanelItemBase",
+    "learn": true,
+    "cost": {
+      "time": 0.5,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/solar_icon",
+    "prefab": "buildings/Solar Panel",
+    "scaleOnBelt": 1
+  },
+
+ {
+    "id": 1522,
+    "type": "WindTurbineItemBase",
+    "learn": true,
+    "cost": {
+      "time": 0.5,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/wind_turbine_icon",
+    "prefab": "buildings/Wind Turbine",
+    "scaleOnBelt": 1
+  },
+
+   {
+    "id": 1601,
+    "type": "RailItemBase",
+    "speed": 1,
+    "learn": true,
+    "cost": {
+      "time": 0.5,
+      "items": [
+        {"itemid": 2010,"amount": 2}
+      ],
+      "outputs": 1
+    },
+    "state": {"power": 1,"defence": 2,"vitality": 10},
+    "stackable": 100,
+    "icon": "Textures/ui/straight-rail",
+    "prefab": "Splines/Junction/Tracks",
+    "scaleOnBelt": 0.6
+  },
 
   {
     "id": 2010,

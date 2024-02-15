@@ -20,7 +20,7 @@ namespace CompleteProject
         {
 #if !MOBILE_INPUT
             // Create a layer mask for the floor layer.
-            floorMask = LayerMask.GetMask ("Floor");
+            floorMask = LayerMask.GetMask ("Footing");
 #endif
 
             // Set up references.

@@ -24,6 +24,7 @@ namespace FactoryFramework
         //How many belt segments fit in one unity unit
         public float BELT_SEGMENTS_PER_UNIT = 4f;
         //Turn radius for horizontal belt arcs. This also controls the control point spacing for spline paths
+        //1f딱 떨어지는 수를 넣지 마라. LOOK at Zero라는 메시지를 보게된다.(우클릭으로 삭제도 안됨)
         public float BELT_TURN_RADIUS = 0.75f;
         //Turn radius for vertical belt arcs
         public float BELT_RAMP_RADIUS = 0.65f;
@@ -41,7 +42,7 @@ namespace FactoryFramework
         public bool DRAW_CABLES_FOR_AOE = true;
         public Material CABLE_MATERIAL;
         public int CABLE_RESOLUTION = 5;
-        public float CABLE_DROOP = 0.25f;
+        public float CABLE_DROOP = 0.01f;       //전기줄 밑으로 처짐(0:일직선)
         public float CABLE_THICKNESS = 0.15f;
 
         public static GlobalLogisticsSettings instance;

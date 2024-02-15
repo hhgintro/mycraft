@@ -12,8 +12,6 @@ using Unity.Mathematics;
 using Unity.Collections;
 using UnityEngine.Windows;
 //using MyCraft;
-using UnityEngine.UIElements;
-using static UnityEditor.Experimental.GraphView.Port;
 
 
 #if UNITY_EDITOR
@@ -268,8 +266,7 @@ namespace FactoryFramework
 				items[x] = item;
 
 				Transform t = item._model;
-				float pos = item._position;
-				float percent = pos / _path.GetTotalLength();
+				float percent = item._position / _path.GetTotalLength();
 				Vector3 worldPos = _path.GetWorldPointFromPathSpace(percent) + _distanceAboveBelt;
 				if (float.IsNaN(worldPos.x) || float.IsNaN(worldPos.y) || float.IsNaN(worldPos.z))
 					continue;	//AABB의 원인

@@ -3,7 +3,7 @@ using Dreamteck.Splines.Examples;
 using MyCraft;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.AssetImporters;
+using System.Linq;
 using UnityEngine;
 
 public class TestLoop : MonoBehaviour
@@ -42,27 +42,71 @@ public class TestLoop : MonoBehaviour
 		//AddPoint(new Vector3(7, 9, 78), Vector3.up);
 		//splineComputer.Close();
 
-		AddPoint_1(testLoop, new Vector3(30.3f, 3.89f, 54.3f), -1, subLoop, 3);	//junction(subLoop의 3번과 연결)
-		AddPoint_1(testLoop, new Vector3(21.8f, 5.6f, 69.0f));
-		AddPoint_1(testLoop, new Vector3(12.8f, 8.5f, 74.0f));
-		AddPoint_1(testLoop, new Vector3(4.7f, 11.7f, 68.8f));
-		AddPoint_1(testLoop, new Vector3(6.3f, 16.0f, 56.0f));
-		AddPoint_1(testLoop, new Vector3(15.4f, 15.0f, 47.6f), 3);	//point 중간삽입
-		AddPoint_1(testLoop, new Vector3(26.6f, 11.0f, 53.2f));
-		AddPoint_1(testLoop, new Vector3(32.5f, 4.78f, 73.16f), -1, subLoop, 4);
+		//AddPoint_1(testLoop, new Vector3(30.3f, 3.89f, 54.3f), -1, subLoop, 3);	//junction(subLoop의 3번과 연결)
+		//AddPoint_1(testLoop, new Vector3(21.8f, 5.6f, 69.0f));
+		//AddPoint_1(testLoop, new Vector3(12.8f, 8.5f, 74.0f));
+		//AddPoint_1(testLoop, new Vector3(4.7f, 11.7f, 68.8f));
+		//AddPoint_1(testLoop, new Vector3(6.3f, 16.0f, 56.0f));
+		//AddPoint_1(testLoop, new Vector3(15.4f, 15.0f, 47.6f), 3);	//point 중간삽입
+		//AddPoint_1(testLoop, new Vector3(26.6f, 11.0f, 53.2f));
+		//AddPoint_1(testLoop, new Vector3(32.5f, 4.78f, 73.16f), -1, subLoop, 4);
+
+		//AddPoint_1(testLoop, new Vector3(28.16f, 3.32f, 67.10f));
+		//AddPoint_1(testLoop, new Vector3(10.36f, 5.90f, 55.07f));
+		//AddPoint_1(testLoop, new Vector3(-12.49f, 3.37f, 44.88f));
 
 		Debug.Log($"{testLoop.name} length: {testLoop.CalculateLength()}");
 	}
 
-	//// Update is called once per frame
-	//void Update()
-	//{
-	//	if(Input.GetMouseButtonDown(0))
-	//	{
-	//		Vector3 pos = testLoop.GetPoint(3).position + Vector3.up;
-	//		testLoop.SetPointPosition(3, pos);
-	//	}
-	//}
+	// Update is called once per frame
+	void Update()
+	{
+		if (Input.GetMouseButtonDown(0))
+		{
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit[] hits = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).ToArray();
+			//RaycastHit[] hits = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE);
+			foreach (RaycastHit hit in hits)
+			{
+				if (hit.collider.TryGetComponent<Terrain>(out Terrain terrain))
+				{
+					//중간에 삽입
+					if (Input.GetKey(KeyCode.LeftShift))
+					{
+						double percent = testLoop.spline.Project(hit.point);
+						Vector3 pos = testLoop.spline.EvaluatePosition(percent);
+						//SplineSample sample = testLoop.spline.Evaluate(percent);
+						//Debug.Log($"{hit.transform.name}/{percent} => {pos} : sample({sample.position})");
+						Debug.Log($"{percent} => hit:{hit.point} / spline:{pos}");
+
+						for (int i = 0; i < testLoop.pointCount; ++i)
+						{
+							double tmp = testLoop.GetPointPercent(i);
+							Debug.Log($"	index({i}): {tmp} percent");
+						}
+
+						for (int i = 0; i < testLoop.pointCount; ++i)
+						{
+							double tmp = testLoop.GetPointPercent(i);
+							if (percent < tmp)
+							{
+								AddPoint_1(testLoop, pos, i);  //point 중간삽입
+								Debug.Log($"new index({i}): {percent} percent");
+								break;
+							}
+						}
+					}
+					//끝에 계속 연결
+					else
+					{
+						Vector3 pos = MyCraft.Common.Floor(hit.point + Vector3.up);  //건물위치간격보간
+						AddPoint_1(testLoop, pos);
+					}
+				}
+				//if (hit.transform.tag != "Safe-Footing")  //안전발판
+			}
+		}
+	}
 
 	void AddPoint(SplineComputer sourceComputer, Vector3 point, int sourceIndex = -1, SplineComputer destComputer = null, int destIndex = -1)
 	{
@@ -74,7 +118,7 @@ public class TestLoop : MonoBehaviour
 		//+1: point가 중간에 들어갈꺼를 예상해서.(끝에 들어갈 경우는 continue에서 빠진다.)
 		for (int i = 0; i < points.Length + 1; ++i)
 		{
-			if (sourceIndex == i) continue;//이자리는 다른것으로 채울예정이므로 비워둔다.
+			if (sourceIndex == i) continue;//이 자리는 신규point로 채울예정이므로 비워둔다.
 			temp[i] = points[pos++];
 		}
 		//new point

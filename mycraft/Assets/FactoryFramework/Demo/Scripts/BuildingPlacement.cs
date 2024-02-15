@@ -5,6 +5,7 @@ using UnityEngine;
 using FactoryFramework;
 using MyCraft;
 
+
 public class BuildingPlacement : IPlacement
 {
 	//[Header("Building Prefabs")]
@@ -22,10 +23,13 @@ public class BuildingPlacement : IPlacement
 	//drill의 경우 아래 자원(철광석,돌,구리광석)이 있어야 설치가 가능합니다.
 	private bool _requiresResourceDepoist = false;
 
-	// building placement variables to track
+	//건물을 세울때 건물이 회전해 버리는 것을 막는다.(회전이 적용되기까지 delay적용)
 	private Vector3 mouseDownPos;
 	private float mouseHeldTime = 0f;
 	private float secondsHoldToRotate = .333f;
+
+	//outline이 적용중인 buiding.
+	private Building _outlineBuilding;
 
 	// we'll want to trigger connect whenever we place a new thing nearby
 	private List<PowerGridComponent> aoePowerConnections = new List<PowerGridComponent>();
@@ -63,17 +67,21 @@ public class BuildingPlacement : IPlacement
 
 	public override void ForceCancel()
 	{
-		Debug.Log("ForceCancel");
+		Debug.Log("ForceCancel BuildingPlacement");
 		if (current != null)
 		{
-			////재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
-			////  우선 취소할때 설정해 준다.
-			////  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
-			////ChangeMatrerial(originalMaterial);
-			//current.GetComponent<LogisticComponent>().SetMaterials(originalMaterial);
-			//current.GetComponent<LogisticComponent>().SetEnable_2(true);
+			//전봇대
+			if(current.TryGetComponent<LogisticComponent>(out LogisticComponent component))
+				component.Clear();
 
-			MyCraft.Managers.Resource.Destroy(current.gameObject);
+            ////재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
+            ////  우선 취소할때 설정해 준다.
+            ////  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
+            ////ChangeMatrerial(originalMaterial);
+            //current.GetComponent<LogisticComponent>().SetMaterials(originalMaterial);
+            //current.GetComponent<LogisticComponent>().SetEnable_2(true);
+
+            MyCraft.Managers.Resource.Destroy(current.gameObject);
 		}
 
 		current = null;
@@ -115,6 +123,32 @@ public class BuildingPlacement : IPlacement
 
 		switch (evt)
 		{
+			//*
+			case Define.MouseEvent.L_Press:
+				{
+					if (State.Start == base.state)
+					{
+						//pole을 들고있는데 pole을 눌렀을때는 END로 넘어가지 않는다(전선을 연결하기 위해)
+						if (current.TryGetComponent<PowerPole>(out PowerPole pole))
+						{
+							Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+							RaycastHit hit = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE).OrderBy(h => h.distance).FirstOrDefault();
+							//foreach (RaycastHit hit in Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE))
+							if (null == hit.collider) break;
+
+							//if (hit.collider.gameObject.TryGetComponent<PowerPole>(out PowerPole _))
+							//	break;
+							if (hit.collider.gameObject.TryGetComponent<Building>(out Building _))
+							{
+								if (hit.transform.tag != "Safe-Footing")  //안전발판
+									break;
+							}
+						}
+						// try to change state to rotate the building
+						if(ValidLocation())	TryChangeState(State.End);
+					}
+				} break;
+			//*/
 			case Define.MouseEvent.L_Click:
 				{
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -124,16 +158,14 @@ public class BuildingPlacement : IPlacement
 
 					if (hit.collider.gameObject.TryGetComponent<Socket>(out Socket socket))
 					{
-						if (socket._logisticComponent.TryGetComponent<Building>(out Building building1))
-						{
-							building1.OnClicked();
-							break;
-						}
+						socket.OnClicked(current?.GetComponent<Building>());
+						break;
 					}
 					if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
 					{
 						//Debug.Log($"클릭:{building.name}");
-						building.OnClicked();
+						building.OnClicked(current?.GetComponent<Building>());
+						break;
 					}
 				} break;
 
@@ -141,7 +173,7 @@ public class BuildingPlacement : IPlacement
 				{
 					LayerMask m;
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-					int layerMask = LayerMask.GetMask(new string[] { "Building", "Conveyor", "Floor"});
+					int layerMask = LayerMask.GetMask(new string[] { "Building", "Conveyor", "Footing"});
 					RaycastHit hit = Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE, layerMask).OrderBy(h => h.distance).FirstOrDefault();
 					if (null == hit.collider)
 					{
@@ -152,12 +184,6 @@ public class BuildingPlacement : IPlacement
 							MyCraft.Managers.Game.DestoryProcess.gameObject.SetActive(false);
 						} break;
 					}
-					////powerGrid
-					//if (hit.collider.TryGetComponent(out PowerGridComponent pgc))
-					//{
-					//	//MyCraft.Managers.Resource.Destroy(pgc.gameObject);
-					//	//break;
-					//}
 					//building
 					if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
 					{
@@ -192,19 +218,13 @@ public class BuildingPlacement : IPlacement
                     //foreach (RaycastHit hit in Physics.RaycastAll(ray, Common.MAX_RAY_DISTANCE))
                     if (null == hit.collider) break;
 
+					GameObject go = null;
                     if (hit.collider.gameObject.TryGetComponent<Socket>(out Socket socket))
-					{
-						OutLine(socket._logisticComponent.gameObject);
-						break;
-                    }
-                    if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
-                    {
-                        OutLine(hit.collider.gameObject);
-                        break;
-                    }
-					OutLine(null);
-                }
-                break;
+						go = socket._logisticComponent.gameObject;
+                    else if (hit.collider.gameObject.TryGetComponent<Building>(out Building building))
+						go = hit.collider.gameObject;
+					OutLine(go);
+                } break;
 		}//..switch (evt)
 	}
 
@@ -218,7 +238,6 @@ public class BuildingPlacement : IPlacement
 		base.SetEnable_1(logistic, enable);
 	}
 
-	Building _outlineBuilding;
 	void OutLine(GameObject go, bool bOnOff = false)
 	{
 		if (null == go)
@@ -236,10 +255,9 @@ public class BuildingPlacement : IPlacement
         }
 
         if (_outlineBuilding == building) return;
-        //old
+
         _outlineBuilding?.OutLine(false);   //old
-		//new
-		building.OutLine(true);
+		building.OutLine(true);				//new
 		_outlineBuilding = building;
     }
 
@@ -264,7 +282,7 @@ public class BuildingPlacement : IPlacement
 		}
 	}
 
-	private bool TryChangeState(State desiredState)
+	protected override bool TryChangeState(State desiredState)
 	{
 		switch (desiredState)
 		{
@@ -282,15 +300,13 @@ public class BuildingPlacement : IPlacement
 					// trigger event
 					startPlacementEvent?.Raise();
 					return true;
-				}
-				break;
+				} break;
 
 			case State.End:
 				{
 					base.state = desiredState;
 					return true;
-				}
-				break;
+				} break;
 
 			case State.None:
 				{
@@ -335,8 +351,7 @@ public class BuildingPlacement : IPlacement
 					current = null;
 					Managers.CenterGrid.Stop();
 					return true;
-				}
-				break;
+				} break;
 		}//..switch(desiredState)
 		return false;
 	}
@@ -358,7 +373,7 @@ public class BuildingPlacement : IPlacement
 				//Debug.Log($"collider: {c.tag}");
 				//if (c.CompareTag("Building"))
 				if(c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
-					|| c.transform.gameObject.layer == LayerMask.NameToLayer("Floor"))
+					|| c.transform.gameObject.layer == LayerMask.NameToLayer("Footing"))
 				{
 					// colliding something!
 					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
@@ -397,7 +412,8 @@ public class BuildingPlacement : IPlacement
 
 		//current = Instantiate(prefab);
 		current = MyCraft.Managers.Resource.Instantiate(prefab);    //HG[2023.06.01]테스트필요
-		current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
+		//current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
+		current.transform.parent = MyCraft.Common.ParentPool(this.transform, prefab.name);
 		//#if UNITY_STANDALONE
 		//	번호를 부여했더니, 이름이 달라져서 개체가 (pool에 저장되지 못하고)삭제되어 버린다.
 		//	디버깅용도로만 사용할 것
@@ -415,11 +431,15 @@ public class BuildingPlacement : IPlacement
 		if (current.TryGetComponent(out PowerGridComponent pgc))
 		{
 			pgc.enabled = false;
-		}
+			if (null == pgc.grid)
+				pgc.Init();
 
-		// init material to ghost
-		//ChangeMatrerial(greenPlacementMaterial);
-		current.GetComponent<LogisticComponent>().SetMaterials(greenGhostMat);
+
+        }
+
+        // init material to ghost
+        //ChangeMatrerial(greenPlacementMaterial);
+        current.GetComponent<LogisticComponent>().SetMaterials(greenGhostMat);
 		return current;
 	}
 
@@ -514,21 +534,27 @@ public class BuildingPlacement : IPlacement
 		//건물에만 적용(안전발판,계단은 제외)
 		DrawCenterGrid(bDrawCenterGrid, ref groundPos);
 
-
 		//Debug.Log($"{current.name}:({groundPos})");
 		current.transform.position = groundPos;
 		current.transform.forward = groundDir;
 
+		//전봇대: 움직일때...전선줄도 따라 움직여야.
+		if (current.TryGetComponent(out PowerGridComponent pgc))
+		{
+			if (0 < pgc.Connections.Count)
+				CableRendererManager.instance?.UpdateCable(pgc, pgc.Connections.ElementAt(0));
+		}
 
 		bool valid = ValidLocation();
-		// left mouse button to try to place building
-		if (Input.GetMouseButtonDown(0) && valid)
-		{
-			// try to change state to rotate the building
-			if (TryChangeState(State.End))
-				mouseDownPos = groundPos;
-		}
-	}
+        //L_Press로 이동함
+        //// left mouse button to try to place building
+        //if (Input.GetMouseButtonDown(0) && valid)
+        //{
+        //	// try to change state to rotate the building
+        //	if (TryChangeState(State.End))
+        //		mouseDownPos = groundPos;
+        //}
+    }
 
 	//건물의 방향을 결정할때
 	protected override void HandleEndState()
@@ -560,11 +586,13 @@ public class BuildingPlacement : IPlacement
 						Quaternion targetRotation = Quaternion.Euler(Vector3.up * -Common.BUILDING_ROTATION_MOUSE_ANGLE) * currentRotation;
 						current.transform.rotation = targetRotation;
 					}
+					break;
 				}
 			}
 			current.transform.position = mouseDownPos;
 		}
 
+		//L_Click으로 이동함
 		if (Input.GetMouseButtonUp(0))
 		{
 			TryChangeState(State.None);

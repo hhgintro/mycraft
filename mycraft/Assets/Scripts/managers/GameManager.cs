@@ -21,6 +21,7 @@ namespace MyCraft
 
 		//system창
 		private GameObject _systemmenu;
+		private GameObject _placement;
 		//ChatManager _chat_manager;
 		
 		//json파일 로드정보
@@ -45,9 +46,16 @@ namespace MyCraft
 
 		private ThirdPersonController _player;
 
+		private GameObject _powersymbol;
+		private GameObject _powerGrid;
+		private GameObject _powerCable;
+
+
 
 		//public SystemMenuManager SystemMenu	{ get { if (null == _systemmenu)	_systemmenu = GameObject.FindObjectOfType(typeof(SystemMenuManager)) as SystemMenuManager; return _systemmenu; } }
 		public GameObject SystemMenu			{ get { if (null == _systemmenu)	_systemmenu = GameObject.Find("Canvas").transform.GetChild(4).gameObject; return _systemmenu; } }
+		public GameObject Placement				{ get { if (null == _placement)		_placement = GameObject.Find("Placement"); return _placement; } }
+
 		public JSonParser<ItemBase> ItemBases	{ get { if (null == _itembase)		_itembase = new JSonParser<ItemBase>(Path.Combine(Application.dataPath, "../config/json/items.json")); return _itembase; } }
 		public JSonParser<TechBase> TechBases	{ get { if (null == _techbase)		_techbase = new JSonParser<TechBase>(Path.Combine(Application.dataPath, "../config/json/technology.json")); return _techbase; } }
 		public JSonParser<Category> Categories	{ get { if (null == _categories)	_categories = new JSonParser<Category>(Path.Combine(Application.dataPath, "../config/json/categories.json")); return _categories; } }
@@ -69,6 +77,9 @@ namespace MyCraft
 
 		public ThirdPersonController Player		{ get { if (null == _player)		_player = GameObject.FindObjectOfType(typeof(ThirdPersonController)) as ThirdPersonController; return _player; } }
 
+		public GameObject PowerSymbol			{ get { if (null == _powersymbol)	_powersymbol = Managers.Resource.Load<GameObject>("prefabs/buildings/PowerSymbol/PowerSymbolQuad"); return _powersymbol; } }
+		public GameObject PowerGrid				{ get { if (null == _powerGrid)		_powerGrid = Managers.Resource.Load<GameObject>("prefabs/buildings/Power Grid"); return _powerGrid; } }
+		public GameObject PowerCable			{ get { if (null == _powerCable)	_powerCable = Managers.Resource.Load<GameObject>("prefabs/buildings/Power Cable"); return _powerCable; } }
 
 		//저장경로
 		public string _save_dir = Application.dataPath + "/../save";
@@ -81,7 +92,8 @@ namespace MyCraft
 		//FactoryFramework
 		private BuildingPlacement _buildingPlacement;
 		private ConveyorPlacement _conveyorPlacement;
-		private GameObject _choiced_building = null;
+		private RailPlacement _railPlacement;
+		private GameObject _holding = null;	//들고있는 개체
 
 		public void Init()
 		{
@@ -113,10 +125,11 @@ namespace MyCraft
 			_player = null;
 		}
 
-		public void InitPlacement(BuildingPlacement building, ConveyorPlacement conveyor)
+		public void InitPlacement(BuildingPlacement building, ConveyorPlacement conveyor, RailPlacement rail)
 		{
-			_buildingPlacement = building;
-			_conveyorPlacement = conveyor;
+			_buildingPlacement	= building;
+			_conveyorPlacement	= conveyor;
+			_railPlacement		= rail;
 
 			//building
 			_buildingPlacement.finishPlacementEvent.OnEvent -= FinishPlaceBuilding;
@@ -124,57 +137,65 @@ namespace MyCraft
 			//conveyor
 			_conveyorPlacement.finishPlacementEvent.OnEvent -= FinishPlaceBuilding;
 			_conveyorPlacement.finishPlacementEvent.OnEvent += FinishPlaceBuilding;
+			////rail
+			//_railPlacement.finishPlacementEvent.OnEvent -= FinishPlaceBuilding;
+			//_railPlacement.finishPlacementEvent.OnEvent += FinishPlaceBuilding;
 		}
 
+		//설치할 건물을 생성합니다.
 		public void PlaceBuilding(InvenItemData item)
 		{
 			if (null == item || null == item.database || item.amount <= 0) return;
 			GameObject prefab = item.database.prefab;
 			if (null == prefab) return;
-			if (null != _choiced_building) return;
+			if (null != _holding) return;
 
 			if (prefab.TryGetComponent(out FactoryFramework.Conveyor _))
 			{
-				_choiced_building = _conveyorPlacement.StartPlacingConveyor(prefab);
-				_choiced_building.GetComponent<FactoryFramework.Conveyor>()._itembase = (ItemBase)item.database;
+				_holding = _conveyorPlacement.StartPlacingConveyor(prefab);
+				_holding.GetComponent<FactoryFramework.Conveyor>()._itembase = (ItemBase)item.database;
 			}
-			//else if (prefab.TryGetComponent(out FactoryFramework.Driller _))
-			//{
-			//	_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, true);
-			//	_choiced_building.GetComponent<FactoryFramework.Driller>()._itembase = (ItemBase)item.database;
-			//}
+			else if (prefab.TryGetComponent(out FactoryFramework.Rail _))
+			{
+				_holding = _railPlacement.StartPlacingRail(prefab);   //자원체크
+				_holding.GetComponent<FactoryFramework.Rail>()._itembase = (ItemBase)item.database;
+			}
+			else if (prefab.TryGetComponent(out FactoryFramework.Driller _))
+			{
+				_holding = _buildingPlacement.StartPlacingBuilding(prefab, true);	//자원체크
+				_holding.GetComponent<FactoryFramework.Driller>()._itembase = (ItemBase)item.database;
+			}
 			else if (prefab.TryGetComponent(out FactoryFramework.LogisticComponent _))
 			{
-				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, false);
-				_choiced_building.GetComponent<FactoryFramework.LogisticComponent>()._itembase = (ItemBase)item.database;
+				_holding = _buildingPlacement.StartPlacingBuilding(prefab, false);
+				_holding.GetComponent<FactoryFramework.LogisticComponent>()._itembase = (ItemBase)item.database;
 			}
 			else if (prefab.TryGetComponent(out FactoryFramework.PowerGridComponent _))
-				_choiced_building = _buildingPlacement.StartPlacingBuilding(prefab, false);
+				_holding = _buildingPlacement.StartPlacingBuilding(prefab, false);
 		}
 		public void DestoryBuilding()
 		{
-			if (null == _choiced_building) return;
+			if (null == _holding) return;
 
-			if (_choiced_building.TryGetComponent(out FactoryFramework.Conveyor _))
+			if (_holding.TryGetComponent(out FactoryFramework.Conveyor _))
 				_conveyorPlacement.ForceCancel();
-			else if (_choiced_building.TryGetComponent(out FactoryFramework.Driller _))
+			else if (_holding.TryGetComponent(out FactoryFramework.Driller _))
 				_buildingPlacement.ForceCancel();
-			else if (_choiced_building.TryGetComponent(out FactoryFramework.PowerGridComponent _) || _choiced_building.TryGetComponent(out FactoryFramework.LogisticComponent _))
+			else if (_holding.TryGetComponent(out FactoryFramework.PowerGridComponent _) || _holding.TryGetComponent(out FactoryFramework.LogisticComponent _))
 				_buildingPlacement.ForceCancel();
-			_choiced_building = null;
+			_holding = null;
 		}
 
 		private void FinishPlaceBuilding()
 		{
-			if (_choiced_building.TryGetComponent<LogisticComponent>(out LogisticComponent component))
+			if (_holding.TryGetComponent<LogisticComponent>(out LogisticComponent component))
 			{
 				component.SetEnable_2(true);
 				Debug.Log($"{component.name} enable:true");
 			}
-
-
-			Debug.Log($"{_choiced_building.name} 완공");
-			_choiced_building = null;   //재할당을 받기위해 null로 설정한다.
+			Debug.Log($"{_holding.name} 완공");
+			GameObject finishBuilding = _holding;	//막 완공된 건물
+			_holding = null;   //재할당을 받기위해 null로 설정한다.
 
 			//각 이벤트 위치어서 개수를 미리 정산해 줍니다.
 			//InvenBase.choiced_item.AddStackCount(-1, false);
@@ -185,7 +206,20 @@ namespace MyCraft
 				return;
 			}
 			//아이템의 수량이 남아 있다면, prefab을 생성해 줍니다.
-			if (null != InvenBase.choiced_item) this.PlaceBuilding(InvenBase.choiced_item);
+			if (null != InvenBase.choiced_item)
+			{
+				this.PlaceBuilding(InvenBase.choiced_item);
+				//방금 완공된 건물이 전봇대이면...
+				if(finishBuilding.TryGetComponent<PowerPole>(out PowerPole pole))
+				{
+					if (finishBuilding.TryGetComponent<PowerGridComponent>(out PowerGridComponent source))
+					{
+						//위치를 맞춰준다.(생성할때-전기줄이 생겼다없어져서(좌표:0,0,0))
+						_holding.transform.position = source.transform.position;
+						source.Connect(_holding?.GetComponent<PowerGridComponent>());
+					}
+				}
+			}
 		}
 
 		//소유한 아이템 개수
@@ -330,6 +364,16 @@ namespace MyCraft
 
 
 				Managers.Game.Player.Save(bw);
+
+				//전기줄
+				bw.Write(CableRendererManager.instance.Cables.Count);
+				foreach(var key in CableRendererManager.instance.Cables.Keys)
+				{
+					//Debug.Log($"key:{key.Item1}/{key.Item2}");
+					bw.Write(key.Item1.GUID.ToString());
+					bw.Write(key.Item2.GUID.ToString());
+				}
+
 				fs.Close();
 			}
 		}
@@ -376,7 +420,8 @@ namespace MyCraft
 						continue;
 					}
 					GameObject instantiated = Managers.Resource.Instantiate(prefab);    //HG[2023.06.01]테스트필요
-					instantiated.transform.parent = _buildingPlacement.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = _buildingPlacement.transform } }).transform;
+					//instantiated.transform.parent = _buildingPlacement.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = _buildingPlacement.transform } }).transform;
+					instantiated.transform.parent = MyCraft.Common.ParentPool(_buildingPlacement.transform, prefab.name);
 
 					////conveyor는 별도로 빼서 아래에서 처리한다. connect처리때문에.
 					//if (instantiated.TryGetComponent<Conveyor>(out Conveyor conveyor))
@@ -394,8 +439,7 @@ namespace MyCraft
 						_conveyorPlacement.SetEnable_1(conveyor, true);
 
                         conveyors.Add(conveyor);
-						//conveyor랑 연결될 buildings GUID
-						lookup.Add(conveyor.GUID, conveyor);
+						lookup.Add(conveyor.GUID, conveyor);	//conveyor랑 연결될 conveyor GUID
 						continue;
 					}
 
@@ -409,8 +453,7 @@ namespace MyCraft
                         _buildingPlacement.SetEnable_1(building, true);
 
                         //Debug.Log($"lookup:({lookup.Count})[{building.name}:{building.GUID}]");
-                        //conveyor랑 연결될 buildings GUID
-                        lookup.Add(building.GUID, building);
+                        lookup.Add(building.GUID, building);	//conveyor랑 연결될 buildings GUID
                         //if(false==lookup.ContainsKey(building.GUID))
                         //	lookup.Add(building.GUID, building);
                         //else
@@ -422,6 +465,16 @@ namespace MyCraft
 				}
 
 				Managers.Game.Player.Load(reader);
+
+				//전기줄
+				int cnt = reader.ReadInt32();
+				for (int i = 0; i < cnt; ++i)
+				{
+					var connectA = lookup[new Guid(reader.ReadString())].GetComponent<PowerGridComponent>();
+					var connectB = lookup[new Guid(reader.ReadString())].GetComponent<PowerGridComponent>();
+					connectA.Connect(connectB);
+				}
+
 				fs.Close();
 
 				foreach( var conveyor in conveyors)

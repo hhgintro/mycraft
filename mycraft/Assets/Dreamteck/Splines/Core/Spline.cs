@@ -149,8 +149,7 @@ namespace Dreamteck.Splines {
         /// <param name="to">Raycast to [0-1] default: 1f</param>
         /// <param name="hitTriggers">Should hit triggers? (not supported in 5.1)</param>
         /// <returns></returns>
-        public bool Raycast(out RaycastHit hit, out double hitPercent, LayerMask layerMask, double resolution = 1.0, double from = 0.0, double to = 1.0, QueryTriggerInteraction hitTriggers = QueryTriggerInteraction.UseGlobal
-        )
+        public bool Raycast(out RaycastHit hit, out double hitPercent, LayerMask layerMask, double resolution = 1.0, double from = 0.0, double to = 1.0, QueryTriggerInteraction hitTriggers = QueryTriggerInteraction.UseGlobal)
         {
             resolution = DMath.Clamp01(resolution);
             from = DMath.Clamp01(from);

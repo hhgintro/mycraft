@@ -82,16 +82,16 @@ namespace MyCraft
 		//	this.InitProgress();
 		//}
 
-		public void Update()
+		public void Update(float PowerEfficiency)
 		{
-			if(true == _bReverse)	ReverseUpdate();
-			else					ForwardUpdate();
+			if(true == _bReverse)	ReverseUpdate(PowerEfficiency);
+			else					ForwardUpdate(PowerEfficiency);
 			if (null != this._inven) this._inven.SetProgress((int)this._id, this._fillAmount);
 		}
 
-		void ReverseUpdate()
+		void ReverseUpdate(float PowerEfficiency)
 		{
-			this._fillAmount -= Time.deltaTime / _time;
+			this._fillAmount -= Time.deltaTime * PowerEfficiency / _time;
 			if (this._fillAmount <= 0f)
 			{
 				//this._fillAmount = 1f;	//(여기서 채우지 않고)아이템 소모할때 다시 채워준다.
@@ -108,9 +108,9 @@ namespace MyCraft
 			//	this._owner?.OnProgressReaching(this._id);  //중간정산 통보합니다.(_maxMultiple 회수만큼 통보한다.)
 			//}
 		}
-		void ForwardUpdate()
+		void ForwardUpdate(float PowerEfficiency)
 		{
-			this._fillAmount += Time.deltaTime / _time;
+			this._fillAmount += Time.deltaTime * PowerEfficiency / _time;
 			if (1f <= this._fillAmount)
 			{
 				//this._fillAmount = 0f;	//(여기서 채우지 않고)아이템 소모할때 다시 채워준다.

@@ -22,7 +22,8 @@ namespace MyCraft
         public void Clear()
         {
             this._recipe = null;
-            this.transform.GetChild(0).gameObject.SetActive(false);
+            if (0 < this.transform.childCount)  //multiple은 background가 없으니 예외처리가 필요.
+                this.transform.GetChild(0).gameObject.SetActive(false);
         }
         public ItemData GetItemData()
         {

@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4731625868044808567
 Transform:
   m_ObjectHideFlags: 0
@@ -115,10 +115,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5913016424837802666}
+  - component: {fileID: 8203081795620497907}
   - component: {fileID: 5913016424837802667}
   - component: {fileID: 5913016424837802664}
+  - component: {fileID: 5471320793048439619}
   - component: {fileID: -4937876293839331760}
-  - component: {fileID: -5171213277805563089}
   - component: {fileID: 2162860348072681307}
   - component: {fileID: -70135365906084404}
   - component: {fileID: 4137706136649535790}
@@ -145,6 +146,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8203081795620497907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5913016424837802670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddc00b8c2d046774894f63a5dbbaa04f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputSockets: []
+  outputSockets: []
 --- !u!33 &5913016424837802667
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -195,35 +210,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &-4937876293839331760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5913016424837802670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc615501dd0e548428dbda0b216b4ece, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 0}
-  basePowerDraw: 0
-  connectionPoint: {x: 0, y: 5.35, z: 0}
-  useConnectionRadius: 1
-  connectionRadius: 15
-  radiusVisual: {fileID: 4731625868044808567}
-  OnDisconnect:
-    m_PersistentCalls:
-      m_Calls: []
-  OnRemoveConnection:
-    m_PersistentCalls:
-      m_Calls: []
-  OnAddConnection:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!64 &-5171213277805563089
-MeshCollider:
+--- !u!65 &5471320793048439619
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -240,10 +228,36 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5324164318256617876, guid: 438fcfbe5bd925740a58eeeacdcdfe94, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2.55, y: 6.4686236, z: 2.55}
+  m_Center: {x: 0.00000011920929, y: 3.1093118, z: -0.00000011920929}
+--- !u!114 &-4937876293839331760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5913016424837802670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc615501dd0e548428dbda0b216b4ece, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 0}
+  basePowerDraw: 0
+  connectionPoint: {x: 0, y: 5.35, z: 0}
+  useConnectionRadius: 0
+  connectionRadius: 15
+  radiusVisual: {fileID: 4731625868044808567}
+  OnDisconnect:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRemoveConnection:
+    m_PersistentCalls:
+      m_Calls: []
+  OnAddConnection:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2162860348072681307
 MonoBehaviour:
   m_ObjectHideFlags: 0

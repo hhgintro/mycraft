@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Driller.cs" />
     <Compile Include="Assets\Scripts\SurvivalShooter\Managers\EnemyManager.cs" />
     <Compile Include="Assets\Scripts\ui\item\BaseComponent.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerPole.cs" />
     <Compile Include="Assets\Scripts\ui\item\BuildingItem.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\IInput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\WaterPurificationPlant.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Lab.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializeManager.cs" />
     <Compile Include="Assets\Scripts\ui\Coordinates.cs" />
+    <Compile Include="Assets\FactoryFramework\Demo\Scripts\PowerEfficiencyToColor.cs" />
     <Compile Include="Assets\Scripts\ui\inven\Slot.cs" />
     <Compile Include="Assets\Scripts\scenes\EditorStartInit.cs" />
     <Compile Include="Assets\Scripts\ui\inven\InventoryTitle.cs" />
@@ -116,6 +118,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Splitter.cs" />
     <Compile Include="Assets\Scripts\managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Utils\TEST_PATHS.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\Rail.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\PathFactory.cs" />
     <Compile Include="Assets\Scripts\SurvivalShooter\Camera\CameraFollow.cs" />
     <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\PlatformSpecific\StandaloneInput.cs" />
@@ -172,6 +175,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\ArcPath.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Mesh\BeltMeshSO.cs" />
     <Compile Include="Assets\FactoryFramework\Demo\Scripts\DemoUIManager.cs" />
+    <Compile Include="Assets\FactoryFramework\Demo\Scripts\RailPlacement.cs" />
     <Compile Include="Assets\Scripts\ui\inven\SkillGroupData.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\PowerGrid.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\CableRendererManager.cs" />
@@ -198,6 +202,7 @@
     <Compile Include="Assets\Scripts\managers\Poolable.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Data\Recipe.cs" />
     <Compile Include="Assets\01.Script\Patch\PatchInfo.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Utils\QuadFaceCameraOffset.cs" />
     <Compile Include="Assets\01.Script\Scene\LogoManager.cs" />
     <Compile Include="Assets\01.Script\AssetBundle\LoadAssetBundleExample.cs" />
     <Compile Include="Assets\Scripts\ui\inven\SkillInven.cs" />
@@ -207,6 +212,7 @@
     <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\RampUp.cs" />
     <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\PlatformSpecific\MobileInput.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Core\Serialization\SerializationReference.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\WindTurbine.cs" />
     <Compile Include="Assets\Polytope Studio\Lowpoly_Demos\Environment_Free\Helpers\PlayerMovement.cs" />
     <Compile Include="Assets\Scripts\ui\item\JSonDatabase.cs" />
     <Compile Include="Assets\01.Script\Scene\StageManager.cs" />
@@ -232,6 +238,7 @@
     <Compile Include="Assets\Scripts\SurvivalShooter\Helpers\VolumeHandler.cs" />
     <Compile Include="Assets\Scripts\SurvivalShooter\Managers\PauseManager.cs" />
     <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\Joystick.cs" />
+    <Compile Include="Assets\Scripts\FactoryFramework\Infrastructure\SolarPanel.cs" />
     <Compile Include="Assets\Scripts\ui\item\InvenItemData.cs" />
     <Compile Include="Assets\Scripts\FactoryFramework\Pathing\CubicBezierPath.cs" />
     <Compile Include="Assets\Resources\Art\SurvivalShooter\MobileInput\Scripts\CrossPlatformInputManager.cs" />

@@ -28,7 +28,8 @@ namespace MyCraft
 				_prefab = Managers.Resource.Load<GameObject>("prefabs/ui/CenterGrid");
 				//Debug.Log($"CenterGridManager::Init({_index}:{_prefab})");
 
-				_root = owner.Find($"Pool_{_prefab.name}") ?? (new GameObject($"Pool_{_prefab.name}") { transform = { parent = owner } }).transform;
+				//_root = owner.Find($"Pool_{_prefab.name}") ?? (new GameObject($"Pool_{_prefab.name}") { transform = { parent = owner } }).transform;
+				_root = MyCraft.Common.ParentPool(owner, _prefab.name);
 			}
 		}
 		public void Clear()
@@ -61,7 +62,6 @@ namespace MyCraft
 
 				//간격: ray를 여러번 쏴준다.(한번 쏘니 안맞는 경우 있어서, 촘촘하게 쏴준다)
 				float interval = 0.5f;
-
 				//디버깅을 위한 (충돌확인)선을 그린다.
 				DrawLine(pos, direction, size.y, interval);
 

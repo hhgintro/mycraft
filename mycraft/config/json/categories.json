@@ -5,7 +5,8 @@
     "panels": [
       {"items": [{"itemid":1000}]},
       {"items": [{"itemid":1100},{"itemid":1200},{"itemid":1210}]},
-      {"items": [{"itemid":1400},{"itemid":1410},{"itemid":1420}]},
+      {"items": [{"itemid":1501},{"itemid":1502},{"itemid":1400},{"itemid":1410},{"itemid":1420}]},
+      {"items": [{"itemid":1601}]},
       {"items": [{"itemid":2040}]}
     ],
     "icon": "Textures/ui/tech/logistics"
@@ -16,7 +17,7 @@
     "id": 1,
     "panels": [
       {"items": [{"itemid":1040},{"itemid":1050},{"itemid":1060}]},
-      {"items": [{"itemid":1070},{"itemid":1080}]},
+      {"items": [{"itemid":1521},{"itemid":1522},{"itemid":1070},{"itemid":1080}]},
       {"items": [{"itemid":1065},{"itemid":1066}]}
     ],
     "icon": "Textures/ui/tech/production"

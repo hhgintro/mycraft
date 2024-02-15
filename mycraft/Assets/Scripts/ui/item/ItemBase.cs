@@ -234,16 +234,61 @@ namespace MyCraft
 		}
 	}
 
-	public class FloorItemBase : ItemBase
+	public class FootingItemBase : ItemBase
 	{
 		////goods의 이동속도
 		//public float speed;
 
-		public FloorItemBase(JsonData json) : base(json)
+		public FootingItemBase(JsonData json) : base(json)
 		{
 			//this.speed = float.Parse(json["speed"].ToString());
 		}
 	}
+
+	public class PowerPoleItemBase : ItemBase
+	{
+		////goods의 이동속도
+		//public float speed;
+
+		public PowerPoleItemBase(JsonData json) : base(json)
+		{
+			//this.speed = float.Parse(json["speed"].ToString());
+		}
+	}
+
+	public class SolarPanelItemBase : ItemBase
+	{
+		////goods의 이동속도
+		//public float speed;
+
+		public SolarPanelItemBase(JsonData json) : base(json)
+		{
+			//this.speed = float.Parse(json["speed"].ToString());
+		}
+	}
+
+    public class WindTurbineItemBase : ItemBase
+    {
+        ////goods의 이동속도
+        //public float speed;
+
+        public WindTurbineItemBase(JsonData json) : base(json)
+        {
+            //this.speed = float.Parse(json["speed"].ToString());
+        }
+    }
+
+	public class RailItemBase : ItemBase
+	{
+		////goods의 이동속도
+		//public float speed;
+
+		public RailItemBase(JsonData json) : base(json)
+		{
+			//this.speed = float.Parse(json["speed"].ToString());
+		}
+	}
+
 
 	public class InserterItemBase : ItemBase
 	{

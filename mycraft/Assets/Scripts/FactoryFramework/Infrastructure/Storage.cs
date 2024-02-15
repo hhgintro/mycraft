@@ -16,8 +16,11 @@ namespace FactoryFramework
 			base.fnStart();
         }
 
-        public override void OnClicked()
+        public override bool OnClicked(Building holding)
         {
+			//전기줄을 연결합니다.
+			if (true == base.OnClicked(holding)) return true;
+
 			MyCraft.Managers.Game.ChestInvens.LinkInven(this, null, base._panels, /*this._progresses*/null, true);
 			//active
 			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
@@ -28,6 +31,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.TurretInvens.gameObject.SetActive(false);
+			return true;
 		}
 
 

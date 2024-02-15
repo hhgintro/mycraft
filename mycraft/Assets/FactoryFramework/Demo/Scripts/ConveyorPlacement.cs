@@ -10,8 +10,6 @@ using System.Linq;
 
 public class ConveyorPlacement : IPlacement
 {
-	[Header("Conveyor Setup")]
-	public Conveyor conveyorPrefab;
 	private Conveyor current;
 
 	private Vector3 startPos;
@@ -58,6 +56,7 @@ public class ConveyorPlacement : IPlacement
 	//buildingPlace의 ForceCancel()와 흡사(conveyor에서 centerGrid을 적용할때 buildingPlace와 통합을 고려할 것)
 	public override void ForceCancel()
 	{
+		Debug.Log("ForceCancel ConveyorPlacement");
 		if (current != null)
 		{
 			////재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
@@ -135,61 +134,60 @@ public class ConveyorPlacement : IPlacement
 		//재사용시(불러오기) material이 녹색으로 노출되거나 collider가 disable된 경우가 있어서
 		//  우선 취소할때 설정해 준다.
 		//  Load()할떄 처리해 주면 좋겠는데, 꼭 처리할 것.
-		logistic.SetMaterials(originalFrameMat, originalBeltMat);	//@@3
+		logistic.SetMaterials(originalFrameMat, originalBeltMat);
 		base.SetEnable_1(logistic, enable);
 	}
 
-	private bool TryChangeState(State desiredState)
-	{
-		base.state = desiredState;
-		return true;
-	}
+	//private bool TryChangeState(State desiredState)
+	//{
+	//	base.state = desiredState;
+	//	return true;
+	//}
 
-	private bool ValidLocation()
-	{
-		if (current == null) return false;
+	//private bool ValidLocation()
+	//{
+	//	if (current == null) return false;
 		
-			foreach (Collider c in Physics.OverlapSphere(startPos, 1f))
-			{
-				//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
-				if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
-					&& c.gameObject != current.gameObject)
-				{
-					// colliding something!
-					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
-						Debug.LogWarning($"Invalid placement: {current.gameObject.name} collides with {c.gameObject.name} at the start");
-					//ChangeMatrerial(redPlacementMaterial);
-					return false;
-				}
-			}
-			foreach (Collider c in Physics.OverlapSphere(endPos, 1f))
-			{
-				//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
-				if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
-					&& c.gameObject != current.gameObject)
-				{
-					// colliding something!
-					if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
-						Debug.LogWarning($"Invalid placement: {current.gameObject.name} collides with {c.gameObject.name} at the end");
-					//ChangeMatrerial(redPlacementMaterial);
-					return false;
-				}
-			}
+	//		foreach (Collider c in Physics.OverlapSphere(startPos, 1f))
+	//		{
+	//			//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+	//			if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
+	//				&& c.gameObject != current.gameObject)
+	//			{
+	//				// colliding something!
+	//				if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
+	//					Debug.LogWarning($"Invalid placement: {current.gameObject.name} collides with {c.gameObject.name} at the start");
+	//				//ChangeMatrerial(redGhostMat);
+	//				return false;
+	//			}
+	//		}
+	//		foreach (Collider c in Physics.OverlapSphere(endPos, 1f))
+	//		{
+	//			//if (c.CompareTag("Building") && c.gameObject != current.gameObject)
+	//			if (c.transform.gameObject.layer == LayerMask.NameToLayer("Building")
+	//				&& c.gameObject != current.gameObject)
+	//			{
+	//				// colliding something!
+	//				if (ConveyorLogisticsUtils.settings.SHOW_DEBUG_LOGS)
+	//					Debug.LogWarning($"Invalid placement: {current.gameObject.name} collides with {c.gameObject.name} at the end");
+	//				//ChangeMatrerial(redGhostMat);
+	//				return false;
+	//			}
+	//		}
 
-		//ChangeMatrerial(greenPlacementMaterial);
-		return true;
-	}
+	//	//ChangeMatrerial(greenGhostMat);
+	//	return true;
+	//}
 
 	public GameObject StartPlacingConveyor(GameObject prefab)
 	{
 		//cancel any placement currently happening
 		cancelPlacementEvent?.Raise();
 		// instantiate a belt to place
-		//current = Instantiate(conveyorPrefab);
-		//current = MyCraft.Managers.Resource.Instantiate(conveyorPrefab.gameObject).GetComponent<Conveyor>();    //HG[2023.06.01]테스트필요
 		current = MyCraft.Managers.Resource.Instantiate(prefab).GetComponent<Conveyor>();    //HG[2023.06.01]테스트필요
-		current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
-		if (TryChangeState(State.Start))
+		//current.transform.parent = this.transform.Find($"Pool_{prefab.name}") ?? (new GameObject($"Pool_{prefab.name}") { transform = { parent = this.transform } }).transform;
+		current.transform.parent = MyCraft.Common.ParentPool(this.transform, prefab.name);
+		if (base.TryChangeState(State.Start))
 		{
 			//b.enabled = false;
 			base.SetEnable_1(current, false);
@@ -215,10 +213,6 @@ public class ConveyorPlacement : IPlacement
 			return false;
 
 		worldPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.3f);   //시작높이	//건물위치간격보간
-		//Vector3 camForward = Camera.main.transform.forward;
-		//camForward.y = 0f;
-		//camForward.Normalize();
-		//worldDir = camForward;
 		worldDir = currentRotation * Vector3.forward;
 		return true;
 	}
@@ -229,10 +223,6 @@ public class ConveyorPlacement : IPlacement
 			return false;
 
 		worldPos = MyCraft.Common.Floor(hit.point + Vector3.up);	//건물위치간격보간
-		//Vector3 camForward = Camera.main.transform.forward;
-		//camForward.y = 0f;
-		//camForward.Normalize();
-		//worldDir = camForward;
 		worldDir = currentRotation * Vector3.forward;
 		return true;
 	}
@@ -255,11 +245,9 @@ public class ConveyorPlacement : IPlacement
 			// try to find an open socket
 			if (hit.collider.gameObject.TryGetComponent(out OutputSocket socket))
 			{
-				if (!socket.IsOpen())
-				{
-					// Socket already Occupied
-					continue;
-				}				
+				// Socket already Occupied
+				if (!socket.IsOpen()) continue;
+
 				startSocket = socket;
 				break;
 			}
@@ -308,7 +296,7 @@ public class ConveyorPlacement : IPlacement
 		{
 			//current.SetMaterials(originalFrameMat, originalBeltMat);
 			current.SetMaterials(greenGhostMat, greenGhostMat);
-			if (Input.GetMouseButtonDown(0)) TryChangeState(State.End);
+			if (Input.GetMouseButtonDown(0)) base.TryChangeState(State.End);
 		}
 		else
 		{
@@ -349,7 +337,7 @@ public class ConveyorPlacement : IPlacement
 				//worldPos = hit.point;
 				//// stay same level if this is the terrain
 				//worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;
-				worldPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.3f);	//건물위치간격보간
+				worldPos = MyCraft.Common.Floor(hit.point + Vector3.up * 0.301f);	//건물위치간격보간
 
 				//Vector3 camForward = Camera.main.transform.forward;
 				//camForward.y = 0f;
@@ -386,15 +374,17 @@ public class ConveyorPlacement : IPlacement
 				} else
 				{
 					worldPos = hit.point;
-					// stay same level if this is the terrain
-					worldPos.y = Terrain.activeTerrain.SampleHeight(worldPos) + startHeight;// + 1;	//+1: 땅에 뭍혀서
+					//// stay same level if this is the terrain
+					//float sampleHeight = Terrain.activeTerrain.SampleHeight(worldPos);
+					//worldPos.y = sampleHeight + startHeight;// + 1;	//+1: 땅에 뭍혀서
 				}
 
 				worldPos = MyCraft.Common.Floor(worldPos);	//건물위치간격보간
 				worldDir = currentRotation * Vector3.forward;
 				// reset socket
 				endSocket = null;
-			}			
+				break;
+			}
 		}
 
 		if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -402,6 +392,7 @@ public class ConveyorPlacement : IPlacement
 			flatEndPos = endPos;
 			shiftMousePos = Input.mousePosition;
 		}
+		worldPos.x = worldPos.x + 0.0001f;	//1f딱 떨어지는 수를 넣지 마라. LOOK at Zero라는 메시지를 보게된다.(우클릭으로 삭제도 안됨)
 		endPos = worldPos;
 		current.data.end = worldPos;
 		current.data.endDir = worldDir;
@@ -456,7 +447,7 @@ public class ConveyorPlacement : IPlacement
 			}
 			// finalize the conveyor
 			current.UpdateMesh(true);
-			current.SetMaterials(originalFrameMat, originalBeltMat);	//@@3
+			current.SetMaterials(originalFrameMat, originalBeltMat);
 			current.AddCollider();
 
 			//지급
@@ -473,7 +464,7 @@ public class ConveyorPlacement : IPlacement
 			startSocket = null;
 			endSocket = null;
 
-			TryChangeState(State.None);
+			base.TryChangeState(State.None);
 			finishPlacementEvent?.Raise();
 			//finishPlacementEvent?.Raise(current.Capacity);
 		}

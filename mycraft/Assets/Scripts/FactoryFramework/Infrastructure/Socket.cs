@@ -19,7 +19,14 @@ namespace FactoryFramework
         public virtual void Disconnect() {}
         public virtual bool IsOpen() { return false; }
 
-        // TODO add a item filter. Maybe whitelist/blacklist List<Item>
-        
-    }
+        public void OnClicked(Building holding)
+        {
+            if (null == _logisticComponent) return;
+            if(_logisticComponent.TryGetComponent<Building>(out Building building))
+                building.OnClicked(holding);
+        }
+
+		// TODO add a item filter. Maybe whitelist/blacklist List<Item>
+
+	}
 }

@@ -21,16 +21,19 @@ namespace FactoryFramework
 			base.fnStart();
         }
 
-		//public override void ProcessLoop()
-		//{
-		//	if (false == StartAssembling(Time.deltaTime))
-		//	{
-		//		base._IsWorking = false;
-		//	}
-		//}
+        //public override void ProcessLoop()
+        //{
+        //	if (false == StartAssembling(Time.deltaTime))
+        //	{
+        //		base._IsWorking = false;
+        //	}
+        //}
 
-		public override void OnClicked()
+        public override bool OnClicked(Building holding)
         {
+			//전기줄을 연결합니다.
+			if (true == base.OnClicked(holding)) return true;
+
 			MyCraft.Managers.Game.TurretInvens.LinkInven(this, null, base._panels, /*this._progresses*/null, true);
 			//active
 			MyCraft.Managers.Game.Inventories.gameObject.SetActive(true);
@@ -41,6 +44,7 @@ namespace FactoryFramework
 			MyCraft.Managers.Game.FactoryInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.ForgeInvens.gameObject.SetActive(false);
 			MyCraft.Managers.Game.LabInvens.gameObject.SetActive(false);
+			return true;
 		}
 
 

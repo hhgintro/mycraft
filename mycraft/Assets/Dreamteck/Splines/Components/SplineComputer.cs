@@ -1,7 +1,9 @@
-namespace Dreamteck.Splines
+ï»¿namespace Dreamteck.Splines
 {
     using UnityEngine;
     using System.Collections.Generic;
+	using static UnityEngine.UIElements.UxmlAttributeDescription;
+	using static PlasticGui.LaunchDiffParameters;
 
 
     public delegate void EmptySplineHandler();
@@ -32,6 +34,8 @@ namespace Dreamteck.Splines
         public enum EvaluateMode { Cached, Calculate }
         public enum SampleMode { Default, Uniform, Optimized }
         public enum UpdateMode { Update, FixedUpdate, LateUpdate, AllUpdate, None }
+        
+        //The transform space of the Spline Computer
         public Space space
         {
             get { return _space; }
@@ -62,7 +66,9 @@ namespace Dreamteck.Splines
             }
         }
 
-        public float knotParametrization
+        public Spline spline { get { return _spline; } }
+		//Value between 0 and 1 which governs the shape of the spline when the type is CatmullRom
+		public float knotParametrization
         {
             get { return _spline.knotParametrization; }
             set
@@ -75,8 +81,8 @@ namespace Dreamteck.Splines
                 }
             }
         }
-
-        public bool linearAverageDirection
+		//Should sample directions be averaged in linear mode?
+		public bool linearAverageDirection
         {
             get
             {
@@ -92,8 +98,8 @@ namespace Dreamteck.Splines
                 }
             }
         }
-
-        public bool is2D
+		//Toggle 2D mode for the spline
+		public bool is2D
         {
             get { return _is2D; }
             set
@@ -106,7 +112,8 @@ namespace Dreamteck.Splines
             }
         }
 
-        public int sampleRate
+		//The sample rate of the spline â€“ the bigger, the smoother
+		public int sampleRate
         {
             get { return _spline.sampleRate; }
             set
@@ -119,8 +126,8 @@ namespace Dreamteck.Splines
                 }
             }
         }
-
-        public float optimizeAngleThreshold
+		//The angle below which samples get deleted when using Optimized sample mode
+		public float optimizeAngleThreshold
         {
             get { return _optimizeAngleThreshold; }
             set
@@ -136,8 +143,8 @@ namespace Dreamteck.Splines
                 }
             }
         }
-
-        public SampleMode sampleMode
+		//The sample mode of this Spline Computer as described in the documentation
+		public SampleMode sampleMode
         {
             get { return _sampleMode; }
             set
@@ -153,10 +160,11 @@ namespace Dreamteck.Splines
         public bool multithreaded = false;
         [HideInInspector]
         public UpdateMode updateMode = UpdateMode.Update;
-        [HideInInspector]
+		//A collection of triggers used by other components to invoke events
+		[HideInInspector]
         public TriggerGroup[] triggerGroups = new TriggerGroup[0];
-
-        public AnimationCurve customValueInterpolation
+		//Custom curve for size and color interpolation
+		public AnimationCurve customValueInterpolation
         {
             get { return _spline.customValueInterpolation; }
             set
@@ -165,8 +173,8 @@ namespace Dreamteck.Splines
                 Rebuild();
             }
         }
-
-        public AnimationCurve customNormalInterpolation
+		//Custom curve for normal interpolation
+		public AnimationCurve customNormalInterpolation
         {
             get { return _spline.customNormalInterpolation; }
             set
@@ -175,40 +183,40 @@ namespace Dreamteck.Splines
                 Rebuild();
             }
         }
-
-        public int iterations
+		//The total count of samples the spline is expected to have based on sampleRate and point count
+		public int iterations
         {
             get
             {
                 return _spline.iterations;
             }
         }
-
-        public double moveStep
+		//The average percent distance between spline samples based on the sampleRate
+		public double moveStep
         {
             get
             {
                 return _spline.moveStep;
             }
         }
-
-        public bool isClosed
+		//Is the spline closed?
+		public bool isClosed
         {
             get
             {
                 return _spline.isClosed;
             }
         }
-
-        public int pointCount
+		//Returns the control point count of the spline (read only)
+		public int pointCount
         {
             get
             {
                 return _spline.points.Length;
             }
         }
-
-        public int sampleCount
+		//Returns the count of the computed samples (read only)
+		public int sampleCount
         {
             get { return _sampleCollection.length; }
         }
@@ -505,8 +513,8 @@ namespace Dreamteck.Splines
                 Rebuild();
             }
         }
-
-        public void GetSamples(SampleCollection collection)
+		//Writes the calculated samples into the passed SampleCollection object
+		public void GetSamples(SampleCollection collection)
         {
             UpdateSampleCollection();
             collection.samples = _sampleCollection.samples;
@@ -795,11 +803,11 @@ namespace Dreamteck.Splines
         }
 
 		//add new point
-		//±âÁ¸ À§Ä¡¸¦ º¯°æÄÚÀÚ ÇÒ¶§´Â SetPointPosition()¿¡¼­ Ã³¸®ÇÕ´Ï´Ù.(¿ì¼± Å×½ºÆ®´Â ¸øÇÔ)
-		public void AddPointPosition_1(int index, Vector3 newPoint, Space setSpace = Space.World)
+		//ê¸°ì¡´ ìœ„ì¹˜ë¥¼ ë³€ê²½ì½”ì í• ë•ŒëŠ” SetPointPosition()ì—ì„œ ì²˜ë¦¬í•©ë‹ˆë‹¤.(ìš°ì„  í…ŒìŠ¤íŠ¸ëŠ” ëª»í•¨)
+		public SplinePoint AddPointPosition_1(int index, Vector3 newPoint, Space setSpace = Space.World)
 		{
 			ResampleTransformIfNeeded();
-			if (index < 0 || _spline.points.Length < index) index = _spline.points.Length;  //bad index´Â ¸Ç³¡¿¡ ³Ö¾îÁØ´Ù.
+			if (index < 0 || _spline.points.Length < index) index = _spline.points.Length;  //bad indexëŠ” ë§¨ëì— ë„£ì–´ì¤€ë‹¤.
 
             AppendPoints_1(index);
 
@@ -812,6 +820,7 @@ namespace Dreamteck.Splines
 			_spline.points[index].size = 1;
 			Rebuild();
 			SetNodeForPoint(index, GetPoint(index));
+            return _spline.points[index];
 		}
 
 		/// <summary>
@@ -973,11 +982,11 @@ namespace Dreamteck.Splines
         {
 			SplinePoint[] temp = new SplinePoint[_spline.points.Length + 1];
 
-			int pos = 0; //»õ point¸¦ ³ÖÀ» À§Ä¡¸¦ ºñ¿ì±â À§ÇØ µû·Î °ü¸®ÇÑ´Ù.
-			//+1: point°¡ Áß°£¿¡ µé¾î°¥²¨¸¦ ¿¹»óÇØ¼­.(³¡¿¡ µé¾î°¥ °æ¿ì´Â continue¿¡¼­ ºüÁø´Ù.)
+			int pos = 0; //ìƒˆ pointë¥¼ ë„£ì„ ìœ„ì¹˜ë¥¼ ë¹„ìš°ê¸° ìœ„í•´ ë”°ë¡œ ê´€ë¦¬í•œë‹¤.
+			//+1: pointê°€ ì¤‘ê°„ì— ë“¤ì–´ê°ˆêº¼ë¥¼ ì˜ˆìƒí•´ì„œ.(ëì— ë“¤ì–´ê°ˆ ê²½ìš°ëŠ” continueì—ì„œ ë¹ ì§„ë‹¤.)
 			for (int i = 0; i < _spline.points.Length + 1; ++i)
 			{
-				if (index == i) continue;//ÀÌÀÚ¸®´Â ´Ù¸¥°ÍÀ¸·Î Ã¤¿ï¿¹Á¤ÀÌ¹Ç·Î ºñ¿öµĞ´Ù.
+				if (index == i) continue;//ì´ ìë¦¬ëŠ” ì‹ ê·œpointë¡œ ì±„ìš¸ì˜ˆì •ì´ë¯€ë¡œ ë¹„ì›Œë‘”ë‹¤.
 				temp[i] = _spline.points[pos++];
 			}
             return _spline.points = temp;
@@ -1057,8 +1066,8 @@ namespace Dreamteck.Splines
             }
             return point;
         }
-
-        public Vector3 EvaluatePosition(double percent)
+		//Evaluates the spline at the provided percent and returns the world position at that percent
+		public Vector3 EvaluatePosition(double percent)
         {
             return EvaluatePosition(percent, EvaluateMode.Cached);
         }
@@ -1080,8 +1089,8 @@ namespace Dreamteck.Splines
         {
             return EvaluatePosition(GetPointPercent(pointIndex), mode);
         }
-
-        public SplineSample Evaluate(double percent)
+		//Evaluates the spline at the provided percent and returns the transformed sample at that percent
+		public SplineSample Evaluate(double percent)
         {
             return Evaluate(percent, EvaluateMode.Cached);
         }
@@ -1264,9 +1273,9 @@ namespace Dreamteck.Splines
 #endif
 
             _queueResample = updateMode != UpdateMode.None;
-        }
+		}
 
-        public void RebuildImmediate()
+		public void RebuildImmediate()
         {
             RebuildImmediate(true, true);
         }

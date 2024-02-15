@@ -30,7 +30,7 @@ namespace MyCraft
 			//GameManager에서 불러올수 없어서 여기에 추가함.
 			//Managers.Game._buildingPlacement = FindObjectOfType<BuildingPlacement>();
 			//Managers.Game._conveyorPlacement = FindObjectOfType<ConveyorPlacement>();
-			Managers.Game.InitPlacement(FindObjectOfType<BuildingPlacement>(), FindObjectOfType<ConveyorPlacement>());
+			Managers.Game.InitPlacement(FindObjectOfType<BuildingPlacement>(), FindObjectOfType<ConveyorPlacement>(), FindObjectOfType<RailPlacement>());
 
 			if(string.IsNullOrEmpty(Managers.Game._load_filename))
 			{
@@ -85,6 +85,7 @@ namespace MyCraft
 			Managers.Game.TechInvens.gameObject.SetActive(false);
 			Managers.Game.TechDescs.gameObject.SetActive(false);
 			Managers.Game.TurretInvens.gameObject.SetActive(false);
+			Managers.Game.DestoryProcess.gameObject.SetActive(false);
 
 			//GameManager.GetDeleteProgress().gameObject.SetActive(false);
 
@@ -119,6 +120,7 @@ namespace MyCraft
 			Managers.Game.Inventories.AddItem(1100, 100, ref fillAmount);   //belt
 			Managers.Game.Inventories.AddItem(1100, 100, ref fillAmount);   //belt
 			Managers.Game.Inventories.AddItem(1100, 100, ref fillAmount);   //belt
+			Managers.Game.Inventories.AddItem(1601, 100, ref fillAmount);   //rail
 			Managers.Game.Inventories.AddItem(1070, 54, ref fillAmount);    //WaterPurificationPlant
 			Managers.Game.Inventories.AddItem(1080, 54, ref fillAmount);    //PumpJack
 			Managers.Game.Inventories.AddItem(1065, 10, ref fillAmount);    //Oil-Refinery
@@ -142,9 +144,14 @@ namespace MyCraft
 			float fillAmount = MyCraft.Global.FILLAMOUNT_DEFAULT;
 			Managers.Game.QuickInvens.AddItem(1100, 100, ref fillAmount);   //belt
 			//Managers.Game.QuickInvens.AddItem(1070, 100, ref fillAmount);   //생수공장
-			Managers.Game.QuickInvens.AddItem(1400, 100, ref fillAmount);   //safe-footing(안전발판)
-			Managers.Game.QuickInvens.AddItem(1410, 100, ref fillAmount);   //ramp-way(경사로)
-			Managers.Game.QuickInvens.AddItem(1420, 100, ref fillAmount);   //ramp-way(경사로)
+			//Managers.Game.QuickInvens.AddItem(1400, 100, ref fillAmount);   //safe-footing(안전발판)
+			//Managers.Game.QuickInvens.AddItem(1410, 100, ref fillAmount);   //ramp-way(경사로)
+			//Managers.Game.QuickInvens.AddItem(1420, 100, ref fillAmount);   //ramp-way(경사로)
+			Managers.Game.QuickInvens.AddItem(1501, 100, ref fillAmount);    //Power Pole
+			//Managers.Game.QuickInvens.AddItem(1502, 100, ref fillAmount);    //Power Tower
+			Managers.Game.QuickInvens.AddItem(1521, 100, ref fillAmount);    //Solar Panel
+			Managers.Game.QuickInvens.AddItem(1522, 100, ref fillAmount);    //Wind Turbine
+			Managers.Game.QuickInvens.AddItem(1601, 100, ref fillAmount);    //rail
 			Managers.Game.QuickInvens.AddItem(1000, 54, ref fillAmount);    //chest
 			Managers.Game.QuickInvens.AddItem(1040, 54, ref fillAmount);    //drill
 			Managers.Game.QuickInvens.AddItem(1050, 54, ref fillAmount);    //forge
